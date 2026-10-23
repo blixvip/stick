@@ -1,0 +1,98 @@
+/* Drawing extends the studio's rail and inspector, using shared theme tokens. */
+.drawing-presets{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:1fr;gap:5px}
+.drawing-preset{border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--text);font:inherit;font-size:11px;padding:6px 4px;cursor:pointer}
+.drawing-preset:hover{background:var(--theme-hover,#f0f0f0)}
+.drawing-preset[aria-pressed=true]{border-color:var(--theme-accent,#0d99ff);background:var(--theme-selection,#e5f3ff);color:var(--theme-accent,#0d99ff)}
+.drawing-preset:focus-visible{outline:2px solid var(--theme-accent,#0d99ff);outline-offset:2px}
+.drawing-preview{display:block;width:100%;height:40px;margin:8px 0 12px;border:1px solid var(--border);border-radius:6px;background:repeating-conic-gradient(#eee 0 25%,#fff 0 50%) 0 0/12px 12px}
+.drawing-toggle-grid{margin:8px 0}
+.drawing-wet-ink{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.drawing-second-color{margin-left:auto}
+.drawing-swatches{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px;margin:-4px 0 12px}
+.drawing-swatch{aspect-ratio:1;border:1px solid var(--border);border-radius:4px;padding:0;cursor:pointer}
+.drawing-swatch[aria-pressed=true]{outline:2px solid var(--theme-accent,#0d99ff);outline-offset:1px}
+.drawing-resolution{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px}
+.drawing-resolution+.drawing-resolution,.inspector-grid+.drawing-resolution{margin-top:8px}
+.drawing-pose>.property-context-heading{display:none}
+.sheet-layer[data-drawing=true] .sheet-layer-name>.icon{color:var(--theme-accent,#0d99ff)}
+.sheet-layer[data-drawing=true] .sheet-layer-name>span::after{content:'DRAW';font-size:8px;font-weight:600;letter-spacing:.4px;color:var(--muted);margin-left:8px}
+.workspace[data-mode=draw] .rail-order{display:none}
+
+.workspace[data-mode=draw] .tweener-tool{display:none}
+.workspace[data-mode=draw] #inspector .inspector-section{padding-block:12px}
+.workspace[data-mode=draw] #inspector .inspector-title{margin-bottom:8px}
+.workspace[data-mode=draw] #inspector .property-context-caption{margin-bottom:0}
+.workspace[data-mode=draw] #inspector .color-row{margin-bottom:12px}
+.drawing-resolution-info,.drawing-empty,.drawing-hint{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px}
+.drawing-quick-note{display:flex;align-items:center;gap:6px;margin-bottom:0}.drawing-quick-note .icon{width:13px;height:13px;flex-shrink:0}
+.workspace[data-mode=draw] .properties-library-save{display:none}
+
+/* Krita-style slider fields: the fill shows the value; label and value sit inside. */
+.draw-sliders{display:grid;gap:5px;margin:8px 0}
+.draw-slider{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;height:26px;padding:0 9px;border-radius:6px;background:var(--theme-field,#f2f2f2);color:var(--text,#222);font-size:11px;overflow:hidden;cursor:ew-resize;touch-action:none;user-select:none;outline:none}
+.draw-slider:focus-visible{box-shadow:0 0 0 2px var(--theme-accent,#0d99ff)}
+.draw-slider-fill{position:absolute;inset:0 auto 0 0;background:color-mix(in srgb,var(--theme-accent,#0d99ff) 20%,transparent);border-right:2px solid var(--theme-accent,#0d99ff);pointer-events:none}
+.draw-slider.is-dragging .draw-slider-fill{background:color-mix(in srgb,var(--theme-accent,#0d99ff) 30%,transparent)}
+.draw-slider-label,.draw-slider-value{position:relative;white-space:nowrap;pointer-events:none}
+.draw-slider-label{color:var(--theme-secondary,#555)}
+.draw-slider-value{font-weight:600;font-variant-numeric:tabular-nums}
+.draw-slider-input{width:64px;border:0;background:transparent;font:inherit;font-weight:600;text-align:right;pointer-events:auto}
+.draw-slider.is-compact{height:24px;min-width:104px;padding:0 7px;font-size:10.5px;border-radius:5px}
+/* Presets show a stroke drawn by the real brush engine. */
+.drawing-preset{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px 3px}
+.drawing-preset-thumb{display:block;width:100%;height:18px;object-fit:contain;pointer-events:none}
+/* A name wider than its tile wraps to two lines; every row keeps the same height. */
+.drawing-preset>span{white-space:normal;line-height:1.1;text-align:center}
+/* The thumbnails are dark strokes on transparency: light strokes on the dark tiles. */
+:root[data-theme=dark] :is(.drawing-preset-thumb,.draw-quick-preset img){filter:invert(1) hue-rotate(180deg)}
+/* Main and second colour as an overlapping pair. */
+.draw-colors{display:flex;align-items:center;gap:8px;margin:8px 0}
+.draw-color-pair{position:relative;flex:none;width:38px;height:34px}
+.draw-color-pair>input{position:absolute;padding:0;border:1px solid var(--border,#ddd);border-radius:5px;background:none;cursor:pointer}
+.draw-color-pair>input::-webkit-color-swatch-wrapper{padding:0}
+.draw-color-pair>input::-webkit-color-swatch{border:0;border-radius:4px}
+.draw-color-primary{left:0;top:0;z-index:1;width:26px;height:26px;box-shadow:0 0 0 2px var(--panel,#fff)}
+.draw-color-secondary{right:0;bottom:0;width:20px;height:20px;border-color:var(--theme-muted,#999)!important}
+.draw-color-swap{width:24px;height:24px}
+/* Canvas quick bar: the settings a painter changes constantly. */
+.drawing-quickbar{position:absolute;top:4px;left:50%;z-index:5;display:flex;flex-direction:column;gap:5px;max-width:calc(100% - 24px);padding:4px 6px;transform:translateX(-50%);border:1px solid var(--border,#e2e2e2);border-radius:10px;background:var(--panel,#fff);box-shadow:0 4px 18px rgba(0,0,0,.08)}
+.drawing-quickbar[hidden]{display:none}
+.draw-quick-row{display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none}
+.draw-quick-divider{flex:none;width:1px;height:20px;background:var(--border,#e2e2e2)}
+.draw-quick-preset,.draw-quick-choice{display:flex;align-items:center;gap:6px;flex:none;height:24px;padding:0 9px;border:1px solid var(--border,#e2e2e2);border-radius:6px;background:var(--panel,#fff);color:var(--text,#222);font:inherit;font-size:11px;white-space:nowrap;cursor:pointer}
+.draw-quick-preset img{width:44px;height:14px;object-fit:contain}
+.draw-quick-choice[aria-pressed=true],.draw-quick-toggle[aria-pressed=true],.draw-quick-preset[aria-expanded=true]{border-color:var(--theme-accent,#0d99ff);background:var(--theme-selection,#e5f3ff);color:var(--theme-accent,#0d99ff)}
+.drawing-quickbar .draw-colors{margin:0;gap:4px}
+/* Quick bar: the main colour sits over the second so both stay readable. */
+.drawing-quickbar .draw-color-pair{width:36px;height:30px}
+.drawing-quickbar .draw-color-primary{width:24px;height:24px}
+.drawing-quickbar .draw-color-secondary{width:20px;height:20px}
+.drawing-quickbar .draw-color-swap{width:22px;height:22px}
+.draw-quick-tool{display:flex;align-items:center;gap:5px;flex:none;padding:0 4px 0 2px;color:var(--theme-text,#222);font-size:var(--ds-text-sm,11px);font-weight:var(--ds-weight-strong,600);white-space:nowrap}
+.draw-quick-tool svg{width:15px;height:15px;color:var(--theme-accent,#0d99ff)}
+.draw-quick-swatches{display:flex;align-items:center;gap:3px;flex:none}
+.draw-quick-swatch{width:16px;height:16px;min-width:0;padding:0;border:1px solid var(--theme-border-strong,rgba(0,0,0,.2));border-radius:4px;cursor:pointer}
+.draw-quick-swatch:hover{outline:2px solid var(--theme-border-strong,#bbb);outline-offset:1px}
+.draw-quick-swatch[aria-pressed=true]{outline:2px solid var(--theme-accent,#0d99ff);outline-offset:1px}
+.draw-quick-choice svg{width:13px;height:13px}
+.draw-quick-presets{width:min(520px,70vw)}
+/* Right-click pop-up palette. */
+.drawing-palette{position:absolute;z-index:7;width:300px;padding:10px 12px;border:1px solid var(--border,#e2e2e2);border-radius:12px;background:var(--panel,#fff);box-shadow:0 10px 32px rgba(0,0,0,.18)}
+.drawing-palette[hidden]{display:none}
+.drawing-palette .draw-colors{margin-top:0}
+.drawing-palette .drawing-swatches{margin:0 0 10px}
+.drawing-palette .draw-sliders{margin-bottom:0}
+/* Transient readout for size, opacity and hardness changes. */
+.drawing-hud{position:absolute;top:54px;left:50%;z-index:6;padding:6px 12px;transform:translateX(-50%);border-radius:14px;background:rgba(20,20,24,.84);color:#fff;font-size:12px;font-variant-numeric:tabular-nums;pointer-events:none;opacity:0;transition:opacity .15s}
+.drawing-hud.is-visible{opacity:1}
+/* Pen pressure curve: a square graph with two Bézier handles and presets. */
+.draw-pressure{display:grid;gap:8px;margin:8px 0}
+.draw-pressure-graph{display:block;width:100%;max-width:170px;aspect-ratio:1;margin:0 auto;overflow:visible;touch-action:none}
+.draw-pressure-frame{fill:var(--theme-field,#f2f2f2);stroke:var(--theme-border,#e2e2e2);stroke-width:1;rx:4px}
+.draw-pressure-grid{fill:none;stroke:var(--theme-border,#e2e2e2);stroke-width:.6}
+.draw-pressure-diagonal{fill:none;stroke:var(--theme-muted,#999);stroke-width:.8;stroke-dasharray:3 3}
+.draw-pressure-arms{fill:none;stroke:var(--theme-accent,#0d99ff);stroke-width:.9;opacity:.55}
+.draw-pressure-line{fill:none;stroke:var(--theme-accent,#0d99ff);stroke-width:2.4;stroke-linecap:round}
+.draw-pressure-handle{fill:var(--theme-panel,#fff);stroke:var(--theme-accent,#0d99ff);stroke-width:2;cursor:grab}
+.draw-pressure-handle:hover,.draw-pressure-handle:focus-visible{fill:var(--theme-accent,#0d99ff);outline:none}
+.draw-pressure.is-dragging .draw-pressure-handle{cursor:grabbing}

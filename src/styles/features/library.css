@@ -1,0 +1,213 @@
+/* Library (user-library.mjs), experience.md §5.5. Its markup carries the
+ * kit's classes (.ui-segmented, .ui-field, .ui-select, .ui-icon-button,
+ * .ui-crumb, .ui-empty, .ui-button; menus are ui-menu.mjs); this sheet lays
+ * them out in the panel and draws what is the Library's own:
+ *
+ *   the head       My library │ Public library, then the search with the kind
+ *                  and the library's ⋯, then where you are: the folder path
+ *                  with the count and New folder (the website in Public)
+ *   a card         the preview on a matte chosen from the artwork's colours,
+ *                  then its name in ink and its kind in grey. Hover lifts the
+ *                  artwork, the selected card has a Styk blue ring and a blue
+ *                  name, ⋯ shows on hover, focus and selection
+ *   the foot       pinned: the status line, then Add selection (in Public, the
+ *                  website)
+ *
+ * The drag ghost, the drop targets and the dialogs are here too. The legacy
+ * sheet keeps only the drag cursors, which need !important. */
+@layer features {
+  :where(#user-library) {
+    display: flex; flex-direction: column; flex: 1; min-block-size: 0;
+    font: var(--type-ui); color: var(--text-1); background: var(--surface);
+  }
+
+  /* ---- The head: source, search and where you are ---- */
+  .library-head { display: grid; gap: var(--space-2); padding: var(--space-3) var(--island-pad) var(--space-1); }
+  .library-source > .ui-segmented-item > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .library-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: var(--space-1-5); }
+  .library-search { --_h: var(--control-md); padding-inline: var(--space-2-5) var(--space-2); color: var(--text-3); }
+  .library-search > svg { flex: none; inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .library-search > input::-webkit-search-cancel-button { cursor: pointer; }
+  .library-kind-filter { inline-size: 104px; }
+  .library-location { display: flex; align-items: center; gap: var(--space-1); min-block-size: var(--control-md); }
+  .library-location > .library-breadcrumbs { flex: 1; min-inline-size: 0; margin-inline-start: calc(-1 * var(--space-2)); overflow-x: auto; scrollbar-width: none; }
+  .library-breadcrumbs > .ui-crumb-item:where([aria-current]) { color: var(--text-1); font: var(--type-ui-strong); }
+  .library-location > .library-origin { display: none; flex: 1; align-items: center; gap: var(--space-1-5); min-inline-size: 0; font: var(--type-small); color: var(--text-2); }
+  .library-origin > svg { flex: none; inline-size: var(--icon-sm); block-size: var(--icon-sm); color: var(--accent-text); }
+  .library-location > .library-count { flex: none; padding-inline: var(--space-1); font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+  :where(#user-library[data-source="public"]) .library-location > :is(.library-breadcrumbs, .library-new-folder) { display: none; }
+  :where(#user-library[data-source="public"]) .library-location > .library-origin { display: flex; }
+  /* The web build's My library: the explanation fills the panel under the source switch. */
+  :where(#user-library[data-unavailable="true"][data-source="mine"]) :is(.library-tools, .library-location, .library-add) { display: none; }
+
+  /* ---- Cards: one listbox, two columns in the docked panel, more when it floats wider ---- */
+  .library-content { flex: 1; min-block-size: 0; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: var(--space-1) var(--island-pad) var(--space-4); }
+  .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: var(--space-3) var(--space-2-5); align-content: start; }
+  .library-group { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; row-gap: var(--space-3); }
+  .library-group + .library-group { margin-block-start: var(--space-2); }
+  .library-group-label {
+    position: sticky; inset-block-start: calc(-1 * var(--space-1)); z-index: 2; grid-column: 1 / -1;
+    display: flex; align-items: baseline; gap: var(--space-1-5); margin-inline: calc(-1 * var(--space-1)); padding: var(--space-2) var(--space-1) var(--space-1);
+    background: var(--surface); font: var(--type-small-strong); color: var(--text-1);
+  }
+  .library-group-count { font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+  .library-card {
+    position: relative; display: grid; align-content: start; gap: var(--space-1-5); min-inline-size: 0;
+    border-radius: var(--radius-lg); outline: none; cursor: grab; touch-action: none; user-select: none;
+    content-visibility: auto; contain-intrinsic-size: auto 132px;
+  }
+  .library-card .library-thumbnail {
+    position: relative; display: grid; place-items: center; aspect-ratio: 5 / 4; overflow: hidden; border-radius: var(--radius-lg);
+    background-color: var(--library-matte, #858b94); /* artwork: the preview's matte */
+    background-image: conic-gradient(#ffffff0d 25%, transparent 0 50%, #ffffff0d 0 75%, transparent 0); /* artwork: a quiet checkerboard */
+    background-size: 14px 14px;
+  }
+  /* The card contains its paint, so its states draw inside the preview: a hairline at rest, a darker one on
+   * hover, 2px of Styk blue when selected, the focus ring's colour when focused. */
+  .library-card .library-thumbnail::after {
+    content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; pointer-events: none;
+    box-shadow: inset 0 0 0 1px var(--line-1); transition: box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .library-card:where(:hover) .library-thumbnail::after { box-shadow: inset 0 0 0 1px var(--line-3); }
+  .library-card:where(.selected) .library-thumbnail::after { box-shadow: inset 0 0 0 2px var(--accent); }
+  .library-card:focus-visible .library-thumbnail::after { box-shadow: inset 0 0 0 2px var(--focus-ring), 0 0 0 3px var(--focus-halo); }
+  .library-thumbnail > img, .library-thumbnail > .library-animation {
+    position: absolute; inset: 0; inline-size: 100%; block-size: 100%; padding: var(--space-1-5); object-fit: contain;
+  }
+  .library-thumbnail > img { opacity: 0; transition: opacity var(--dur-base) var(--ease-out), scale var(--dur-base) var(--ease-out); }
+  .library-card:where(.is-loaded) .library-thumbnail > img { opacity: 1; }
+  .library-card:where(:hover) .library-thumbnail > img { scale: 1.04; }
+  .library-thumbnail > .library-animation { z-index: 1; pointer-events: none; }
+  .library-card:where(.library-preview-playing) .library-thumbnail > img { visibility: hidden; }
+  .library-thumbnail > svg { inline-size: 28px; block-size: 28px; color: var(--text-on-strong); opacity: 0.7; }
+  .library-card:where(.folder) .library-thumbnail { background: var(--tint-library-soft); }
+  .library-card:where(.folder) .library-thumbnail > svg { inline-size: 40px; block-size: 40px; color: var(--tint-library-ink); opacity: 1; fill: none; stroke-width: 1.5; }
+  .library-card .library-card-info { display: grid; gap: 1px; min-inline-size: 0; padding-inline: var(--space-0-5); }
+  .library-card .library-name { overflow: hidden; font: var(--type-small-strong); color: var(--text-1); text-overflow: ellipsis; white-space: nowrap; }
+  .library-card:where(.selected) .library-name { color: var(--accent-text-strong); }
+  .library-card .library-kind { font: var(--type-micro); font-weight: var(--weight-medium); color: var(--text-3); }
+  .library-card .library-rename {
+    min-inline-size: 0; inline-size: 100%; block-size: var(--control-sm); margin-block: -2px; padding: 0 var(--space-1-5);
+    border: 0; border-radius: var(--radius-sm); outline: none; background: var(--surface); color: var(--text-1); font: var(--type-small-strong);
+    box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo);
+  }
+
+  /* ⋯ on hover, focus and the selected card; always under touch. */
+  .library-card .library-more {
+    position: absolute; inset-block-start: var(--space-1-5); inset-inline-end: var(--space-1-5); z-index: 3;
+    display: grid; place-items: center; inline-size: 24px; block-size: 24px; padding: 0;
+    border: 0; border-radius: var(--radius-sm); background: var(--surface-raised); color: var(--text-1);
+    box-shadow: var(--elevation-1); line-height: 0; opacity: 0; transition: opacity var(--dur-fast) var(--ease-out);
+  }
+  .library-card .library-more > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .library-card:where(:hover, :focus-within, .selected) .library-more { opacity: 1; }
+  .library-card .library-more:where(:hover) { background: var(--surface-hover); }
+  .library-card .library-more:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; opacity: 1; }
+  @media (hover: none) { .library-card .library-more { opacity: 1; } }
+
+  /* A movieclip or a set says so in the corner; a movieclip plays on hover with a progress line. */
+  .library-thumbnail > .library-clip-badge {
+    position: absolute; inset-block-end: var(--space-1-5); inset-inline-end: var(--space-1-5); z-index: 2;
+    display: grid; place-items: center; inline-size: 20px; block-size: 20px; border-radius: var(--radius-sm);
+    background: var(--surface-raised); color: var(--tint-library-ink); box-shadow: var(--elevation-1);
+  }
+  .library-clip-badge > svg { inline-size: 12px; block-size: 12px; }
+  .library-thumbnail > .library-preview-hint {
+    position: absolute; inset-block-end: var(--space-1-5); inset-inline-start: var(--space-1-5); z-index: 2;
+    padding: 1px var(--space-1-5); border-radius: var(--radius-sm); background: var(--surface-inverse); color: var(--text-inverse);
+    font: var(--type-micro); opacity: 0; transition: opacity var(--dur-fast) var(--ease-out); pointer-events: none;
+  }
+  .library-card:where(:hover, .library-preview-playing) .library-preview-hint { opacity: 0.92; }
+  .library-thumbnail > .library-preview-progress {
+    position: absolute; inset: auto 0 0; z-index: 2; display: none; block-size: 2px;
+    background: var(--accent-line); transform: scaleX(var(--library-progress, 0)); transform-origin: left;
+  }
+  .library-card:where(.library-preview-playing) .library-preview-progress { display: block; }
+  .library-thumbnail > .library-preview-loading {
+    inline-size: 18px; block-size: 18px; border: 2px solid var(--line-2); border-block-start-color: var(--accent-line); border-radius: 50%;
+    animation: library-spin 0.8s linear infinite;
+  }
+  @keyframes library-spin { to { rotate: 1turn; } }
+
+  /* Loading the public library: quiet placeholders in the cards' shape. */
+  .library-card:where(.is-skeleton) { cursor: default; }
+  .library-card:where(.is-skeleton) .library-thumbnail { background: var(--surface-sunken); animation: library-pulse 1.4s var(--ease-out) infinite alternate; }
+  .library-card:where(.is-skeleton) :is(.library-name, .library-kind) { block-size: 10px; border-radius: var(--radius-xs); background: var(--surface-sunken); }
+  .library-card:where(.is-skeleton) .library-name { inline-size: 70%; margin-block: 2px; }
+  .library-card:where(.is-skeleton) .library-kind { inline-size: 40%; }
+  @keyframes library-pulse { to { opacity: 0.55; } }
+  /* An asset opened from a website link glows once. */
+  .library-card:where(.library-card-linked) .library-thumbnail::after { animation: library-linked 1.8s var(--ease-out) 2; }
+  @keyframes library-linked { 50% { box-shadow: inset 0 0 0 2px var(--accent), 0 0 0 4px var(--focus-halo); } }
+
+  /* The preview background override (the library menu); Automatic follows each artwork. */
+  :where(#user-library[data-background="light"]) .library-card:not(.folder) .library-thumbnail { background-color: #edf0f4; /* artwork: LIBRARY_MATTES.light */ }
+  :where(#user-library[data-background="dark"]) .library-card:not(.folder) .library-thumbnail { background-color: #343b47; /* artwork: LIBRARY_MATTES.dark */ }
+
+  .library-empty.ui-empty { padding-block: var(--space-8) var(--space-4); }
+
+  /* ---- The foot, pinned under the cards ---- */
+  .library-foot { display: grid; gap: var(--space-2); padding: var(--space-2-5) var(--island-pad) var(--space-3); box-shadow: inset 0 1px 0 var(--line-1); }
+  .library-foot > .ui-button { inline-size: 100%; justify-content: center; }
+  .library-foot > .library-website { display: none; color: var(--text-2); }
+  :where(#user-library[data-source="public"]) .library-foot > .library-add { display: none; }
+  :where(#user-library[data-source="public"]) .library-foot > .library-website { display: inline-flex; }
+  .library-message { margin: 0; overflow-wrap: anywhere; font: var(--type-small); color: var(--success-text); }
+  .library-message:empty { display: none; }
+  .library-message:where([data-error="true"]) { color: var(--danger-text); }
+
+  /* ---- Dragging a card: a small ghost under the pointer, a ring on the destination ---- */
+  .library-card:where(.library-dragging) { opacity: 0.45; }
+  .library-drag-ghost {
+    position: fixed; inset: 0 auto auto 0; z-index: var(--z-floating); inline-size: 112px; padding: var(--space-1-5);
+    border-radius: var(--radius-lg); background: var(--surface-raised); color: var(--text-1); box-shadow: var(--elevation-3);
+    pointer-events: none; contain: layout paint; will-change: transform; transform: translate3d(-200px, -200px, 0);
+  }
+  .library-drag-ghost > img { display: block; inline-size: 100%; block-size: 76px; border-radius: var(--radius-md); background: var(--library-matte, #858b94); /* artwork */ object-fit: contain; }
+  .library-drag-ghost > span { display: block; margin-block-start: var(--space-1-5); overflow: hidden; font: var(--type-small-strong); text-overflow: ellipsis; white-space: nowrap; }
+  .library-drag-ghost > small { display: block; font: var(--type-micro); font-weight: var(--weight-medium); color: var(--text-3); }
+  .library-folder-drop-target :where(.library-thumbnail)::after { box-shadow: inset 0 0 0 2px var(--accent); }
+  .library-card:where(.folder).library-folder-drop-target .library-thumbnail { background: var(--accent-soft); }
+  .ui-crumb-item:where(.library-folder-drop-target) { background: var(--accent-soft); color: var(--accent-text); }
+  .library-drop-target { outline: 2px solid var(--accent-line); outline-offset: -2px; }
+  .library-drop-target::after {
+    content: "Drop to add to the scene"; position: absolute; inset: var(--space-5) auto auto 50%; z-index: var(--z-canvas-hud); translate: -50% 0;
+    padding: var(--space-2) var(--space-3-5); border-radius: var(--radius-pill); background: var(--surface-raised);
+    color: var(--text-1); box-shadow: var(--elevation-3); font: var(--type-ui-strong); pointer-events: none;
+  }
+
+  /* ---- New folder, Move and Remove ---- */
+  .library-dialog {
+    inline-size: min(400px, calc(100vw - var(--space-10))); padding: var(--space-6);
+    border: 0; border-radius: var(--radius-xl); background: var(--surface-raised); color: var(--text-1); box-shadow: var(--elevation-3); font: var(--type-ui);
+  }
+  .library-dialog::backdrop { background: var(--surface-backdrop); }
+  .library-dialog h2 { margin: 0 0 var(--space-2); overflow-wrap: anywhere; font: var(--type-title); letter-spacing: var(--tracking-title); color: var(--text-1); }
+  .library-dialog p { margin: 0 0 var(--space-5); font: var(--type-ui); color: var(--text-2); }
+  .library-dialog label { display: grid; gap: var(--space-1-5); font: var(--type-small-strong); color: var(--text-2); }
+  .library-dialog input {
+    block-size: var(--control-lg); padding: 0 var(--space-3); border: 0; border-radius: var(--radius-md);
+    background: var(--surface-sunken); color: var(--text-1); font: var(--type-ui);
+  }
+  .library-dialog input:focus-visible { outline: none; background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo); }
+  .library-dialog footer { display: flex; justify-content: flex-end; gap: var(--space-2); margin-block-start: var(--space-6); }
+  .library-dialog .library-dialog-error { margin-block-start: var(--space-2); font: var(--type-small); color: var(--danger-text); }
+  .library-dialog .library-dialog-error:empty { display: none; }
+  .library-move-location { padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); background: var(--surface-sunken); overflow-wrap: anywhere; font: var(--type-small-strong); color: var(--text-2); }
+  .library-move-folders { display: grid; gap: var(--space-0-5); max-block-size: 260px; overflow: auto; margin-block-start: var(--space-2); }
+  .library-move-folders > button {
+    display: flex; align-items: center; justify-content: flex-start; gap: var(--space-2-5); inline-size: 100%; min-block-size: var(--control-md);
+    padding: 0 var(--space-2-5); border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-1); font: var(--type-ui); text-align: start;
+  }
+  .library-move-folders > button > svg { flex: none; inline-size: var(--icon-md); block-size: var(--icon-md); color: var(--tint-library-ink); }
+  .library-move-folders > button:where([data-parent]) > svg { color: var(--text-2); }
+  .library-move-folders > button:where(:hover) { background: var(--surface-hover); }
+  .library-move-folders > button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset-inset); }
+  .library-move-folders > .library-move-none { margin: 0; padding: var(--space-2) var(--space-2-5); font: var(--type-small); color: var(--text-3); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .library-card .library-thumbnail > .library-preview-loading, .library-card:where(.is-skeleton) .library-thumbnail { animation: none; }
+    .library-card:where(:hover) .library-thumbnail > img { scale: none; }
+  }
+}

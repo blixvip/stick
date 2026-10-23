@@ -1,0 +1,18 @@
+.tweener-tool {position:relative;width:32px;height:32px;border-radius:5px;flex:none;}
+.studio-rail .tweener-tool > .tool {color:var(--tween-color);}
+.studio-rail .tweener-tool.active > .tool {color:var(--tween-color);background:color-mix(in srgb,var(--tween-color) 15%,transparent);box-shadow:inset 2px 0 var(--tween-color);}
+.tweener-arrow {position:absolute;right:-2px;bottom:-1px;width:14px;height:14px;min-height:0;padding:2px;border:0;border-radius:3px;background:var(--theme-panel,#fff);color:var(--tween-color);}
+.tweener-arrow svg {display:block;width:10px;height:10px;}
+.tweener-arrow:hover,.tweener-arrow[aria-expanded=true] {background:color-mix(in srgb,var(--tween-color) 18%,var(--theme-panel,#fff));}
+.workspace[data-mode=rig] .tweener-tool {display:none;}
+.tweener-types {position:fixed;inset:auto;margin:0;box-sizing:border-box;width:210px;padding:5px;max-width:calc(100vw - 16px);border:1px solid var(--theme-border,#dce1e7);border-radius:9px;background:var(--theme-panel,#fff);color:var(--theme-text,#303843);box-shadow:0 8px 28px #0002;font:12px Inter,'Segoe UI',sans-serif;}
+.tweener-types button {display:flex;align-items:center;gap:10px;width:100%;height:38px;padding:0 10px;border:0;border-radius:5px;background:transparent;color:inherit;text-align:left;font:inherit;}
+.tweener-types button:hover,.tweener-types button:focus-visible {background:var(--theme-hover,#f1f3f5);}
+.tweener-types button[aria-checked=true] {background:color-mix(in srgb,var(--tween-color) 10%,transparent);}
+.tweener-types .icon {width:20px;height:20px;color:var(--tween-color);}
+.tween-chosen {margin-left:auto;color:var(--tween-color);visibility:hidden;}
+[aria-checked=true] > .tween-chosen {visibility:visible;}
+.tweener-tool :focus-visible,.tweener-types :focus-visible {outline:2px solid var(--tween-color);outline-offset:1px;}
+.tweener-active #overlay {cursor:ew-resize!important;}
+.tweener-hud {position:absolute;left:50%;bottom:52px;transform:translateX(-50%);z-index:5;pointer-events:none;padding:7px 12px;border:1px solid color-mix(in srgb,var(--tween-color) 45%,transparent);border-radius:20px;background:var(--theme-panel,#fff);color:var(--tween-color);box-shadow:0 3px 12px #0001;font:600 12px Inter,'Segoe UI',sans-serif;font-variant-numeric:tabular-nums;white-space:pre;}
+.tweener-hud[hidden] {display:none;}

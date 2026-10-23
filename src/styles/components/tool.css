@@ -1,0 +1,53 @@
+/* Tool button (components.md "Tool button and Rail"): a 40px square, radius
+ * 12, a 20px glyph in --text-2, in the floating tool bar beside the canvas.
+ * The active tool [aria-pressed="true"] is a vivid Styk blue tile with a white
+ * glyph, the one strong colour of the bar, so it reads at a glance. A tool
+ * with variants (the Tweener, Select pixels, Shapes) keeps its corner tick,
+ * .ui-tool-tick: a decorative 5px triangle (aria-hidden); the rail lists the
+ * variants on a click on the tick, a right-click or a long press. Keeps
+ * data-tool and the tools' ids on the same element. */
+@layer components {
+  .ui-tool-button {
+    --icon-size: var(--icon-xl);
+    position: relative;
+    display: inline-grid; place-items: center; flex: none;
+    inline-size: var(--control-xl); block-size: var(--control-xl); padding: 0;
+    border: 1px solid transparent; border-radius: var(--radius-lg);
+    background: transparent; color: var(--text-2);
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+    -webkit-app-region: no-drag;
+  }
+  .ui-tool-button > svg { inline-size: var(--icon-size); block-size: var(--icon-size); }
+  .ui-tool-button:where(:hover):not(:disabled, [aria-pressed="true"]) { background: var(--surface-hover); color: var(--text-1); }
+  .ui-tool-button:where(:active):not(:disabled) { transform: scale(var(--press-scale)); }
+  .ui-tool-button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .ui-tool-button[aria-pressed="true"] {
+    background: var(--accent-strong); color: var(--text-on-strong);
+    box-shadow: 0 6px 14px -8px color-mix(in srgb, var(--accent-strong) 70%, transparent);
+  }
+  .ui-tool-button:disabled { opacity: 0.42; }
+
+  .ui-tool-tick {
+    position: absolute; inset-block-end: 5px; inset-inline-end: 5px;
+    inline-size: 5px; block-size: 5px;
+    background: var(--text-3); clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    pointer-events: none;
+  }
+  .ui-tool-button:where([aria-pressed="true"]) > .ui-tool-tick { background: var(--text-on-strong); }
+  .ui-tool-tick:where(:dir(rtl)) { clip-path: polygon(0 0, 100% 100%, 0 100%); }
+  /* A tick that lists the variants itself (src/shell/rail.mjs): a 16px button over the tool's lower corner. */
+  .ui-tool-tick-button {
+    position: absolute; inset: auto 0 0 auto; inline-size: 16px; block-size: 16px; padding: 0;
+    border: 0; border-end-end-radius: var(--radius-lg); background: transparent; cursor: pointer;
+    -webkit-app-region: no-drag;
+  }
+  .ui-tool-tick-button:where(:hover, [aria-expanded="true"]) > .ui-tool-tick { background: var(--text-1); }
+  :where([data-active]) > .ui-tool-tick-button > .ui-tool-tick { background: var(--text-on-strong); }
+  /* At the minimal width, the low height tier and in the compact chrome (under 801px tall) the tools are 32px. */
+  :where(:root[data-tier="minimal"], :root[data-height="low"], :root[data-chrome="compact"]) .ui-tool-button { inline-size: var(--control-md); block-size: var(--control-md); --icon-size: var(--icon-lg); }
+
+  @media (forced-colors: active) {
+    .ui-tool-button[aria-pressed="true"] { border-color: Highlight; color: Highlight; background: Canvas; }
+    .ui-tool-tick { background: CanvasText; }
+  }
+}

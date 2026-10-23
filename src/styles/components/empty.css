@@ -1,0 +1,26 @@
+/* Empty state (components.md "Containers"): a title, at most one quiet line
+ * and at most one action, centred in its panel ("No effects on Bubble", Draw's
+ * "New drawing": "Paint anywhere to start a drawing layer" and New drawing
+ * layer). In the VFX tab the suggested tiles follow it. No illustrations, no
+ * coach marks.
+ *
+ *   <div class="ui-empty">
+ *     <svg class="ui-icon ui-empty-glyph">…</svg>
+ *     <h3 class="ui-empty-title">New drawing</h3>
+ *     <p class="ui-empty-text">Paint anywhere to start a drawing layer</p>
+ *     <div class="ui-empty-actions"><button class="ui-button" data-variant="outline">New drawing layer</button></div>
+ *   </div>
+ *
+ * data-align="start": the same parts at the start of an inspector column. */
+@layer components {
+  .ui-empty {
+    display: grid; justify-items: center; align-content: start; gap: var(--space-2);
+    padding: var(--space-6) var(--space-4); text-align: center;
+  }
+  .ui-empty-glyph { inline-size: var(--icon-lg); block-size: var(--icon-lg); color: var(--text-3); }
+  .ui-empty-title { margin: 0; font: var(--type-heading); letter-spacing: var(--tracking-heading); color: var(--text-1); text-wrap: balance; }
+  .ui-empty-text { max-inline-size: 34ch; margin: 0; font: var(--type-small); color: var(--text-2); text-wrap: pretty; }
+  .ui-empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2); margin-block-start: var(--space-1); }
+  .ui-empty[data-align="start"] { justify-items: start; padding-inline: 0; text-align: start; }
+  .ui-empty:where([data-align="start"]) > .ui-empty-actions { justify-content: start; }
+}

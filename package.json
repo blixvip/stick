@@ -1,0 +1,290 @@
+{
+  "name": "stykanimate-webapp",
+  "productName": "StykAnimate",
+  "version": "1.2.5",
+  "description": "A WebGPU desktop workspace for Pivot animation and stick figures.",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://stykanimate.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/filippocalippo/StykAnimate-App.git"
+  },
+  "bugs": {
+    "url": "https://github.com/filippocalippo/StykAnimate-App/issues"
+  },
+  "private": true,
+  "type": "module",
+  "main": "desktop/main.cjs",
+  "desktopName": "stykanimate.desktop",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "serve": "node scripts/serve.mjs",
+    "check": "node scripts/check.mjs",
+    "locales:build": "node scripts/build-locales.mjs",
+    "locales:check": "node scripts/build-locales.mjs --check",
+    "locales:validate": "node scripts/build-locales.mjs --validate-only",
+    "test:localization:browser": "node tests/localization-settings.browser.mjs && node tests/localization-app.browser.mjs && node tests/localization-native-app.browser.mjs && node tests/localization-foundation.browser.mjs && node tests/localization-packs.browser.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:hotkeys": "node --test tests/hotkeys.test.mjs",
+    "test:hotkeys:ui": "node tests/hotkeys-timeline.browser.mjs",
+    "test:hotkeys:desktop": "node scripts/smoke-hotkeys.mjs",
+    "test:drawing:desktop": "node scripts/smoke-drawing.mjs",
+    "benchmark:drawing-load": "node scripts/benchmark-drawing-load.mjs",
+    "test:ui": "node tests/app.browser.mjs",
+    "test:renderer": "node tests/renderer-gpu-smoke.mjs",
+    "test:timeline": "node tests/timeline.browser.mjs",
+    "test:recovery": "node --test scripts/recovery.test.mjs",
+    "test:streams": "node --test scripts/file-streams.test.mjs",
+    "test:streams:desktop": "node scripts/smoke-native-streams.mjs",
+    "test:preferences": "node --test scripts/preferences.test.mjs",
+    "test:telemetry": "node --test tests/telemetry*.test.mjs",
+    "benchmark:telemetry": "node scripts/benchmark-telemetry.mjs",
+    "web:build": "node scripts/build-web.mjs",
+    "web:verify": "node scripts/verify-web.mjs",
+    "web:preview": "node scripts/build-web.mjs && node scripts/serve-web.mjs",
+    "web:deploy": "node scripts/deploy-web.mjs",
+    "test:web": "node tests/web-build.browser.mjs && node tests/web-offline.browser.mjs",
+    "test:pinch": "node tests/canvas-pinch.browser.mjs",
+    "test:touch": "node tests/touch.browser.mjs",
+    "test:web:browsers": "node tests/browser-save-recovery.browser.mjs && node tests/web-autosave.browser.mjs && node tests/web-library.browser.mjs && node tests/web-library-engine.browser.mjs && node tests/web-support.browser.mjs",
+    "test:preferences:desktop": "node scripts/smoke-preferences.mjs",
+    "test:project-files": "node --test scripts/project-files.test.mjs",
+    "test:project-files:desktop": "node scripts/smoke-project-files.mjs",
+    "test:project-tabs:desktop": "node scripts/smoke-project-tabs.mjs",
+    "test:home": "node tests/home.browser.mjs && node tests/tutorials.browser.mjs",
+    "test:home:desktop": "node scripts/smoke-home.mjs",
+    "test:project-library": "node --test scripts/project-library.test.mjs",
+    "test:recovery:desktop": "node scripts/smoke-recovery.mjs",
+    "benchmark:native-import": "node scripts/benchmark-native-import.mjs",
+    "benchmark:dense": "node scripts/benchmark-dense-scene.mjs",
+    "benchmark:animation-modes": "node --expose-gc scripts/benchmark-animation-modes.mjs",
+    "benchmark:animation-memory": "node --expose-gc scripts/benchmark-animation-memory.mjs",
+    "test:animation-performance": "node --test tests/animation-performance.test.mjs",
+    "test:animation-performance:browser": "node tests/animation-mode-performance.browser.mjs",
+    "test:desktop": "node scripts/smoke-desktop.mjs",
+    "test:desktop:packaged": "node scripts/smoke-desktop.mjs --packaged",
+    "test:boot": "node scripts/smoke-boot.mjs",
+    "test:boot:packaged": "node scripts/smoke-boot.mjs --packaged",
+    "test:export:desktop": "node scripts/smoke-video-export.mjs",
+    "test:export:packaged": "node scripts/smoke-video-export.mjs --packaged",
+    "test:library": "node --test scripts/library-store.test.mjs scripts/public-library.test.mjs tests/user-library.test.mjs",
+    "test:library:desktop": "node scripts/smoke-library.mjs",
+    "build:sidecar": "node scripts/run-python.mjs scripts/build-sidecar.py",
+    "build:video-encoder": "node scripts/run-python.mjs scripts/stage-video-encoder.py",
+    "build:vfw": "node scripts/run-python.mjs scripts/build-vfw-bridge.py",
+    "build:frame-scan": "node scripts/run-python.mjs scripts/build-frame-scan.py",
+    "build:brand": "node scripts/build-brand-assets.mjs",
+    "test:clipboard": "node --test tests/editor-frame-clipboard.test.mjs tests/frame-clipboard-authored.test.mjs",
+    "test:clipboard:desktop": "node scripts/smoke-frame-clipboard.mjs",
+    "verify:sidecar": "node scripts/verify-sidecar.mjs",
+    "pack": "electron-builder --dir",
+    "verify:package": "node scripts/verify-package.mjs",
+    "mark:release": "node scripts/mark-release.mjs",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux",
+    "test:updates": "node --test tests/updates.test.mjs tests/appimage-updater.test.mjs tests/release-assets.test.mjs",
+    "test:updates:linux": "node scripts/verify-appimage-update.mjs",
+    "test:updates:desktop": "node scripts/smoke-updates.mjs",
+    "release:prepare": "node scripts/prepare-release.mjs",
+    "changelog:check": "node scripts/check-changelog.mjs",
+    "release:verify": "node scripts/release-assets.mjs",
+    "release:publish": "node scripts/publish-release.mjs"
+  },
+  "dependencies": {
+    "electron-updater": "6.6.2"
+  },
+  "devDependencies": {
+    "electron": "39.8.10",
+    "electron-builder": "26.15.3",
+    "playwright": "1.63.0",
+    "pyodide": "314.0.7",
+    "ws": "8.22.0"
+  },
+  "build": {
+    "beforePack": "scripts/before-pack.cjs",
+    "appId": "app.stykanimate.desktop",
+    "protocols": [
+      {
+        "name": "StykAnimate",
+        "schemes": [
+          "stykanimate"
+        ]
+      }
+    ],
+    "productName": "StykAnimate",
+    "artifactName": "StykAnimate-${version}-${os}-${arch}.${ext}",
+    "toolsets": {
+      "appimage": "1.0.3"
+    },
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "desktop/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": ".",
+        "to": "web",
+        "filter": [
+          "index.html",
+          "*.css",
+          "*.svg",
+          "*.png",
+          "src/**/*",
+          "assets/**/*",
+          "vendor/**/*"
+        ]
+      },
+      {
+        "from": "backend",
+        "to": "backend",
+        "filter": [
+          "**/*.py"
+        ]
+      },
+      {
+        "from": "codecs",
+        "to": "tools",
+        "filter": [
+          "*.py"
+        ]
+      },
+      {
+        "from": "codecs/codec_bridge.py",
+        "to": "codec_bridge.py"
+      },
+      {
+        "from": "build/sidecar",
+        "to": "sidecar",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "build/video-encoder",
+        "to": "video-encoder",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "fileAssociations": [
+      {
+        "ext": "nodes",
+        "mimeType": "application/x-sticknodes-figure",
+        "name": "Stick Nodes figure",
+        "role": "Viewer"
+      },
+      {
+        "ext": "nodemc",
+        "mimeType": "application/x-sticknodes-movieclip",
+        "name": "Stick Nodes movie clip",
+        "role": "Viewer"
+      },
+      {
+        "ext": "stknds",
+        "mimeType": "application/x-sticknodes-project",
+        "name": "Stick Nodes project",
+        "role": "Viewer"
+      },
+      {
+        "ext": "piv",
+        "mimeType": "application/x-pivot-animation",
+        "name": "Pivot animation",
+        "role": "Editor"
+      },
+      {
+        "ext": "stk",
+        "mimeType": "application/x-pivot-figure",
+        "name": "Pivot stick figure",
+        "role": "Editor"
+      },
+      {
+        "ext": "stykmov",
+        "mimeType": "application/vnd.stykanimate.movieclip",
+        "name": "StykAnimate movieclip",
+        "role": "Editor"
+      },
+      {
+        "ext": "stkz",
+        "mimeType": "application/vnd.stykanimate.figure",
+        "name": "StykAnimate figure",
+        "role": "Editor"
+      },
+      {
+        "ext": "styk",
+        "mimeType": "application/vnd.stykanimate.project",
+        "name": "StykAnimate project",
+        "role": "Editor"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "desktop/assets/stykanimate.ico",
+      "signExecutable": false,
+      "extraResources": [
+        {
+          "from": "native/bin",
+          "to": "vfw",
+          "filter": [
+            "build-info.json",
+            "x86/*.exe",
+            "x64/*.exe"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "installerIcon": "desktop/assets/stykanimate.ico",
+      "uninstallerIcon": "desktop/assets/stykanimate.ico",
+      "installerHeaderIcon": "desktop/assets/stykanimate.ico",
+      "include": "desktop/installer.nsh",
+      "artifactName": "StykAnimate-${version}-Setup-${arch}.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "portable": {
+      "artifactName": "StykAnimate-${version}-Portable-${arch}.${ext}"
+    },
+    "mac": {
+      "icon": "desktop/assets/stykanimate.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.graphics-design",
+      "hardenedRuntime": true
+    },
+    "linux": {
+      "icon": "desktop/assets/stykanimate.png",
+      "target": [
+        "AppImage"
+      ],
+      "category": "Graphics",
+      "executableName": "stykanimate",
+      "syncDesktopName": true,
+      "synopsis": "Stick figure animation"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "filippocalippo",
+        "repo": "styk-animate-releases",
+        "private": false,
+        "releaseType": "draft"
+      }
+    ],
+    "releaseInfo": {
+      "releaseNotesFile": "release-notes.md"
+    }
+  }
+}

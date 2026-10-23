@@ -1,0 +1,61 @@
+/* The rail's column (experience.md §3.2): the current workspace's tools on the
+ * window's field, vertically centered beside the canvas in every workspace
+ * (layout/workspace.css places the column; src/shell/rail.mjs shows the
+ * tools). A tool with variants sits in a `.rail-slot` with its corner tick
+ * (components/tool.css .ui-tool-tick-button), which lists the variants; the
+ * Tweener's own tick (tweener-controls.mjs) is drawn the same way here.
+ * Until the figure's quick actions land (M4), Animate's two stacking buttons
+ * follow the tools under a short hairline. */
+@layer layout {
+  .shell-rail { align-items: stretch; gap: 0; }
+  .shell-rail-handle {
+    flex: none; align-self: center; inline-size: 28px; block-size: 24px; min-block-size: 24px;
+    padding: 0; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-3);
+    cursor: grab; touch-action: none;
+  }
+  .shell-rail-handle::after {
+    content: ''; display: block; inline-size: 18px; block-size: 6px; margin: auto;
+    background: radial-gradient(circle, currentColor 1px, transparent 1px) 0 0 / 6px 3px;
+  }
+  .shell-rail-handle:where(:hover, :focus-visible) { background: var(--surface-hover); color: var(--text-1); }
+  .shell-rail-handle[data-dragging] { cursor: grabbing; }
+  :where(.rail-slot, .shell-rail .tweener-tool) { position: relative; display: flex; flex: none; inline-size: auto; block-size: auto; border-radius: 0; }
+
+  .shell-rail :where(.tweener-arrow) {
+    position: absolute; inset: auto 0 0 auto;
+    inline-size: 14px; block-size: 14px; min-block-size: 0; padding: 0;
+    border: 0; border-end-end-radius: var(--radius-lg); background: transparent; color: var(--text-3);
+    cursor: pointer; -webkit-app-region: no-drag;
+  }
+  /* The Tweener draws today's arrow as the same 5px tick. */
+  .shell-rail :where(.tweener-arrow) > svg { display: none; }
+  .shell-rail :where(.tweener-arrow)::after {
+    content: ""; position: absolute; inset-block-end: 4px; inset-inline-end: 4px; inline-size: 5px; block-size: 5px;
+    background: currentColor; clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+  .shell-rail :where(.tweener-arrow):where(:hover, [aria-expanded="true"]) { background: transparent; color: var(--text-1); }
+  .shell-rail :where(.tweener-tool.active) > :where(.tweener-arrow) { color: var(--accent-text); }
+
+  /* Build's quick options: a second group under the tools, past a 20px hairline; an option that is on looks pressed. */
+  .shell-rail :where(.rail-quick) {
+    position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--space-1);
+    margin-block-start: var(--space-3); padding-block-start: var(--space-2);
+  }
+  .shell-rail :where(.rail-quick)[hidden] { display: none; }
+  .shell-rail :where(.rail-quick)::before {
+    content: ""; position: absolute; inset: 0 auto auto calc(50% - 10px); inline-size: 20px; block-size: 1px; background: var(--line-2);
+  }
+  :where(.shell-rail[data-columns]) > .rail-quick { display: grid; grid-template-columns: repeat(2, auto); justify-content: center; }
+  :where(:root[data-height="low"]) .shell-rail :where(.rail-quick) { gap: 2px; margin-block-start: var(--space-1-5); }
+  :where(:root[data-height="low"]) .shell-rail :where(.rail-quick > button) { block-size: 30px; min-block-size: 30px; }
+
+  /* Animate's stacking buttons: a separate group under a 20px hairline. */
+  .shell-rail :where(.rail-order) { position: relative; margin-block-start: var(--space-2); }
+  .shell-rail :where(.rail-order)::before {
+    content: ""; position: absolute; inset: calc(-1 * var(--space-1)) auto auto calc(50% - 10px); inline-size: 20px; block-size: 1px; background: var(--line-2);
+  }
+
+  @media (forced-colors: active) {
+    .shell-rail :where(.tweener-arrow)::after { background: CanvasText; }
+  }
+}

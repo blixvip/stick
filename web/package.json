@@ -1,0 +1,9 @@
+{
+  "name": "stykanimate-web-deploy",
+  "private": true,
+  "type": "module",
+  "description": "Pinned Cloudflare tooling for deploying the browser build (npm ci --prefix web).",
+  "devDependencies": {
+    "wrangler": "4.130.0"
+  }
+}

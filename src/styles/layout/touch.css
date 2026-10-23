@@ -1,0 +1,117 @@
+/* The touch interface's layouts (docs/TOUCH.md). src/touch/touch-mode.mjs
+ * writes :root[data-input="touch"] and the layout's name, data-touch-layout:
+ *
+ *   phone-portrait    the band on top, the stage, the timeline, and a tab
+ *                     bar under the thumb (the workspaces and Properties;
+ *                     src/touch/touch-shell.mjs moves them there)
+ *   phone-landscape   the band turned into a wing on the right, so the stage
+ *                     and the timeline's header get the whole height
+ *   tablet-*          the desktop's arrangement at touch size
+ *
+ * The dock host still decides which panel shows where (the solver's touch
+ * profile folds the side panels into sheets); this sheet places the regions,
+ * keeps them inside the safe areas and keeps the browser's own gestures off
+ * the editor. Every selector starts from the root's touch state inside
+ * :where(), so nothing here changes the desktop interface. */
+@layer layout {
+  /* ---- The page: no page zoom, no pull to refresh, no rubber band, no selecting the chrome's words ---- */
+  :where(:root[data-input="touch"]) { overscroll-behavior: none; touch-action: manipulation; -webkit-text-size-adjust: 100%; }
+  :where(:root[data-input="touch"]) body {
+    overscroll-behavior: none; touch-action: manipulation;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+  }
+  :where(:root[data-input="touch"]) :where(input, textarea, select, [contenteditable="true"], [contenteditable=""]) {
+    -webkit-user-select: text; user-select: text; -webkit-touch-callout: default;
+  }
+  /* A field under 16px makes iOS zoom the page when it takes focus. */
+  :where(:root[data-input="touch"]) :where(input:not([type="range"], [type="checkbox"], [type="radio"], [type="color"]), textarea, select) { font-size: var(--text-field); }
+  /* The canvas and the painted timeline take every touch themselves (their pinch, their drags). */
+  :where(:root[data-input="touch"]) :where(#viewport, #overlay, #scene) { touch-action: none; }
+
+  /* ---- The shell: inside the safe areas ---- */
+  :where(:root[data-input="touch"]) .shell { padding-inline: var(--safe-left) var(--safe-right); }
+
+  /* ---- The band (every touch layout): the mark, the document, the workspaces and the actions at touch size ---- */
+  :where(:root[data-input="touch"]) .shell-top {
+    block-size: calc(var(--topbar-h) + var(--safe-top)); padding-block-start: var(--safe-top);
+    column-gap: var(--space-2); -webkit-app-region: no-drag;
+  }
+  :where(:root[data-input="touch"]) .band-end { gap: var(--space-1); }
+  :where(:root[data-input="touch"]) .shell-mark { block-size: var(--control-md); min-inline-size: var(--control-md); padding-inline: var(--space-2) var(--space-1); }
+  :where(:root[data-input="touch"]) .shell-mark > img { inline-size: 26px; block-size: 26px; }
+
+  /* ---- Phone, upright: band · workspace · tab bar ---- */
+  :where(:root[data-touch-layout="phone-portrait"]) .shell { grid-template-rows: auto minmax(0, 1fr) auto auto; }
+  :where(:root[data-touch-layout="phone-portrait"]) .shell-top { grid-template-columns: minmax(0, 1fr) auto; }
+  :where(:root[data-touch-layout="phone-portrait"]) .band-center { display: none; }
+  :where(:root[data-touch-layout="phone-portrait"]) .band-start { grid-column: 1; }
+  :where(:root[data-touch-layout="phone-portrait"]) .band-end { grid-column: 2; }
+  :where(:root[data-touch-layout="phone-portrait"]) .band-start { min-inline-size: 0; }
+  .touch-tabbar {
+    display: flex; align-items: stretch; gap: var(--space-1);
+    min-block-size: var(--tabbar-h); padding: var(--space-1) var(--space-2) calc(var(--space-1) + var(--safe-bottom));
+    background: var(--surface); box-shadow: inset 0 1px 0 var(--line-1);
+  }
+
+  /* ---- Phone, on its side: the band is a wing on the right; the stage and the timeline take the height ---- */
+  :where(:root[data-touch-layout="phone-landscape"]) .shell { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: minmax(0, 1fr); }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-work { grid-row: 1; grid-column: 1; }
+  /* The wing is a two-column grid: the mark over the three workspaces, Export over Undo, Redo and Properties; a
+   * session's buttons (Done, Test rig, Cancel) take whole rows under them. It scrolls only where even that is taller
+   * than the window. */
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-top {
+    grid-row: 1; grid-column: 2;
+    display: grid; grid-template-columns: repeat(2, var(--control-md)); grid-auto-rows: var(--control-md);
+    align-content: start; justify-content: center; gap: var(--space-1-5) var(--space-1);
+    inline-size: auto; block-size: auto; min-block-size: 0;
+    padding: calc(var(--space-2) + var(--safe-top)) var(--space-2) calc(var(--space-2) + var(--safe-bottom));
+    overflow-x: hidden; overflow-y: auto; scrollbar-width: none;
+    box-shadow: inset 1px 0 0 var(--line-1);
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-top > .band-cluster,
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-top .band-history { display: contents; }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-mark { grid-area: 1 / 1; padding: 0; justify-content: center; inline-size: var(--control-md); }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-mark > .chevron { display: none; }
+  :where(:root[data-touch-layout="phone-landscape"]) .band-center > .workspace-switch { grid-area: 2 / 1 / span 3 / 2; }
+  :where(:root[data-touch-layout="phone-landscape"]) .band-end > .band-export { grid-area: 1 / 2; }
+  :where(:root[data-touch-layout="phone-landscape"]) .band-history > [data-action="undo"] { grid-area: 2 / 2; }
+  :where(:root[data-touch-layout="phone-landscape"]) .band-history > [data-action="redo"] { grid-area: 3 / 2; }
+  :where(:root[data-touch-layout="phone-landscape"]) .band-end > .shell-sheet-button { grid-area: 4 / 2; }
+  :where(:root[data-touch-layout="phone-landscape"]) .band-end > :where(.band-done, .band-testrig, .band-cancel) { grid-column: 1 / -1; }
+
+  /* ---- The workspace: the stage island and the timeline, flush to the safe areas ---- */
+  :where(:root[data-input="touch"]) .shell-work { padding-block-end: max(var(--shell-pad-bottom, var(--space-2)), var(--safe-bottom)); }
+  :where(:root[data-touch-layout="phone-portrait"]) .shell-work { padding-block-end: var(--shell-pad-bottom, var(--space-1)); }
+
+  /* ---- The floating tool bar: touch-sized tools, and room to scroll ---- */
+  :where(:root[data-input="touch"]) .shell-rail { padding: var(--space-1); gap: var(--space-1); border-radius: var(--radius-2xl); }
+  :where(:root[data-input="touch"]) .shell-rail :where(.tool-dock) { gap: var(--space-1); }
+  :where(:root[data-input="touch"]) .shell-rail :where(.tool, .rail-add, .rail-quick > button) {
+    inline-size: var(--control-xl); block-size: var(--control-xl); min-block-size: var(--control-xl);
+  }
+  :where(:root[data-input="touch"]) .shell-rail-handle { display: none; }
+  :where(:root[data-input="touch"]) .shell-rail { overscroll-behavior: contain; touch-action: pan-y; }
+
+  /* ---- An upright phone's tool bar lies along the stage's bottom edge, one row that scrolls sideways (the solver
+   * keeps the artboard clear of it: layout-solver.mjs portraitRail) ---- */
+  :where(.workspace[data-rail-orientation="horizontal"]) > .shell-rail {
+    align-self: end; justify-self: center; flex-direction: row; align-items: center;
+    max-inline-size: calc(100% - 2 * var(--space-2)); max-block-size: none; margin: 0 var(--space-2) var(--space-2);
+    overflow-x: auto; overflow-y: hidden; overscroll-behavior: contain; touch-action: pan-x;
+  }
+  .shell-rail[data-more-after] { mask-image: linear-gradient(to right, black calc(100% - 16px), transparent); }
+
+  /* ---- The modifier buttons: the stage's corner under the thumb, above the canvas (touch/modifier-dock.mjs) ---- */
+  .touch-modifiers {
+    grid-area: stage; align-self: end; justify-self: end; z-index: var(--z-canvas-hud);
+    display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2);
+    margin: 0 var(--space-3) var(--space-3) 0; pointer-events: none;
+    max-block-size: calc(100% - var(--control-2xl) - var(--space-6));
+  }
+  .touch-modifiers > * { pointer-events: auto; }
+  .touch-modifiers[hidden], .touch-modifiers-list[hidden] { display: none; }
+  :where(.workspace[data-rail="right"]) > .touch-modifiers { justify-self: start; align-items: flex-start; margin-inline: var(--space-3) 0; }
+  /* Over an upright phone's tool bar, which lies along the stage's bottom edge. */
+  :where(.workspace[data-rail-orientation="horizontal"]) > .touch-modifiers { margin-block-end: calc(var(--control-xl) + var(--space-2) * 3); }
+
+}

@@ -1,0 +1,48 @@
+/* Form row, field grid, row and action row (components.md "Form row, field
+ * grid, row"). .ui-form-row stacks a label over a text field (rare: rename,
+ * dialogs). .ui-field-grid is two columns with 8px gaps, one below 200px;
+ * data-ratio="3:2" gives a labelled select room beside a short field (Layer
+ * and the Order stepper): the short column never gets less than its field's
+ * min-content, so "Order ↓ 2 ↑" keeps its whole value and both steps, and
+ * data-stack-narrow stacks a pair holding a select or switch below 240px. In
+ * a grid a field's label sits 4px from its value (padding 6/4), so
+ * "Opacity 100%" keeps a spare character in a 256px inspector; the stepper
+ * field keeps its own tighter padding. A grid with an id can be a controlled
+ * region; [hidden] hides it in place. .ui-row is a row label and one control
+ * (a stepper or segmented control; selects carry their label inside instead)
+ * or a read-only value (.ui-row-value: "Joined to  Rival · Left hand").
+ * .ui-action-row lays out a few buttons that act on the selection. */
+@layer components {
+  .ui-form-row { display: grid; gap: var(--space-1-5); min-inline-size: 0; }
+  .ui-form-label { font: var(--type-small-strong); color: var(--text-2); }
+  .ui-form-error { display: flex; align-items: center; gap: var(--space-1-5); font: var(--type-small); color: var(--danger-text); }
+  .ui-form-error > svg { flex: none; inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+
+  .ui-field-grid {
+    container: fieldgrid / inline-size;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2);
+    min-inline-size: 0;
+  }
+  .ui-field-grid[hidden] { display: none; }
+  .ui-field-grid > .ui-span-2 { grid-column: 1 / -1; }
+  .ui-field-grid[data-ratio="3:2"] { grid-template-columns: minmax(0, 3fr) minmax(min-content, 2fr); }
+  .ui-field-grid > .ui-field { --_gap: var(--space-1); padding-inline: var(--space-1-5) var(--space-1); }
+  /* After the grid rule, which has the same specificity: the stepper field keeps its gapless 2px padding. */
+  :where(.ui-field-grid) > .ui-field[data-steps] { --_gap: 0; padding-inline: var(--space-0-5); }
+  @container fieldgrid (width < 200px) { .ui-field-grid > * { grid-column: 1 / -1; } }
+  @container fieldgrid (width < 240px) { .ui-field-grid[data-stack-narrow] > * { grid-column: 1 / -1; } }
+
+  .ui-row {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+    min-block-size: var(--control-lg); font: var(--type-ui); color: var(--text-1);
+  }
+  .ui-row-label { flex: none; font: var(--type-small); color: var(--text-2); white-space: nowrap; }
+  .ui-row > :where(.ui-select) { flex: 1 1 auto; max-inline-size: 62%; }
+  .ui-row-value {
+    min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: end;
+    font: var(--type-value); font-variant-numeric: tabular-nums; color: var(--text-1);
+  }
+
+  .ui-action-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); min-inline-size: 0; }
+  .ui-action-row[data-fill] > * { flex: 1 1 0; min-inline-size: 0; }
+}

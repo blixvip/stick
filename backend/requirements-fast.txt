@@ -1,0 +1,4 @@
+# Optional compiled JSON encoder; the service retains its stdlib fallback.
+orjson==3.12.0
+# Optional zstd codec for version-2 native containers; zlib sections always work.
+zstandard==0.23.0

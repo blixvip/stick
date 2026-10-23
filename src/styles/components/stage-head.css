@@ -1,0 +1,118 @@
+/* Stage header (experience.md §4.1-4.4, architecture.md §3.12): the canvas's
+ * own 40px line, a sibling of #viewport above it (never inside it), level with
+ * the inspector's tabs and separated from the stage by one --line-1 hairline.
+ * src/shell/stage-head.mjs fills and updates it.
+ *
+ *   .stage-head        role=toolbar "Stage"; the stage island lays it out in
+ *                      its first row (layout/stage.css) and #viewport below
+ *   .stage-head-start  the location crumb, or the tool's options: a tool
+ *                      options bar (.ui-optbar) or a host adopted until its
+ *                      tool declares descriptors (Draw's quick bar, the chain
+ *                      and polygon controls). The crumb shows only while none
+ *                      of them does.
+ *   .stage-head-msg    the message's place. In the app the message is the
+ *                      #toast host in the top layer (ui-toast.mjs), placed over
+ *                      this row by stage-head.mjs (components/toast.css
+ *                      data-place), so nothing ever sits above it or clips it,
+ *                      and this slot stays empty; a message rendered into the
+ *                      slot itself (the component's static form,
+ *                      tests/fixtures/ui-chrome.html) is laid out here, its
+ *                      room set by --msg-start and --msg-end.
+ *   .stage-head-end    the view cluster, zoom and Fit, as .stage-head-cluster
+ *                      groups (the view toggles marked data-view)
+ *
+ * States written by stage-head.mjs while a message shows:
+ *   data-msg-over       the message covers the start: it hides while it shows
+ *   data-msg-over-view  (compact and minimal) it covers the view toggles too
+ *   data-msg-drop       the whole message does not fit beside the view
+ *                       cluster: it takes a line of its own just under the
+ *                       header, over the stage's top margin, for its moment.
+ *                       A message is never cut.
+ * While focus is in the start slot (a tool option being typed in), a message
+ * that would cover it takes its own line instead: hiding the slot would drop
+ * the focus and, under PropertyControls, commit a half-typed value. */
+@layer components {
+  .stage-head {
+    --_h: var(--control-2xl);
+    position: relative; z-index: var(--z-canvas-hud);
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-3);
+    block-size: var(--_h); min-inline-size: 0; padding: 0 var(--space-1-5) 0 var(--space-2);
+    background: var(--surface); box-shadow: inset 0 -1px 0 var(--line-1);
+    -webkit-app-region: no-drag;
+    container: stage-head / inline-size;
+  }
+  .stage-head[hidden] { display: none; }
+  /* 40px in the compact chrome of windows under 801px tall (layout-solver.mjs chromeFor). */
+  :where(:root[data-chrome="compact"]) .stage-head { --_h: var(--control-xl); }
+  /* Clipped with room for the focus rings and field halos drawn outside the bar's controls. A size container:
+   * the crumb folds to the room it gets (Build's narrow stage), never by the window's width alone. */
+  .stage-head-start {
+    display: flex; align-items: center; gap: var(--space-2); min-inline-size: 0; overflow: clip; overflow-clip-margin: var(--space-1);
+    container: stage-start / inline-size;
+  }
+  .stage-head-start > :is(.ui-optbar, .ui-crumb) { flex: 1 1 0; min-inline-size: 0; }
+  /* Where you are, while the tool has no options to show. */
+  .stage-head-start:where(:has(> :not(.ui-crumb, [hidden]))) > .ui-crumb { display: none; }
+  /* The crumb never wraps or cuts: the size leaves first, then the Scene's word (its glyph and name stay its tooltip and name). */
+  @container stage-start (width < 185px) { .ui-crumb-meta { display: none; } }
+  @container stage-start (width < 113px) { .ui-crumb-name { display: none; } }
+  .stage-head-end { display: flex; align-items: center; gap: var(--space-3); justify-self: end; }
+  /* A cluster inside the end: the view toggles, then zoom and Fit. */
+  .stage-head-cluster { display: flex; align-items: center; gap: var(--space-0-5); flex: none; }
+  /* A view toggle says what it shows: its glyph and word ("Joints", "Paths", "Handles"), quiet at rest and Styk blue
+   * while on. In a stage narrower than 820px the words fold and the glyphs stay (the tooltip keeps the name). */
+  .ui-button.stage-toggle { --_px: var(--space-2); gap: var(--space-1-5); color: var(--text-2); }
+  .ui-button.stage-toggle > svg { inline-size: var(--icon-md); block-size: var(--icon-md); }
+  :where(.ui-split) > .ui-button.stage-toggle { border-start-end-radius: 0; border-end-end-radius: 0; }
+  @container stage-head (inline-size < 820px) {
+    .ui-button.stage-toggle { --_px: 0; inline-size: var(--control-md); }
+    .stage-toggle > .ui-label { display: none; }
+  }
+  /* In Draw the brush bar takes the start: the view toggles show their glyphs (their tooltips keep the names). */
+  :where(.stage-head[data-workspace="draw"]) .ui-button.stage-toggle { --_px: 0; inline-size: var(--control-md); }
+  :where(.stage-head[data-workspace="draw"]) .stage-toggle > .ui-label { display: none; }
+  .stage-head-cluster[hidden], .stage-head-cluster > [hidden] { display: none; }
+  /* The view menu in the toggles' place (stage-head.mjs setViewMenu: a phone's touch interface). */
+  :where(.stage-head[data-view-menu]) .stage-head-cluster:where([data-view]) { display: none; }
+  .ui-button.stage-view-menu { --_px: var(--space-2); gap: var(--space-0-5); color: var(--text-2); }
+  .stage-view-menu[hidden] { display: none; }
+  /* A quiet state beside zoom while it applies ("Reduced preview"): words, no chip or accent. */
+  .stage-head-note { color: var(--text-3); font: var(--type-small); white-space: nowrap; }
+  .stage-head-note[hidden] { display: none; }
+  .stage-head-msg {
+    --msg-start: 0px; --msg-end: 0px;
+    position: absolute; inset-block: 0; inset-inline: var(--msg-start) var(--msg-end);
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .stage-head-msg:empty { display: none; }
+  .stage-head-msg > * { max-inline-size: 100%; pointer-events: auto; }
+  .stage-head:where([data-msg-drop], [data-msg-over]:has(> .stage-head-start:focus-within)) > .stage-head-msg {
+    inset-block: calc(100% + var(--space-1-5)) auto; inset-inline: var(--space-2);
+    block-size: var(--control-lg);
+  }
+
+  /* The zoom value and its chevron: the value opens the zoom menu; tabular so it never jitters. */
+  .ui-button.stage-zoom { --_px: var(--space-1-5); gap: var(--space-0-5); min-inline-size: 52px; font-variant-numeric: tabular-nums; }
+  .stage-zoom-chevron { display: inline-grid; color: var(--text-3); }
+  .stage-zoom-chevron > svg { inline-size: var(--icon-xs); block-size: var(--icon-xs); }
+
+  /* A pick mode's own controls while it lasts (the chain's and the polygon's count, Finish and Cancel). */
+  .stage-mode-controls {
+    position: static; z-index: auto; transform: none; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+    display: flex; align-items: center; gap: var(--space-1); flex: none;
+    font: var(--type-small); color: var(--text-2); font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .stage-mode-controls[hidden] { display: none; }
+  .stage-mode-controls > span { padding-inline: var(--space-1) var(--space-0-5); }
+
+  :where(.stage-head[data-msg-over]) > .stage-head-start:not(:focus-within) { visibility: hidden; }
+  .stage-head:where([data-msg-over-view]:not([data-msg-over]:has(> .stage-head-start:focus-within))) .stage-head-cluster:where([data-view]) { visibility: hidden; }
+
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .stage-head { padding-inline: var(--space-1); gap: var(--space-2); }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .stage-head-end { gap: var(--space-1); }
+
+  @media (forced-colors: active) {
+    .stage-head { border-block-end: 1px solid CanvasText; box-shadow: none; }
+  }
+}

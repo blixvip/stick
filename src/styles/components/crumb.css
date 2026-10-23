@@ -1,0 +1,63 @@
+/* Crumb (components.md "Crumb", experience.md §4.2): where you are, in the
+ * stage header's start when the tool has no options. The Scene with its size
+ * (a click selects the Scene: scene-settings) and, at its end, the scene's
+ * background chip (#crumb-background, data-paint-picker: one click from the
+ * colour picker), a swatch of the scene's colour inside a visible border; or
+ * the scope path inside a session ("Scene 1 › Punch", "Scene 1 › Camera"),
+ * whose first part leaves the session. The Library's folder path uses it too.
+ * 13/500 --text-2; the current part --text-1 600; › separators --text-3. The
+ * crumb never wraps.
+ *
+ *   <nav class="ui-crumb" aria-label="Location">
+ *     <button class="ui-crumb-item" data-action="scene-settings">…<span>Scene 1</span><span class="ui-crumb-meta">960 × 540</span></button>
+ *     <button class="ui-crumb-swatch" id="crumb-background" data-paint-picker aria-label="Background color #FFFFFF, opens the color picker">
+ *       <span class="ui-crumb-chip" style="--swatch:#ffffff"></span></button>
+ *   </nav> */
+@layer components {
+  .ui-crumb {
+    display: flex; align-items: center; flex-wrap: nowrap; gap: var(--space-0-5); min-inline-size: 0;
+    font: var(--type-ui); color: var(--text-2); white-space: nowrap;
+  }
+  .ui-crumb-item {
+    --icon-size: var(--icon-sm);
+    display: inline-flex; align-items: center; gap: var(--space-1-5); flex: none; min-inline-size: 0;
+    block-size: var(--control-md); padding: 0 var(--space-2);
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-2);
+    font: inherit; white-space: nowrap;
+    -webkit-app-region: no-drag;
+  }
+  .ui-crumb-item > svg { flex: none; inline-size: var(--icon-size); block-size: var(--icon-size); }
+  .ui-crumb-item:where(:hover):not(:disabled) { background: var(--surface-hover); color: var(--text-1); }
+  .ui-crumb-item:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset-inset); }
+  .ui-crumb-meta { font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .ui-crumb-sep { flex: none; padding-inline: var(--space-0-5); color: var(--text-3); }
+  .ui-crumb-here {
+    --icon-size: var(--icon-sm);
+    display: inline-flex; align-items: center; gap: var(--space-1-5); min-inline-size: 0;
+    padding-inline: var(--space-1); color: var(--text-1); font: var(--type-ui-strong); white-space: nowrap;
+  }
+  .ui-crumb-here > svg { flex: none; inline-size: var(--icon-size); block-size: var(--icon-size); }
+  .ui-crumb-here > span { overflow: hidden; text-overflow: ellipsis; }
+
+  /* The background chip: a 28px target holding an 18×13 swatch of the scene's colour inside a visible border. */
+  .ui-crumb-swatch {
+    display: inline-grid; place-items: center; flex: none;
+    inline-size: var(--control-md); block-size: var(--control-md); margin-inline-start: calc(-1 * var(--space-1)); padding: 0;
+    border: 0; border-radius: var(--radius-md); background: transparent;
+    -webkit-app-region: no-drag;
+  }
+  .ui-crumb-swatch:where(:hover) { background: var(--surface-hover); }
+  .ui-crumb-swatch:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset-inset); }
+  .ui-crumb-chip {
+    --swatch: var(--surface);
+    display: block; inline-size: 18px; block-size: 13px; border-radius: var(--radius-2xs);
+    background: var(--swatch); box-shadow: inset 0 0 0 1px var(--line-control);
+  }
+
+  /* Compact and minimal: the size leaves before the crumb would wrap. */
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-crumb-meta { display: none; }
+
+  @media (forced-colors: active) {
+    .ui-crumb-chip { forced-color-adjust: none; border: 1px solid CanvasText; }
+  }
+}

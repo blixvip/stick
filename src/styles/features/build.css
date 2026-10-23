@@ -1,0 +1,131 @@
+/* Build (experience.md revision 5): the figure builder on the kit.
+ *
+ * Structure (builder-outliner.mjs): the figure's name as the island's title
+ * with its part count, the parts as a tree whose indent guides show what hangs
+ * from what, each row led by its kind's glyph (line, circle, image, text), the
+ * selected part in Styk blue, and a foot of labelled buttons (Fit figure,
+ * Timeline, Snapping). It starts folded to its strip. The part commands live in
+ * Properties (quick tiles and ⋯), the right-click menu and the stage header,
+ * never in a second toolbar; the rail keeps Build's quick options under its tools.
+ *
+ * The rig (rig-controls.mjs) is kit rows in titled sections: one block per
+ * behaviour, its settings shown only while it is on.
+ *
+ * The exit choices ("Keep changes to Walker?") are choice cards. */
+@layer features {
+  /* ==== Structure ==== */
+  .builder-outliner { background: var(--surface); color: var(--text-1); font: var(--type-ui); }
+  .shell-island .builder-outliner-head {
+    gap: var(--space-2); padding: 0 var(--space-2) 0 var(--island-pad);
+    border-block-end: 0; box-shadow: inset 0 -1px 0 var(--line-1);
+  }
+  :where(:root[data-chrome="compact"]) .shell-island .builder-outliner-head { block-size: var(--control-xl); min-block-size: var(--control-xl); }
+  .builder-outliner-head > .builder-outliner-icon {
+    display: inline-grid; place-items: center; inline-size: 22px; block-size: 22px; border-radius: var(--radius-xs);
+    background: var(--tint-library-soft); color: var(--tint-library-ink);
+  }
+  .builder-outliner-icon > svg { inline-size: 14px; block-size: 14px; }
+  .builder-outliner-head > .builder-name {
+    flex: 1; min-inline-size: 0; block-size: var(--control-md); padding: 0 var(--space-1-5);
+    border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-1);
+    font: var(--type-section); letter-spacing: -0.005em;
+  }
+  .builder-name:where(:hover:not(:disabled)) { background: var(--surface-hover); }
+  .builder-name:focus { outline: none; background: var(--surface-sunken); box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+  .builder-outliner-head > .builder-outliner-count { flex: none; font: var(--type-small); color: var(--text-3); }
+
+  .builder-outliner > .builder-tree { padding-block: var(--space-1); scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+  .builder-tree > .builder-tree-spacer > :is(.builder-tree-row, .builder-tree-header) { inset-inline: var(--space-2); }
+  .builder-tree-row {
+    gap: var(--space-1-5); padding: 0 var(--space-2);
+    border: 0; border-radius: var(--radius-sm); color: var(--text-1); font: var(--type-ui);
+  }
+  /* The indent guides: a hairline for each level the row hangs under. */
+  .builder-tree-row::before {
+    content: ""; position: absolute; inset-block: 0; inset-inline-start: var(--space-2); pointer-events: none;
+    inline-size: calc(var(--depth, 0) * 14px);
+    background: linear-gradient(to right, transparent 7px, var(--line-2) 7px 8px, transparent 8px) 0 0 / 14px 100% repeat-x;
+  }
+  .builder-tree-row:where(:hover) { background: var(--surface-hover); }
+  .builder-tree-row[aria-selected="true"] { background: var(--accent-soft); color: var(--accent-text-strong); }
+  .builder-tree-row[aria-selected="true"] .builder-row-label { font-weight: var(--weight-semibold); }
+  .builder-tree-row:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+  .builder-tree-row > .builder-twisty { inline-size: 16px; block-size: 16px; color: var(--text-3); border-radius: var(--radius-2xs); }
+  .builder-twisty:where(.open, .collapsed)::before { content: none; }
+  .builder-twisty:where(.open, .collapsed) {
+    background: currentColor;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M6 4l4 4-4 4' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/></svg>") center / 12px no-repeat;
+    transition: rotate var(--dur-fast) var(--ease-out);
+  }
+  .builder-twisty.open { rotate: 90deg; }
+  .builder-tree-row > .builder-row-icon { color: var(--text-3); }
+  .builder-row-icon > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .builder-tree-row[aria-selected="true"] > .builder-row-icon { color: var(--accent); }
+  .builder-tree-row > .builder-badge {
+    padding: 0 var(--space-1); border: 0; border-radius: var(--radius-2xs); background: var(--surface-well);
+    font: var(--weight-semibold) 10px/16px var(--font-ui); color: var(--text-3);
+  }
+  .builder-tree-header {
+    inset-inline: var(--space-2); padding-inline: var(--space-2); border: 0; border-block-start: 1px solid var(--line-1);
+    background: transparent; font: var(--type-eyebrow); letter-spacing: 0; text-transform: none; color: var(--text-3);
+  }
+  .builder-poly-swatch { inline-size: 12px; block-size: 12px; border: 0; border-radius: var(--radius-2xs); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .builder-outliner-empty { inset: var(--space-4) var(--island-pad) auto; font: var(--type-ui); color: var(--text-3); text-align: start; line-height: 1.5; }
+  .builder-drop { background: var(--accent-line); }
+  .builder-drop.child { background: var(--accent-soft); box-shadow: inset 0 0 0 1.5px var(--accent-line); border-radius: var(--radius-sm); }
+
+  /* The foot: Fit figure, Timeline and Snapping, each with its word. */
+  .builder-outliner > .builder-footer {
+    display: flex; align-items: center; gap: var(--space-1); padding: var(--space-2);
+    border-block-start: 0; box-shadow: inset 0 1px 0 var(--line-1); flex-direction: row-reverse; justify-content: flex-end;
+  }
+  .builder-footer > button {
+    display: inline-flex; align-items: center; gap: var(--space-1-5); flex: 1 1 auto; min-inline-size: 0; justify-content: center;
+    block-size: var(--control-md); padding: 0 var(--space-2); border: 0; border-radius: var(--radius-md);
+    background: var(--surface-sunken); color: var(--text-2); font: var(--type-button); white-space: nowrap;
+  }
+  .builder-footer > button > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); flex: none; }
+  .builder-footer > button > span { overflow: hidden; text-overflow: ellipsis; }
+  .builder-footer > button:where(:hover) { background: var(--surface-hover); color: var(--text-1); }
+  .builder-footer > button:where([aria-pressed="true"], [aria-expanded="true"]) { background: var(--accent-soft); color: var(--accent-text-strong); }
+  .builder-footer > button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+
+  /* ==== The rail's quick options ==== */
+  /* An option that is on reads as a soft accent, so it never looks like the active tool. */
+  .rail-quick > .ui-tool-button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-text-strong); box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+  .rail-quick > .ui-tool-button:where([aria-pressed="true"]:hover) { background: var(--accent-soft); }
+
+  /* ==== The rig in Properties ====
+   * Rig's behaviours (rig-controls.mjs) are blocks of kit rows: Link, Smart Stretch, Stretch response and Angle
+   * lock, a hairline between them; a block's settings sit under its switch or choice while it is on. */
+  [data-section="rig-controls"] > .ui-section-body { gap: var(--space-3); }
+  /* Every block after the first (Link) starts under a hairline; hidden placeholders between blocks do not count. */
+  [data-section="rig-controls"] > .ui-section-body > * ~ .inspector-group:where([data-rig-block]) {
+    padding-block-start: var(--space-3); box-shadow: inset 0 1px 0 var(--line-1);
+  }
+  /* A block's head names the behaviour in ink; its settings' labels stay quiet. */
+  .inspector-group:where([data-rig-block]) > :where(.ui-field-grid:first-child) .ui-field-label { color: var(--text-1); font-weight: var(--weight-semibold); }
+  /* A block's settings hang under its head: indented behind a guide, so what is on reads as one unit. */
+  .ui-field-grid:where([data-rig-settings]) {
+    margin-inline-start: var(--space-1); padding-inline-start: var(--space-3); box-shadow: inset 2px 0 0 var(--accent-line);
+  }
+  /* A named block inside a block (Second rotation): its quiet title over its own settings. */
+  .inspector-group-title { padding-block-start: var(--space-1); font: var(--type-small); color: var(--text-3); }
+  :where(.inspector-group[data-rig-block]) .inspector-group:where([data-rig-block]) > .inspector-group-title { padding-inline-start: calc(var(--space-1) + var(--space-3)); }
+
+  /* ==== Leaving Build: the choices as cards ==== */
+  .builder-exit-options { display: grid; gap: var(--space-2); }
+  .builder-exit-option {
+    display: flex; align-items: flex-start; justify-content: flex-start; gap: var(--space-3); inline-size: 100%; min-inline-size: 0; box-sizing: border-box;
+    padding: var(--space-3) var(--space-3-5); white-space: normal;
+    border: 0; border-radius: var(--radius-lg); background: var(--surface-sunken); color: var(--text-1); text-align: start;
+    box-shadow: inset 0 0 0 1px transparent; transition: background-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
+  }
+  .builder-exit-option:hover { background: var(--surface-hover); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .builder-exit-option:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .builder-exit-option.primary { background: var(--accent-soft); box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+  .builder-exit-option > svg { inline-size: 20px; block-size: 20px; flex: none; margin-block-start: 1px; color: var(--accent); }
+  .builder-exit-option > span { display: grid; gap: var(--space-0-5); min-inline-size: 0; }
+  .builder-exit-option strong { font: var(--type-ui-strong); }
+  .builder-exit-option small { font: var(--type-small); color: var(--text-3); }
+}

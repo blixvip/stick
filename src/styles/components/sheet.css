@@ -1,0 +1,21 @@
+/* Sheet (components.md "Sheet"): a panel shown over the stage without
+ * moving it: a raised island in the top layer (a popover in place, so its
+ * content keeps its home in the DOM). The inspector at compact width, a
+ * strip's panel and the timeline body at the low height tier. */
+@layer components {
+  .ui-sheet {
+    display: flex; flex-direction: column;
+    inline-size: min(320px, calc(100vw - 16px)); max-block-size: calc(100dvh - var(--topbar-h) - 16px);
+    border: 1px solid transparent; border-radius: var(--radius-xl);
+    background: var(--surface-raised); color: var(--text-1); box-shadow: var(--elevation-3);
+  }
+  .ui-sheet[popover] { position: fixed; margin: 0; padding: 0; inset: var(--topbar-h) 8px auto auto; }
+  .ui-sheet[data-side="left"]:where([popover]) { inset: var(--topbar-h) auto auto calc(var(--rail-w) + 8px); }
+  .ui-sheet[data-side="bottom"]:where([popover]) { inset: auto 8px 8px 8px; inline-size: auto; max-block-size: 50dvh; }
+  /* A closed sheet takes no room (its display above beats the UA's popover rule). */
+  .ui-sheet:where([popover]:not(:popover-open)) { display: none; }
+
+  @media (forced-colors: active) {
+    .ui-sheet { border-color: CanvasText; }
+  }
+}

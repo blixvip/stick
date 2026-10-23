@@ -1,0 +1,47 @@
+/* Icon button (components.md "Icon button"): a 32px square, radius 10, an
+ * 18px glyph in --text-2; sm 28 (16px glyph), xs 24 (14px glyph, dense rows),
+ * lg 36. Ghost by default; data-variant="soft" on the mist fill,
+ * data-shape="round" for a circle. A toggle that is on [aria-pressed="true"]
+ * turns Styk blue on its soft tint; an open menu button [aria-expanded="true"]
+ * keeps its pressed tile. Always named with aria-label; the tooltip adds the
+ * shortcut. */
+@layer components {
+  .ui-icon-button {
+    --_s: var(--control-md);
+    --_r: var(--radius-md);
+    --_bg: transparent;
+    --_bg-hover: var(--surface-hover);
+    --_bg-active: var(--surface-pressed);
+    --_fg: var(--text-2);
+    --_fg-hover: var(--text-1);
+    --icon-size: var(--icon-lg);
+    position: relative;
+    display: inline-grid; place-items: center; flex: none;
+    inline-size: var(--_s); block-size: var(--_s); padding: 0;
+    border: 1px solid transparent; border-radius: var(--_r);
+    background: var(--_bg); color: var(--_fg);
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+    -webkit-app-region: no-drag;
+  }
+  .ui-icon-button > svg { inline-size: var(--icon-size); block-size: var(--icon-size); }
+  .ui-icon-button[aria-expanded="true"] { background: var(--surface-pressed); color: var(--text-1); }
+  .ui-icon-button:where(:hover):not(:disabled, [aria-disabled="true"]) { background: var(--_bg-hover); color: var(--_fg-hover); }
+  .ui-icon-button:where(:active):not(:disabled, [aria-disabled="true"]) { background: var(--_bg-active); transform: scale(var(--press-scale)); }
+  .ui-icon-button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .ui-icon-button[aria-pressed="true"] {
+    --_bg: var(--accent-soft); --_bg-hover: var(--accent-soft-hover); --_bg-active: var(--accent-soft-hover);
+    --_fg: var(--accent); --_fg-hover: var(--accent-text);
+  }
+  .ui-icon-button[data-size="xs"] { --_s: var(--control-xs); --_r: var(--radius-sm); --icon-size: var(--icon-sm); }
+  .ui-icon-button[data-size="sm"] { --_s: var(--control-sm); --_r: var(--radius-sm); --icon-size: var(--icon-md); }
+  .ui-icon-button[data-size="lg"] { --_s: var(--control-lg); --_r: var(--radius-lg); --icon-size: var(--icon-lg); }
+  .ui-icon-button[data-variant="soft"] { --_bg: var(--control-soft); --_bg-hover: var(--control-soft-hover); --_bg-active: var(--control-soft-pressed); --_fg: var(--text-1); }
+  .ui-icon-button[data-tone="danger"] { --_fg-hover: var(--danger-text); --_bg-hover: var(--danger-soft); }
+  .ui-icon-button[data-shape="round"] { --_r: var(--radius-pill); }
+  .ui-icon-button:is(:disabled, [aria-disabled="true"]) { opacity: 0.42; }
+
+  @media (forced-colors: active) {
+    .ui-icon-button:focus-visible { outline-color: Highlight; }
+    .ui-icon-button[aria-pressed="true"] { border-color: Highlight; }
+  }
+}

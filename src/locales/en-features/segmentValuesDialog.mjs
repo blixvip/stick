@@ -1,0 +1,21 @@
+export default Object.freeze({
+  "segmentValuesDialog.segmentValues": "Segment values",
+  "segmentValuesDialog.closeSegmentValues": "Close segment values",
+  "segmentValuesDialog.segment": "{value} · Segment {segment_id}{value2}",
+  "segmentValuesDialog.relativeAngle": "Relative angle",
+  "segmentValuesDialog.copyValues": "Copy values",
+  "segmentValuesDialog.pasteValues": "Paste values",
+  "segmentValuesDialog.angleBendLength": "Angle : Bend : Length",
+  "segmentValuesDialog.useValues": "Use values",
+  "segmentValuesDialog.scrubSegment": "Scrub segment {key}",
+  "segmentValuesDialog.segment2": "Segment {key}",
+  "segmentValuesDialog.segmentValuesCopied": "Segment values copied.",
+  "segmentValuesDialog.pasted": "Pasted {count} {value}.",
+  "segmentValuesDialog.noNumericSegmentValuesFoundExistingValuesAre": "No numeric segment values found. Existing values are unchanged.",
+  "segmentValuesDialog.cancel": "Cancel",
+  "segmentValuesDialog.apply": "Apply",
+  "segmentValuesDialog.figure": "Figure",
+  "segmentValuesDialog.handleEdit": " · Handle Edit",
+  "segmentValuesDialog.angleIsMeasuredFromTheIncomingSegmentS": "Angle is measured from the incoming segment’s end tangent. Length is independent of figure scale.",
+  "segmentValuesDialog.angleIsMeasuredFromTheCanvasXAxis": "Angle is measured from the canvas X axis. Length is independent of figure scale."
+});

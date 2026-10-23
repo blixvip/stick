@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "StykAnimate",
+  "short_name": "StykAnimate",
+  "description": "Free stick figure animation studio that runs in your browser.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#eceff4",
+  "theme_color": "#eceff4",
+  "categories": ["graphics", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

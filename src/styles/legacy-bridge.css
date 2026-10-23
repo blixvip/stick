@@ -1,0 +1,81 @@
+/* Legacy token names, pointed at the brand tokens in tokens.css.
+ *
+ * The legacy stylesheets (legacy/ and the <style> blocks some modules inject)
+ * read --theme-*, --ds-* and a few short aliases,
+ * which legacy/45-design-system.css and legacy/46-theme.css define on :root.
+ * Declared here, in the tokens layer, these beat those definitions in both
+ * themes, so every surface uses the brand palette before it is rebuilt. Each
+ * value resolves on :root, so it follows :root[data-theme="dark"] in
+ * tokens.css. Delete a name once nothing reads it, and this file with the
+ * legacy layer.
+ */
+@layer tokens {
+  :root {
+    /* Surfaces, back to front */
+    --theme-workspace: var(--surface-field);          /* around the artboard */
+    --theme-field: var(--surface-sunken);
+    --theme-subtle: var(--surface-sunken);
+    --theme-panel: var(--surface);
+    --theme-hover: var(--surface-hover);
+    --theme-overlay: var(--surface-raised);
+    --theme-backdrop: var(--surface-backdrop);
+
+    /* Lines */
+    --theme-border: var(--line-2);
+    --theme-border-strong: var(--line-3);
+
+    /* Text */
+    --theme-text: var(--text-1);
+    --theme-secondary: var(--text-2);
+    --theme-muted: var(--text-3);
+
+    /* Blue. Legacy rules use --theme-accent for small text, active icons and
+       focus marks, so it is the text blue: #0d99ff is only 2.99:1 on white.
+       --theme-action fills switches, sliders, progress bars and toggles: the
+       blue that carries a glyph (white in light, ink in dark, from
+       --text-on-strong). Primary buttons use --primary and --on-primary
+       directly, so they become the ink pill (a light pill in dark). */
+    --theme-accent: var(--accent-text);
+    --theme-action: var(--accent-strong);
+    --theme-action-hover: color-mix(in srgb, var(--accent-strong) 86%, var(--text-1));
+    --theme-selected: var(--surface-selected);
+    --theme-selected-hover: var(--surface-selected-hover);
+
+    /* Status */
+    --theme-danger: var(--danger-text);
+    --theme-danger-bg: var(--danger-soft);
+    --theme-danger-action: var(--danger-strong);
+    --theme-warning: var(--warning-text);
+    --theme-warning-bg: var(--warning-soft);
+    --theme-success: var(--success-text);
+    --theme-success-bg: var(--success-soft);
+    --theme-violet: var(--tint-time-ink);
+    --theme-violet-bg: var(--tint-time-soft);
+
+    /* --theme-shadow and --ds-shadow-* stay as legacy defines them: almost
+       every use is a soft drop shadow, already a neutral ink in light and
+       black in dark. */
+
+    /* Short aliases (legacy/01-style.css, 20-studio.css, 46-theme.css) */
+    --text: var(--text-1);
+    --muted: var(--text-3);
+    --border: var(--line-2);
+    --panel: var(--surface);
+    --purple: var(--accent-line);                     /* timeline keys, playheads */
+    --purple-soft: var(--surface-selected);
+
+    /* Read by legacy rules but never defined, so their light fallbacks showed
+       in dark mode too */
+    --theme-selection: var(--surface-selected);
+    --theme-canvas: var(--artboard-placeholder);
+    --input: var(--surface-sunken);
+    --field: var(--surface-sunken);
+    --input-bg: var(--surface-sunken);
+
+    /* Scale. Only the font and the focus ring move to the brand; legacy sizes,
+       radii, spacing and motion keep their values until their surface is
+       rebuilt, so nothing moves. */
+    --ds-font: var(--font-ui);
+    --ds-focus-ring: 0 0 0 3px var(--focus-halo);
+  }
+}

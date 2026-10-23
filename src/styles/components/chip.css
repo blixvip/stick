@@ -1,0 +1,29 @@
+/* Chip (components.md "Select, Stepper, Switch, Checkbox, Radio, Swatch"):
+ * a 28px pill on --surface-well, 12/600 --text-1, for catalogues and
+ * popovers only (the VFX catalogue's filters, the library's kinds, the
+ * palette's scopes); never at rest in a header or the inspector. A button chip
+ * toggles with aria-pressed: blue-soft with an accent hairline. */
+@layer components {
+  .ui-chip {
+    --_bg: var(--surface-well);
+    --_fg: var(--text-1);
+    --icon-size: var(--icon-sm);
+    display: inline-flex; align-items: center; gap: var(--space-1); flex: none;
+    block-size: var(--control-md); padding: 0 var(--space-3);
+    border: 1px solid transparent; border-radius: var(--radius-pill);
+    background: var(--_bg); color: var(--_fg);
+    font: var(--type-small-strong); line-height: 1; white-space: nowrap;
+    transition: background-color var(--dur-fast), color var(--dur-fast);
+    -webkit-app-region: no-drag;
+  }
+  .ui-chip > svg { flex: none; inline-size: var(--icon-size); block-size: var(--icon-size); }
+  button.ui-chip:where(:hover):not(:disabled) { background: var(--surface-pressed); }
+  button.ui-chip:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  button.ui-chip[aria-pressed="true"] { --_bg: var(--accent-soft); --_fg: var(--accent-text); box-shadow: inset 0 0 0 1px var(--accent-line); }
+  button.ui-chip:disabled { opacity: 0.42; }
+
+  @media (forced-colors: active) {
+    .ui-chip { border-color: CanvasText; }
+    button.ui-chip[aria-pressed="true"] { background: Highlight; color: HighlightText; forced-color-adjust: none; }
+  }
+}

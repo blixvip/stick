@@ -1,0 +1,60 @@
+import {chromium} from './support/playwright.mjs';
+import assert from 'node:assert/strict';
+import {mkdir,writeFile} from 'node:fs/promises';
+const out='artifacts/workspace-clean';await mkdir(out,{recursive:true});
+const browser=await chromium.launch({channel:'chrome',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:900}}),errors=[],checks=[];
+page.on('pageerror',e=>errors.push(e.message));
+const check=(name,result)=>{assert.ok(result,name);checks.push(name);console.log('PASS',name);};
+try {
+ await page.goto(process.env.STYK_URL||'http://127.0.0.1:47831');await page.waitForFunction(()=>window.styk?.ready);
+ await page.screenshot({path:`${out}/light.png`});
+ check('History quick actions live in the band, not the stage header',await page.locator('.titlebar [aria-label="Edit history"] button').count()===2&&await page.locator('.stage-head [data-action="undo"], .stage-head [data-action="redo"]').count()===0);
+ check('Canvas view controls remain accessible in the stage header',await page.locator('.stage-head [data-slot="stage-end"] #zoom-label').isVisible());
+ await page.locator('#zoom-label').click();check('Zoom menu opens',await page.locator('#menu [data-action="zoom-reset"]').isVisible());
+ await page.keyboard.press('Escape');check('Escape restores trigger focus',await page.locator('#zoom-label').evaluate(e=>document.activeElement===e));
+ const viewport=await page.locator('#viewport').boundingBox();
+ await page.mouse.click(viewport.x+100,viewport.y+70,{button:'right'});
+ check('Empty-stage menu excludes figure edits',await page.locator('#menu [data-action="scene-settings"]').count()===1&&await page.locator('#menu [data-action="delete"]').count()===0);
+ await page.keyboard.press('Escape');
+ const point=await page.evaluate(()=>{const e=styk.editor,g=[...e.geometry.objects.values()][0],p=g.joints.get(0),r=document.querySelector('#viewport').getBoundingClientRect();return {x:r.x+styk.state.view.x+p.x*styk.state.view.scale,y:r.y+styk.state.view.y+p.y*styk.state.view.scale};});
+ const before=await page.evaluate(()=>JSON.stringify(styk.editor.frame));
+ await page.mouse.click(point.x,point.y,{button:'right'});
+ check('Right-click on a joint opens figure actions without editing',await page.locator('#menu [data-action="duplicate"]').isVisible()&&await page.evaluate(()=>!styk.state.drag&&JSON.stringify(styk.editor.frame))===before);
+ await page.screenshot({path:`${out}/context.png`});
+ await page.locator('#menu [data-action="selection-more"]').click();check('More figure actions remain available',await page.locator('#menu [data-action="locate-previous"]').isVisible());
+ await page.keyboard.press('Escape');
+ await page.mouse.click(point.x,point.y,{button:'right'});
+ await page.mouse.move(viewport.x+100,viewport.y+70);await page.mouse.down();
+ check('Outside pointer-down dismisses menu before drag',await page.locator('#menu').isHidden());await page.mouse.up();
+ await page.evaluate(()=>{const e=styk.editor;e.select(e.frame.objects[0].unique_id);e.addFigure(e.object.figure_type_id);});
+ await page.locator("#viewport").focus();await page.keyboard.press("Control+a");
+ const selected=await page.evaluate(()=>[...styk.editor.selectedUids]);
+ await page.mouse.click(point.x,point.y,{button:'right'});
+ check('Right-click preserves selected figures',await page.evaluate(n=>styk.editor.selectedUids.size===n,selected.length)&&selected.length>1);
+ await page.keyboard.press('Escape');
+ for(const width of [1100,900]) {
+  await page.setViewportSize({width,height:740});
+  check(`No horizontal overflow at ${width}px`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  const controls=await page.locator('.stage-head [data-slot="stage-end"]').boundingBox(),stage=await page.locator('.stage-head').boundingBox();
+  check(`View controls fit the stage header at ${width}px`,controls.x>=stage.x&&controls.x+controls.width<=stage.x+stage.width);
+  await page.screenshot({path:`${out}/compact-${width}.png`});
+ }
+ await page.setViewportSize({width:1440,height:900});await page.evaluate(()=>document.documentElement.dataset.theme='dark');await page.screenshot({path:`${out}/dark.png`});
+ await page.evaluate(async()=>{
+  const {emptyDocument,createFrame,createObject}=await import('/src/demo.mjs');
+  const report=emptyDocument(),figure=report.figure_types[0],base=figure.segments[0];
+  figure.segments=[{...base,segment_id:1,parent_id:0,length:120,angle_rad:0},{...base,segment_id:2,parent_id:1,length:80,angle_rad:Math.PI/2}];figure.segment_count=2;
+  report.keyframes=[createFrame([createObject(figure,1,300,220)])];styk.editor.load(report);styk.editor.select(1,0);styk.fit();
+ });
+ await page.keyboard.press('v');
+ const bendPoint=await page.evaluate(()=>{const p=[...styk.editor.geometry.objects.values()][0].joints.get(1),r=document.querySelector('#viewport').getBoundingClientRect();return {x:r.x+styk.state.view.x+p.x*styk.state.view.scale,y:r.y+styk.state.view.y+p.y*styk.state.view.scale};});
+ await page.mouse.move(bendPoint.x,bendPoint.y);await page.keyboard.down('Shift');await page.mouse.down({button:'right'});
+ check('Shift + right-drag routes to bend',await page.evaluate(()=>styk.state.drag?.kind==='bend'));
+ await page.mouse.move(bendPoint.x,bendPoint.y+30,{steps:8});await page.mouse.up({button:'right'});await page.keyboard.up('Shift');
+ check('Bend completes without opening a menu',await page.evaluate(()=>!styk.state.drag&&styk.editor.object.bend_flag===1&&document.querySelector('#menu').hidden));
+ await page.mouse.click(bendPoint.x,bendPoint.y,{button:'right'});
+ check('Normal right-click works after bending',await page.locator('#menu').isVisible());await page.keyboard.press('Escape');
+ check('No runtime errors',errors.length===0);
+ await writeFile(`${out}/report.json`,JSON.stringify({checks,errors},null,2));
+} finally {await browser.close();}

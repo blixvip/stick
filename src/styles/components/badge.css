@@ -1,0 +1,45 @@
+/* The cursor badge (experience.md §7.3, DECISIONS "drag a swatch, an effect or
+ * an image"): while a colour, an effect or an image is dragged over the stage,
+ * the pointer carries a small badge of what is dragged, and the message slot
+ * says what the drop will do. It is the only badge: the count badges, kind
+ * tags and status badges of revision 2 stay removed (components.md §0.6), and
+ * nothing is ever drawn over the artwork.
+ *
+ *   <div class="ui-cursor-badge" aria-hidden="true" style="--x:120px; --y:48px">
+ *     <span class="ui-cursor-badge-swatch" style="--swatch:#e8553a"></span>
+ *   </div>
+ *
+ * The drag's owner creates it in the top layer (popover="manual") or in the
+ * window's floating layer, writes the pointer position to --x and --y through
+ * CSSOM (transform only: no layout per move) and removes it on drop or
+ * cancel. Parts: .ui-cursor-badge-swatch (a colour), .ui-cursor-badge-glyph
+ * (an effect's glyph), .ui-cursor-badge-thumb (an image's thumbnail, an
+ * <img>). */
+@layer components {
+  .ui-cursor-badge {
+    --x: 0px;
+    --y: 0px;
+    /* Physical: --x and --y are the pointer's client coordinates in every writing direction. */
+    position: fixed; inset: 0 auto auto 0; z-index: var(--z-floating);
+    display: inline-grid; place-items: center;
+    min-inline-size: var(--control-md); block-size: var(--control-md); margin: 0; padding: var(--space-1);
+    border: 0; border-radius: var(--radius-md);
+    background: var(--surface-raised); color: var(--text-1); box-shadow: var(--elevation-2);
+    pointer-events: none; user-select: none;
+    /* Offset from the hot spot so the badge never covers what the pointer is over. */
+    translate: calc(var(--x) + 14px) calc(var(--y) + 14px);
+  }
+  .ui-cursor-badge:where(:popover-open) { overflow: visible; }
+  .ui-cursor-badge-swatch {
+    --swatch: var(--surface);
+    display: block; inline-size: 20px; block-size: 20px; border-radius: 50%;
+    background: var(--swatch); box-shadow: inset 0 0 0 1px var(--line-control);
+  }
+  .ui-cursor-badge-glyph { display: block; inline-size: var(--icon-md); block-size: var(--icon-md); color: var(--accent-text); }
+  .ui-cursor-badge-thumb { display: block; max-inline-size: 48px; max-block-size: 32px; border-radius: var(--radius-2xs); object-fit: contain; }
+
+  @media (forced-colors: active) {
+    .ui-cursor-badge { border: 1px solid CanvasText; }
+    .ui-cursor-badge-swatch { forced-color-adjust: none; }
+  }
+}

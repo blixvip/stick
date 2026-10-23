@@ -1,0 +1,42 @@
+/* The stage island's rows (architecture.md §3.11.8, §3.12): the stage header
+ * (.stage-head, 40px, level with the inspector's tabs), Build's bar until
+ * M7a moves its commands, then #viewport, a plain rectangle (its box and the
+ * corner caps: layout/workspace.css). Nothing interactive sits inside
+ * #viewport: the view cluster, zoom, Draw's quick bar and the chain and
+ * polygon controls live in the header, and fittedView() keeps the artboard
+ * inside the layout solver's insets only.
+ *
+ * Hosts the header adopts before their tools declare option descriptors
+ * (M7a, M7b) keep their own sheets; here they lose what floated them over the
+ * canvas: Draw's quick bar is the start's row (its preset drawer drops under
+ * the header, anchored to .stage-head, outside the start's clip). */
+@layer layout {
+  .shell-stage > .stage-head { flex: none; }
+
+  /* The crumb names the Scene; the artboard's own caption would say it twice over the desk. */
+  :where(#artboard) > .artboard-name { display: none; }
+  /* A tool's instruction is the stage header's message now (the mode kind), never a caption on the canvas. */
+  :where(#viewport-hint) { display: none; }
+
+  .stage-head-start > .drawing-quickbar {
+    position: static; transform: none; flex: 1 1 0; flex-direction: row; min-inline-size: 0; max-inline-size: none;
+    gap: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  }
+  .stage-head-start > .drawing-quickbar:where([hidden]) { display: none; }
+  .stage-head-start > :where(.drawing-quickbar) > .draw-quick-row { flex: 1 1 auto; min-inline-size: 0; }
+  /* In a compact header the rail's highlighted tool names it; the bar keeps its room for the options. */
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .stage-head-start .draw-quick-row > :where(.draw-quick-tool, .draw-quick-tool + .draw-quick-divider) { display: none; }
+  .stage-head .draw-quick-presets {
+    position: absolute; inset-block-start: calc(100% + var(--space-1)); inset-inline-start: var(--space-2);
+    z-index: var(--z-canvas-hud); padding: var(--space-2);
+    border-radius: var(--radius-xl); background: var(--surface-raised); box-shadow: var(--elevation-2);
+  }
+
+  /* The playback rate is a passive readout in the canvas's top-right corner. */
+  :where(#viewport) > :where(#playback-fps) { z-index: var(--z-canvas-overlay); }
+
+  /* Remaining activity readouts stay in the hidden log. */
+  .statusbar :where(.viewport-top, #preview-quality) { position: static; inset: auto; margin: 0; }
+  .statusbar :where(#preview-quality, .viewport-top:has(> #preview-badge:not([hidden]))) { margin-inline-end: var(--space-2); }
+  .statusbar :where(#preview-badge) { padding: 0 var(--space-1); border-radius: var(--radius-2xs); font: var(--type-small-strong); }
+}

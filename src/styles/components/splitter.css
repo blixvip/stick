@@ -1,0 +1,19 @@
+/* Splitter (components.md "Splitter"): an 8px separator between islands with
+ * a 2px accent line on hover, focus and drag, and a 16px hit area across it.
+ * role=separator with its value, arrow keys (Shift: bigger steps), End for the
+ * largest size, Home or Enter for the default size and Escape to cancel a
+ * drag; the host places it over the gap. */
+@layer components {
+  .ui-splitter { position: relative; flex: none; inline-size: 8px; margin-inline: calc(-1 * var(--space-1)); cursor: col-resize; touch-action: none; }
+  .ui-splitter[aria-orientation="horizontal"] { inline-size: auto; block-size: 8px; margin: calc(-1 * var(--space-1)) 0; cursor: row-resize; }
+  .ui-splitter::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: 3px; inline-size: 2px; border-radius: 1px; background: transparent; transition: background-color var(--dur-fast) 150ms; }
+  .ui-splitter[aria-orientation="horizontal"]::before { inset: 3px 0 auto; inline-size: auto; block-size: 2px; }
+  .ui-splitter::after { content: ""; position: absolute; inset-block: 0; inset-inline: calc(-1 * var(--space-1)); }
+  .ui-splitter[aria-orientation="horizontal"]::after { inset: calc(-1 * var(--space-1)) 0; }
+  .ui-splitter:is(:hover, :focus-visible, [data-dragging="true"], [data-force~="hover"])::before { background: var(--accent-line); }
+  .ui-splitter:focus-visible { outline: none; }
+
+  @media (forced-colors: active) {
+    .ui-splitter:is(:hover, :focus-visible, [data-dragging="true"])::before { background: Highlight; }
+  }
+}

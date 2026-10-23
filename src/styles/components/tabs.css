@@ -1,0 +1,34 @@
+/* Tabs (components.md "Tabs"): one view switch, drawn like every other switch
+ * in the app (the workspace switch, Simple │ Advanced, a dialog's format): a
+ * pill track on the well with a white thumb under the shown tab. Used by the
+ * shell's islands (the Properties, VFX and Library tabs, which keep their ids
+ * and role=tab names) and dialogs with pages. */
+@layer components {
+  .ui-tabs {
+    --tab-pad: var(--space-3);
+    display: inline-flex; align-items: stretch; gap: var(--space-0-5); flex: none; min-inline-size: 0;
+    block-size: var(--control-md); padding: var(--space-0-5);
+    border-radius: var(--radius-pill); background: var(--surface-well);
+  }
+  .ui-tab {
+    --icon-size: var(--icon-md);
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1-5); min-inline-size: 0;
+    padding: 0 var(--tab-pad, var(--space-3)); border: 0; border-radius: var(--radius-pill);
+    background: transparent; color: var(--text-2);
+    font: var(--type-button); white-space: nowrap;
+    transition: color var(--dur-fast), background-color var(--dur-thumb) var(--ease-out), box-shadow var(--dur-thumb);
+  }
+  .ui-tab:is(:hover, [data-force~="hover"]) { color: var(--text-1); }
+  .ui-tab[aria-selected="true"] {
+    background: var(--control-thumb); color: var(--text-1);
+    box-shadow: var(--shadow-thumb);
+  }
+  .ui-tab:focus-visible, .ui-tab[data-force~="focus"] { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -2px; }
+  /* Line tabs for dense page lists (Settings' pages stay a sidebar; this remains for compatibility). */
+  .ui-tabs[data-variant="rule"] { background: transparent; }
+
+  @media (forced-colors: active) {
+    .ui-tab[aria-selected="true"] { outline: 2px solid Highlight; }
+  }
+}

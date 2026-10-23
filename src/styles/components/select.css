@@ -1,0 +1,47 @@
+/* Select (components.md "Select"): a native <select> in the field look,
+ * regular value, no ring at rest, a 12px chevron. In the inspector a select
+ * carries its label inside (.ui-field[data-select]: "Layer  Bubble ▾");
+ * data-bare drops the visible label when the value already names its kind
+ * ("Layer 1 ▾"), keeping it as the tooltip and the accessible name, so no
+ * select ever sits unlabelled beside another. .ui-select is the standalone
+ * form for dialogs and popovers, always named by its row. */
+@layer components {
+  .ui-field:where([data-select]) { padding-inline-end: 0; cursor: default; }
+  .ui-field:where([data-select]) > select.ui-field-input {
+    appearance: none; min-inline-size: 0; text-overflow: ellipsis;
+    padding-inline-end: calc(var(--space-2) + 12px + var(--space-1));
+    font-variant-numeric: normal; cursor: default;
+  }
+  .ui-field:where([data-bare]) > select.ui-field-input { padding-inline-start: 0; }
+  .ui-field-chev {
+    position: absolute; inset-inline-end: var(--space-2); inset-block-start: 50%; translate: 0 -50%;
+    inline-size: 12px; block-size: 12px; flex: none;
+    stroke-width: var(--icon-stroke-small); color: var(--text-3); pointer-events: none;
+  }
+
+  .ui-select { position: relative; display: inline-grid; min-inline-size: 0; }
+  .ui-select > select {
+    appearance: none; min-inline-size: 0; inline-size: 100%; block-size: var(--control-lg); margin: 0;
+    padding: 0 calc(var(--space-2) + var(--icon-sm) + var(--space-1-5)) 0 var(--space-2-5);
+    border: 1px solid transparent; border-radius: var(--radius-md);
+    background: var(--surface-sunken); box-shadow: none; color: var(--text-1);
+    font: var(--type-value);
+  }
+  .ui-select > select:hover { box-shadow: inset 0 0 0 1px var(--line-3); }
+  .ui-select > select:focus-visible {
+    outline: none; background: var(--surface);
+    box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo);
+  }
+  .ui-select > select:disabled { opacity: 0.5; }
+  .ui-select > svg {
+    position: absolute; inset-inline-end: 10px; inset-block-start: 50%; translate: 0 -50%;
+    inline-size: var(--icon-sm); block-size: var(--icon-sm);
+    stroke-width: var(--icon-stroke-small); color: var(--text-3); pointer-events: none;
+  }
+  .ui-select[data-size="sm"] > select { block-size: var(--control-md); }
+
+  @media (forced-colors: active) {
+    .ui-select > select { border-color: CanvasText; }
+    .ui-field-chev, .ui-select > svg { color: CanvasText; }
+  }
+}

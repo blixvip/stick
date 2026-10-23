@@ -1,0 +1,213 @@
+/* StykAnimate design system.
+   One definition of colour, type, spacing, radius, elevation and motion for the
+   editor chrome. Component stylesheets reference the --theme-* tokens (their
+   literal fallbacks predate this file); theme.css overrides the colour tokens
+   for dark mode. Artwork, paint swatches, joint colours and export previews keep
+   their own colours. Loaded after component styles and before theme.css. */
+
+:root {
+  /* Colour · neutral surfaces from back to front */
+  --theme-workspace: #e9ebef;
+  --theme-field: #f1f3f6;
+  --theme-subtle: #f8f9fb;
+  --theme-panel: #ffffff;
+  --theme-hover: #eaedf1;
+  --theme-border: #e2e5ea;
+  --theme-border-strong: #c8cdd5;
+  /* Colour · text (muted text keeps 4.5:1 on every light surface) */
+  --theme-text: #1f2328;
+  --theme-secondary: #4a5361;
+  --theme-muted: #66707e;
+  /* Colour · interaction. The StykAnimate brand blue. */
+  --theme-accent: #0d99ff;
+  --theme-action: #0d99ff;
+  --theme-action-hover: #0086e6;
+  --theme-selected: #e5f4ff;
+  --theme-selected-hover: #d2ebff;
+  /* Colour · status */
+  --theme-danger: #c2352c;
+  --theme-danger-bg: #fdecea;
+  --theme-danger-action: #c2352c;
+  --theme-warning: #8a5a00;
+  --theme-warning-bg: #fff4dc;
+  --theme-success: #1d7a4c;
+  --theme-success-bg: #e2f4ea;
+  --theme-violet: #7a4fc2;
+  --theme-violet-bg: #f1eafb;
+  /* Colour · overlays */
+  --theme-overlay: #ffffffeb;
+  --theme-backdrop: #111a2b59;
+  --theme-shadow: #1b263814;
+
+  /* Type */
+  --ds-font: "Segoe UI Variable Text", Inter, "Segoe UI", system-ui, sans-serif;
+  --ds-text-xs: 10.5px;
+  --ds-text-sm: 11px;
+  --ds-text: 12px;
+  --ds-text-md: 13px;
+  --ds-text-lg: 15px;
+  --ds-weight-strong: 600;
+
+  /* Space · 4px grid */
+  --ds-space-1: 4px;
+  --ds-space-2: 8px;
+  --ds-space-3: 12px;
+  --ds-space-4: 16px;
+  --ds-space-5: 20px;
+  --ds-space-6: 24px;
+
+  /* Shape */
+  --ds-radius-sm: 5px;
+  --ds-radius: 7px;
+  --ds-radius-lg: 10px;
+  --ds-radius-xl: 14px;
+  --ds-control-sm: 26px;
+  --ds-control: 30px;
+  --ds-control-lg: 34px;
+
+  /* Elevation · resting, floating (rails, bars), overlay (menus, popovers, dialogs) */
+  --ds-shadow-1: 0 1px 2px #1b26380f;
+  --ds-shadow-2: 0 2px 4px #1b26380a, 0 6px 18px #1b263812;
+  --ds-shadow-3: 0 4px 10px #1b263812, 0 18px 48px #1b263826;
+  --ds-focus-ring: 0 0 0 3px color-mix(in srgb, var(--theme-accent) 26%, transparent);
+
+  /* Motion */
+  --ds-fast: 110ms;
+  --ds-ease: cubic-bezier(.2, .7, .2, 1);
+
+  font-family: var(--ds-font);
+}
+:root[data-theme="dark"] {
+  --theme-border-strong: #5b6573;
+  --ds-shadow-1: 0 1px 2px #0000004d;
+  --ds-shadow-2: 0 2px 6px #00000040, 0 8px 22px #00000059;
+  --ds-shadow-3: 0 6px 14px #00000059, 0 22px 56px #0000008c;
+}
+
+/* ---------- Base ---------- */
+::selection { background: var(--theme-selected-hover); }
+:where(input[type="checkbox"], input[type="radio"], input[type="range"], progress) { accent-color: var(--theme-accent); }
+#inspector .check-row input { accent-color: var(--theme-accent); }
+:where(button, [role="button"], a, summary, select) { transition: background-color var(--ds-fast) var(--ds-ease), border-color var(--ds-fast) var(--ds-ease), color var(--ds-fast) var(--ds-ease), box-shadow var(--ds-fast) var(--ds-ease); }
+:is(button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid var(--theme-accent); outline-offset: 2px; }
+
+/* Scrollbars: quiet and consistent in both themes. */
+* { scrollbar-color: var(--theme-border-strong) transparent; }
+.sheet-scroll::-webkit-scrollbar-thumb,
+.sheet-filmstrip-scroll::-webkit-scrollbar-thumb { background: var(--theme-border-strong); border-color: var(--theme-field); }
+.sheet-scroll::-webkit-scrollbar-thumb:hover,
+.sheet-filmstrip-scroll::-webkit-scrollbar-thumb:hover { background: var(--theme-muted); }
+
+/* ---------- Buttons ---------- */
+.button { height: var(--ds-control); padding: 0 12px; border-radius: var(--ds-radius); border-color: var(--theme-border); background: var(--theme-panel); color: var(--theme-text); font-size: var(--ds-text-sm); font-weight: 500; box-shadow: var(--ds-shadow-1); }
+.button:hover:not(:disabled) { background: var(--theme-hover); border-color: var(--theme-border-strong); }
+.button:active:not(:disabled) { box-shadow: none; }
+.button.subtle { box-shadow: none; }
+.button.subtle:hover:not(:disabled) { border-color: transparent; }
+.button.primary { background: var(--primary); border-color: var(--primary); color: var(--on-primary); font-weight: var(--ds-weight-strong); }
+.button.primary:hover:not(:disabled) { background: var(--primary-hover); border-color: var(--primary-hover); }
+.button.primary:disabled { opacity: 1; background: var(--theme-field); border-color: var(--theme-border); color: var(--theme-muted); box-shadow: none; }
+.button.small { height: var(--ds-control-sm); padding: 0 10px; border-radius: var(--ds-radius-sm); }
+.button.danger { color: var(--theme-danger); }
+.button.danger:hover:not(:disabled) { background: var(--theme-danger-bg); border-color: color-mix(in srgb, var(--theme-danger) 35%, transparent); }
+.icon-button { border-radius: 6px; color: var(--theme-secondary); }
+.icon-button:hover:not(:disabled) { background: var(--theme-hover); color: var(--theme-text); }
+.icon-button.active, .icon-button[aria-pressed="true"] { background: var(--theme-selected); color: var(--theme-accent); }
+.titlebar .button { border-radius: var(--ds-radius); }
+.titlebar .button.subtle { color: var(--theme-secondary); }
+/* One ink primary per surface: in Build it is Done, so Export steps down. */
+:root:has(.workspace[data-mode="rig"]) .titlebar [data-action="export"] { background: var(--control-soft); border-color: transparent; color: var(--text-1); box-shadow: none; }
+:root:has(.workspace[data-mode="rig"]) .titlebar [data-action="export"]:hover:not(:disabled) { background: var(--control-soft-hover); border-color: transparent; }
+
+/* ---------- Segmented controls and tabs ----------
+   One look for every "pick one of a few" control. */
+.inspector-switch,
+.timeline-mode-switch,
+.export-category,
+.camera-inspector-tabs,
+.ds-segmented { display: flex; gap: 2px; padding: 3px; border: 0; border-radius: var(--ds-radius); background: var(--theme-field); }
+/* The Properties / VFX / Library switch sits in the panel's top bar. */
+.inspector-switch { flex-shrink: 0; margin: 10px 12px 8px; border-bottom: 0; }
+.inspector-switch button,
+.timeline-mode-switch button,
+.export-category button,
+.camera-inspector-tabs button,
+.ds-segmented > button { flex: 1; height: 26px; min-width: 0; padding: 0 10px; border: 0; border-radius: var(--ds-radius-sm); background: transparent; color: var(--theme-muted); font-size: var(--ds-text-sm); font-weight: 500; box-shadow: none; }
+.timeline-mode-switch button { flex: 0 0 auto; }
+.inspector-switch button:hover:not([aria-selected="true"]),
+.timeline-mode-switch button:hover:not([aria-pressed="true"]),
+.export-category button:hover:not([aria-pressed="true"]),
+.camera-inspector-tabs button:hover:not([aria-selected="true"]),
+.ds-segmented > button:hover:not([aria-pressed="true"]):not([aria-selected="true"]) { background: transparent; color: var(--theme-text); }
+.inspector-switch button[aria-selected="true"],
+.timeline-mode-switch button[aria-pressed="true"],
+.export-category button[aria-pressed="true"],
+.camera-inspector-tabs button[aria-selected="true"],
+.ds-segmented > button:is([aria-pressed="true"], [aria-selected="true"]) { background: var(--theme-panel); color: var(--theme-text); font-weight: var(--ds-weight-strong); border: 0; box-shadow: var(--ds-shadow-1), 0 0 0 1px var(--theme-border); }
+:root[data-theme="dark"] :is(.inspector-switch, .timeline-mode-switch, .export-category, .camera-inspector-tabs, .ds-segmented) :is([aria-pressed="true"], [aria-selected="true"]) { background: var(--theme-hover); }
+
+/* ---------- Surfaces ---------- */
+.studio-rail,
+.canvas-view-controls,
+.drawing-quickbar { border-color: var(--theme-border); border-radius: 12px; box-shadow: var(--ds-shadow-2); }
+.studio-rail .tool, .rail-add { border-radius: var(--ds-radius); }
+.canvas-view-controls button { border-radius: 6px; }
+#artboard { box-shadow: 0 0 0 1px #1b26381a, var(--ds-shadow-2); }
+.right-panel { border-left-color: var(--theme-border); }
+.timeline-panel { border-top-color: var(--theme-border); box-shadow: none; }
+.canvas-toolbar, .titlebar, .timeline-toolbar { border-color: var(--theme-border); }
+
+/* Inspector hierarchy: calm section titles, generous rhythm, clear fields. */
+#inspector .inspector-section { padding: var(--ds-space-4); border-bottom-color: var(--theme-border); }
+#inspector .inspector-title { font-size: var(--ds-text); font-weight: var(--ds-weight-strong); color: var(--theme-text); letter-spacing: -.05px; }
+#inspector :is(.field, .color-row, .paint-trigger, .inline-select, .property-layer-name) { border-radius: 6px; background: var(--theme-field); }
+#inspector :is(.field, .color-row, .paint-trigger, .inline-select):hover { background: var(--theme-hover); border-color: transparent; }
+#inspector .field:focus-within { background: var(--theme-panel); border-color: var(--theme-accent); box-shadow: var(--ds-focus-ring); }
+#inspector .property-note { background: var(--theme-warning-bg); color: var(--theme-warning); }
+.property-context-caption, .drawing-hint { color: var(--theme-muted); }
+
+/* ---------- Overlays: menus, popovers, dialogs, toasts ---------- */
+#menu,
+.library-context-menu,
+.audio-clip-popover,
+.audio-properties,
+.audio-options,
+.builder-popover,
+.timeline-menu { border: 1px solid var(--theme-border); border-radius: var(--ds-radius-lg); background: var(--theme-panel); box-shadow: var(--ds-shadow-3); }
+#menu .menu-item, .library-context-menu button { border-radius: var(--ds-radius-sm); }
+#menu .menu-item:hover, .library-context-menu button:hover { background: var(--theme-hover); }
+dialog, .library-dialog { border-radius: var(--ds-radius-xl); border-color: var(--theme-border); box-shadow: var(--ds-shadow-3); }
+dialog::backdrop, .library-dialog::backdrop { background: var(--theme-backdrop); }
+#toast { border-radius: var(--ds-radius-lg); padding: 10px 16px; background: #1f2328f2; color: #fff; font-size: var(--ds-text-sm); font-weight: 500; box-shadow: var(--ds-shadow-3); }
+:root[data-theme="dark"] #toast { background: #eef1f5f2; color: #1f2328; }
+
+/* ---------- Shared building blocks for panels ----------
+   Empty states and labelled switches used by Library, VFX, Onion skin and Audio. */
+.ds-empty { display: grid; justify-items: center; gap: var(--ds-space-2); padding: var(--ds-space-6) var(--ds-space-4); text-align: center; color: var(--theme-muted); font-size: var(--ds-text-sm); line-height: 1.5; }
+.ds-empty-icon { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 2px; border-radius: 12px; background: var(--theme-selected); color: var(--theme-accent); }
+.ds-empty-icon .icon { width: 22px; height: 22px; }
+.ds-empty strong { color: var(--theme-text); font-size: var(--ds-text); font-weight: var(--ds-weight-strong); }
+.ds-empty p { margin: 0; max-width: 240px; }
+.ds-empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--ds-space-2); margin-top: var(--ds-space-1); }
+.ds-switch { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; cursor: pointer; font-size: var(--ds-text-sm); color: var(--theme-text); }
+.ds-switch > input { position: relative; flex: none; appearance: none; width: 28px; height: 16px; margin: 1px 0 0; border-radius: 999px; background: var(--theme-border-strong); cursor: pointer; transition: background-color var(--ds-fast) var(--ds-ease); }
+.ds-switch > input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px #0003; transition: transform var(--ds-fast) var(--ds-ease); }
+.ds-switch > input:checked { background: var(--theme-action); }
+.ds-switch > input:checked::after { transform: translateX(12px); background: var(--switch-knob-on); }
+.ds-switch > input:focus-visible { outline: 2px solid var(--theme-accent); outline-offset: 2px; }
+.ds-switch > span { display: grid; gap: 2px; min-width: 0; }
+.ds-switch small { color: var(--theme-muted); font-size: var(--ds-text-xs); line-height: 1.4; }
+.ds-chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 1px solid var(--theme-border); border-radius: 999px; background: var(--theme-panel); color: var(--theme-text); font-size: var(--ds-text-sm); cursor: pointer; }
+.ds-chip:hover:not(:disabled) { border-color: var(--theme-accent); background: var(--theme-selected); color: var(--theme-accent); }
+.ds-chip .icon { width: 14px; height: 14px; }
+.ds-section-label { margin: 0 0 var(--ds-space-2); color: var(--theme-muted); font-size: var(--ds-text-xs); font-weight: var(--ds-weight-strong); letter-spacing: .06em; text-transform: uppercase; }
+
+@media (prefers-reduced-motion: reduce) {
+  :where(button, [role="button"], a, summary, select), .ds-switch > input, .ds-switch > input::after { transition: none; }
+}
+
+/* Onion skin toggle + settings split button in the timeline toolbar. */
+.timeline-onion-controls { gap: 1px; padding: 2px; border-color: var(--theme-border); border-radius: var(--ds-radius); }
+.timeline-onion-controls .icon-button { height: 26px; border-radius: var(--ds-radius-sm); }
+.timeline-onion-controls .onion-options-button { width: 22px; border-left: 0; }
+.timeline-onion-controls .onion-options-button .icon { width: 13px; height: 13px; }

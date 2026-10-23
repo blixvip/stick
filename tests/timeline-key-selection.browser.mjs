@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import {chromium} from './support/playwright.mjs';
+const browser=await chromium.launch({channel:'chrome',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];
+page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(30000);
+try{
+  await page.goto(process.env.STYK_URL??'http://127.0.0.1:47831');await page.waitForFunction(()=>window.styk?.ready);
+  await page.evaluate(async()=>{const {emptyDocument,createFrame,createObject}=await import('/src/demo.mjs');const report=emptyDocument();report.keyframes=[0,60].map(x=>createFrame([createObject(report.figure_types[0],1,200+x,250)],12));styk.settingsUI.commit({timelineMode:'advanced'});styk.editor.load(report);styk.editor.sheetSetEasing(['layer-1'],0,12,{interpolation:'constant'});styk.fit();});
+  const grid=page.getByRole('grid',{name:'Layer frames'});
+  const cell=async(tick,row=0)=>{const box=await grid.boundingBox(),{y,step,offset}=await page.evaluate(row=>{const t=styk.timeline;return {y:t.rowY(row+2)+t.rowSize(row+2)/2,step:t.pxPerTick,offset:t._offsetX()};},row);return {x:box.x+(tick+.5)*step-offset,y:box.y+y};};
+  const drag=async(from,to)=>{await page.mouse.move(from.x,from.y);await page.mouse.down();await page.mouse.move(to.x,to.y,{steps:8});await page.mouse.up();};
+  await page.evaluate(async()=>{const {emptyDocument,createFrame,createObject}=await import('/src/demo.mjs');const r=emptyDocument();r.keyframes=Array.from({length:16},(_,i)=>createFrame([createObject(r.figure_types[0],1,200+i*4,250)],1));styk.editor.load(r);styk.timeline.seek(0);});
+  const denseBefore=await page.evaluate(()=>JSON.stringify(styk.editor.serialize()));
+  await drag(await cell(3),await cell(7));
+  assert.deepEqual(await page.evaluate(()=>[styk.timeline.start,styk.timeline.end]),[3,7]);
+  assert.equal(await page.evaluate(()=>JSON.stringify(styk.editor.serialize())),denseBefore,'Selecting occupied keys must not move them');
+  await page.mouse.click(...Object.values(await cell(5)));
+  assert.deepEqual(await page.evaluate(()=>[styk.timeline.start,styk.timeline.end]),[3,7],'Click preserves selected range');
+  const duration=await page.evaluate(()=>styk.editor.totalTicks);
+  await grid.press('Delete');
+  assert.deepEqual(await page.evaluate(()=>styk.editor.layerFrameKeys('layer-1').map(k=>k.tick)),[0,1,2,8,9,10,11,12,13,14,15]);
+  assert.equal(await page.evaluate(()=>styk.editor.totalTicks),duration);
+  await grid.press('Control+z');
+  assert.equal(await page.evaluate(()=>JSON.stringify(styk.editor.serialize())),denseBefore);
+  await drag(await cell(3),await cell(18));
+  assert.deepEqual(await page.evaluate(()=>styk.editor.layerFrameKeys('layer-1').map(k=>k.tick)),[0,1,2,8,9,10,11,12,13,14,15,18,19,20,21,22]);
+  await grid.press('Control+z');
+  assert.equal(await page.evaluate(()=>JSON.stringify(styk.editor.serialize())),denseBefore);
+  await page.screenshot({path:'artifacts/timeline-key-selection.png'});
+  assert.deepEqual(errors,[]);console.log('PASS dense key selection, preserved range, non-ripple deletion and undo');
+}finally{await browser.close();}

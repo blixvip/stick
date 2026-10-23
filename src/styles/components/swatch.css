@@ -1,0 +1,101 @@
+/* Swatch (components.md "Swatch"): 20px (16 sm, 28 lg, 24 in a
+ * .ui-swatch-grid), radius 6, always --swatch-ring. The colour comes from
+ * --swatch (a colour) or --swatch-paint (a gradient paint), written inline by
+ * the inspector kit; the checkerboard shows through transparency.
+ * data-mixed splits it ("Mixed"), data-swatch="none" crosses it out. A
+ * swatch is a paint-picker button ([data-paint-picker], #segment-color's
+ * pattern), a plain button (a recent colour) or a native <input type=color>
+ * (#figure-color, #background-color), all opened by color-picker.mjs. */
+@layer components {
+  .ui-swatch {
+    --swatch: var(--surface);
+    --swatch-paint: initial;
+    --_s: 20px;
+    position: relative; flex: none; display: inline-block;
+    inline-size: var(--_s); block-size: var(--_s); margin: 0; padding: 0;
+    border: 0; border-radius: var(--radius-sm); appearance: none; cursor: default;
+    background: var(--swatch-paint, linear-gradient(var(--swatch), var(--swatch))),
+      repeating-conic-gradient(var(--checker-a) 0 25%, var(--checker-b) 0 50%) 0 0 / 8px 8px;
+    box-shadow: inset 0 0 0 1px var(--swatch-ring);
+  }
+  .ui-swatch[data-size="sm"] { --_s: 16px; border-radius: var(--radius-2xs); }
+  .ui-swatch[data-size="lg"] { --_s: 28px; border-radius: var(--radius-md); }
+  .ui-swatch[data-mixed] {
+    background: linear-gradient(135deg, var(--swatch) 0 50%, transparent 50%),
+      repeating-conic-gradient(var(--checker-a) 0 25%, var(--checker-b) 0 50%) 0 0 / 8px 8px;
+  }
+  .ui-swatch[data-swatch="none"] {
+    background: linear-gradient(to top right, transparent calc(50% - 1px), var(--danger-dot) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)), var(--surface);
+  }
+  /* A native colour input draws its value itself; the ring sits on its swatch. */
+  .ui-swatch::-webkit-color-swatch-wrapper { padding: 0; }
+  .ui-swatch::-webkit-color-swatch { border: 1px solid var(--swatch-ring); border-radius: inherit; }
+  .ui-swatch::-moz-color-swatch { border: 1px solid var(--swatch-ring); border-radius: inherit; }
+  :is(button, input).ui-swatch:where(:hover):not(:disabled) { box-shadow: inset 0 0 0 1px var(--swatch-ring), 0 0 0 2px var(--surface), 0 0 0 3px var(--line-3); }
+  :is(button, input).ui-swatch:is([aria-pressed="true"], [aria-checked="true"]) { box-shadow: inset 0 0 0 1px var(--swatch-ring), 0 0 0 2px var(--surface), 0 0 0 4px var(--accent-line); }
+  .ui-swatch:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .ui-swatch:disabled { opacity: 0.42; }
+
+  /* A collection of swatches (the figure's colours, recent colours): one group of 24px targets. */
+  .ui-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, 24px); gap: var(--space-1-5); }
+  .ui-swatch-grid > .ui-swatch { --_s: 24px; }
+
+  /* The colour picker's palette (color-picker.mjs): a hairline under the
+   * values, Project | Recent as a small segmented switch with + at its end,
+   * then ten swatches a row filling the picker's width. The picker itself is
+   * still a legacy sheet, so these rules reset its generic button look. */
+  .paint-palette { margin-block-start: var(--space-3); padding-block-start: var(--space-3); border-block-start: 1px solid var(--line-1); }
+  .paint-palette-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-block-end: var(--space-2); }
+  .paint-palette-title { font: var(--type-small-strong); color: var(--text-2); }
+  .paint-palette-views { display: inline-flex; gap: var(--space-0-5); padding: 2px; border-radius: var(--radius-md); background: var(--surface-sunken); }
+  .paint-palette-views > button {
+    min-inline-size: 0; block-size: 22px; padding: 0 var(--space-2-5);
+    border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-2); font: var(--type-small);
+  }
+  .paint-palette-views > button:hover { background: var(--surface-hover); color: var(--text-1); }
+  .paint-palette-views > button[aria-pressed="true"] { background: var(--surface-raised); color: var(--text-1); box-shadow: 0 0 0 1px var(--line-2); }
+  .paint-palette-add {
+    display: inline-grid; place-items: center; min-inline-size: 0; inline-size: 26px; block-size: 26px; padding: 0;
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-2);
+  }
+  .paint-palette-add:where(:hover):not(:disabled) { background: var(--accent-soft); color: var(--accent-text-strong); }
+  .paint-palette-add:disabled { opacity: 0.35; }
+  .paint-palette-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: var(--space-1); }
+  .paint-palette-grid > .ui-swatch { inline-size: auto; min-inline-size: 0; block-size: auto; aspect-ratio: 1; cursor: pointer; }
+  .paint-palette-grid > .ui-swatch:where([draggable="true"]) { cursor: grab; }
+  .paint-palette-empty { margin: 0; padding: var(--space-2) var(--space-2-5); border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-3); font: var(--type-small); }
+  /* Mine ▾: the personal palette's name, cut short, then a caret. */
+  .paint-palette-views > .paint-palette-mine { display: inline-flex; align-items: center; gap: var(--space-1); max-inline-size: 110px; }
+  .paint-palette-mine > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .paint-palette-mine > svg { flex: none; color: var(--text-3); }
+  /* The personal palettes, in place of the grid: rows with five chips, a name and a count, then actions. */
+  .paint-palette-menu { display: grid; gap: var(--space-0-5); }
+  .paint-palette-menu > hr { margin: var(--space-1) 0; border: 0; border-block-start: 1px solid var(--line-1); }
+  .paint-palette-menu > .paint-palette-item {
+    display: flex; align-items: center; gap: var(--space-2); inline-size: 100%; min-inline-size: 0; block-size: 30px; padding: 0 var(--space-2);
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-1); font: var(--type-small); text-align: start;
+  }
+  .paint-palette-menu > .paint-palette-item:where(:hover, :focus-visible) { background: var(--surface-hover); }
+  .paint-palette-item[aria-checked="true"] { background: var(--accent-soft); color: var(--accent-text-strong); }
+  .paint-palette-item > .paint-palette-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .paint-palette-item > small { color: var(--text-3); font: var(--type-small); }
+  .paint-palette-chips { display: inline-flex; flex: none; inline-size: 50px; }
+  .paint-palette-chips > i { inline-size: 10px; block-size: 16px; background: var(--swatch); box-shadow: inset 0 0 0 1px var(--swatch-ring); }
+  .paint-palette-chips > i:first-child { border-start-start-radius: var(--radius-2xs); border-end-start-radius: var(--radius-2xs); }
+  .paint-palette-chips > i:last-child { border-start-end-radius: var(--radius-2xs); border-end-end-radius: var(--radius-2xs); }
+  /* Naming, renaming and deleting happen in place, in a small form. */
+  .paint-palette-form { display: grid; gap: var(--space-2); padding: var(--space-2-5); border-radius: var(--radius-md); background: var(--surface-sunken); font: var(--type-small); }
+  .paint-palette-form > p { margin: 0; color: var(--text-1); }
+  .paint-palette-form > label { display: grid; gap: var(--space-1-5); color: var(--text-2); }
+  .paint-palette-form input { inline-size: 100%; block-size: 28px; background: var(--surface-field); color: var(--text-1); }
+  .paint-palette-form-actions { display: flex; justify-content: flex-end; gap: var(--space-1-5); }
+  .paint-palette-form-actions > button { block-size: 26px; padding: 0 var(--space-2-5); border-radius: var(--radius-md); background: var(--surface-raised); color: var(--text-1); font: var(--type-small); box-shadow: 0 0 0 1px var(--line-2); }
+  .paint-palette-form-actions > .is-primary { background: var(--accent-strong); color: var(--text-on-strong); box-shadow: none; }
+  .paint-palette-form-actions > .is-danger { background: var(--danger-strong); color: var(--text-on-strong); box-shadow: none; }
+
+  @media (forced-colors: active) {
+    /* Swatches are artwork: they keep their colour and gain a real border. */
+    .ui-swatch { forced-color-adjust: none; outline: 1px solid CanvasText; }
+    .ui-swatch:focus-visible { outline: 2px solid Highlight; }
+  }
+}

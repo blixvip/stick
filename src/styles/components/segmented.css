@@ -1,0 +1,52 @@
+/* Segmented (components.md "Segmented"): a pill track on --surface-well with
+ * 2px padding; items 13/600 --text-2. The selected item is a white thumb with
+ * a 3:1 hairline and the one rest shadow. data-size="sm" (a 28px track, 12px
+ * words), "lg" (32px), data-fill (equal items). Two to four options; five or
+ * more is a select. Radio semantics (role=radiogroup, items role=radio with
+ * aria-checked), except the tested button groups that keep aria-pressed (the
+ * workspace switch, the timeline mode, the 3D rig's Pose and Rotate) and tabs
+ * (aria-selected), drawn the same. Icon items carry an aria-label and a
+ * tooltip. Inert until markup carries .ui-segmented. */
+@layer components {
+  .ui-segmented {
+    --_h: var(--control-md);
+    justify-self: start;
+    display: inline-flex; align-items: stretch; gap: var(--space-0-5); flex: none;
+    block-size: var(--_h); padding: var(--space-0-5);
+    border-radius: var(--radius-pill); background: var(--surface-well);
+  }
+  .ui-segmented-item {
+    --icon-size: var(--icon-md);
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1-5);
+    min-inline-size: 24px; padding: 0 var(--space-3);
+    border: 1px solid transparent; border-radius: var(--radius-pill);
+    background: transparent; color: var(--text-2);
+    font: var(--type-ui-strong); line-height: 1; white-space: nowrap;
+    transition: background-color var(--dur-thumb) var(--ease-spring), color var(--dur-fast), box-shadow var(--dur-thumb);
+    -webkit-app-region: no-drag;
+  }
+  .ui-segmented-item > svg { flex: none; inline-size: var(--icon-size); block-size: var(--icon-size); }
+  .ui-segmented-item:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 0; }
+  .ui-segmented-item:where(:hover):not(:disabled) { color: var(--text-1); }
+  /* The white thumb: a --line-control hairline (3:1 against the well) and the one lift. */
+  .ui-segmented-item:is([aria-checked="true"], [aria-pressed="true"], [aria-selected="true"]) {
+    background: var(--control-thumb); color: var(--text-1);
+    box-shadow: inset 0 0 0 1px var(--line-control), var(--elevation-1);
+  }
+  .ui-segmented-item:disabled { opacity: 0.42; }
+
+  .ui-segmented[data-size="sm"] { --_h: var(--control-md); }
+  .ui-segmented:where([data-size="sm"]) .ui-segmented-item { padding: 0 var(--space-2-5); font: var(--type-small-strong); line-height: 1; }
+  .ui-segmented[data-size="lg"] { --_h: var(--control-lg); }
+  .ui-segmented[data-fill] { display: flex; justify-self: stretch; }
+  .ui-segmented:where([data-fill]) .ui-segmented-item { flex: 1 1 0; padding: 0 var(--space-1-5); }
+  /* An icon-only item (the pixel selection's and the shapes' variants): a compact pill with a 16px glyph. */
+  .ui-segmented-item:has(> svg:only-child) { padding-inline: var(--space-2); --icon-size: var(--icon-sm); }
+
+  @media (forced-colors: active) {
+    .ui-segmented { border: 1px solid CanvasText; }
+    .ui-segmented-item:is([aria-checked="true"], [aria-pressed="true"], [aria-selected="true"]) {
+      background: Highlight; color: HighlightText; forced-color-adjust: none;
+    }
+  }
+}

@@ -1,0 +1,128 @@
+/* Project tabs (experience.md §2, docs/PROJECT-TABS.md): the open projects in
+ * the top band, where the project's name used to be. src/shell/project-tabs-view.mjs
+ * renders them.
+ *
+ *   <div class="project-tabs">
+ *     <div class="project-tabs-list" role="tablist">
+ *       <div class="project-tab" role="tab" aria-selected="true" data-state="edited">
+ *         <span class="project-tab-art"><canvas></canvas></span>
+ *         <span class="project-tab-name">Rooftop fight</span>
+ *         <span class="project-tab-end"><span class="project-tab-dot"></span><button class="project-tab-close"></button></span>
+ *       </div>
+ *     </div>
+ *     <button class="ui-icon-button project-tabs-add" data-action="new"></button>
+ *   </div>
+ *
+ * The strip takes the room the band's start has left and its tabs share it:
+ * each is at most 184px wide and shrinks to its picture, the one in front
+ * last, so a dozen projects fit without scrolling and the band's other
+ * controls never move. The strip's own width does not depend on its tabs
+ * (contain: inline-size), so the band is not measured again as they shrink.
+ *
+ * A tab's dot is its state: neutral for unsaved changes (never red), the
+ * success tone for a moment after a save. Under the pointer, and on the tab
+ * in front while it has nothing unsaved, Close takes the dot's place. */
+@layer components {
+  .project-tabs {
+    display: flex; align-items: center; gap: var(--space-0-5); flex: 1 1 0;
+    contain: inline-size; min-inline-size: 148px; margin-inline-start: var(--space-1);
+    /* The reserve always holds the tab in front and New; a tab can never reach over the band's other controls. */
+    overflow: clip; overflow-clip-margin: 3px;
+  }
+  /* A tab is a size container (its name and state fold by its own width), so it has no intrinsic width:
+   * the list's is the sum of its tabs' (--project-tabs, written by the view), and shrinks from there. */
+  .project-tabs-list { display: flex; align-items: center; gap: var(--space-0-5); flex: 0 1 calc(var(--project-tabs, 1) * 186px); min-inline-size: 0; }
+  .project-tab {
+    position: relative; display: flex; align-items: center; gap: var(--space-1-5);
+    /* The resting tabs give way four times as fast as the one in front, which keeps its name longest. */
+    flex: 0 4 184px; min-inline-size: 36px; block-size: var(--control-lg); padding: 0 var(--space-1) 0 var(--space-2);
+    border-radius: var(--radius-md); color: var(--text-2); font: var(--type-ui); white-space: nowrap;
+    container-type: inline-size; -webkit-app-region: no-drag;
+    transition: background-color var(--dur-fast), color var(--dur-fast);
+  }
+  .project-tab:where(:hover) { background: var(--surface-hover); color: var(--text-1); }
+  .project-tab[aria-selected="true"] {
+    flex: 0 1 172px; min-inline-size: 84px;
+    background: var(--surface); color: var(--text-1); font: var(--type-ui-strong); box-shadow: var(--elevation-1);
+  }
+  .project-tab:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: var(--focus-offset-inset); }
+
+  /* The stage as the project was last seen, or a scene glyph until it has been drawn once. */
+  .project-tab-art {
+    display: grid; place-items: center; flex: none; inline-size: 26px; block-size: 16px; overflow: hidden;
+    border-radius: var(--radius-2xs); background: var(--artboard-placeholder); box-shadow: 0 0 0 1px var(--swatch-ring);
+    color: var(--slate-600);
+  }
+  .project-tab-art > canvas { display: block; inline-size: 100%; block-size: 100%; }
+  .project-tab-art > svg { inline-size: 11px; block-size: 11px; stroke-width: 2; }
+  .project-tab-name { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; unicode-bidi: plaintext; }
+
+  .project-tab-end { position: relative; display: grid; place-items: center; flex: none; inline-size: var(--control-xs); block-size: var(--control-xs); }
+  .project-tab-dot { inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--neutral-dot); opacity: 0; transition: opacity var(--dur-fast); }
+  :where(.project-tab[data-state]) .project-tab-dot { opacity: 1; }
+  :where(.project-tab[data-state="saved"]) .project-tab-dot { background: var(--success-dot); }
+  .project-tab-close {
+    position: absolute; inset: 0; display: grid; place-items: center; padding: 0;
+    border: 0; border-radius: var(--radius-xs); background: transparent; color: var(--text-2); opacity: 0;
+  }
+  .project-tab-close > svg { inline-size: 13px; block-size: 13px; stroke-width: 2; }
+  .project-tab-close:where(:hover) { background: var(--surface-pressed); color: var(--text-1); }
+  .project-tab-close:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 0; opacity: 1; }
+  :where(.project-tab:hover, .project-tab[aria-selected="true"]:not([data-state])) .project-tab-close { opacity: 1; }
+  :where(.project-tab:hover, .project-tab:has(.project-tab-close:focus-visible)) .project-tab-dot { opacity: 0; }
+
+  /* A narrowing tab gives its room to its name: Close goes first (the middle button, Ctrl+W and the tab's
+   * menu still close it), then the name, and the dot stays for as long as there is something to say. */
+  @container (max-width: 124px) {
+    .project-tab-close { display: none; }
+    .project-tab-end { inline-size: 9px; }
+    :where(.project-tab:not([data-state])) > .project-tab-end { display: none; }
+  }
+  @container (max-width: 72px) { .project-tab-name { display: none; } }
+
+  /* Reordering: the dragged tab dims and a line marks where it lands. */
+  .project-tab[data-dragging] { opacity: 0.45; }
+  .project-tab[data-drop]::after {
+    content: ""; position: absolute; inset-block: var(--space-1-5); inline-size: 2px; border-radius: 1px; background: var(--accent-line);
+  }
+  .project-tab[data-drop="before"]::after { inset-inline-start: -2px; }
+  .project-tab[data-drop="after"]::after { inset-inline-end: -2px; }
+
+  .project-tabs-add { flex: none; -webkit-app-region: no-drag; }
+
+  /* A finger has no hover: the tab in front always offers Close, beside its dot. */
+  :where(:root[data-input="touch"]) .project-tab-end { display: flex; gap: var(--space-0-5); inline-size: auto; }
+  :where(:root[data-input="touch"]) .project-tab { padding-inline-end: 0; }
+  :where(:root[data-input="touch"]) .project-tab-close { position: static; inline-size: var(--touch-target); block-size: var(--touch-target); display: none; }
+  :where(:root[data-input="touch"] .project-tab[aria-selected="true"]) .project-tab-close { display: grid; opacity: 1; }
+  :where(:root[data-input="touch"] .project-tab:not([data-state])) .project-tab-dot { display: none; }
+  :where(:root[data-input="touch"]) .project-tab-dot { opacity: 1; }
+
+  /* Ctrl+Tab (src/shell/project-switcher.mjs): the open projects as pictures under the tabs, most recently used first. */
+  .project-switcher { inline-size: min(716px, calc(100vw - var(--space-4))); max-inline-size: none; }
+  .project-switcher-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(156px, 1fr)); gap: var(--space-1); }
+  .project-switcher-card {
+    display: grid; gap: var(--space-0-5); min-inline-size: 0; padding: var(--space-1-5) var(--space-1-5) var(--space-2);
+    border: 0; border-radius: var(--radius-lg); background: transparent; color: var(--text-1); text-align: start;
+  }
+  .project-switcher-card:where(:hover) { background: var(--surface-hover); }
+  .project-switcher-card[aria-selected="true"] { background: var(--surface-selected); box-shadow: inset 0 0 0 2px var(--selection-line); }
+  .project-switcher-card:focus-visible { outline: 0; }
+  .project-switcher-art {
+    display: grid; place-items: center; aspect-ratio: 16 / 9; margin-block-end: var(--space-1); overflow: hidden;
+    border-radius: var(--radius-sm); background: var(--artboard-placeholder); box-shadow: 0 0 0 1px var(--swatch-ring);
+  }
+  .project-switcher-art > canvas { display: block; inline-size: 100%; block-size: 100%; }
+  .project-switcher-name { min-inline-size: 0; overflow: hidden; font: var(--type-ui-strong); white-space: nowrap; text-overflow: ellipsis; unicode-bidi: plaintext; }
+  .project-switcher-state { font: var(--type-small); color: var(--text-3); }
+  .project-switcher .ui-popover-foot { font: var(--type-small); color: var(--text-3); }
+
+  @media (forced-colors: active) {
+    .project-switcher-card[aria-selected="true"] { outline: 2px solid Highlight; outline-offset: -2px; }
+    .project-tab[aria-selected="true"] { outline: 2px solid Highlight; outline-offset: -2px; }
+    .project-tab-dot { background: CanvasText; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .project-tab, .project-tab-dot { transition: none; }
+  }
+}

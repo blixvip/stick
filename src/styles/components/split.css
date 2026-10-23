@@ -1,0 +1,42 @@
+/* Split button (components.md "Split button"): a toggle or command and,
+ * attached to it, a 24px-wide chevron that opens its settings or variants:
+ * Onion (#onion-button, #onion-settings-button), Motion paths (#paths-button,
+ * .path-options-button), Grid (#canvas-guides-button,
+ * #guides-options-button), New layer. The two halves share one hover so they
+ * read as one control; each keeps its own name, tooltip and focus ring.
+ *
+ *   <div class="ui-split" role="group" aria-label="Onion skin">
+ *     <button class="ui-icon-button" data-quiet aria-pressed="false" aria-label="Onion skin">…</button>
+ *     <button class="ui-split-more" aria-haspopup="dialog" aria-expanded="false" aria-label="Onion skin settings">…</button>
+ *   </div>
+ *
+ * data-size="sm" on the group: 24px tall (the layer list's header). */
+@layer components {
+  .ui-split { display: inline-flex; align-items: center; flex: none; border-radius: var(--radius-md); }
+  .ui-split > :is(.ui-icon-button, .ui-button) { border-start-end-radius: 0; border-end-end-radius: 0; }
+  .ui-split-more {
+    --icon-size: 12px;
+    display: inline-grid; place-items: center; flex: none;
+    inline-size: var(--control-sm); block-size: var(--control-md); padding: 0;
+    border: 1px solid transparent; border-radius: 0;
+    border-start-end-radius: var(--radius-md); border-end-end-radius: var(--radius-md);
+    background: transparent; color: var(--text-3);
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+    -webkit-app-region: no-drag;
+  }
+  .ui-split-more > svg { inline-size: var(--icon-size); block-size: var(--icon-size); stroke-width: 2; }
+  .ui-split-more:where(:hover, [aria-expanded="true"]):not(:disabled) { background: var(--surface-hover); color: var(--text-1); }
+  .ui-split-more:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .ui-split-more:disabled { opacity: 0.42; }
+
+  /* One hover for both halves; a pressed toggle keeps its own tile. */
+  .ui-split:where(:hover) > :where(.ui-icon-button, .ui-button, .ui-split-more):not(:disabled) { background: var(--surface-hover); }
+  .ui-split:where(:hover) > [aria-pressed="true"]:where(:not([data-quiet])) { background: var(--accent-soft-hover); }
+  .ui-split:where(:hover) > [aria-pressed="true"]:where([data-quiet]) { background: var(--control-soft-hover); }
+
+  .ui-split:where([data-size="sm"]) > .ui-split-more { block-size: var(--control-sm); }
+
+  @media (forced-colors: active) {
+    .ui-split { outline: 1px solid CanvasText; }
+  }
+}

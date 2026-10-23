@@ -1,0 +1,22 @@
+export default Object.freeze({
+  "ikView.ik": "IK",
+  "ikView.useIk": "Use IK",
+  "ikView.dragTheJointToMoveItsWholeChain": "Drag the joint to move its whole chain",
+  "ikView.ikOptions": "IK options",
+  "ikView.pinned": "Pinned",
+  "ikView.keepTheJointWhereItIsWhenThe": "Keep the joint where it is when the body moves",
+  "ikView.stretch": "Stretch",
+  "ikView.allowStretch": "Allow stretch",
+  "ikView.chain": "Chain",
+  "ikView.ikChainLength": "IK chain length",
+  "ikView.shorterChain": "Shorter chain",
+  "ikView.longerChain": "Longer chain",
+  "ikView.direction": "Direction",
+  "ikView.ikBendDirection": "IK bend direction",
+  "ikView.bend": "Bend {value}",
+  "ikView.rotation": "Rotation",
+  "ikView.ikTargetRotation": "IK target rotation",
+  "ikView.left": "Left",
+  "ikView.both": "Both",
+  "ikView.right": "Right"
+});

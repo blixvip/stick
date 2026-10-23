@@ -1,0 +1,56 @@
+/* Shared chrome tokens. Component fallbacks preserve the original light palette.
+   Artwork, paint swatches, joint colors and export previews retain their colors. */
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-text: #e7e9ee;
+  --theme-secondary: #c2c8d2;
+  --theme-muted: #a6aebb;
+  --theme-panel: #24272d;
+  --theme-subtle: #202227;
+  --theme-field: #2c3037;
+  --theme-hover: #363c45;
+  --theme-workspace: #181a1f;
+  --theme-border: #3d444f;
+  --theme-border-strong: #606b7b;
+  --theme-accent: #79bfff;
+  --theme-action: #0878c4;
+  --theme-action-hover: #0866a8;
+  --theme-selected: #203d56;
+  --theme-selected-hover: #2b506d;
+  --theme-danger: #ff9b9b;
+  --theme-danger-bg: #42282e;
+  --theme-danger-action: #ac3641;
+  --theme-warning: #eac58b;
+  --theme-warning-bg: #3b3226;
+  --theme-success: #91d6b1;
+  --theme-success-bg: #243c33;
+  --theme-violet: #c5a8f1;
+  --theme-violet-bg: #382e4b;
+  --theme-overlay: #24272df2;
+  --theme-backdrop: #080b12a3;
+  --theme-shadow: #00000055;
+  --text: var(--theme-text);
+  --muted: var(--theme-muted);
+  --border: var(--theme-border);
+  --panel: var(--theme-panel);
+  --input: var(--theme-field);
+  --purple: var(--theme-accent);
+  --purple-soft: var(--theme-selected);
+}
+
+:root[data-theme="dark"] #viewport { background: var(--theme-workspace); }
+:root[data-theme="dark"] :is(input, select, textarea) { color-scheme: dark; }
+:root[data-theme="dark"] option { background: var(--theme-field); color: var(--theme-text); }
+:root[data-theme="dark"] ::selection { background: var(--theme-selected-hover); color: var(--theme-text); }
+:root[data-theme="dark"] .sheet-playhead > span { background: var(--theme-action); }
+:root[data-theme="dark"] .sheet-scroll::-webkit-scrollbar-thumb,
+:root[data-theme="dark"] .sheet-filmstrip-scroll::-webkit-scrollbar-thumb { background: var(--theme-border-strong); }
+:root[data-theme="dark"] .sheet-scroll::-webkit-scrollbar-thumb:hover,
+:root[data-theme="dark"] .sheet-filmstrip-scroll::-webkit-scrollbar-thumb:hover { background: var(--theme-muted); }
+
+.sheet-layer[data-kind="camera"] { --track-accent: var(--sheet-camera-accent); --track-tint: var(--sheet-camera-tint); }
+.sheet-layer[data-kind="scene"] { --track-accent: var(--sheet-scene-accent); --track-tint: var(--sheet-scene-tint); }

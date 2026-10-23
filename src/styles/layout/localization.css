@@ -1,0 +1,34 @@
+@layer layout {
+  /* Physical docks, pointer geometry and chronological tracks retain their
+     coordinate system. Interface captions inside them follow the language. */
+  :where(#app), .workspace, .viewport, .shell-stage, :where(#timeline), .sheet-scroll,
+  .audio-ruler, .audio-lanes, .filmstrip-scroll, .filmstrip-track,
+  .camera-motion-graph, .paint-ramp, canvas, input[type="number"],
+  input[type="range"], input[inputmode="numeric"], input[inputmode="decimal"],
+  kbd, .ui-field-unit, .timeline-readout,
+  :where(#time-display), .ui-range-strip { direction: ltr; }
+  :root { --interface-direction: ltr; }
+  :root[dir="rtl"] { --interface-direction: rtl; }
+  .titlebar, .shell-tabs, :where(#inspector), .inspector-head, .inspector-foot,
+  .shell-panel-head, .library-body, .timeline-head, .sheet-labels,
+  .ui-dialog, dialog, .ui-menu, :where(#menu), .ui-popover, .ui-tooltip,
+  .ui-toast, .styk-settings, .support-center {
+    direction: var(--interface-direction);
+  }
+  .ui-dialog-desc, .ui-dialog-row, .ui-row-label, .ui-field-label,
+  .ui-empty-text, .ui-menu-label, .styk-settings-note { text-align: start; }
+  .ui-dialog-title, .ui-dialog-desc, .ui-dialog-choice-text,
+  .ui-toast-text, .ui-menu-label, .ui-row-label, .ui-section-title {
+    min-inline-size: 0; overflow-wrap: anywhere;
+  }
+  .ui-dialog-foot { flex-wrap: wrap; }
+  .ui-dialog-foot .ui-button, .ui-dialog-choice, .insert-actions button {
+    white-space: normal; block-size: auto; min-block-size: 32px;
+  }
+  .ui-field-label, .ui-row-label, .styk-settings-row > span {
+    white-space: normal; line-height: 1.3;
+  }
+  :where(:root[dir="rtl"]) .ui-menu-sub { transform: rotate(180deg); }
+  :where(:root[dir="rtl"]) .ui-section-chev { transform: scaleX(-1); }
+  .library-name, .sheet-layer-name { unicode-bidi: plaintext; }
+}

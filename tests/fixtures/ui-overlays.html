@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; media-src 'self' blob: data:; object-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Overlay kit fixture</title>
+  <!-- A static page for browser tests of the overlay kit (src/ui/): menus, the
+       menubar, popovers, tooltips, toasts, dialogs, the palette and toolbar
+       overflow, wired to a small command registry. Serve the repository
+       (scripts/serve.mjs) and open /tests/fixtures/ui-overlays.html;
+       window.fixture exposes the instances and a log of commands run. -->
+  <link rel="icon" type="image/svg+xml" href="/mark.svg">
+  <link rel="stylesheet" href="/src/styles/app.css">
+  <style>
+    body { margin: 0; min-block-size: 100dvh; display: grid; grid-template-rows: auto 1fr; background: var(--surface-field); }
+    .fixture-band { display: flex; align-items: center; gap: var(--space-3); block-size: var(--topbar-h); padding: 0 var(--space-3); background: var(--surface); border-block-end: 1px solid var(--line-1); }
+    .fixture-band nav { display: flex; gap: var(--space-1); }
+    .fixture-band #edge-tip { margin-inline-start: auto; }
+    .fixture-band button, .fixture-stage button { block-size: var(--control-md); padding: 0 var(--space-2-5); border-radius: var(--radius-sm); }
+    .fixture-stage { display: grid; align-content: start; gap: var(--space-4); padding: var(--space-4); outline: none; }
+    .fixture-stage section { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); padding: var(--space-3); border-radius: var(--radius-lg); background: var(--surface); }
+    .fixture-stage h2 { flex-basis: 100%; margin: 0; font: var(--type-small-strong); color: var(--text-3); }
+    .fixture-context { display: grid; place-items: center; inline-size: 240px; block-size: 96px; border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-2); }
+    .fixture-toolbar { display: flex; gap: var(--space-1); inline-size: 60%; min-inline-size: 0; overflow: hidden; }
+    .fixture-toolbar > button { flex: none; }
+  </style>
+  <script type="module" src="./ui-overlays.mjs"></script>
+</head>
+<body>
+  <header class="fixture-band">
+    <nav aria-label="Application menu">
+      <button type="button" data-app-menu="file">File</button>
+      <button type="button" data-app-menu="edit">Edit</button>
+      <button type="button" data-app-menu="view">View</button>
+    </nav>
+    <button type="button" id="open-palette" data-tooltip="Search commands" data-hotkey-hint="Ctrl+P">Search commands</button>
+    <button type="button" id="edge-tip" data-tooltip="A longer tooltip for the control at the right edge of the window" data-hotkey-hint="F1">?</button>
+  </header>
+  <main class="fixture-stage" id="fixture-stage" tabindex="-1">
+    <section aria-label="Menus">
+      <h2>Menus</h2>
+      <div class="fixture-context" id="context-area" tabindex="0">Right-click, Shift+F10 or the Menu key</div>
+      <button type="button" id="open-menu-host">Menu in the #menu host</button>
+    </section>
+    <section aria-label="Popover and tooltips">
+      <h2>Popover and tooltips</h2>
+      <button type="button" id="open-popover" aria-haspopup="dialog" aria-expanded="false">Onion skin settings</button>
+      <button type="button" aria-label="Undo" data-command="undo">↶</button>
+      <button type="button" aria-label="Redo" data-command="redo">↷</button>
+      <button type="button" data-tooltip="Add frame" data-hotkey-hint="A">+</button>
+    </section>
+    <section aria-label="Toolbar overflow">
+      <h2>Toolbar overflow</h2>
+      <div class="fixture-toolbar" id="toolbar" role="toolbar" aria-label="Frame tools">
+        <button type="button" data-action="undo" data-overflow-pinned>Undo</button>
+        <button type="button" data-action="redo">Redo</button>
+        <button type="button" data-action="copy">Copy</button>
+        <button type="button" data-action="paste">Paste</button>
+        <button type="button" data-action="duplicate" data-overflow-priority="2">Duplicate</button>
+        <button type="button" data-action="mirror">Flip horizontally</button>
+        <button type="button" data-action="mirror-vertical">Flip vertically</button>
+        <button type="button" data-action="toggle-onion" aria-pressed="false">Onion skin</button>
+        <button type="button" id="toolbar-more" aria-label="More tools" aria-haspopup="menu" hidden>⋯</button>
+      </div>
+    </section>
+    <section aria-label="Dialogs">
+      <h2>Dialogs</h2>
+      <button type="button" id="open-confirm">Confirm</button>
+      <button type="button" id="open-prompt">Rename…</button>
+      <button type="button" id="open-choose">Choose…</button>
+      <button type="button" id="open-modal">Dialog with a menu</button>
+    </section>
+    <section aria-label="Messages">
+      <h2>Messages</h2>
+      <button type="button" id="toast-info">Message</button>
+      <button type="button" id="toast-undo">Message with Undo</button>
+      <button type="button" id="toast-error">Error</button>
+      <button type="button" id="toast-task">Task</button>
+      <button type="button" id="toast-over-modal">Error over a dialog</button>
+    </section>
+  </main>
+  <div id="menu" class="menu" hidden></div>
+  <div id="toast" hidden></div>
+</body>
+</html>

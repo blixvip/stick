@@ -1,0 +1,108 @@
+/** Image decoding must not need the geometry/rendering engine to start.
+ * The legacy-owner control intentionally fails against the blocked dependency. */
+import assert from 'node:assert/strict';
+import {chromium} from './support/playwright.mjs';
+import {createRequire} from 'node:module';
+import {mkdir, readFile, writeFile} from 'node:fs/promises';
+import path from 'node:path';
+import {previewPNG} from './preview-png-fixture.mjs';
+
+const root = path.resolve('.'), output = path.join(root, 'artifacts/image-resources');
+await mkdir(output, {recursive: true});
+await writeFile(path.join(output, 'fixture.html'), '<!doctype html><title>Image resources</title>');
+const source = `data:image/png;base64,${(await previewPNG(32, 16)).toString('base64')}`;
+const {startBackend} = createRequire(import.meta.url)('../desktop/backend.cjs');
+const backend = await startBackend({appRoot: root}); let browser;
+try {
+  browser = await chromium.launch({channel: 'chrome', headless: true});
+  const context = await browser.newContext(), blocked = [];
+  await context.route('**/src/pivot/geometry.mjs', route => {
+    blocked.push(new URL(route.request().url()).pathname); return route.abort();
+  });
+  if (process.env.STYK_TEST_LEGACY_IMAGE_OWNER === '1') {
+    const body = (await readFile(path.join(root, 'src/preview-image-worker.mjs'), 'utf8'))
+      .replaceAll('ImageResources', 'PlaybackResources').replace("'./image-resources.mjs'", "'./playback-resources.mjs'");
+    await context.route('**/src/preview-image-worker.mjs', route => route.fulfill({contentType: 'text/javascript', body}));
+  }
+  const page = await context.newPage(); page.setDefaultTimeout(20000);
+  await page.goto(`${backend.origin}/artifacts/image-resources/fixture.html`);
+  const result = await page.evaluate(async source => {
+    const {PreviewImages} = await import('/src/preview-images.mjs');
+    const notifications=[];
+    const images = new PreviewImages({maxBytes: 4096,onReady:value=>notifications.push(value)});
+    const item = {type: 'image', asset: {url: source}};
+    const read = image => {
+      const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
+      const ctx = canvas.getContext('2d'); ctx.drawImage(image, 0, 0);
+      return Array.from(ctx.getImageData(0, 0, canvas.width, canvas.height).data);
+    };
+    try {
+      // Cancellation before worker readiness must release its pending request.
+      const first = images.prepare([item]);
+      const cancelled = first.then(() => false, error => error.name === 'AbortError');
+      images.clear();
+      if (!await cancelled) throw new Error('The cancelled decode resolved successfully.');
+      await images.prepare([item], {maxDimension: 8});
+      const small = images.get(source), pixels = read(small);
+      const smallSize = [small.width, small.height, small.naturalWidth, small.naturalHeight];
+      const worker = images.worker;
+      await images.prepare([item], {maxDimension: 8});
+      if (images.worker !== worker || images.get(source) !== small) throw new Error('Unchanged decoding did not retain its result.');
+      // Different request signature, same actual decoded worker bitmap. This
+      // must exercise a response, not just the main-thread signature shortcut.
+      const sequence=images.sequence;
+      await images.prepare([item,item], {maxDimension: 8});
+      if(images.sequence!==sequence+1||images.get(source)!==small||notifications.at(-1).unchanged!==true)
+        throw new Error('An identical transferred variant replaced the consumer bitmap.');
+      if(JSON.stringify(read(small))!==JSON.stringify(pixels))throw new Error('Retained variant pixels changed.');
+      await images.prepare([item], {maxDimension: 32});
+      const full = images.get(source), fullPixels = read(full);
+      if(full===small||notifications.at(-1).unchanged||!notifications.at(-1).resized)
+        throw new Error('A higher-resolution decode did not invalidate old pixels.');
+      if (images.bytes > images.maxBytes) throw new Error('Image residency exceeded its allowance.');
+      return {cancelled: true, smallSize, pixels, fullSize: [full.width, full.height], fullPixels,
+        timings: images.lastPreparation, retainedBytes: images.bytes, notifications};
+    } finally {images.clear();}
+  }, source);
+  assert.deepEqual(blocked, [], 'image-only work attempted to load scene geometry');
+  assert.deepEqual(result.smallSize, [8, 4, 32, 16]);
+  assert.deepEqual(result.fullSize, [32, 16]);
+  for (const [pixels, width, height] of [[result.pixels, 8, 4], [result.fullPixels, 32, 16]])
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++)
+      assert.deepEqual(pixels.slice((y * width + x) * 4, (y * width + x + 1) * 4), x < width / 2 ? [230, 70, 90, 255] : [35, 180, 90, 255]);
+  delete result.pixels; delete result.fullPixels;
+  // Exercise the actual application callback with a real decoder response.
+  // Temporarily hold viewport requests so they cannot supersede this fixture.
+  const appContext=await browser.newContext(),appPage=await appContext.newPage(),appErrors=[];
+  appPage.on('pageerror',error=>appErrors.push(error.message));
+  await appPage.goto(backend.origin);await appPage.waitForFunction(()=>window.styk?.ready);
+  result.appInvalidation=await appPage.evaluate(async source=>{
+    const {PreviewImages}=await import('/src/preview-images.mjs'),original=PreviewImages.prototype.prepare;
+    let owner;
+    PreviewImages.prototype.prepare=function(...args){owner=this;return original.apply(this,args);};
+    try{
+      styk.fit();
+      const deadline=performance.now()+10000;
+      while(!owner){if(performance.now()>deadline)throw new Error('Application image owner was not observed.');await new Promise(requestAnimationFrame);}
+    }finally{PreviewImages.prototype.prepare=original;}
+    const {editor,state}=styk,renderer=state.renderer,report=editor.report,revision=editor.revision,history=editor.historySize;
+    owner.prepare=()=>Promise.resolve();
+    try{
+      if(owner.current)await owner.current;
+      const item={type:'image',asset:{url:source}},generations=[renderer.generation];
+      await original.call(owner,[item],{maxDimension:8});generations.push(renderer.generation);
+      const retained=owner.get(source);
+      await original.call(owner,[item,item],{maxDimension:8});generations.push(renderer.generation);
+      if(owner.get(source)!==retained)throw new Error('Application lost unchanged image identity.');
+      await original.call(owner,[item],{maxDimension:32});generations.push(renderer.generation);
+      await original.call(owner,[]);generations.push(renderer.generation);
+      if(editor.report!==report||editor.revision!==revision||editor.historySize!==history)throw new Error('Image readiness changed the document/history.');
+      return {generations,backend:renderer.stats.backend,documentUnchanged:true};
+    }finally{delete owner.prepare;owner.clear();styk.fit();}
+  },source);
+  const g=result.appInvalidation.generations;
+  assert.deepEqual(g.slice(1).map((v,i)=>v-g[i]),[1,0,1,1],'only proven identical pixels avoid application invalidation');
+  assert.deepEqual(appErrors,[]);await appContext.close();
+  await writeFile(path.join(output, 'report.json'), JSON.stringify(result, null, 2));
+  console.log(JSON.stringify(result));
+} finally {await browser?.close(); backend.stop();}

@@ -1,0 +1,102 @@
+/* Menu (src/ui/ui-menu.mjs; components.md "Menu"): app, context, zoom and
+ * overflow menus and their submenus, in the top layer. A menu is short and
+ * grouped: each group names what it holds (.ui-menu-label, a small grey
+ * heading), rows are 32px with a glyph, the label in ink and the shortcut in
+ * grey at the end; rarely used commands sit in a submenu row with a chevron.
+ * Danger rows (Delete) come last, in red.
+ *
+ * Rows are button.menu-item.ui-menu-item: a lead column (a glyph, the check or
+ * a pad, so labels line up), the label <span>, the shortcut as plain text in a
+ * <kbd>, the submenu chevron and, for a disabled row, its reason underneath.
+ * .menu-item is a hook class kept for tests and legacy styles; the properties
+ * below override what the legacy sheet sets on it. */
+@layer components {
+  .ui-menu {
+    --icon-size: var(--icon-md);
+    display: flex; flex-direction: column;
+    max-block-size: calc(100dvh - var(--space-4)); overflow-y: auto; overscroll-behavior: contain;
+    min-inline-size: 240px; max-inline-size: 340px; padding: var(--space-1-5);
+    border: 1px solid transparent; border-radius: var(--radius-xl);
+    background: var(--surface-raised); color: var(--text-1);
+    box-shadow: var(--elevation-3);
+    font: var(--type-ui);
+    -webkit-app-region: no-drag;
+  }
+  /* A menu that scrolls says so: a 12px fade while more is below and a drawn 6px scrollbar. */
+  .ui-menu[data-more-below] { mask-image: linear-gradient(to bottom, black calc(100% - 12px), transparent); }
+  .ui-menu::-webkit-scrollbar { width: 6px; }
+  .ui-menu::-webkit-scrollbar-thumb { border-radius: 3px; background: var(--scrollbar-thumb-hover); }
+  /* The popover's UA rule hides it while closed; `display: flex` above would otherwise win. */
+  .ui-menu:where([popover]:not(:popover-open)) { display: none; }
+  .ui-menu[popover] { position: fixed; margin: 0; inset: auto; }
+  .ui-menu:popover-open { transition: opacity var(--dur-base) var(--ease-out), translate var(--dur-base) var(--ease-out); }
+  @starting-style { .ui-menu:popover-open { opacity: 0; translate: 0 4px; } }
+
+  .ui-menu-item {
+    position: relative;
+    display: grid; grid-template-columns: var(--icon-size) minmax(0, 1fr) auto auto; align-items: center; column-gap: var(--space-2-5);
+    justify-content: stretch;
+    inline-size: 100%; min-block-size: var(--control-md); block-size: auto; padding: 0 var(--space-2-5);
+    border: 0; border-radius: var(--radius-sm);
+    background: transparent; color: var(--text-1);
+    font: var(--type-ui); text-align: start; white-space: nowrap; user-select: none;
+  }
+  .ui-menu-item > :first-child { grid-column: 1; }
+  .ui-menu-item > svg { inline-size: var(--icon-size); block-size: var(--icon-size); color: var(--text-2); }
+  .ui-menu-item > span { grid-column: 2; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  .ui-menu-pad { inline-size: var(--icon-size); }
+  .ui-menu-swatch {
+    display: inline-block; inline-size: 10px; block-size: 10px; margin-inline-end: var(--space-2); vertical-align: -1px;
+    border-radius: 50%; background: var(--swatch, transparent); box-shadow: inset 0 0 0 1px var(--line-2);
+  }
+  .ui-menu-item:where(:hover, [aria-expanded="true"]):not([aria-disabled="true"]) { background: var(--surface-hover); }
+  .ui-menu-item:where(:hover, [aria-expanded="true"]):not([aria-disabled="true"]) > svg { color: var(--text-1); }
+  .ui-menu-item:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset-inset); background: var(--surface-hover); }
+
+  /* The check column: a check for checkbox rows, a dot for radio rows, shown when checked, in Styk blue. */
+  .ui-menu-check { display: inline-grid; place-items: center; inline-size: var(--icon-size); color: var(--accent); --icon-size: var(--icon-sm); }
+  .ui-menu-check > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); stroke-width: 2.5; }
+  .ui-menu-item:not([aria-checked="true"]) > :where(.ui-menu-check) > * { visibility: hidden; }
+  .ui-menu-item:where([role="menuitemradio"][aria-checked="true"]) .ui-menu-check::before {
+    content: ""; inline-size: 7px; block-size: 7px; border-radius: 50%; background: currentColor;
+  }
+
+  /* Shortcuts are plain text (never keycaps), in a kbd so assistive tech and tests read them. */
+  .ui-menu-shortcut {
+    grid-column: 3; margin: 0 0 0 var(--space-6); padding: 0;
+    border: 0; background: none; box-shadow: none;
+    font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums;
+  }
+  .ui-menu-sub { grid-column: 4; inline-size: var(--icon-sm); block-size: var(--icon-sm); margin-inline-start: var(--space-3); color: var(--text-3); }
+  .ui-menu-reason {
+    grid-column: 2 / -1; grid-row: 2;
+    font: var(--type-micro); font-weight: var(--weight-medium); color: var(--text-3); white-space: normal;
+  }
+  .ui-menu-item:has(> .ui-menu-reason) { padding-block: var(--space-1); }
+
+  .ui-menu-item[aria-disabled="true"] { color: var(--text-disabled); }
+  .ui-menu-item:where([aria-disabled="true"]) > svg { color: var(--text-disabled); }
+  .ui-menu-item[data-tone="danger"] { color: var(--danger-text); }
+  .ui-menu-item:where([data-tone="danger"]) > svg { color: var(--danger-text); }
+  .ui-menu-item[data-tone="danger"]:where(:hover, :focus-visible) { background: var(--danger-soft); }
+
+  /* A group: its small heading names what the rows below it do. */
+  .ui-menu-group { display: flex; flex-direction: column; }
+  .ui-menu-label {
+    padding: var(--space-2-5) var(--space-2-5) var(--space-1);
+    font: var(--type-eyebrow); letter-spacing: 0.01em; color: var(--text-3);
+  }
+  :where(.ui-menu-group:first-child) > .ui-menu-label, .ui-menu > .ui-menu-label:where(:first-child) { padding-block-start: var(--space-1); }
+  .ui-menu-sep { flex: none; block-size: 1px; margin: var(--space-1-5) var(--space-1); border: 0; background: var(--line-1); }
+  /* An inline control in a menu (the timeline zoom slider) */
+  .ui-menu-row {
+    display: grid; grid-template-columns: var(--icon-size) minmax(0, 1fr) var(--icon-size); align-items: center; gap: var(--space-2);
+    min-block-size: var(--control-md); padding: 0 var(--space-2-5); color: var(--text-2);
+  }
+
+  @media (forced-colors: active) {
+    .ui-menu { border-color: CanvasText; }
+    .ui-menu-item:focus-visible { outline-color: Highlight; }
+    .ui-menu-item[aria-disabled="true"] { color: GrayText; }
+  }
+}

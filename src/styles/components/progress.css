@@ -1,0 +1,40 @@
+/* Progress and spinner (components.md "Progress and spinner"). .ui-progress is
+ * a 6px track on --surface-well filled with --accent-strong to --_p (a
+ * percentage written through CSSOM), or indeterminate with
+ * [data-indeterminate]; it carries role=progressbar and its aria-value*
+ * itself. .ui-spinner is a 14px ring in currentColor (a busy button's icon,
+ * the document's "Saving…"). Both hold still under reduced motion. The toast's
+ * task bar keeps its own part (.ui-toast-progress). */
+@layer components {
+  .ui-progress {
+    --_p: 0%;
+    --_fill: var(--accent-strong);
+    --_track: var(--surface-well);
+    position: relative; overflow: hidden;
+    block-size: 6px; min-inline-size: 48px; border-radius: var(--radius-pill); background: var(--_track);
+  }
+  .ui-progress::before {
+    content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;
+    inline-size: var(--_p); border-radius: inherit; background: var(--_fill);
+    transition: inline-size var(--dur-base) linear;
+  }
+  .ui-progress[data-indeterminate]::before { inline-size: 32%; animation: ui-progress-indeterminate 1.3s var(--ease-in-out) infinite; }
+  .ui-progress[data-tone="danger"] { --_fill: var(--danger-dot); }
+  @keyframes ui-progress-indeterminate { from { translate: -100% 0; } to { translate: 320% 0; } }
+
+  .ui-spinner {
+    display: inline-block; flex: none; inline-size: 14px; block-size: 14px; border-radius: 50%;
+    border: 2px solid currentColor; border-inline-end-color: transparent; opacity: 0.8;
+    animation: ui-spinner-turn 0.8s linear infinite;
+  }
+  @keyframes ui-spinner-turn { to { rotate: 360deg; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-progress[data-indeterminate]::before { animation: none; inline-size: 100%; opacity: 0.45; }
+    .ui-spinner { animation: none; border-inline-end-color: currentColor; opacity: 0.45; }
+  }
+  @media (forced-colors: active) {
+    .ui-progress { border: 1px solid CanvasText; }
+    .ui-progress::before { background: Highlight; }
+  }
+}

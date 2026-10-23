@@ -1,0 +1,25 @@
+/* Minimal builder chrome; shared tools and command layout stay intact. */
+/* Build's grid, hidden timeline and rail placement: retired in M1 (the dock host lays Build out) */
+.workspace[data-mode=rig] .viewport-help { display: none; }
+.workspace[data-mode=rig] .builder-outliner-head { height: 48px; min-height: 48px; padding: 0 12px; gap: 5px; }
+.workspace[data-mode=rig] .builder-name { height: 30px; font-family: inherit; font-size: 12px; font-weight: 600; }
+.workspace[data-mode=rig] .builder-outliner-count { font-size: 10px; }
+.workspace[data-mode=rig] .builder-tree { padding-top: 0; }
+.workspace[data-mode=rig] .builder-tree-row { font-size: 12px; border-radius: 0 5px 5px 0; right: 6px; }
+.workspace[data-mode=rig] .builder-twisty { width: 18px; height: 24px; }
+.workspace[data-mode=rig] .builder-tree-row[aria-selected=true] .builder-row-label { font-weight: 600; }
+.workspace[data-mode=rig] .builder-tree-row[aria-selected=true] .builder-badge { color: var(--theme-accent, #0d99ff); }
+.workspace[data-mode=rig] .builder-outliner-empty { font-size: 12px; line-height: 1.6; padding: 12px; text-align: center; }
+.builder-footer { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-top: 1px solid var(--border); gap: 6px; }
+.builder-footer button { display: flex; align-items: center; gap: 7px; height: 30px; padding: 0 8px; border-radius: 6px; font-size: 11px; color: var(--muted); }
+.builder-footer .icon { width: 15px; height: 15px; }
+.builder-footer button:hover { background: var(--theme-hover, #f5f5f5); color: var(--text); }
+.builder-footer button[aria-expanded=true] { background: var(--theme-selected, #e5f4ff); color: var(--theme-accent, #0d99ff); }
+.builder-footer button:focus-visible { outline: 2px solid var(--theme-accent, #0d99ff); outline-offset: -2px; }
+/* Build's stage is an inline-size container. */
+.workspace[data-mode=rig] .center { container-type: inline-size; }
+
+#builder-snap {flex:0 0 30px;}
+#builder-snap[aria-pressed="true"] {color:var(--accent-text);background:var(--accent-soft);}
+#chain-controls {gap:10px;}
+#chain-controls button {border:0;border-radius:5px;padding:5px 9px;cursor:pointer;}

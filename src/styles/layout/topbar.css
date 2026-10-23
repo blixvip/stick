@@ -1,0 +1,73 @@
+/* The top band (experience.md §2, §1.8; architecture §3.11.4): one row in three
+ * clusters that read left to right as where (the mark with its menu, the open
+ * projects as tabs) │ how (the workspaces) │ what next (history, Save, Export,
+ * or in a session its quiet Export, Cancel or Test rig and the ink Done) and
+ * the window controls. The start takes the room the other two leave, so the
+ * tabs have it, and no cluster takes less than its content, so the band never
+ * wraps or clips: the dock host folds it first. `.shell-top` is the band's
+ * visual class beside the `.titlebar` hook; features/band.css sizes the
+ * components inside it and folds their words; components/project-tabs.css
+ * shares the start's room between the tabs.
+ *
+ * Folds: the dock host writes the solver's fold steps to the band's own
+ * `data-band`, in the band's fold order (BAND_FOLDS); src/shell/topbar.mjs
+ * measures the band's width after each step, so no rule here may depend on the
+ * window's size. Words and spacing fold before controls, the ink primary's word
+ * last. The menubar is always folded into the mark (features/band.css), so the
+ * `menus` step frees nothing.
+ * Sessions: topbar.mjs writes `data-session` (build, movieclip, camera) and
+ * shows the buttons marked `data-band-session` for it. */
+@layer layout {
+  .shell-top {
+    --band-pad: var(--space-2);
+    display: grid; grid-template-columns: minmax(max-content, 1fr) max-content max-content;
+    align-items: center; column-gap: var(--space-3);
+    block-size: var(--topbar-h); min-inline-size: 0; padding: 0 var(--band-pad) 0 var(--space-2);
+    overflow: hidden; border: 0; background: var(--surface); box-shadow: inset 0 -1px 0 var(--line-1);
+    -webkit-app-region: drag;
+  }
+  .shell-top :where(button, input, nav, [role="toolbar"], [role="group"]) { -webkit-app-region: no-drag; }
+  .band-cluster { display: flex; align-items: center; gap: var(--space-1); min-inline-size: 0; }
+  .band-center { justify-self: center; }
+  .band-end { justify-self: end; gap: var(--space-2); }
+  .band-history { display: flex; align-items: center; gap: 0; }
+  .shell-top :where(.band-label) { white-space: nowrap; }
+
+  /* The mark: the StykAnimate symbol in brand blue and the StykAnimate menu's chevron. */
+  .shell-mark {
+    display: inline-flex; align-items: center; gap: var(--space-0-5); flex: none;
+    block-size: var(--control-lg); padding: 0 var(--space-1) 0 var(--space-1-5);
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--accent);
+  }
+  .shell-mark:where(:hover, [aria-expanded="true"]) { background: var(--surface-hover); }
+  .shell-mark:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .shell-mark > img { inline-size: 22px; block-size: 22px; }
+  .shell-mark > :where(span:not(.chevron)) { display: none; }
+  .shell-mark > :where(.chevron) { display: inline-flex; margin: 0; color: var(--text-3); }
+  .shell-mark > :where(.chevron) > svg { inline-size: 12px; block-size: 12px; stroke-width: 2; }
+
+  /* The workspace glyphs show only when the band folds the switch's names (features/band.css). */
+  .band-ws-icon { display: none; }
+  .band-ws-icon > svg { inline-size: 17px; block-size: 17px; }
+
+  /* The window controls sit flush with the window's edge and fill the band's height; close hovers danger-soft. */
+  .shell-top :where(#window-controls) { align-self: stretch; display: flex; margin-inline-end: calc(-1 * var(--band-pad)); }
+  .shell-top :where(#window-controls)[hidden] { display: none; }
+  .shell-top :where(#window-controls) > button {
+    display: inline-grid; place-items: center; inline-size: 44px; block-size: auto; padding: 0;
+    border: 0; border-radius: 0; background: transparent; color: var(--text-2);
+  }
+  .shell-top :where(#window-controls) > button:hover { background: var(--surface-hover); color: var(--text-1); }
+  .shell-top :where(#window-controls > [data-action="close"]):hover { background: var(--danger-soft); color: var(--danger-text); }
+  .shell-top :where(#window-controls) > button > svg { inline-size: 16px; block-size: 16px; }
+
+  /* ---- The fold order (BAND_FOLDS); features/band.css folds the components (Save, Redo, a session's Export, the
+   * menubar) and their words ---- */
+  .shell-top[data-band~="tight"] { column-gap: var(--space-2); }
+  .shell-top[data-band~="tight"] :where(.band-cluster) { gap: var(--space-0-5); }
+  .shell-top[data-band~="tight"] :where(.band-end) { gap: var(--space-1); }
+  .shell-top[data-band~="winctl"] :where(#window-controls) > button { inline-size: 36px; }
+  /* Once the switch shows its glyphs, the band's last spacing tightens too. */
+  .shell-top[data-band~="icons"] { column-gap: var(--space-1); padding-inline-start: var(--space-1); }
+  .shell-top[data-band~="icons"] :where(.band-end) { gap: var(--space-0-5); }
+}

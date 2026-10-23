@@ -1,0 +1,182 @@
+/* The export dialog (src/export-sheet.mjs, experience.md §5.14): the form
+ * column of the export dialog variant (components/dialog-variants.css), the
+ * preview pane's caption and notes, and the progress view that replaces the
+ * settings while an export runs (src/export-progress.mjs). It composes the
+ * kit (.ui-dialog-row, .ui-field, .ui-select, .ui-segmented, .ui-switch,
+ * .ui-section) and only lays those out. Calm: the foot's primary names the
+ * format and is the one ink button; no lime, no badges. The rows follow
+ * src/export-request.mjs exportFieldVisibility(); the sheet hides a row with
+ * [hidden]. */
+@layer features {
+  /* The form: label column and rhythm. It scrolls under a fade while rows wait below (data-more-below, set by the sheet).
+   * max-content rows: in a body of fixed height whose rows overflow, auto rows would shrink to a row's min-block-size and overlap. */
+  .export-body { --_label: 72px; grid-auto-rows: max-content; gap: var(--space-2-5); padding-block-start: var(--space-1); }
+  .export-body[data-more-below] { mask-image: linear-gradient(to bottom, var(--text-1) calc(100% - 28px), transparent); } /* only the stops' alpha counts */
+  .export-body :where(.ui-dialog-row)[hidden] { display: none; }
+  .export-body .ui-row-label { color: var(--text-2); }
+
+  /* Quick presets (src/export-presets.mjs): a radiogroup of tiles above the settings, an icon beside the place's name and
+   * what it makes. The chosen one is the selected surface with the accent line, as the Project list's; the note under
+   * them says what the export will be, in the warning ink when the canvas's shape will show with bars. A hairline then
+   * separates the presets from the settings they filled in. */
+  .ui-export-form .ui-segmented { block-size: auto; min-block-size: var(--control-md); }
+  .ui-export-form .ui-segmented-item { padding-block: var(--space-1); line-height: 1.25; min-inline-size: 0; white-space: normal; overflow-wrap: anywhere; block-size: auto; min-block-size: var(--control-sm); }
+  :where(#export-format) .ui-segmented-item { flex-basis: auto; }
+  .export-preset-section {
+    display: grid; gap: var(--space-2); padding-block-end: var(--space-3); margin-block-end: var(--space-0-5);
+    border-block-end: 1px solid var(--line-1);
+  }
+  .export-section-label { margin: 0; font: var(--type-small-strong); color: var(--text-2); }
+  .export-presets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-1-5); }
+  :root[data-tier="minimal"] .export-presets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .export-preset {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: var(--space-2);
+    min-inline-size: 0; padding: var(--space-2) var(--space-2-5);
+    border: 0; border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-1); text-align: start;
+    transition: background-color var(--dur-fast), box-shadow var(--dur-fast);
+  }
+  .export-preset > svg { grid-row: 1 / 3; inline-size: var(--icon-md); block-size: var(--icon-md); color: var(--text-2); }
+  .export-preset > span { min-inline-size: 0; white-space: normal; overflow-wrap: anywhere; }
+  .export-preset-label { font: var(--type-small-strong); }
+  .export-preset-detail { font: var(--type-small); color: var(--text-3); }
+  .export-preset:where(:hover) { background: var(--surface-hover); }
+  .export-preset:where(:hover) > svg { color: var(--text-1); }
+  .export-preset[aria-checked="true"] { background: var(--surface-selected); box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+  .export-preset[aria-checked="true"] > svg { color: var(--accent-text); }
+  .export-preset:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .export-preset-note { margin: 0; font: var(--type-small); color: var(--text-2); }
+  .export-preset-note[data-fits="false"] { color: var(--warning-text); }
+  .export-preset-note[hidden] { display: none; }
+
+  /* What the chosen type and quality are for: a quiet line under their row, in the control column. */
+  .export-hint { margin: calc(-1 * var(--space-1)) 0 0; padding-inline-start: calc(var(--_label) + var(--space-3)); font: var(--type-small); color: var(--text-3); }
+  .export-hint[hidden] { display: none; }
+
+  /* Name: the extension after the typed name, in the field. */
+  .export-extension { flex: none; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+  /* Size › Custom…: Width, Lock ratio, Height on the row under Size. */
+  .export-size-custom { display: flex; align-items: center; gap: var(--space-1-5); min-inline-size: 0; }
+  .export-size-custom > :not(.export-lock) { flex: 1 1 0; min-inline-size: 0; }
+  /* Lock ratio: a linked-values glyph over its checkbox (the checkbox takes the clicks and the keyboard). */
+  .export-lock { position: relative; flex: none; color: var(--text-3); }
+  .export-lock:has(> :checked) { color: var(--text-1); background: var(--control-soft); }
+  .export-lock:has(> :focus-visible) { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .export-lock-input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: default; }
+
+  /* Picture: Edges and Transparent; Sound; GIF's Colours: one line each. */
+  .export-inline { display: flex; align-items: center; gap: var(--space-2); min-inline-size: 0; }
+  .export-inline > .ui-select { flex: 1 1 auto; min-inline-size: 0; }
+  .export-inline > .ui-select[hidden] { display: none; }
+  .export-toggle {
+    display: flex; flex: 1 1 auto; align-items: center; justify-content: space-between; gap: var(--space-2);
+    min-inline-size: 0; min-block-size: var(--control-lg); padding: 0 var(--space-2-5);
+    border-radius: var(--radius-md); background: var(--surface-sunken); font: var(--type-ui);
+  }
+  .export-toggle > span { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .export-toggle:has(> :disabled) { color: var(--text-2); }
+  /* Disabled means explained: the reason under a switch that cannot act (Transparent in MP4). */
+  .export-reason { grid-column: 2; margin: 0; font: var(--type-small); color: var(--text-3); }
+  .export-reason[hidden] { display: none; }
+
+  /* Project: its four types (.piv, .stkz, .stk, .stykmov) as a visible list, one click each. The list is
+   * role="radiogroup" and each .export-type role="radio" with aria-checked; arrow keys move the choice. */
+  .export-types { display: grid; gap: var(--space-0-5); }
+  .export-row-list { align-items: start; }
+  .export-row-list > .ui-row-label { line-height: var(--control-lg); }
+  .export-type {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+    min-block-size: var(--control-lg); padding: 0 var(--space-2-5);
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-1); font: var(--type-ui); text-align: start;
+  }
+  .export-type:where(:hover) { background: var(--surface-hover); }
+  .export-type[aria-checked="true"] { background: var(--surface-selected); box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+  .export-type[aria-disabled="true"] { color: var(--text-disabled); }
+  .export-type:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .export-type-extension { color: var(--text-3); font: var(--type-small); font-variant-numeric: tabular-nums; }
+
+  /* Encoding: a titled section, closed at rest; its title carries the summary ("H.264 · automatic bitrate"). */
+  .export-encoding { padding-block-start: 0; }
+  .export-encoding[hidden] { display: none; }
+  .export-encoding > .ui-section-body { gap: var(--space-2-5); }
+  .export-encoding-summary { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; font: var(--type-small); color: var(--text-3); text-align: end; text-overflow: ellipsis; white-space: nowrap; }
+  .export-vfw, .vfw-export-controls { display: grid; gap: var(--space-2-5); min-inline-size: 0; }
+  :where(.export-vfw, .vfw-export-controls)[hidden] { display: none; }
+
+  /* Notes: a quiet line (the Windows codec's status, Simple mode's played frames, the working pose). */
+  .export-note { margin: 0; font: var(--type-small); color: var(--text-3); overflow-wrap: anywhere; }
+  .export-note[hidden] { display: none; }
+
+  /* The preview's caption: ▶, "Frames" and the typed From and To beside it. */
+  .export-caption-range { display: inline-flex; align-items: center; gap: var(--space-1-5); }
+  .export-caption-range[hidden], .ui-export-caption > [hidden], .ui-export-preview > [hidden] { display: none; }
+  .export-frame-field { flex: none; inline-size: 76px; }
+  .export-caption-label { white-space: nowrap; }
+  .export-preview-note { text-align: center; }
+  .ui-export-stage > canvas { background: var(--artboard-placeholder); }
+  /* A vertical preset (data-frame="portrait", set by the sheet): the stage is the phone's 9:16 screen and the canvas sits
+   * in it at its own shape, so a landscape animation shows the bars the platform will add. Compact and minimal keep
+   * their preview strip. */
+  :where(:root:not([data-tier="compact"], [data-tier="minimal"])) .ui-export-stage[data-frame="portrait"] {
+    display: grid; place-items: center; align-self: center; aspect-ratio: 9 / 16; block-size: min(360px, 100%); inline-size: auto;
+    background: var(--surface-letterbox);
+  }
+  :where(:root:not([data-tier="compact"], [data-tier="minimal"])) .ui-export-stage[data-frame="portrait"] > canvas { inline-size: 100%; block-size: auto; max-block-size: 100%; }
+  /* The trim strip keeps eight cells' size; a short animation spreads its frames along it. */
+  .ui-export-preview > .ui-range-strip { grid-auto-columns: calc((100% - 7 * var(--space-0-5)) / 8); justify-content: space-between; }
+  .ui-range-strip > i > canvas { object-fit: contain; }
+  /* On the sunken pane the caption's fields are raised, so they read as fields. */
+  .ui-export-caption .ui-field { background: var(--surface); }
+
+  /* The foot: the validation line above the summary (.ui-dialog-meta), Cancel and the primary. */
+  .ui-export-form > .ui-dialog-foot { flex-wrap: wrap; row-gap: var(--space-2); padding-block-start: var(--space-2); }
+  .ui-export-form > .ui-dialog-foot[hidden] { display: none; }
+  .ui-export-form > .ui-dialog-body[hidden] { display: none; }
+  .export-validation { flex: 1 0 100%; margin: 0; font: var(--type-small); color: var(--text-2); }
+  .export-validation[hidden] { display: none; }
+  .export-validation[data-error="true"] { color: var(--danger-text); }
+  .ui-export-form .ui-dialog-meta[hidden] { display: none; }
+
+  /* Progress stays inside the dialog (#export-progress, #cancel-export): it takes the form column's body and foot. */
+  .export-progress-host { display: grid; min-block-size: 0; }
+  .ui-export-form > .export-progress-host { grid-column: 2; grid-row: 2 / -1; overflow: auto; }
+  .export-progress { display: grid; gap: var(--space-3); align-content: safe center; min-block-size: 0; padding: var(--space-2) var(--space-6) var(--space-5); }
+  .export-progress-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+  .export-progress-head > strong { font: var(--type-heading); color: var(--text-1); }
+  .export-progress-head > output { font: var(--type-numeral); color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .export-progress > progress {
+    appearance: none; display: block; inline-size: 100%; block-size: 6px; margin: 0;
+    border: 0; border-radius: var(--radius-pill); background: var(--surface-well); overflow: hidden;
+  }
+  .export-progress > progress::-webkit-progress-bar { background: var(--surface-well); border-radius: var(--radius-pill); }
+  .export-progress > progress::-webkit-progress-value { background: var(--accent-strong); border-radius: var(--radius-pill); transition: inline-size var(--dur-base) linear; }
+  .export-progress > progress::-moz-progress-bar { background: var(--accent-strong); border-radius: var(--radius-pill); }
+  .export-progress > p { margin: 0; min-block-size: 18px; font: var(--type-small); color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .export-progress > p[hidden] { display: none; }
+  .export-progress-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: var(--space-3);
+    margin: 0; padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg); background: var(--surface-sunken);
+  }
+  .export-progress-stats dt { font: var(--type-small); color: var(--text-3); }
+  .export-progress-stats dd { margin: var(--space-1) 0 0; font: var(--type-emphasis); color: var(--text-1); font-variant-numeric: tabular-nums; }
+  .export-progress-actions { display: flex; justify-content: flex-end; padding-block-start: var(--space-2); }
+
+  /* Compact and minimal: one column; the preview is a strip (the stage and the trim) with its caption on the line below.
+   * In the smallest windows (minimal, or low) the caption keeps ▶ and "Frames" on the strip's line and the typed From and
+   * To give way; the trim's ends still set the range, by pointer or with the arrow keys. */
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-preview { flex-wrap: wrap; row-gap: var(--space-2); }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-preview > .ui-range-strip { flex: 1 1 0; }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-preview > .ui-range-strip > i { aspect-ratio: auto; block-size: 30px; }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-caption { flex: 1 0 100%; justify-content: flex-start; }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .export-preview-note { display: none; }
+  :where(:root[data-tier="minimal"], :root[data-height="low"]) .ui-export-caption { flex: none; }
+  :where(:root[data-tier="minimal"], :root[data-height="low"]) .export-caption-range { display: none; }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-form > .export-progress-host { grid-column: 1; grid-row: 3 / -1; }
+
+  /* Forced colours drop the box-shadow and flatten the selected surface: outline the chosen type instead. */
+  @media (forced-colors: active) {
+    .export-type[aria-checked="true"], .export-preset[aria-checked="true"] { outline: 2px solid Highlight; outline-offset: var(--focus-offset-inset); }
+    .export-preset { border: 1px solid CanvasText; }
+    .export-progress > progress { border: 1px solid CanvasText; }
+  }
+}

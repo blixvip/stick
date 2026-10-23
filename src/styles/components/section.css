@@ -1,0 +1,78 @@
+/* Section (components.md "Section"): a group of a panel's controls under a
+ * title that says what is inside. The hierarchy reads at a glance:
+ *   the panel's title (the selection's name, 18px bold)
+ *   a section: a 22px colour badge (its kind: blue geometry, orange looks,
+ *   violet time, mint structure, gold camera, rose effects) and an ink title
+ *   in Inter Tight 650, over its controls
+ *   the controls: quiet fields with grey labels and ink values.
+ * Sections are separated by a hairline and 16px of air. Core sections are
+ * always open, with at most two title actions on the right. Titled sections
+ * ([data-collapsible]) fold behind their title row, which opens with one
+ * click and is remembered per kind of selection; a closed one is one 36px
+ * row with a chevron at its end. data-section is inspector-dom.mjs's
+ * identity key. */
+@layer components {
+  .ui-section { min-inline-size: 0; padding-block: var(--space-4); }
+  .ui-section + .ui-section, .inspector-bare + .ui-section { box-shadow: inset 0 1px 0 var(--line-1); }
+  .ui-section-head { display: flex; align-items: center; gap: var(--space-2); min-block-size: var(--control-sm); margin-block-end: var(--space-3); }
+  .ui-section-title {
+    flex: 1; min-inline-size: 0; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font: var(--type-section); letter-spacing: -0.005em; color: var(--text-1);
+  }
+  /* The kind badge: a tinted 22px tile with the section's glyph in the tint's ink. */
+  .ui-section-badge {
+    --_soft: var(--tint-select-soft); --_ink: var(--tint-select-ink);
+    display: inline-grid; place-items: center; flex: none;
+    inline-size: 22px; block-size: 22px; border-radius: var(--radius-xs);
+    background: var(--_soft); color: var(--_ink);
+  }
+  .ui-section-badge > svg { inline-size: 14px; block-size: 14px; stroke-width: 2; }
+  .ui-section-badge[data-tint="time"] { --_soft: var(--tint-time-soft); --_ink: var(--tint-time-ink); }
+  .ui-section-badge[data-tint="library"] { --_soft: var(--tint-library-soft); --_ink: var(--tint-library-ink); }
+  .ui-section-badge[data-tint="draw"] { --_soft: var(--tint-draw-soft); --_ink: var(--tint-draw-ink); }
+  .ui-section-badge[data-tint="fx"] { --_soft: var(--tint-fx-soft); --_ink: var(--tint-fx-ink); }
+  .ui-section-badge[data-tint="camera"] { --_soft: var(--tint-camera-soft); --_ink: var(--tint-camera-ink); }
+  .ui-section-body { display: grid; gap: var(--space-2); min-inline-size: 0; }
+  .ui-section-body[hidden] { display: none; }
+  .ui-section-action { margin-block: calc(-1 * var(--space-1)); }
+  .ui-section-actions { display: flex; flex: none; gap: var(--space-0-5); margin-block: calc(-1 * var(--space-1)); }
+
+  /* A titled section: the whole row opens it; its chevron sits at the end. */
+  .ui-section[data-collapsible] { padding-block: var(--space-1-5); }
+  .ui-section:where([data-collapsible])[data-open] { padding-block-end: var(--space-4); }
+  .ui-section:where([data-collapsible]) > .ui-section-head { margin-block-end: 0; }
+  .ui-section:where([data-collapsible][data-open]) > .ui-section-head { margin-block-end: var(--space-2); }
+  .ui-section-toggle {
+    flex: 1; display: flex; align-items: center; gap: var(--space-2); min-inline-size: 0;
+    block-size: var(--control-lg); margin: 0 calc(-1 * var(--space-2)); padding: 0 var(--space-2);
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-1);
+    font: inherit; text-align: start; cursor: default;
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+  .ui-section-toggle > .ui-section-title { color: inherit; }
+  .ui-section-toggle:hover { background: var(--surface-hover); }
+  .ui-section-toggle:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset-inset); }
+  .ui-section-chev {
+    flex: none; order: 9; inline-size: var(--icon-md); block-size: var(--icon-md); stroke-width: 2; color: var(--text-3);
+    transition: rotate var(--dur-base) var(--ease-out);
+  }
+  .ui-section-chev:dir(rtl) { scale: -1 1; }
+  .ui-section-toggle:where([aria-expanded="true"]) .ui-section-chev { rotate: 90deg; }
+
+  /* The title switch: the toggle spans the row; a hidden copy of the title sizes the first column so the switch follows the words. */
+  .ui-section-head:where([data-switch]) { display: grid; grid-template-columns: max-content auto minmax(0, 1fr); }
+  .ui-section-head:where([data-switch]) > .ui-section-toggle { grid-column: 1 / -1; grid-row: 1; }
+  .ui-section-sizer {
+    grid-column: 1; grid-row: 1; visibility: hidden; pointer-events: none;
+    display: inline-flex; gap: var(--space-2); padding-inline-start: calc(22px + var(--space-2));
+    white-space: nowrap; font: var(--type-section);
+  }
+  .ui-section-switch {
+    grid-column: 2; grid-row: 1; z-index: 1;
+    display: inline-grid; place-items: center; block-size: var(--control-lg); padding-inline: var(--space-2) var(--space-1);
+  }
+  .ui-section-head:where([data-switch]) > :is(.ui-section-action, .ui-section-actions) {
+    grid-column: 3; grid-row: 1; justify-self: end; z-index: 1;
+    margin-inline-end: calc(var(--icon-md) + var(--space-2));
+  }
+}

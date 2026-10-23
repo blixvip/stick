@@ -1,0 +1,29 @@
+/* Scope line (components.md "Scope line", experience.md §5.1): a 28px
+ * blue-soft line under the inspector's name, shown only while an edit reaches
+ * beyond the selection (Edit together is on): a select-tinted dot, the scope
+ * ("Editing frames 22–28") and the way back (Stop). Text, not chrome; never
+ * shown at the default.
+ *
+ *   <div class="ui-scope" role="status">
+ *     <span class="ui-dot" data-tint="select" aria-hidden="true"></span>
+ *     <span>Editing frames 22–28</span>
+ *     <button class="ui-button" data-variant="ghost" data-size="sm"><span class="ui-label">Stop</span></button>
+ *   </div>
+ *
+ * The dot is drawn here, so the line does not depend on the dot component. */
+@layer components {
+  .ui-scope {
+    display: flex; align-items: center; gap: var(--space-2);
+    min-block-size: var(--control-md); margin-block-start: var(--space-1); padding: 0 var(--space-1) 0 var(--space-2-5);
+    border-radius: var(--radius-md); background: var(--surface-selected); color: var(--text-1);
+    font: var(--type-small-strong);
+  }
+  .ui-scope > .ui-dot { flex: none; inline-size: 7px; block-size: 7px; border-radius: 50%; background: var(--tint-select); }
+  .ui-scope > span:not(.ui-dot) { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-scope > .ui-button { flex: none; }
+
+  @media (forced-colors: active) {
+    .ui-scope { border: 1px solid Highlight; }
+    .ui-scope > .ui-dot { background: Highlight; forced-color-adjust: none; }
+  }
+}

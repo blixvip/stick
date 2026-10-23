@@ -1,0 +1,15 @@
+/* The shell (architecture §3.11): #app is exactly one window tall, the band
+ * on top, the workspace grid below it, and (until M3b hides it into the
+ * activity log) the status bar under the workspace. The page never scrolls
+ * the shell. The dock host (src/shell/dock-host.mjs) writes the tiers as
+ * :root[data-tier|data-height|data-left] and the workspace grid as custom
+ * properties on .workspace; before it runs, the defaults in workspace.css
+ * lay out the default Animate arrangement at the wide tier. */
+@layer layout {
+  /* One column as wide as the window: a band wider than the window folds (topbar.css), never widens the workspace. */
+  .shell {
+    display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+    block-size: 100dvh; min-inline-size: 0; overflow: hidden;
+    background: var(--surface-field);
+  }
+}

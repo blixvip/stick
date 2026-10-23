@@ -1,0 +1,92 @@
+/* Tool options bar (components.md "Tool options bar", experience.md §4.2):
+ * one row of the active tool's everyday options in the stage header's start,
+ * rendered by src/ui/tool-options.mjs from the tool's option descriptors.
+ * Clusters (.ui-optbar-group) sit 12px apart; inside a cluster 4px. It takes
+ * its width from layout (flex 1 in the header's start) and never from its
+ * content, so the fold model can measure what fits.
+ *
+ * Folding: labels drop first (data-label-dropped on an item: its word leaves,
+ * its accessible name stays), then items fold in their declared order to their
+ * twin, their home or the More options popover (.ui-optbar-more). Folded items
+ * are hidden by tool-options.mjs (data-overflowed, as toolbar-overflow.mjs).
+ *
+ * Pieces: .ui-optbar-label (an outside label: "Drag", "Mirror"),
+ * .ui-optbar-set (a labelled pair of toggles), .ui-optbar-select,
+ * .ui-optbar-stepper, .ui-optbar-colors with .ui-optbar-pair (stroke over
+ * fill; opens the colour picker) and .ui-optbar-recent (24px round targets
+ * with a 20px colour). The shared inputs keep their own sheets: the inline
+ * field (field.css, .ui-field[data-inline]: 28px, sized to its label and its
+ * longest value plus one spare character), .ui-select, .ui-stepper and
+ * .ui-swatch. Import field.css, select.css, stepper.css and swatch.css before
+ * this sheet: the bar's adjustments to them rely on coming later where their
+ * specificity ties.
+ *
+ * The row clips with a margin: focus rings and field halos are drawn outside
+ * its 24-28px controls in a 28px row, and the fold model keeps the items
+ * themselves inside it. */
+@layer components {
+  .ui-optbar {
+    display: flex; align-items: center; gap: var(--space-3);
+    flex: 1 1 0; min-inline-size: 0; overflow: clip; overflow-clip-margin: var(--space-1);
+  }
+  .ui-optbar-group { display: flex; align-items: center; gap: var(--space-1); flex: none; }
+  /* Items keep their measured size: they never grow or shrink (the fold model moves them instead). */
+  .ui-optbar-group > .ui-optbar-item, .ui-optbar-set > * { flex: none; }
+  .ui-optbar-label { flex: none; padding-inline: var(--space-1) 0; font: var(--type-small); color: var(--text-3); white-space: nowrap; user-select: none; }
+  .ui-optbar-set { display: flex; align-items: center; gap: var(--space-0-5); flex: none; }
+  .ui-optbar-set > .ui-optbar-label { padding-inline-end: var(--space-1); }
+  .ui-optbar-select, .ui-optbar-stepper, .ui-optbar-colors { display: flex; align-items: center; gap: var(--space-1-5); flex: none; }
+  /* 28px in the bar (the inspector's stepper is 32px), so the row keeps its height. */
+  .ui-optbar-stepper > .ui-stepper { block-size: var(--control-md); }
+  .ui-optbar-more { flex: none; }
+
+  /* Labels dropped: the word leaves the row, the name stays for assistive technology. */
+  .ui-optbar-item:where([data-label-dropped]) .ui-label {
+    position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  .ui-optbar-item:where([data-label-dropped]) > .ui-optbar-label { display: none; }
+  .ui-button:where(.ui-optbar-item)[data-label-dropped], .ui-optbar-set:where([data-label-dropped]) > .ui-button { --_px: 0; inline-size: var(--_h); }
+
+  /* The colour pair: stroke over fill in one 28px target. */
+  .ui-optbar-pair {
+    position: relative; flex: none; inline-size: var(--control-md); block-size: var(--control-md); padding: 0;
+    border: 0; border-radius: var(--radius-md); background: transparent;
+    -webkit-app-region: no-drag;
+  }
+  .ui-optbar-pair:where(:hover):not(:disabled) { background: var(--surface-hover); }
+  .ui-optbar-pair:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .ui-optbar-pair > .ui-swatch {
+    --_s: 15px;
+    --swatch: var(--surface);
+    position: absolute; inset-block-start: 4px; inset-inline-start: 4px; z-index: 1;
+    inline-size: var(--_s); block-size: var(--_s); border-radius: var(--radius-2xs);
+    background: var(--swatch);
+    box-shadow: inset 0 0 0 1px var(--line-control), 0 0 0 1.5px var(--surface);
+  }
+  .ui-optbar-pair > .ui-swatch:where([data-role="fill"]) { --_s: 13px; inset-block: auto 4px; inset-inline: auto 4px; z-index: 0; }
+  .ui-optbar-colors > .ui-icon-button { margin-inline-start: calc(-1 * var(--space-1)); }
+
+  /* Recent colours: one collection of 24px round targets with a 20px colour. */
+  .ui-optbar-recent { display: flex; align-items: center; gap: var(--space-0-5); flex: none; }
+  .ui-optbar-recent > .ui-swatch {
+    --swatch: var(--surface);
+    inline-size: var(--control-sm); block-size: var(--control-sm); padding: var(--space-0-5);
+    border: 0; border-radius: 50%;
+    background: var(--swatch) content-box;
+    box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--line-control);
+    -webkit-app-region: no-drag;
+  }
+  /* Hover and focus stay inside the 24px target. The element selectors outrank swatch.css's outer hover ring
+   * (:is(button, input).ui-swatch:hover) in any import order, within the two-class budget. */
+  div.ui-optbar-recent > button.ui-swatch:where(:hover:not(:disabled)) { box-shadow: inset 0 0 0 1px var(--line-3), inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--line-control); }
+  div.ui-optbar-recent > button.ui-swatch:where(:focus-visible) { outline: 2px solid var(--focus-ring); outline-offset: 0; }
+
+  /* More options: the folded controls themselves, one per row, in a popover. */
+  .ui-optbar-more-body { display: grid; gap: var(--space-2); min-inline-size: 200px; }
+  .ui-optbar-more-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-block-size: var(--control-md); }
+  .ui-optbar-more-label { font: var(--type-small); color: var(--text-2); }
+
+  @media (forced-colors: active) {
+    .ui-optbar-pair > .ui-swatch, .ui-optbar-recent > .ui-swatch { forced-color-adjust: none; border: 1px solid CanvasText; }
+  }
+}

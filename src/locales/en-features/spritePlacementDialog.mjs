@@ -1,0 +1,20 @@
+export default Object.freeze({
+  "spritePlacementDialog.end":"End",
+  "spritePlacementDialog.coordinateLabel":"{point} {axis}",
+  "spritePlacementDialog.spritePlacement": "Sprite placement",
+  "spritePlacementDialog.closeSpritePlacement": "Close sprite placement",
+  "spritePlacementDialog.px": "{value} · {width} × {height} px",
+  "spritePlacementDialog.placeTheOriginWhereTheSpriteRotatesAnd": "Place the origin where the sprite rotates and the end where another part attaches.",
+  "spritePlacementDialog.arrowKeys1Px": "Arrow keys · 1 px",
+  "spritePlacementDialog.spriteHandlesDragAHandleOrUseArrow": "Sprite handles. Drag a handle or use arrow keys to move it by one image pixel.",
+  "spritePlacementDialog.resetHandles": "Reset handles",
+  "spritePlacementDialog.chooseAttachment": "Choose attachment",
+  "spritePlacementDialog.angle": "Angle {value}°",
+  "spritePlacementDialog.lengthPx": "Length {value} px",
+  "spritePlacementDialog.cancel": "Cancel",
+  "spritePlacementDialog.origin": "Origin",
+  "spritePlacementDialog.sprite": "Sprite",
+  "spritePlacementDialog.endHandle": "End handle",
+  "spritePlacementDialog.originHandle": "Origin handle",
+  "spritePlacementDialog.theSpritePreviewCouldNotBeLoaded": "The sprite preview could not be loaded."
+});

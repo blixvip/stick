@@ -1,0 +1,26 @@
+/* Tooltip (src/ui/ui-tooltip.mjs; components.md "Tooltip"): the one ink pill
+ * with a name and, after a middle dot, the shortcut as plain text
+ * ("Undo · Ctrl+Z"). Never interactive, never covers its invoker. */
+@layer components {
+  :where(.ui-tooltip) { --focus-ring: var(--inverse-focus); }
+  .ui-tooltip {
+    display: inline-flex; align-items: center; gap: var(--space-1-5);
+    max-inline-size: 280px; padding: var(--space-1) var(--space-2-5);
+    border: 0; border-radius: var(--radius-md);
+    background: var(--surface-inverse); color: var(--text-inverse);
+    font: var(--type-small); font-weight: var(--weight-medium);
+    pointer-events: none; user-select: none;
+    -webkit-app-region: no-drag;
+  }
+  .ui-tooltip:where([popover]:not(:popover-open)) { display: none; }
+  .ui-tooltip[popover] { position: fixed; margin: 0; inset: auto; overflow: visible; }
+  /* Label, dot and shortcut are separate items, so the gap spaces both sides of the dot. */
+  .ui-tooltip-sep { color: var(--text-inverse-2); }
+  .ui-tooltip-key { color: var(--text-inverse-2); font-variant-numeric: tabular-nums; }
+  .ui-tooltip:popover-open { transition: opacity var(--dur-base) var(--ease-out); }
+  @starting-style { .ui-tooltip:popover-open { opacity: 0; } }
+
+  @media (forced-colors: active) {
+    .ui-tooltip { border: 1px solid CanvasText; }
+  }
+}

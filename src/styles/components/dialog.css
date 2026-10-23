@@ -1,0 +1,97 @@
+/* Dialog (src/ui/ui-dialog.mjs; components.md "Dialog"): a native <dialog>
+ * opened with showModal() around a <form method="dialog">. Sizes sm 420,
+ * md 640, lg 880 × min(540, window − 32); one size for the dialog's whole
+ * life. The veil dims without blur (a blur over the live canvas costs frames).
+ * At the compact and minimal tiers md and lg fill the window and the foot with
+ * the primary action stays in it. */
+@layer components {
+  .ui-dialog {
+    --_w: 640px;
+    inline-size: min(var(--_w), calc(100vw - 32px)); max-inline-size: calc(100vw - 32px);
+    max-block-size: min(720px, calc(100dvh - 32px));
+    padding: 0; border: 1px solid transparent; border-radius: var(--radius-2xl);
+    background: var(--surface-raised); color: var(--text-1);
+    box-shadow: var(--elevation-4);
+    font: var(--type-ui);
+    overflow: hidden;
+    -webkit-app-region: no-drag;
+  }
+  .ui-dialog[open] { display: flex; flex-direction: column; }
+  .ui-dialog::backdrop { background: var(--surface-backdrop); backdrop-filter: none; }
+  /* Every modal dialog (the legacy #dialog and the feature dialogs too) gets the same flat veil: no blur. */
+  :where(dialog)::backdrop { background: var(--surface-backdrop); backdrop-filter: none; }
+  .ui-dialog[data-size="sm"] { --_w: 420px; }
+  .ui-dialog[data-size="md"] { --_w: 640px; }
+  .ui-dialog[data-size="lg"] { --_w: 880px; block-size: min(540px, calc(100dvh - 32px)); }
+  .ui-dialog[open] { transition: opacity var(--dur-slow) var(--ease-out), translate var(--dur-slow) var(--ease-out); }
+  @starting-style { .ui-dialog[open] { opacity: 0; translate: 0 8px; } }
+
+  .ui-dialog-form { display: flex; flex: 1 1 auto; flex-direction: column; min-block-size: 0; margin: 0; }
+  .ui-dialog-head { display: flex; flex: none; align-items: center; gap: var(--space-3); padding: var(--space-5) var(--space-4) var(--space-2) var(--space-6); }
+  .ui-dialog-heading { flex: 1; min-inline-size: 0; display: grid; gap: var(--space-1); }
+  .ui-dialog-title { margin: 0; font: var(--type-title); letter-spacing: var(--tracking-title); }
+  .ui-dialog-desc { margin: 0; font: var(--type-body); color: var(--text-2); }
+  .ui-dialog-close {
+    display: inline-grid; place-items: center; flex: none; align-self: flex-start;
+    inline-size: var(--control-md); block-size: var(--control-md); padding: 0;
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-2);
+  }
+  .ui-dialog-close:where(:hover) { background: var(--surface-hover); }
+  .ui-dialog-close > svg { inline-size: var(--icon-md); block-size: var(--icon-md); }
+  .ui-dialog-body {
+    display: grid; flex: 1 1 auto; gap: var(--space-3); align-content: start;
+    min-block-size: 0; padding: var(--space-2) var(--space-6) var(--space-5); overflow: auto;
+  }
+  .ui-dialog-foot { display: flex; flex: none; align-items: center; justify-content: flex-end; gap: var(--space-2); padding: var(--space-3) var(--space-5) var(--space-5) var(--space-6); }
+  .ui-dialog-meta { margin-inline-end: auto; font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .ui-dialog-error {
+    display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md); background: var(--danger-soft); color: var(--danger-text); font: var(--type-small);
+  }
+  /* The display above would otherwise win over [hidden] once the legacy [hidden] rule is gone. */
+  .ui-dialog-error[hidden] { display: none; }
+  /* showLegacyDialog(): the form around #dialog-content's head and body adds no box of its own. */
+  .ui-legacy-dialog-form { display: contents; }
+  /* Its title reads like the kit dialogs' until M6 ports these dialogs. */
+  .ui-legacy-dialog-form > .dialog-head > h2 { font: var(--type-title); letter-spacing: var(--tracking-title); }
+  /* Form rows inside dialogs: a fixed label column and the control */
+  .ui-dialog-row { display: grid; grid-template-columns: var(--_label, 80px) minmax(0, 1fr); align-items: center; gap: var(--space-3); min-block-size: var(--control-lg); }
+
+  /* prompt(): a stacked label over one text field */
+  .ui-dialog-body > .ui-form-row { display: grid; gap: var(--space-1-5); }
+  .ui-form-row > .ui-field-input {
+    block-size: var(--control-lg); padding: 0 var(--space-3);
+    border: 0; border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-1);
+    box-shadow: inset 0 0 0 1px transparent; font: var(--type-ui);
+  }
+  :where(.ui-form-row) > .ui-field-input:focus-visible { outline: none; background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo); }
+  :where(.ui-form-row) > .ui-field-input[aria-invalid="true"] { box-shadow: inset 0 0 0 1.5px var(--danger-text); }
+  /* Opened by a pointer: the caret shows where typing goes; the ring waits for the first key. */
+  :where(.ui-dialog[data-pointer-open]) .ui-field-input:focus-visible { background: var(--surface-sunken); box-shadow: inset 0 0 0 1px transparent; }
+
+  /* choose(): one full-width action per option, with an optional description */
+  .ui-dialog-choices { display: grid; gap: var(--space-1-5); }
+  .ui-dialog-choice {
+    display: flex; align-items: center; gap: var(--space-3); inline-size: 100%;
+    min-block-size: var(--control-2xl); padding: var(--space-2) var(--space-3);
+    border: 0; border-radius: var(--radius-lg); background: var(--surface-sunken); color: var(--text-1);
+    text-align: start; white-space: normal; justify-content: flex-start;
+  }
+  .ui-dialog-choice:where(:hover) { background: var(--surface-hover); }
+  .ui-dialog-choice:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .ui-dialog-choice > svg { flex: none; inline-size: var(--icon-md); block-size: var(--icon-md); color: var(--text-2); }
+  .ui-dialog-choice-text { display: grid; gap: var(--space-0-5); min-inline-size: 0; }
+  .ui-dialog-choice-text > b { font: var(--type-ui-strong); }
+  .ui-dialog-choice-text > small { font: var(--type-small); color: var(--text-2); }
+  .ui-dialog-choice[data-tone="danger"] { color: var(--danger-text); }
+
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-dialog:is([data-size="md"], [data-size="lg"]) {
+    inline-size: 100vw; max-inline-size: 100vw; block-size: 100dvh; max-block-size: 100dvh;
+    margin: 0; border-radius: 0;
+  }
+
+  @media (forced-colors: active) {
+    .ui-dialog { border-color: CanvasText; }
+    .ui-form-row > .ui-field-input { border: 1px solid CanvasText; }
+  }
+}

@@ -1,0 +1,52 @@
+import {chromium} from './support/playwright.mjs';
+import assert from 'node:assert/strict';
+import {mkdir} from 'node:fs/promises';
+const browser=await chromium.launch({channel:'chrome',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
+page.on('pageerror',e=>errors.push(e.message));
+const settle=()=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+try {
+ await page.goto(process.env.STYK_URL||'http://127.0.0.1:47841');await page.waitForFunction(()=>window.styk?.ready);
+ await page.locator('[data-workspace-mode="rig"]').click();await settle();
+ const target=await page.evaluate(async()=>{
+   const {worldToScreen}=await import('/src/renderer.mjs');const {editor:e,state}=styk;
+   e.select(e.selectedUid,2);e.updateSegmentStyle({color:'#e54283',thickness:19});
+   const q=worldToScreen(e.geometry.objects.get(e.selectedSlot).segments[2].end,{report:e.report,frame:e.frame,view:state.view});
+   const r=document.querySelector('#viewport').getBoundingClientRect();return {x:r.x+q.x,y:r.y+q.y};
+ });
+ await page.locator('[data-tool="line"]').click();
+ await page.mouse.move(target.x,target.y);await page.mouse.down();await page.mouse.move(target.x+100,target.y-55,{steps:5});await settle();
+ await mkdir('artifacts/builder-appearance',{recursive:true});
+ await page.screenshot({path:'artifacts/builder-appearance/line-preview.png'});
+ const preview=await page.evaluate(()=>{const {appearance,start,current}=styk.state.drag;const overlay=document.querySelector('#overlay');return {appearance,hasPixels:overlay.getContext('2d').getImageData(0,0,overlay.width,overlay.height).data.some((v,i,a)=>i%4===0&&v===229&&a[i+1]===66&&a[i+2]===131&&a[i+3]>0)};});
+ assert.equal(preview.appearance.width,19);assert.equal(preview.hasPixels,true);
+ await page.mouse.up();await settle();
+ const line=await page.evaluate(()=>{const s=styk.editor.figure.segments.at(-1);return {width:s.thickness,color:s.color_rgb};});
+ assert.deepEqual(line,{width:19,color:[229,66,131]});
+ const tip=await page.evaluate(async()=>{const {worldToScreen}=await import('/src/renderer.mjs');const {editor:e,state}=styk;const q=worldToScreen(e.geometry.objects.get(e.selectedSlot).segments.at(-1).end,{report:e.report,frame:e.frame,view:state.view});const r=document.querySelector('#viewport').getBoundingClientRect();return {x:r.x+q.x,y:r.y+q.y};});
+ await page.locator('[data-tool="chain"]').click();
+ await page.mouse.click(tip.x,tip.y);await page.mouse.click(tip.x+70,tip.y+40);await page.mouse.click(tip.x+120,tip.y+100);await page.mouse.move(tip.x+150,tip.y+120);await settle();
+ await page.screenshot({path:'artifacts/builder-appearance/chain-preview.png'});
+ assert.equal(await page.evaluate(()=>{const c=document.querySelector('#overlay');return c.getContext('2d').getImageData(0,0,c.width,c.height).data.some((v,i,a)=>i%4===0&&v===229&&a[i+1]===66&&a[i+2]===131&&a[i+3]>0);}),true);
+ await page.keyboard.press('Enter');await settle();
+ const chain=await page.evaluate(()=>styk.editor.figure.segments.slice(-2).map(s=>({width:s.thickness,color:s.color_rgb})));
+ assert.deepEqual(chain,[line,line]);assert.deepEqual(errors,[]);
+ await mkdir('artifacts/builder-inheritance',{recursive:true});await page.screenshot({path:'artifacts/builder-inheritance/result.png'});
+ // Copy and Paste appearance are the part's ⋯ menu's (Properties), under Appearance.
+ const edit=page.locator('#object-actions'),row=name=>page.getByRole('menuitem',{name,exact:true});
+ await edit.click();assert.equal(await row('Paste appearance').isDisabled(),true);
+ await row('Copy appearance').click();
+ await page.evaluate(()=>{styk.state.builderBranch=false;styk.editor.select(styk.editor.selectedUid,4);});await settle();
+ const before=await page.evaluate(()=>JSON.stringify(styk.editor.serialize()));
+ await edit.click();assert.equal(await row('Paste appearance').isDisabled(),false);
+ await row('Paste appearance').click();await settle();
+ assert.deepEqual(await page.evaluate(async()=>{const {copyBuilderAppearance}=await import('/src/builder-appearance.mjs');return copyBuilderAppearance(styk.editor);}),await page.evaluate(()=>styk.state.builderAppearance));
+ await page.keyboard.press('Control+z');await settle();assert.equal(await page.evaluate(()=>JSON.stringify(styk.editor.serialize())),before);
+ await page.keyboard.press('Control+Shift+z');await settle();
+ await page.evaluate(()=>styk.workspace.dock('structure','left'));await settle();await page.locator('.builder-tree-row[aria-selected="true"]').first().click({button:'right'});
+ await page.locator('#menu [data-action="copy-builder-appearance"]').waitFor({state:'visible'});
+ await page.screenshot({path:'artifacts/builder-appearance/menu.png'});
+ await page.locator('#menu [data-action="copy-builder-appearance"]').click();
+ assert.deepEqual(errors,[]);
+ console.log('PASS: coloured Line/Chain previews, menu copy/paste, disabled empty clipboard, undo/redo, and joint context menu.');
+}finally{await browser.close();}

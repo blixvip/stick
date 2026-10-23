@@ -1,0 +1,41 @@
+# Line endings are LF in the repository and in every working tree, on Windows and
+# Linux alike. Recorded hashes (icon source, native sources, codec sources) then
+# match on both, and a checkout never differs from the file that was reviewed.
+# Rules are ordered from general to specific: later lines win, so the LFS
+# entries below keep their own attributes.
+* text=auto eol=lf
+
+# Binary formats are never converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.icns binary
+*.wasm binary
+*.zip binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.f32 binary
+*.wav binary
+*.mp3 binary
+*.mp4 binary
+*.webm binary
+*.piv binary
+*.stk binary
+*.styk binary
+*.stkz binary
+*.stykmov binary
+*.nodes binary
+*.nodemc binary
+*.stknds binary
+*.exe binary
+*.dll binary
+*.lib binary
+*.exp binary
+*.so binary
+*.dylib binary
+

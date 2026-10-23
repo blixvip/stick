@@ -1,0 +1,207 @@
+/* The desktop Feedback shell (support-desktop-ui.mjs) around the shared
+ * support center (src/support-center.mjs and .css, copied byte for byte to the
+ * website and never edited for the editor). The shared sheet loads lazily into
+ * the legacy layer through support-bridge.css; this sheet is in `features`, so
+ * it wins over it whatever the specificity and gives the private inbox the
+ * editor's look in both themes: the site's display titles, pill buttons and
+ * tabs, sunken fields with a focus halo, rounded cards and message bubbles.
+ * Only the creator's view is styled here: the moderation workspace is the
+ * website's own page. */
+@layer features {
+  /* ---- The shell ---- */
+  .styk-feedback {
+    container: styk-feedback / inline-size;
+    inline-size: min(880px, calc(100vw - 32px)); block-size: min(800px, calc(100dvh - 32px));
+    max-inline-size: none; max-block-size: none; margin: auto; padding: 0;
+    border: 0; border-radius: var(--radius-3xl);
+    background: var(--surface); color: var(--text-1); box-shadow: var(--elevation-4);
+    overflow: hidden; font: var(--type-ui); font-feature-settings: var(--font-features);
+  }
+  .styk-feedback:where([open]) { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+  .styk-feedback::backdrop { background: var(--surface-backdrop); }
+  .styk-feedback-head {
+    display: flex; align-items: center; gap: var(--space-3);
+    min-block-size: 72px; padding: var(--space-3) var(--space-4) var(--space-3) var(--space-5);
+    border-block-end: 1px solid var(--line-1);
+  }
+  .styk-feedback-badge {
+    display: grid; place-items: center; flex: none; inline-size: 40px; block-size: 40px;
+    border-radius: var(--radius-lg); background: var(--badge-new); color: var(--on-badge);
+  }
+  .styk-feedback-badge > svg { inline-size: var(--icon-lg); block-size: var(--icon-lg); }
+  .styk-feedback-head > div { display: grid; gap: var(--space-0-5); flex: 1; min-inline-size: 0; }
+  .styk-feedback-head h2 {
+    margin: 0; color: var(--text-1);
+    font: var(--weight-display) var(--text-20)/var(--leading-20) var(--font-display); letter-spacing: var(--tracking-display);
+  }
+  .styk-feedback-head p { margin: 0; font: var(--type-small); color: var(--text-3); }
+  .styk-feedback-close {
+    display: grid; place-items: center; flex: none; inline-size: var(--control-lg); block-size: var(--control-lg); padding: 0;
+    border: 0; border-radius: 50%; background: var(--control-soft); color: var(--text-1);
+  }
+  .styk-feedback-close:where(:hover) { background: var(--control-soft-hover); }
+  .styk-feedback-close:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .styk-feedback-close > svg { inline-size: var(--icon-md); block-size: var(--icon-md); stroke-width: var(--icon-stroke-small); }
+  .styk-feedback-body { min-inline-size: 0; overflow: auto; overscroll-behavior: contain; padding: var(--space-6) var(--space-8) var(--space-8); scrollbar-gutter: stable; }
+  .styk-feedback-loading { margin: 0; padding: var(--space-10) 0; text-align: center; color: var(--text-3); }
+
+  /* ---- The shared center, on the editor's tokens ---- */
+  .styk-feedback .support-center {
+    --sc-bg: var(--surface); --sc-panel: var(--surface-raised); --sc-input: var(--surface-sunken);
+    --sc-line: var(--line-2); --sc-text: var(--text-1); --sc-muted: var(--text-3); --sc-blue: var(--accent-text);
+    --sc-hover: var(--surface-hover); --sc-selected: var(--accent-soft); --sc-action: var(--primary);
+    --sc-action-text: var(--on-primary); --sc-note: var(--warning-soft);
+    max-inline-size: 760px; margin-inline: auto;
+    color-scheme: inherit; color: var(--text-1); font: var(--type-ui);
+  }
+  .styk-feedback .support-center :where(h2) { font: var(--weight-display) var(--text-28)/var(--leading-28) var(--font-display); letter-spacing: -0.035em; }
+  .styk-feedback .support-center :where(h3) { font: var(--type-heading); letter-spacing: var(--tracking-heading); }
+  .styk-feedback .sc-small { font: var(--type-small); color: var(--text-3); }
+  .styk-feedback .sc-eyebrow { font: var(--type-small-strong); color: var(--text-3); }
+
+  /* Buttons: the kit's pills. */
+  .styk-feedback .support-center button {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1-5);
+    min-block-size: var(--control-md); padding: 0 var(--space-3-5);
+    border: 0; border-radius: var(--radius-pill); background: var(--control-soft); color: var(--text-1);
+    font: var(--type-button); letter-spacing: -0.005em;
+    transition: background-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast);
+  }
+  .styk-feedback .support-center button:where(:hover:not(:disabled)) { background: var(--control-soft-hover); }
+  .styk-feedback .support-center button:where(:active:not(:disabled)) { transform: scale(var(--press-scale)); }
+  .styk-feedback .support-center .sc-primary { min-block-size: var(--control-lg); padding-inline: var(--space-5); background: var(--primary); color: var(--on-primary); box-shadow: var(--primary-shadow); }
+  .styk-feedback .support-center .sc-primary:where(:hover:not(:disabled)) { background: var(--primary-hover); filter: none; }
+  .styk-feedback .support-center .sc-quiet { background: transparent; color: var(--text-2); }
+  .styk-feedback .support-center .sc-danger { color: var(--danger-text); }
+  .styk-feedback .support-center :is(button, input, select, textarea, summary):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+
+  /* The top row: New report │ My reports as a segmented pill, Other devices at the end. */
+  .styk-feedback .sc-top { align-items: center; margin-block-end: var(--space-6); border: 0; }
+  .styk-feedback .sc-tabs { display: inline-flex; gap: var(--space-0-5); padding: var(--space-0-5); border-radius: var(--radius-pill); background: var(--surface-well); }
+  .styk-feedback .sc-tabs button { min-block-size: var(--control-md); padding: 0 var(--space-4); background: transparent; color: var(--text-2); font: var(--type-ui-strong); }
+  .styk-feedback .sc-tabs button:where([aria-current="page"]) { background: var(--control-thumb); color: var(--text-1); box-shadow: inset 0 0 0 1px var(--line-control), var(--elevation-1); }
+  .styk-feedback .sc-tabs button::after { content: none; }
+  .styk-feedback summary { font: var(--type-small-strong); color: var(--text-2); }
+  .styk-feedback .sc-access > summary {
+    display: inline-flex; align-items: center; min-block-size: var(--control-md); padding: 0 var(--space-3-5);
+    border: 0; border-radius: var(--radius-pill); background: var(--control-soft); color: var(--text-1); font: var(--type-button);
+  }
+  .styk-feedback :is(.sc-access-actions, .sc-menu-actions) {
+    padding: var(--space-1); border: 0; border-radius: var(--radius-xl);
+    background: var(--surface-raised); box-shadow: var(--elevation-3);
+  }
+  .styk-feedback :is(.sc-access-actions, .sc-menu-actions) button { justify-content: flex-start; inline-size: 100%; border-radius: var(--radius-sm); background: transparent; font: var(--type-ui); }
+  .styk-feedback .sc-notice {
+    margin-block-end: var(--space-4); padding: var(--space-3) var(--space-4); border: 0;
+    border-radius: var(--radius-lg); background: var(--accent-soft); color: var(--text-1); font: var(--type-ui);
+  }
+  .styk-feedback .sc-notice:where([role="alert"]) { background: var(--warning-soft); }
+
+  /* The new report: numbered steps, sunken fields, a drop zone. */
+  .styk-feedback .sc-grid { border: 0; border-radius: 0; background: transparent; }
+  .styk-feedback .sc-body { padding: 0; }
+  .styk-feedback .sc-steps { gap: var(--space-3); margin-block-end: var(--space-6); }
+  .styk-feedback .sc-steps button { min-block-size: var(--control-md); padding: 0 var(--space-3) 0 var(--space-1); gap: var(--space-2); background: transparent; font-size: 0; }
+  .styk-feedback .sc-steps button::before {
+    content: attr(data-step-nav); display: grid; place-items: center; inline-size: 26px; block-size: 26px;
+    border-radius: 50%; background: var(--surface-well); color: var(--text-2); font: var(--type-small-strong);
+  }
+  .styk-feedback .sc-steps button > span { font: var(--type-ui-strong); color: var(--text-2); }
+  .styk-feedback .sc-steps button:where([aria-current="step"])::before { background: var(--primary); color: var(--on-primary); }
+  .styk-feedback .sc-steps button:where([aria-current="step"]) > span { color: var(--text-1); }
+  .styk-feedback .sc-step-line { inline-size: 40px; block-size: 2px; border-radius: 1px; background: var(--line-2); }
+  .styk-feedback .sc-fields { gap: var(--space-5); }
+  .styk-feedback .support-center label { font: var(--type-small-strong); color: var(--text-2); }
+  .styk-feedback .support-center :is(input, textarea, select) {
+    min-block-size: var(--control-lg); margin-block-start: var(--space-2); padding: var(--space-2) var(--space-3);
+    border: 0; border-radius: var(--radius-md); background-color: var(--surface-sunken); color: var(--text-1);
+    box-shadow: inset 0 0 0 1px var(--line-1); font: var(--type-body); line-height: var(--leading-14);
+    transition: background-color var(--dur-fast), box-shadow var(--dur-fast);
+  }
+  .styk-feedback .support-center :is(input, textarea, select):where(:hover) { box-shadow: inset 0 0 0 1px var(--line-3); }
+  .styk-feedback .support-center :is(input, textarea, select):focus { outline: 0; background-color: var(--surface); box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 4px var(--focus-halo); }
+  .styk-feedback .support-center :is(input, textarea)::placeholder { color: var(--text-placeholder); opacity: 1; }
+  /* A select draws the kit's chevron from its label (the shared markup has no room for a glyph). */
+  .styk-feedback .support-center select { appearance: none; padding-inline-end: var(--space-8); }
+  .styk-feedback .support-center label:has(> select) { position: relative; }
+  .styk-feedback .support-center label:has(> select)::after {
+    content: ""; position: absolute; inset-inline-end: 15px; inset-block-end: 15px;
+    inline-size: 7px; block-size: 7px; border: solid var(--text-3); border-width: 0 1.75px 1.75px 0;
+    rotate: 45deg; pointer-events: none;
+  }
+  .styk-feedback .support-center textarea { min-block-size: 96px; }
+  .styk-feedback .support-center [name="description"] { min-block-size: 140px; }
+  .styk-feedback .sc-extra { padding-block-start: var(--space-4); border-block-start: 1px solid var(--line-1); }
+  .styk-feedback .sc-file-zone {
+    min-block-size: 112px; padding: var(--space-5); gap: var(--space-1-5);
+    border: 1.5px dashed var(--line-3); border-radius: var(--radius-xl);
+    background: radial-gradient(var(--stage-dot) 1.1px, transparent 1.3px) 0 0 / 16px 16px, var(--surface-sunken);
+    transition: border-color var(--dur-fast), background-color var(--dur-fast);
+  }
+  .styk-feedback .sc-file-zone:where(:hover, :focus-within, .sc-drag) { border-color: var(--accent-line); background-color: var(--accent-soft); outline: 0; }
+  .styk-feedback .sc-upload-button { font: var(--type-button); color: var(--accent-text); }
+  .styk-feedback .sc-upload-button > span { font-size: var(--text-20); }
+  .styk-feedback .sc-file-zone p { font: var(--type-small); color: var(--text-3); }
+  .styk-feedback .sc-file { border: 0; border-radius: var(--radius-lg); background: var(--surface-sunken); font: var(--type-small); }
+  .styk-feedback .sc-file button { min-block-size: var(--control-xs); padding: 0 var(--space-2); background: transparent; color: var(--accent-text); font: var(--type-small-strong); }
+  .styk-feedback .sc-project-preview { border-radius: var(--radius-md); background: var(--accent-soft); color: var(--accent-text); font: var(--weight-display) var(--text-18)/1 var(--font-display); }
+  .styk-feedback .sc-form-footer { margin-block-start: var(--space-6); padding-block-start: var(--space-5); border-block-start: 1px solid var(--line-1); }
+  .styk-feedback .sc-form-footer > .sc-small::before { content: ""; display: inline-block; inline-size: 7px; block-size: 7px; margin-inline-end: var(--space-1-5); border-radius: 50%; background: var(--success-dot); vertical-align: 1px; }
+  .styk-feedback .sc-retention p { font: var(--type-small); color: var(--text-3); }
+
+  /* My reports: a card list. */
+  .styk-feedback .sc-inbox { padding: 0; border: 0; }
+  .styk-feedback .sc-inbox-header { margin: 0 var(--space-1) var(--space-3); }
+  .styk-feedback .sc-inbox-header strong { font: var(--type-heading); letter-spacing: var(--tracking-heading); }
+  .styk-feedback .sc-refresh { background: transparent; color: var(--text-2); }
+  .styk-feedback .sc-list { gap: var(--space-2); }
+  .styk-feedback .support-center .sc-item {
+    display: grid; justify-items: start; gap: var(--space-1-5); padding: var(--space-3-5) var(--space-4);
+    border: 0; border-radius: var(--radius-xl); background: var(--surface-raised); box-shadow: var(--elevation-1);
+    text-align: start; font: var(--type-ui);
+  }
+  .styk-feedback .support-center .sc-item:where(:hover) { background: var(--surface-raised); box-shadow: var(--elevation-2); }
+  .styk-feedback .sc-item-meta { justify-self: stretch; font: var(--type-small); color: var(--text-3); }
+  .styk-feedback .sc-item-title { margin: 0; font: var(--type-emphasis); color: var(--text-1); }
+  .styk-feedback .sc-dot { background: var(--accent); }
+  .styk-feedback .sc-pill { padding: var(--space-0-5) var(--space-2); border-radius: var(--radius-pill); background: var(--surface-well); color: var(--text-2); font: var(--type-micro); }
+  .styk-feedback .sc-pill:where([data-status="new"], [data-status="in_progress"]) { background: var(--accent-soft); color: var(--accent-text-strong); }
+  .styk-feedback .sc-pill:where([data-status="waiting"]) { background: var(--warning-soft); color: var(--warning-text); }
+  .styk-feedback .sc-pill:where([data-status="resolved"]) { background: var(--success-soft); color: var(--success-text); }
+  .styk-feedback .sc-empty { padding: var(--space-10) var(--space-4); border-radius: var(--radius-xl); background: var(--surface-sunken); color: var(--text-3); }
+  .styk-feedback .sc-empty h3 { margin-block-end: var(--space-4); color: var(--text-2); }
+
+  /* A conversation: bubbles, the reply composer. */
+  .styk-feedback .sc-thread-toolbar { margin-block-end: var(--space-4); }
+  .styk-feedback .sc-live { font: var(--type-small); color: var(--text-3); }
+  .styk-feedback .sc-live::before { color: var(--success-dot); }
+  .styk-feedback .sc-report-menu > summary { min-block-size: var(--control-md); padding: var(--space-2) var(--space-3); border-radius: var(--radius-pill); }
+  .styk-feedback .sc-ticket-heading h2 { margin-block-start: var(--space-3); font-size: var(--text-28); }
+  .styk-feedback .sc-details { padding-block-end: var(--space-4); border-block-end: 1px solid var(--line-1); }
+  .styk-feedback .support-center dl { font: var(--type-ui); }
+  .styk-feedback .sc-conversation { gap: var(--space-3); }
+  .styk-feedback .sc-message {
+    padding: var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-xl);
+    border-end-start-radius: var(--radius-2xs); background: var(--surface-sunken);
+  }
+  .styk-feedback .sc-message:where([data-role="developer"]) { border-radius: var(--radius-xl); border-end-end-radius: var(--radius-2xs); background: var(--accent-soft); }
+  .styk-feedback .sc-message:where([data-role="note"]) { background: var(--warning-soft); }
+  .styk-feedback .sc-message header { font: var(--type-small); color: var(--text-3); }
+  .styk-feedback .sc-message header strong { font: var(--type-small-strong); color: var(--text-1); }
+  .styk-feedback .sc-message p { font: var(--type-body); line-height: 1.6; }
+  .styk-feedback .sc-composer { margin-block-start: var(--space-5); padding-block-start: var(--space-5); border-block-start: 1px solid var(--line-1); }
+  .styk-feedback .sc-recovery { border: 0; border-radius: var(--radius-xl); background: var(--accent-soft); }
+  .styk-feedback .sc-delete-confirm { border: 0; border-radius: var(--radius-lg); background: var(--danger-soft); }
+
+  @container styk-feedback (max-width: 620px) {
+    .styk-feedback-head { min-block-size: 60px; padding-inline: var(--space-4) var(--space-3); }
+    .styk-feedback-badge { inline-size: 34px; block-size: 34px; }
+    .styk-feedback-head p { display: none; }
+    .styk-feedback-body { padding: var(--space-4); }
+    .styk-feedback .sc-top { flex-wrap: wrap; gap: var(--space-2); }
+  }
+  @media (forced-colors: active) {
+    .styk-feedback .sc-tabs button:where([aria-current="page"]) { outline: 2px solid Highlight; }
+    .styk-feedback .support-center :is(input, textarea, select) { border: 1px solid CanvasText; }
+  }
+}

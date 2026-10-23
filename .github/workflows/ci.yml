@@ -1,0 +1,114 @@
+name: Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+defaults:
+  run:
+    # One shell everywhere: Git Bash on Windows runners, bash on Linux.
+    shell: bash
+jobs:
+  unit:
+    # Windows matches the release runner and exercises the Windows-only services;
+    # Linux is a supported platform and must stay green on every change.
+    name: Unit tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      # Unit tests need neither the Electron binary nor Playwright browsers.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.0'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.9'
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      # Tests that need the local Pivot corpus, generated inventories or built
+      # encoders skip here and name the missing fixture; they run locally.
+      - name: Syntax and changelog
+        run: |
+          npm run check
+          npm run changelog:check
+      - name: Application unit tests
+        run: npm test
+      - name: Codec service tests
+        run: python -m unittest discover -s backend -p "test_*.py"
+
+  web:
+    uses: ./.github/workflows/web-verify.yml
+
+  linux-app:
+    # Builds the Linux app from source exactly as a release would, then boots it.
+    name: Linux app
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.0'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.9'
+          cache: pip
+          cache-dependency-path: scripts/requirements-build.txt
+      - name: Install locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          python -m pip install -r scripts/requirements-build.txt
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          # Ubuntu 24.04 runners restrict unprivileged user namespaces, which
+          # Chromium's sandbox needs; the app itself never disables the sandbox.
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: Build the native scanner, codec and video encoder
+        run: |
+          npm run build:frame-scan
+          npm run build:sidecar
+          npm run verify:sidecar
+          npm run build:video-encoder
+      - name: Package the AppImage
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: |
+          npm run dist:linux -- --x64 --publish never
+          npm run verify:package
+      - name: Boot the packaged app
+        run: |
+          xvfb-run -a npm run test:boot:packaged
+          version=$(node -p 'JSON.parse(require("fs").readFileSync("package.json")).version')
+          STYK_PACKAGED_EXECUTABLE="$GITHUB_WORKSPACE/release/StykAnimate-$version-linux-x86_64.AppImage" xvfb-run -a npm run test:boot:packaged
+      - name: Export video with the bundled encoder
+        run: xvfb-run -a npm run test:export:packaged
+      - name: Verify Linux updates and save before restart
+        run: |
+          STYK_PACKAGED_EXECUTABLE="$GITHUB_WORKSPACE/release/linux-unpacked/stykanimate" xvfb-run -a npm run test:updates:desktop
+          xvfb-run -a npm run test:updates:linux
+      - name: Upload the build evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-appimage
+          path: |
+            release/*.AppImage
+            release/latest-linux.yml
+            artifacts/sidecar-smoke.json
+            artifacts/updates/smoke.json
+            artifacts/updates/appimage-smoke.json
+          retention-days: 7

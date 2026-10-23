@@ -1,0 +1,114 @@
+/* StykAnimate editor styles: the only stylesheet index.html links.
+ *
+ * Cascade layers, lowest priority first. For normal declarations every layer
+ * after `legacy` beats it whatever the specificity; for !important the order
+ * inverts, so a legacy !important rule beats every later layer.
+ *
+ * legacy  The stylesheets that predate the layers, moved unchanged into
+ *         legacy/ and imported below in their previous cascade order. The
+ *         <style> blocks that modules inject and the lazy support sheets
+ *         (support-bridge.css) join this layer after them, so they still win
+ *         on order exactly as before. See docs/DESIGN-SYSTEM.md.
+ *
+ * Every import is a request before first paint: add files sparingly.
+ */
+@layer legacy, reset, tokens, base, layout, components, features, states, utilities;
+
+@import url("./legacy/00-drawing.css") layer(legacy);  /* was the first line of style.css */
+@import url("./legacy/01-style.css") layer(legacy);
+@import url("./legacy/20-studio.css") layer(legacy);
+@import url("./legacy/30-builder-workspace.css") layer(legacy);
+@import url("./legacy/31-rig-controls.css") layer(legacy);
+@import url("./legacy/33-tweener.css") layer(legacy);
+@import url("./legacy/34-canvas-guides.css") layer(legacy);
+@import url("./legacy/36-movieclip-ui.css") layer(legacy);
+@import url("./legacy/37-vfx.css") layer(legacy);
+@import url("./legacy/38-camera-motion.css") layer(legacy);
+@import url("./legacy/39-user-library.css") layer(legacy);
+@import url("./legacy/40-layer-timeline.css") layer(legacy);
+@import url("./legacy/41-audio.css") layer(legacy);
+@import url("./legacy/42-ik.css") layer(legacy);
+@import url("./legacy/43-update-ui.css") layer(legacy);
+@import url("./legacy/45-design-system.css") layer(legacy);
+@import url("./legacy/46-theme.css") layer(legacy);
+
+/* Layered files wrap themselves in their @layer block: import them without layer(). */
+@import url("./tokens.css");
+@import url("./legacy-bridge.css");  /* legacy token names -> tokens.css */
+@import url("./base/fonts.css");
+@import url("./base/document.css");
+/* Shell: the workspace grid, docks, islands, strips, sheets and splitters (src/shell/dock-host.mjs) */
+@import url("./layout/shell.css");
+@import url("./layout/workspace.css");
+@import url("./layout/dock.css");
+@import url("./layout/topbar.css");
+@import url("./layout/rail.css");
+@import url("./layout/stage.css");
+@import url("./layout/localization.css");
+@import url("./layout/touch.css");     /* the touch interface's layouts (docs/TOUCH.md) */
+@import url("./components/island.css");
+@import url("./components/tabs.css");
+@import url("./components/strip.css");
+@import url("./components/sheet.css");
+@import url("./components/splitter.css");
+@import url("./components/drop-zone.css");
+@import url("./components/choice.css");
+/* Overlay kit (src/ui/ui-menu, ui-popover, ui-tooltip, ui-toast, ui-dialog, command-palette) */
+@import url("./components/button.css");
+@import url("./components/icon-button.css");
+@import url("./components/menu.css");
+@import url("./components/popover.css");
+@import url("./components/tooltip.css");
+@import url("./components/toast.css");
+@import url("./components/dialog.css");
+@import url("./components/palette.css");
+@import url("./components/kbd.css");
+@import url("./components/dialog-variants.css");
+/* Stage chrome and tool options (src/ui/tool-options, quick-actions); toolbar.css follows the button sheets */
+@import url("./components/segmented.css");
+@import url("./components/tool.css");
+@import url("./components/rail.css");
+@import url("./components/toolbar.css");
+@import url("./components/split.css");
+@import url("./components/crumb.css");
+@import url("./components/menubar.css");
+@import url("./components/optbar.css");
+@import url("./components/stage-head.css");
+@import url("./components/quick.css");
+@import url("./components/scope.css");
+@import url("./components/chip.css");
+@import url("./components/progress.css");
+@import url("./components/empty.css");
+@import url("./components/badge.css");
+@import url("./components/dot.css");
+@import url("./components/project-tabs.css");
+/* Inspector kit (src/inspector-kit) */
+@import url("./components/field.css");
+@import url("./components/select.css");
+@import url("./components/slider.css");
+@import url("./components/stepper.css");
+@import url("./components/switch.css");
+@import url("./components/check.css");
+@import url("./components/swatch.css");
+@import url("./components/form.css");
+@import url("./components/section.css");
+@import url("./components/list-row.css");
+/* Features */
+@import url("./features/inspector.css");
+@import url("./features/timeline.css");
+@import url("./features/layer-folders.css");
+@import url("./features/export.css");
+@import url("./features/dialogs.css");
+@import url("./features/band.css");
+@import url("./features/build.css");
+@import url("./features/draw.css");
+@import url("./features/panels.css");
+@import url("./features/vfx.css");
+@import url("./features/onion.css");
+@import url("./features/library.css");
+@import url("./features/audio.css");
+@import url("./features/view-options.css");
+@import url("./features/settings.css");
+@import url("./features/home.css");  /* Home and the tutorials' strip, mark and pointer (docs/HOME.md, docs/TUTORIALS.md) */
+@import url("./features/support-desktop.css");  /* the Feedback shell over the lazy support-bridge.css */
+@import url("./features/touch.css");  /* the touch interface's components (docs/TOUCH.md) */

@@ -1,0 +1,22 @@
+/* Document-wide base rules. A rule in this layer beats every legacy rule for
+ * the same element, so while the legacy layer exists only rules meant for the
+ * whole document belong here unscoped (docs/DESIGN-SYSTEM.md). */
+@layer base {
+  /* Inter (base/fonts.css) first; the system fonts cover the scripts it lacks,
+   * such as Arabic, Hebrew and Chinese. This replaces the legacy :root font. */
+  html {
+    font-family: var(--font-ui);
+  }
+
+  /* The desktop app hides the editor until its saved settings arrive
+   * (src/theme-bootstrap.js), on the colour of the window behind it. */
+  :where(:root[data-theme-pending]) { background: var(--surface-prepaint); }
+  :where(:root[data-theme-pending] #app) { visibility: hidden; }
+
+  /* Announcements and compatibility hosts: fixed at the window's origin, so a
+   * visually hidden host never extends the page below the shell. */
+  .ui-visually-hidden {
+    position: fixed; inset-block-start: 0; inset-inline-start: 0; inline-size: 1px; block-size: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+}

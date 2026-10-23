@@ -1,0 +1,49 @@
+/* Quick actions (components.md "Quick actions", experience.md §5.1): the
+ * selection's most used commands right under its name, as labelled tiles:
+ * a glyph over its one-word name (Flip · Front · Back · Duplicate · Delete),
+ * so what each does is visible without a tooltip. The row shares the panel's
+ * width equally and never wraps; a small gap separates kinds of command. A
+ * toggle that changes what edits do (Isolate) is Styk blue while on; a tile
+ * that removes something turns red on hover. Rendered by
+ * src/ui/quick-actions.mjs from the command registry: every row command is a
+ * .ui-quick-word tile; a pair that belongs together (Match ◀ ▶) is one
+ * .ui-quick-tile with two glyph halves. */
+@layer components {
+  .ui-quick {
+    display: flex; align-items: stretch; flex-wrap: nowrap; gap: var(--space-1);
+    margin: var(--space-3) 0 0; container-type: inline-size;
+  }
+  .ui-quick[hidden] { display: none; }
+  .ui-quick-sep { flex: none; inline-size: var(--space-1); }
+
+  .ui-button.ui-quick-word {
+    --_px: var(--space-1); --_bg: var(--surface-sunken); --_bg-hover: var(--surface-hover); --_bg-active: var(--surface-pressed);
+    flex: 1 1 auto; min-inline-size: 0; block-size: 52px;
+    flex-direction: column; gap: 3px;
+    border-radius: var(--radius-md); color: var(--text-1);
+    font: var(--weight-semibold) 11px/13px var(--font-ui); letter-spacing: 0;
+  }
+  .ui-quick-word > svg { inline-size: 18px; block-size: 18px; color: var(--text-2); }
+  .ui-quick-word > .ui-label { max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* A narrow panel (the 256px inspector) keeps every word whole in a 10px caption. */
+  @container (inline-size < 260px) {
+    .ui-button.ui-quick-word { --_px: 2px; font-size: 10px; }
+  }
+  .ui-quick-word:where(:hover:not(:disabled)) > svg { color: var(--text-1); }
+  .ui-quick-word[aria-pressed="true"] { --_bg: var(--accent-soft); --_bg-hover: var(--accent-soft-hover); color: var(--accent-text); }
+  .ui-quick-word:where([aria-pressed="true"]) > svg { color: var(--accent); }
+  .ui-quick-word[data-tone="danger"]:where(:hover:not(:disabled)) { --_bg-hover: var(--danger-soft); color: var(--danger-text); }
+  .ui-quick-word:where([data-tone="danger"]:hover:not(:disabled)) > svg { color: var(--danger-text); }
+
+  /* A pair that belongs together (Match ◀ ▶): one tile with two halves and its word under them. */
+  .ui-quick-tile {
+    flex: 1.4 1 0; min-inline-size: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto; align-items: center;
+    block-size: 52px; padding: 4px 4px 6px; border-radius: var(--radius-md); background: var(--surface-sunken);
+  }
+  .ui-quick-tile > .ui-icon-button { justify-self: center; grid-row: 1; --_s: 30px; }
+  .ui-quick-label { grid-column: 1 / -1; grid-row: 2; justify-self: center; font: var(--weight-semibold) 11px/13px var(--font-ui); color: var(--text-1); white-space: nowrap; user-select: none; }
+
+  @media (forced-colors: active) {
+    .ui-quick-word, .ui-quick-tile { border: 1px solid CanvasText; }
+  }
+}

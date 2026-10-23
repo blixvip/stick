@@ -1,0 +1,59 @@
+name: Verify browser release
+on:
+  workflow_call:
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+jobs:
+  web:
+    name: Browser (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+      STYK_WEB_DIR: build/web
+      # Windows must exercise a real AAC soundtrack; Linux verifies the clear
+      # unsupported response as well as real Opus export.
+      STYK_REQUIRE_AAC: ${{ matrix.os == 'windows-latest' && '1' || '0' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.0'
+          cache: npm
+      - name: Install locked dependencies and browsers
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix web --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          if [ "$RUNNER_OS" = Linux ]; then npx playwright install --with-deps firefox webkit; fi
+      - name: Build and verify the browser release
+        run: |
+          npm run web:build
+          npm run web:verify
+          npm run test:web
+          npm run test:web:browsers
+      - name: Firefox and WebKit storage and editor checks
+        if: runner.os == 'Linux'
+        run: |
+          STYK_BROWSER=firefox npm run test:web:browsers
+          STYK_BROWSER=webkit npm run test:web:browsers
+      - name: Verify browser Cloudflare configuration
+        if: runner.os == 'Linux'
+        run: |
+          npm run web:deploy -- --dry-run
+      - name: Preserve deployable browser files
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-release
+          path: build/web
+          include-hidden-files: true
+          retention-days: 30
+          if-no-files-found: error

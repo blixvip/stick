@@ -1,0 +1,125 @@
+/* Inspector (feature, track D): what the inspector composes from the .ui-*
+ * components and no component owns. Scoped to #inspector through :where()
+ * where a rule would otherwise reach other surfaces, so rules stay at feature
+ * specificity. A skeleton: it grows as contexts move to descriptors
+ * (src/inspector-kit.mjs) and their legacy rules (legacy/07, 22, 25b, 36, 42)
+ * are deleted. No key state, no dividers, no cards. */
+@layer features {
+  /* The header (src/inspector-header.mjs): one line with the target's name and
+     its one menu, then the scope line and the quick actions; it stays put while
+     the body scrolls. Its hosts are index.html's slots. */
+  :where(#properties-panel) > .inspector-header {
+    display: flex; align-items: center; gap: var(--space-2);
+    block-size: auto; min-block-size: calc(var(--control-lg) + var(--space-3)); margin: 0;
+    padding: var(--space-3) calc(var(--island-pad) - var(--space-1-5)) 0 var(--island-pad);
+    border: 0; background: transparent;
+  }
+  .ui-target-line { display: flex; flex: 1 1 auto; align-items: center; gap: var(--space-1-5); min-inline-size: 0; }
+  .ui-target-kind { flex: none; display: inline-grid; color: var(--text-3); }
+  .ui-target-kind > .ui-icon { inline-size: var(--icon-md); block-size: var(--icon-md); }
+  .ui-target-name {
+    flex: 1 1 auto; min-inline-size: 0; margin: 0;
+    font: var(--type-heading); letter-spacing: var(--tracking-heading); color: var(--text-1);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ui-target-text { border-radius: var(--radius-2xs); }
+  .ui-target-text:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  /* Renaming in place: the name becomes a field of the same size. */
+  .ui-target-input {
+    flex: 1 1 auto; min-inline-size: 0; block-size: var(--control-lg); margin: 0 0 0 calc(-1 * var(--space-2));
+    padding: 0 var(--space-2); border: 0; border-radius: var(--radius-md); outline: none;
+    background: var(--surface); color: var(--text-1); font: var(--type-heading); letter-spacing: var(--tracking-heading);
+    box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo);
+  }
+  :where(#properties-panel) > .inspector-header > .ui-icon-button { flex: none; color: var(--text-2); }
+  /* The scope line and the quick actions under the name. */
+  :where(#properties-panel) > .inspector-head { flex: none; padding: 0 var(--island-pad) var(--space-1); }
+  :where(#properties-panel) > .inspector-head[hidden] { display: none; }
+
+  /* The body: the island's inline padding; sections follow each other on whitespace. */
+  :where(#inspector) { padding: 0 var(--island-pad) var(--island-pad); scrollbar-gutter: stable; }
+  /* The first section shown sits under the header (hidden sections leave empty
+     placeholders that keep positions). */
+  :where(#inspector) > :nth-child(1 of .ui-section:not([hidden])) { padding-block-start: var(--space-2); }
+  /* A sub-module's own markup (drawing, parallax, the camera's motion, Build's
+     rig controls) keeps its edge-to-edge sections until it moves to descriptors. */
+  .inspector-bare { margin-inline: calc(-1 * var(--island-pad)); }
+  .inspector-bare[hidden] { display: none; }
+  /* Inside a kit section, a sub-module's section wrapper draws no second frame. */
+  .ui-section-body > :is(.inspector-section, .spatial-rig) { padding: 0; border: 0; }
+  .ui-section-body > .inspector-section > :where(.inspector-title:first-child) { display: none; }
+  /* A text action beside glyph actions in a section's title (Join…, Rotate 15°, Centre). */
+  .ui-section-action.ui-button { --_px: var(--space-2); color: var(--text-2); font: var(--type-small-strong); }
+  .ui-section-action.ui-button:where(:hover):not(:disabled) { color: var(--text-1); }
+  /* An action row fills its grid cell when it shares a row with a field (Library…, Add). */
+  .ui-field-grid > .ui-action-row { min-inline-size: 0; }
+  .ui-field-grid > .ui-action-row > .ui-button { flex: 1 1 auto; justify-content: center; }
+
+  /* The Properties footer (the Library's "Add to library", shown with the panel): one quiet row over a hairline. */
+  :where(#properties-panel) > .properties-library-save {
+    flex: none; margin: 0; padding: var(--space-1-5) calc(var(--island-pad) - var(--space-1)) var(--space-2);
+    border: 0; box-shadow: inset 0 1px 0 var(--line-1);
+  }
+  :where(#properties-panel) > .properties-library-save > .button {
+    inline-size: auto; min-block-size: var(--control-md); justify-content: flex-start; gap: var(--space-1-5);
+    padding: 0 var(--space-2); border: 0; background: transparent; color: var(--text-2); font: var(--type-small-strong);
+  }
+  :where(#properties-panel) > .properties-library-save > .button:hover { background: var(--surface-hover); color: var(--text-1); }
+
+  /* The body fades its last line while more is below (data-more-below, kept by
+     installInspectorKit), so a half-visible title always reads as "scrolls". */
+  :where(#inspector)[data-more-below] { mask-image: linear-gradient(to bottom, black calc(100% - 28px), transparent); }
+
+  /* A segmented control that keeps native radios (IK's bend direction keeps
+     its change handler): the label is the item and draws the thumb while its
+     radio is checked; the radio stays focusable but invisible. Track C's
+     segmented.css should own these rules (a request, not yet moved). */
+  :where(#inspector) .ui-segmented-item:has(> .ui-segmented-input) { position: relative; }
+  :where(#inspector) .ui-segmented-input {
+    position: absolute; inset: 0; inline-size: 100%; block-size: 100%;
+    margin: 0; opacity: 0; appearance: none; cursor: default;
+  }
+  :where(#inspector) .ui-segmented-item:has(> .ui-segmented-input:checked) {
+    background: var(--control-thumb); color: var(--text-1);
+    box-shadow: inset 0 0 0 1px var(--line-control), var(--elevation-1);
+  }
+  :where(#inspector) .ui-segmented-item:has(> .ui-segmented-input:focus-visible) { outline: 2px solid var(--focus-ring); outline-offset: 0; }
+  :where(#inspector) .ui-segmented-item:has(> .ui-segmented-input:disabled) { opacity: 0.42; }
+
+  /* A quiet line of facts (the Scene's "2 figures · 48 frames · 2.0 s"). */
+  .inspector-meta { margin: 0; font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+  /* Rows stacked as one region (IK's options, a fill's own fields). */
+  .inspector-group { display: grid; gap: var(--space-2); min-inline-size: 0; }
+  .inspector-group[hidden] { display: none; }
+
+  /* A preview drawn in its section (the camera monitor, the brush stroke): a
+     flat sunken area with a one-line caption; never raised, never a card. */
+  .inspector-preview { display: grid; gap: var(--space-1-5); min-inline-size: 0; }
+  .inspector-preview-media {
+    display: block; inline-size: 100%; min-block-size: 48px;
+    border-radius: var(--radius-md); background: var(--surface-sunken); overflow: hidden;
+  }
+  .inspector-preview-caption {
+    display: flex; justify-content: space-between; gap: var(--space-2); min-inline-size: 0;
+    font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums;
+  }
+  .inspector-preview-caption > span { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Pages of a long list (fills, palette colours): previous, "1–12 / 14", next. */
+  .inspector-pager { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-inline-size: 0; }
+  .inspector-pager-text { font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+  /* The foot, pinned under the scrolling body: one quiet row of commands for
+     the whole context ("Add to library"), over a hairline. */
+  .inspector-foot {
+    display: flex; align-items: center; gap: var(--space-1); flex: none;
+    padding: var(--space-1-5) var(--space-2) var(--space-2);
+    box-shadow: inset 0 1px 0 var(--line-1);
+  }
+  .inspector-foot > .ui-button { justify-content: flex-start; color: var(--text-2); }
+
+  @media (forced-colors: active) {
+    .inspector-preview-media { outline: 1px solid CanvasText; }
+  }
+}

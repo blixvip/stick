@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editor chrome fixture</title>
+  <!-- A static page for the redesign's chrome components (components.md): the rail and tool buttons, the menubar,
+       the stage header with its crumb, view cluster and message, the tool options bar (src/ui/tool-options.mjs) at
+       three widths, split buttons, segmented controls, quick actions (src/ui/quick-actions.mjs) over the command
+       registry, the scope line, chips, progress, the empty state and the cursor badge. Serve the repository
+       (scripts/serve.mjs) and open /tests/fixtures/ui-chrome.html: it shows the light and dark themes side by side;
+       ?theme=light or ?theme=dark shows one. window.fixture exposes the instances and a log of commands run.
+       The component sheets are linked here until app.css imports them. -->
+  <link rel="icon" type="image/svg+xml" href="/mark.svg">
+  <link rel="stylesheet" href="/src/styles/app.css">
+  <!-- The shared inputs the tool options bar composes (the inspector kit's sheets). -->
+  <link rel="stylesheet" href="/src/styles/components/field.css">
+  <link rel="stylesheet" href="/src/styles/components/select.css">
+  <link rel="stylesheet" href="/src/styles/components/stepper.css">
+  <link rel="stylesheet" href="/src/styles/components/swatch.css">
+  <!-- This kit. -->
+  <link rel="stylesheet" href="/src/styles/components/tool.css">
+  <link rel="stylesheet" href="/src/styles/components/rail.css">
+  <link rel="stylesheet" href="/src/styles/components/toolbar.css">
+  <link rel="stylesheet" href="/src/styles/components/segmented.css">
+  <link rel="stylesheet" href="/src/styles/components/stage-head.css">
+  <link rel="stylesheet" href="/src/styles/components/optbar.css">
+  <link rel="stylesheet" href="/src/styles/components/split.css">
+  <link rel="stylesheet" href="/src/styles/components/crumb.css">
+  <link rel="stylesheet" href="/src/styles/components/menubar.css">
+  <link rel="stylesheet" href="/src/styles/components/quick.css">
+  <link rel="stylesheet" href="/src/styles/components/badge.css">
+  <link rel="stylesheet" href="/src/styles/components/chip.css">
+  <link rel="stylesheet" href="/src/styles/components/progress.css">
+  <link rel="stylesheet" href="/src/styles/components/empty.css">
+  <link rel="stylesheet" href="/src/styles/components/scope.css">
+  <style>
+    /* The page itself. */
+    html, body { margin: 0; }
+    body { min-block-size: 100dvh; background: var(--surface-field); color: var(--text-1); font: var(--type-ui); }
+    .fixture-pair { display: grid; grid-template-columns: 1fr 1fr; block-size: 100dvh; }
+    .fixture-pair > iframe { inline-size: 100%; block-size: 100%; border: 0; }
+    .fixture { display: grid; gap: var(--space-3); padding: var(--space-4); }
+    .fixture h1 { margin: 0; font: var(--type-heading); }
+    .fixture h2 { margin: 0 0 var(--space-2); font: var(--type-small-strong); color: var(--text-3); }
+    .fixture section { padding: var(--space-3); border-radius: var(--radius-xl); background: var(--surface); }
+    .fixture-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+    .fixture-columns { display: grid; grid-template-columns: auto 1fr; gap: var(--space-3); align-items: start; }
+    .fixture-field { padding: var(--space-2) 0; background: var(--surface-field); border-radius: var(--radius-xl); }
+    /* The inspector's content column: 288px less its 16px padding on each side. */
+    .fixture-inspector { inline-size: 256px; max-inline-size: 100%; }
+    .fixture-inspector h3 { margin: var(--space-3) 0 0; font: var(--type-heading); }
+    .fixture-inspector h3:first-child { margin-block-start: 0; }
+    .fixture-stage { display: grid; gap: var(--space-2); }
+    .fixture-stage .stage-head { border-radius: var(--radius-lg); }
+    .fixture-badge .ui-cursor-badge { position: relative; inset: auto; translate: none; }
+    .fixture-toolbar { inline-size: 100%; }
+
+  </style>
+  <script type="module" src="./ui-chrome.mjs"></script>
+</head>
+<body>
+  <main class="fixture" id="fixture" hidden>
+    <h1>Editor chrome</h1>
+
+    <section aria-label="Band and rail">
+      <h2>Menubar, workspace switch, rail</h2>
+      <div class="fixture-columns">
+        <nav class="ui-rail fixture-field" aria-label="Editor tools">
+          <button type="button" class="ui-tool-button" aria-label="Add" data-icon="plus"><span class="ui-tool-tick" aria-hidden="true"></span></button>
+          <span class="ui-rail-sep" aria-hidden="true"></span>
+          <button type="button" class="ui-tool-button" aria-label="Select and pose" aria-pressed="true" data-icon="cursor"></button>
+          <button type="button" class="ui-tool-button" aria-label="Tweener" aria-pressed="false" data-icon="transform"><span class="ui-tool-tick" aria-hidden="true"></span></button>
+          <button type="button" class="ui-tool-button" aria-label="Pan" aria-pressed="false" data-icon="hand"></button>
+          <div class="ui-rail-end"><button type="button" class="ui-tool-button" aria-label="Help" data-icon="help"></button></div>
+        </nav>
+        <div class="fixture-row">
+          <nav class="ui-menubar" role="menubar" aria-label="Application menu">
+            <button type="button" class="ui-menubar-item" role="menuitem" data-app-menu="file" aria-haspopup="menu"><u>F</u>ile</button>
+            <button type="button" class="ui-menubar-item" role="menuitem" data-app-menu="edit" aria-haspopup="menu" aria-expanded="true"><u>E</u>dit</button>
+            <button type="button" class="ui-menubar-item" role="menuitem" data-app-menu="view" aria-haspopup="menu"><u>V</u>iew</button>
+            <button type="button" class="ui-menubar-item" role="menuitem" data-app-menu="animation" aria-haspopup="menu"><u>A</u>nimation</button>
+            <button type="button" class="ui-menubar-item" role="menuitem" data-app-menu="help" aria-haspopup="menu"><u>H</u>elp</button>
+          </nav>
+          <div class="ui-segmented" data-size="lg" role="group" aria-label="Workspace">
+            <button type="button" class="ui-segmented-item" aria-pressed="true" data-workspace-mode="animate"><span class="ui-label">Animate</span></button>
+            <button type="button" class="ui-segmented-item" aria-pressed="false" data-workspace-mode="draw"><span class="ui-label">Draw</span></button>
+            <button type="button" class="ui-segmented-item" aria-pressed="false" data-workspace-mode="rig"><span class="ui-label">Build</span></button>
+          </div>
+          <div class="ui-segmented" data-size="sm" role="radiogroup" aria-label="Selection shape">
+            <button type="button" class="ui-segmented-item" role="radio" aria-checked="true" aria-label="Lasso" data-icon="lasso"></button>
+            <button type="button" class="ui-segmented-item" role="radio" aria-checked="false" aria-label="Rectangle" data-icon="frame"></button>
+            <button type="button" class="ui-segmented-item" role="radio" aria-checked="false" aria-label="Ellipse" data-icon="circle"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Stage header">
+      <h2>Stage header: location, view cluster, zoom; a message; a session's scope path; a message on its own line</h2>
+      <div class="fixture-stage">
+        <div class="stage-head" role="toolbar" aria-label="Stage">
+          <div class="stage-head-start">
+            <nav class="ui-crumb" aria-label="Location">
+              <button type="button" class="ui-crumb-item" data-action="scene-settings" data-icon="scene"><span>Scene 1</span><span class="ui-crumb-meta">960 × 540</span></button>
+              <button type="button" class="ui-crumb-swatch" id="crumb-background" data-paint-picker aria-haspopup="dialog" aria-label="Background color #FFFFFF, opens the color picker" data-tooltip="Background color · #FFFFFF"><span class="ui-crumb-chip" id="crumb-chip"></span></button>
+            </nav>
+          </div>
+          <div class="stage-head-end">
+            <div class="stage-head-cluster" data-view role="group" aria-label="View">
+              <button type="button" class="ui-icon-button" data-quiet aria-pressed="true" aria-label="Joints" data-action="toggle-handles" data-icon="nodes"></button>
+              <div class="ui-split" role="group" aria-label="Motion paths">
+                <button type="button" class="ui-icon-button" data-quiet aria-pressed="false" aria-label="Motion paths" data-action="toggle-motion-paths" data-icon="route"></button>
+                <button type="button" class="ui-split-more" aria-haspopup="dialog" aria-expanded="false" aria-label="Motion path settings" data-icon="chevron-down"></button>
+              </div>
+              <div class="ui-split" role="group" aria-label="Grid and guides">
+                <button type="button" class="ui-icon-button" data-quiet aria-pressed="true" aria-label="Grid" data-icon="grid"></button>
+                <button type="button" class="ui-split-more" aria-haspopup="dialog" aria-expanded="true" aria-label="Grid and guides settings" data-icon="chevron-down"></button>
+              </div>
+              <button type="button" class="ui-icon-button" data-quiet aria-pressed="true" aria-label="Effects preview" data-icon="activity"></button>
+            </div>
+            <div class="stage-head-cluster" role="group" aria-label="Zoom">
+              <button type="button" class="ui-button" data-size="sm" data-variant="ghost" aria-haspopup="menu"><span class="ui-label">95%</span></button>
+              <button type="button" class="ui-icon-button" aria-label="Fit canvas" data-action="zoom-reset" data-icon="fit"></button>
+            </div>
+          </div>
+          <div class="stage-head-msg" style="--msg-start: 0px; --msg-end: 200px">
+            <div class="ui-toast" role="status"><span class="ui-toast-dot"></span><span class="ui-toast-text"><b>Drag a red joint</b> to pose</span></div>
+          </div>
+        </div>
+        <div class="stage-head" role="toolbar" aria-label="Stage (movieclip session)">
+          <div class="stage-head-start">
+            <nav class="ui-crumb" aria-label="Location">
+              <button type="button" class="ui-crumb-item" data-action="movieclip-done" data-icon="scene"><span>Scene 1</span></button>
+              <span class="ui-crumb-sep" aria-hidden="true">›</span>
+              <span class="ui-crumb-here" data-icon="frame"><span>Punch</span></span>
+            </nav>
+          </div>
+          <div class="stage-head-end"><div class="stage-head-cluster"><button type="button" class="ui-icon-button" aria-label="Fit canvas" data-icon="fit"></button></div></div>
+        </div>
+        <div class="stage-head" role="toolbar" aria-label="Stage (dropped message)" data-msg-drop data-msg-over>
+          <div class="stage-head-start"><nav class="ui-crumb" aria-label="Location"><button type="button" class="ui-crumb-item" data-icon="scene"><span>Scene 1</span></button></nav></div>
+          <div class="stage-head-end"><div class="stage-head-cluster"><button type="button" class="ui-icon-button" aria-label="Fit canvas" data-icon="fit"></button></div></div>
+          <div class="stage-head-msg"><div class="ui-toast" role="alert"><span class="ui-toast-text"><b>Restore unsaved work</b> from 12:04?</span><button type="button" class="ui-button" data-size="sm" data-variant="ghost"><span class="ui-label">Not now</span></button><button type="button" class="ui-button" data-size="sm" data-variant="outline"><span class="ui-label">Restore</span></button></div></div>
+        </div>
+        <div style="block-size: 48px"></div>
+      </div>
+    </section>
+
+    <section aria-label="Tool options">
+      <h2>Tool options (tool-options.mjs): Brush at 900, 560 and 380 px; Edit joints; Select pixels; Tweener</h2>
+      <div class="fixture-stage" id="optbars"></div>
+    </section>
+
+    <section aria-label="Inspector">
+      <h2>Quick actions (quick-actions.mjs over the command registry) and the scope line</h2>
+      <div class="fixture-row" style="align-items: start">
+        <div class="fixture-inspector" id="quick-rows"></div>
+        <div class="fixture-inspector">
+          <h3>Bubble</h3>
+          <div class="ui-scope" role="status"><span class="ui-dot" data-tint="select" aria-hidden="true"></span><span>Editing frames 22–28</span><button type="button" class="ui-button" data-variant="ghost" data-size="sm"><span class="ui-label">Stop</span></button></div>
+          <div class="ui-empty">
+            <span class="ui-empty-glyph" data-icon="brush" aria-hidden="true"></span>
+            <h3 class="ui-empty-title">New drawing</h3>
+            <p class="ui-empty-text">Paint anywhere to start a drawing layer</p>
+            <div class="ui-empty-actions"><button type="button" class="ui-button" data-variant="outline"><span class="ui-label">New drawing layer</span></button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Toolbar, chips, progress, badge">
+      <h2>Toolbar with label priority · chips · progress and spinner · the cursor badge</h2>
+      <div class="ui-toolbar fixture-toolbar" role="toolbar" aria-label="Library">
+        <div class="ui-toolbar-group">
+          <button type="button" class="ui-button" data-size="sm" data-variant="ghost" data-label-priority="2" data-icon="folder"><span class="ui-label">New folder</span></button>
+          <button type="button" class="ui-button" data-size="sm" data-variant="ghost" data-label-priority="2" data-icon="reset"><span class="ui-label">Refresh</span></button>
+        </div>
+        <span class="ui-toolbar-spacer"></span>
+        <div class="ui-toolbar-group">
+          <button type="button" class="ui-icon-button" data-quiet aria-pressed="true" aria-label="Loop playback" data-icon="loop"></button>
+          <button type="button" class="ui-icon-button" data-quiet aria-pressed="false" aria-label="Audio" data-icon="music"></button>
+          <button type="button" class="ui-button" data-size="sm" data-variant="ghost" aria-pressed="true" data-icon="builder-branch"><span class="ui-label">Whole branch</span></button>
+        </div>
+      </div>
+      <div class="fixture-row" style="margin-block-start: var(--space-3)">
+        <button type="button" class="ui-chip" aria-pressed="true">All</button>
+        <button type="button" class="ui-chip" aria-pressed="false">Glow</button>
+        <span class="ui-chip">Looks · 13</span>
+        <div class="ui-progress" role="progressbar" aria-label="Export" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="--_p: 60%; inline-size: 120px"></div>
+        <div class="ui-progress" role="progressbar" aria-label="Loading" data-indeterminate style="inline-size: 120px"></div>
+        <span class="ui-spinner" aria-hidden="true"></span>
+        <span class="fixture-badge"><span class="ui-cursor-badge" aria-hidden="true"><span class="ui-cursor-badge-swatch" id="badge-swatch"></span></span></span>
+        <span class="fixture-badge"><span class="ui-cursor-badge" aria-hidden="true"><span class="ui-cursor-badge-glyph" data-icon="activity"></span></span></span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

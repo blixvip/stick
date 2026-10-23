@@ -1,0 +1,489 @@
+/* The timeline island (experience.md §5.6, §5.7; architecture.md §3.14): the
+ * shared header in three clusters (timeline-header.mjs) with the view tools
+ * leading the end one, the layer list's header (layer-timeline.mjs), and the
+ * Simple timeline (sheet-filmstrip.mjs): the band the tools take above the
+ * cards, the frame bar, the frame cards and the Layers popover. The frame card
+ * (.ui-frame-card, components.md "Filmstrip") lives here because only the
+ * Simple timeline draws it.
+ *
+ * The header's controls carry the kit's classes (.ui-button, .ui-icon-button,
+ * .ui-split, .ui-segmented, .ui-slider); this sheet lays them out. The header
+ * hides what folds at the minimal tier and in Draw and Build itself (hidden);
+ * the frame rate's compact fold of layout/workspace.css is restated here. */
+@layer features {
+  /* The header reads this marker to give index.html's controls the kit's look (timeline-header.mjs). */
+  .timeline-panel { --timeline-kit: 1; }
+
+  /* ---- The header: three clusters that never touch ---- */
+  .timeline-toolbar.tl-head {
+    display: grid; grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
+    align-items: center; column-gap: var(--space-3);
+    padding-inline: var(--space-2); overflow: clip; white-space: nowrap;
+    border-block-end: 1px solid var(--line-1); background: var(--surface);
+  }
+  /* Each cluster keeps its whole width, so a header too narrow for them overflows (and folds its words) instead of overlapping. */
+  .tl-head > .tl-start, .tl-head > .tl-transport, .tl-head > .tl-end { display: flex; align-items: center; }
+  .tl-head > .tl-start { grid-column: 1; gap: var(--space-2); }
+  .tl-head > .tl-transport { grid-column: 2; }
+  .tl-head > .tl-end { grid-column: 3; justify-self: end; gap: var(--space-1); }
+
+  .tl-mode { border: 0; }
+  .tl-mode > .ui-segmented-item { block-size: auto; }
+  .tl-frame-wrap, .tl-frame-tools { display: flex; align-items: center; gap: var(--space-1); }
+  .tl-add { inline-size: auto; }
+  .tl-add > .ui-label { display: inline; }
+  /* An audio clip's selection hides the frame commands (they act on frames, not clips), as before. */
+  .sheet-header-tools.audio-selection > .tl-frame-tools { display: none; }
+  .tl-add, .tl-together { --_px: var(--space-2-5); }
+  .tl-cel > .ui-button { --_px: var(--space-2); border-start-end-radius: 0; border-end-end-radius: 0; }
+  .tl-together > .ui-label { display: inline; }
+  .tl-together > .range-edit-count { font: var(--type-small-strong); font-variant-numeric: tabular-nums; color: var(--text-3); }
+  .tl-together[aria-pressed="true"] > .range-edit-count { color: inherit; }
+  /* Edit together shows only while it can apply (two or more frames selected), with its word and count; its
+   * hotkey and the Animation menu reach it any time. */
+  .tl-together:disabled { display: none; }
+
+  /* The transport: First frame, the steps, a soft Play disc, Loop, the readout and the frame rate. */
+  .tl-controls { display: flex; align-items: center; gap: var(--space-0-5); margin: 0; }
+  .tl-controls > .divider { display: none; }
+  .tl-controls > .tl-play { --_s: var(--control-lg); margin-inline: var(--space-0-5); }
+  .tl-controls > .tl-loop { margin-inline-start: var(--space-1); }
+  .tl-playback-range { --_px: var(--space-1); gap: var(--space-1); font-variant-numeric: tabular-nums; }
+  .tl-playback-range[data-active] { color: var(--accent-text); background: var(--accent-soft); }
+  .tl-playback-range-label:empty { display: none; }
+  .tl-readout {
+    display: inline-flex; align-items: center; block-size: var(--control-md);
+    margin-inline-start: var(--space-1); padding: 0 var(--space-1-5);
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-1);
+    font: var(--type-ui-strong); font-variant-numeric: tabular-nums; cursor: pointer;
+  }
+  .tl-readout:where(:hover, [aria-expanded="true"]) { background: var(--surface-hover); }
+  .tl-readout:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .tl-readout > span { min-inline-size: 0; margin: 0; font: inherit; color: inherit; }
+  .tl-controls > .tl-fps { display: inline-flex; align-items: center; gap: var(--space-0-5); padding-inline-end: var(--space-1-5); font: var(--type-small); color: var(--text-3); }
+  .tl-fps > input {
+    inline-size: 3.2ch; block-size: var(--control-sm); padding: 0 var(--space-0-5);
+    border: 0; border-radius: var(--radius-sm); background: transparent;
+    font: var(--type-small); color: var(--text-3); text-align: end; font-variant-numeric: tabular-nums;
+  }
+  .tl-fps > input:where(:hover, :focus) { background: var(--surface-sunken); color: var(--text-1); }
+  .tl-fps > input:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 0; }
+
+  .tl-onion { margin: 0; padding: 0; border: 0; gap: 0; }
+  /* Auto key (Advanced only): a record dot that fills red while edits key the playhead; the playhead turns red too. */
+  .tl-autokey { gap: var(--space-1); }
+  .tl-autokey-dot { inline-size: 8px; block-size: 8px; border: 1.5px solid currentColor; border-radius: 50%; opacity: 0.7; }
+  .tl-autokey:where([aria-pressed="true"]) { color: var(--danger-text); }
+  .tl-autokey:where([aria-pressed="true"]) .tl-autokey-dot {
+    border-color: var(--danger-dot); background: var(--danger-dot); opacity: 1;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger-dot) 22%, transparent);
+  }
+  .timeline-panel:where(.simple-mode) .tl-autokey { display: none; }
+  .timeline-panel:where(.auto-keying) .layer-timeline { --sheet-playhead: var(--danger-dot); --sheet-playhead-tab: var(--danger-dot); }
+  /* Audio's dot: only while the animation has sound. */
+  .tl-audio:where([data-has-audio="true"])::after {
+    inset: 5px 5px auto auto; inline-size: 6px; block-size: 6px;
+    border: 0; background: var(--success-dot); box-shadow: 0 0 0 1.5px var(--surface);
+  }
+
+  /* The zoom slider, then the words fold in order when the clusters would otherwise meet (timeline-header.mjs). */
+  .tl-head:where([data-fold~="zoom"]) .tl-ruler-tools > .tl-zoom { display: none; }
+  .tl-head:where([data-fold~="together"]) .tl-together > :is(.ui-label, .range-edit-count),
+  .tl-head:where([data-fold~="cel"]) .tl-cel-main > .ui-label,
+  .tl-head:where([data-fold~="add"]) .tl-add > .ui-label,
+  .tl-head:where([data-fold~="autokey"]) .tl-autokey > .ui-label {
+    position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  .tl-head:where([data-fold~="together"]) .tl-together,
+  .tl-head:where([data-fold~="add"]) .tl-add,
+  .tl-head:where([data-fold~="autokey"]) .tl-autokey { --_px: 0; inline-size: var(--control-md); }
+  /* Last, where even the glyphs do not fit, Next copy's commands lead Timeline ⋯. */
+  .tl-head:where([data-fold~="celmenu"]) .tl-cel,
+  .tl-head:where([data-fold~="autokeymenu"]) .tl-autokey,
+  .tl-head:where([data-fold~="playbackrangemenu"]) .tl-playback-range,
+  .tl-head:where([data-fold~="modemenu"]) .tl-mode { display: none; }
+
+  /* The frame rate folds at compact width (into the Scene's Rate), restated over this sheet's display. */
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .tl-head .tl-fps { display: none; }
+  /* Minimal: tighter gaps, the transport in the middle's free space, and Timeline… a row of Timeline ⋯. */
+  :where(:root[data-tier="minimal"]) .timeline-toolbar.tl-head { grid-template-columns: auto minmax(max-content, 1fr) auto; column-gap: var(--space-1); padding-inline: var(--space-1); }
+  :where(:root[data-tier="minimal"]) .tl-head .tl-readout { margin-inline-start: 0; padding-inline: var(--space-1); font: var(--type-small-strong); font-variant-numeric: tabular-nums; }
+  :where(:root[data-tier="minimal"]) .tl-mode > .ui-segmented-item { padding-inline: var(--space-2); }
+  :where(:root[data-tier="minimal"]) .tl-head > :is(.tl-start, .tl-end) { gap: var(--space-0-5); }
+
+  /* ---- The view tools: zoom, Fit timeline, Tall timeline, then a hairline before Onion ---- */
+  .shell-timeline-body:where(:not(:popover-open)) { position: relative; }
+  .tl-end > .tl-ruler-tools {
+    display: flex; align-items: center; gap: var(--space-0-5);
+    margin-inline-end: var(--space-1); padding-inline-end: var(--space-2); box-shadow: inset -1px 0 0 var(--line-1);
+  }
+  .tl-ruler-tools > .tl-zoom { display: flex; align-items: center; gap: var(--space-1); min-inline-size: 0; }
+  .tl-zoom > .tl-zoom-glyph { display: inline-grid; color: var(--text-3); }
+  .tl-zoom-glyph > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .tl-zoom > .ui-slider { inline-size: 88px; min-inline-size: 0; }
+  :where(:root[data-tier="narrow"]) .tl-zoom > .ui-slider { inline-size: 56px; }
+  :where(:root[data-tier="narrow"], :root[data-tier="compact"]) .timeline-toolbar.tl-head { column-gap: var(--space-2); }
+  :where(:root[data-tier="compact"]) .tl-zoom > .ui-slider { inline-size: 48px; }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .tl-zoom > .tl-zoom-glyph { display: none; }
+  /* Minimal: the view tools leave the header (zoom stays on Ctrl + wheel, Fit leads Timeline ⋯). */
+  :where(:root[data-tier="minimal"]) .tl-end > .tl-ruler-tools { display: none; }
+  /* Tall timeline means nothing while the timeline is folded to its header. */
+  :where(.shell-bottom[data-state="strip"]) .tl-ruler-tools > .tl-tall { display: none; }
+
+
+  /* ---- The layer list's header: Layers, Focus, New layer and Find layers ---- */
+  .layer-timeline .sheet-label-head { gap: var(--space-1); padding-inline: var(--island-pad) var(--space-1); }
+  .sheet-label-head > .sheet-label-title { flex: 1; min-inline-size: 0; font: var(--type-eyebrow); color: var(--text-3); }
+  .sheet-label-head > .sheet-focus { --_px: var(--space-2); flex: none; }
+  .sheet-label-head:has(:where(.sheet-focus:not([hidden]))) > .sheet-label-title { display: none; }
+  .sheet-label-head > .sheet-focus[aria-pressed="true"] { --_bg: var(--accent-soft); --_bg-hover: var(--accent-soft-hover); color: var(--accent-text-strong); }
+  .sheet-label-head > .sheet-new-layer > .ui-split-more { block-size: var(--control-sm); }
+  .sheet-label-head { container: layer-heading / inline-size; }
+  .sheet-label-head:has(:where(.sheet-search:not([hidden]))) > .sheet-layer-filter { display: none; }
+  /* What adds rows (New layer) sits apart from what narrows them (Filter layers, Find layers). */
+  .sheet-label-head > .sheet-layer-filter { margin-inline-start: var(--space-1); }
+  :is(.sheet-layer-filter, .tl-layers-filter):where([data-active="true"]) { background: var(--accent-soft); color: var(--accent-text-strong); }
+  @container layer-heading (max-width: 240px) {
+    .sheet-label-head > .sheet-focus { --_px: 0; inline-size: var(--control-sm); }
+    .sheet-focus > .ui-label { display: none; }
+  }
+  @container layer-heading (max-width: 176px) {
+    .sheet-label-head > :is(.sheet-find-layer, .sheet-label-title) { display: none; }
+    .sheet-label-head .ui-icon-button { --_s: var(--control-xs); }
+    .sheet-label-head > .sheet-focus { --_h: var(--control-xs); min-inline-size: 0; inline-size: var(--control-xs); }
+    .sheet-new-layer > .ui-split-more { display: none; }
+    :where(:root[data-input="touch"]) .sheet-label-head > :is(.sheet-new-layer, .sheet-focus) { display: none; }
+  }
+  @container layer-heading (max-width: 240px) {
+    :where(:root[data-input="touch"]) .sheet-label-head > .sheet-find-layer,
+    :where(:root[data-input="touch"]) .sheet-new-layer > .ui-split-more { display: none; }
+  }
+  /* Under the short tier's 24px ruler the header's buttons are 24px too. */
+  :where(:root[data-height="short"], :root[data-height="low"]) .sheet-label-head :is(.ui-icon-button, .sheet-new-layer > .ui-split-more) { --_s: var(--control-xs); block-size: var(--control-xs); }
+  :where(:root[data-height="short"], :root[data-height="low"]) .sheet-label-head > .sheet-focus { block-size: var(--control-xs); }
+
+  /* ---- Go to frame ---- */
+  .tl-goto { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-2); inline-size: 220px; }
+  .tl-goto > .tl-goto-meta { grid-column: 1 / -1; font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .tl-playback-range-form { display: grid; gap: var(--space-2); inline-size: min(300px, calc(100vw - 48px)); }
+  .tl-playback-range-fields { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+  .tl-playback-range-help { margin: 0; color: var(--text-3); font: var(--type-small); white-space: normal; }
+  .tl-playback-range-meta { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-block-size: var(--control-sm); }
+  .tl-playback-range-meta > .ui-button { flex: none; margin-inline-end: calc(-1 * var(--space-1)); }
+  .tl-playback-range-actions { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); inline-size: 100%; }
+
+  /* ==== The Simple timeline ==== */
+  /* The frame card: the thumbnail, framed as today on a white rounded card (the current and the selected cards
+   * outlined in the accent), the number with the current or hovered card's count in words ("6 · 5 inbetweens"),
+   * and one duration bar whose length is the hold. No easing pins, partial marks or ghost card (visual-system.md). */
+  .ui-frame-card {
+    display: grid; grid-template-rows: auto auto auto; justify-items: center; align-content: start; row-gap: var(--space-1);
+    box-sizing: border-box; padding: var(--space-2) var(--space-1-5) 0;
+    border: 0; background: none; box-shadow: none; color: var(--text-3);
+  }
+  .ui-frame-thumb {
+    position: relative; display: block; inline-size: 100%; block-size: auto; aspect-ratio: 5 / 3;
+    margin: 0; padding: 0; overflow: hidden; border: 0; border-radius: var(--radius-md);
+    background: var(--artboard-placeholder); cursor: default; outline: none;
+  }
+  .ui-frame-thumb > canvas { display: block; inline-size: 100%; block-size: 100%; object-fit: contain; }
+  /* The card's line sits over the thumbnail (a canvas would cover an inset shadow). */
+  .ui-frame-thumb::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    box-shadow: inset 0 0 0 1px var(--line-2); transition: box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .ui-frame-card:where(:hover) .ui-frame-thumb::after { box-shadow: inset 0 0 0 1px var(--line-3); }
+  .ui-frame-card:where([data-selected="true"], [data-current="true"]) .ui-frame-thumb::after { box-shadow: inset 0 0 0 2px var(--accent-line); }
+  .ui-frame-thumb:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: 2px; }
+
+  .ui-frame-num {
+    position: relative; max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font: var(--type-micro); font-variant-numeric: tabular-nums; color: var(--text-3);
+  }
+  .ui-frame-card:where([data-current="true"]) .ui-frame-num { color: var(--accent-text); }
+  /* The count in words: on the current card, a hovered one and a bar being dragged. */
+  .ui-frame-count { display: none; color: var(--text-3); font-weight: var(--weight-medium); }
+  .ui-frame-card:where([data-current="true"], :hover, [data-dragging]) .ui-frame-count { display: inline; }
+  /* The working copy's edited dot, before the number. */
+  .ui-frame-num[data-edited]::before {
+    content: ""; display: inline-block; inline-size: 6px; block-size: 6px; margin-inline-end: var(--space-1);
+    border-radius: 50%; background: var(--accent-line); vertical-align: 1px;
+  }
+
+  /* The duration bar: its length is the hold on the strip's shared scale (the longest hold full), neutral; the
+   * current frame's in the accent. Its 25px row is the drag target; the range input inside only carries the value
+   * for the keyboard (the card's slider name), so it takes no pointer. */
+  .ui-frame-hold {
+    position: relative; display: block; justify-self: stretch; block-size: 25px;
+    margin: calc(-1 * var(--space-1)) var(--space-1) 0; cursor: ew-resize; touch-action: none;
+  }
+  .ui-frame-hold::before {
+    content: ""; position: absolute; inset-block-start: 11px; inset-inline-start: 0; block-size: 3px;
+    inline-size: clamp(6px, var(--hold-w, 0%), 100%); border-radius: 1.5px; background: var(--hold);
+  }
+  .ui-frame-card:where([data-current="true"]) .ui-frame-hold::before { background: var(--accent-line); }
+  /* The grip at the bar's end: drag it to hold the frame longer. */
+  .ui-frame-hold::after {
+    content: ""; position: absolute; inset-block-start: 8px; block-size: 9px;
+    inset-inline-start: calc(clamp(6px, var(--hold-w, 0%), 100%) - 1.5px);
+    inline-size: 3px; border-radius: 1.5px; background: var(--accent-line); opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+  .ui-frame-card:where(:hover, [data-current="true"], [data-dragging]) .ui-frame-hold::after,
+  .ui-frame-hold:focus-within::after { opacity: 1; }
+  .ui-frame-hold-input {
+    position: absolute; inset: 0; inline-size: 100%; block-size: 100%; margin: 0; padding: 0;
+    appearance: none; background: transparent; opacity: 0; pointer-events: none;
+  }
+  .ui-frame-hold:has(:focus-visible) { outline: var(--focus-width) solid var(--focus-ring); outline-offset: -6px; border-radius: var(--radius-xs); }
+  .ui-frame-hold:has(:disabled) { cursor: default; }
+  .ui-frame-hold:has(:disabled)::before { opacity: 0.5; }
+
+  @media (forced-colors: active) {
+    .ui-frame-card:where([data-selected="true"], [data-current="true"]) .ui-frame-thumb::after { box-shadow: inset 0 0 0 2px Highlight; }
+    .ui-frame-hold::before, .ui-frame-hold::after, .ui-frame-num[data-edited]::before { background: CanvasText; }
+  }
+
+  /* The island: the frame bar in the label column's place, then the strip of cards, which scrolls sideways under the
+   * tools' band with a thin scrollbar. The frame bar is 372px in two columns ("Frame 6 of 8 · holds 0.25 s" and the
+   * whole length on its first line), one 212px column at compact width, and drops its first line at the short tier. */
+  .sheet-filmstrip { background: var(--surface); color: var(--text-1); font: var(--type-ui); }
+
+  /* ---- The frame bar ---- */
+  .sheet-filmstrip > .sheet-framebar {
+    flex: none; box-sizing: border-box; inline-size: 372px;
+    display: grid; grid-auto-rows: max-content; align-content: start; justify-content: stretch; row-gap: var(--space-2);
+    padding: var(--space-2-5) var(--space-3) var(--space-2) var(--island-pad);
+    overflow: hidden auto; border: 0; border-inline-end: 1px solid var(--line-1); background: var(--surface);
+  }
+  .sheet-framebar > .sheet-framebar-title {
+    display: flex; align-items: baseline; gap: var(--space-2); min-inline-size: 0; margin: 0;
+    white-space: nowrap; font: var(--type-ui); color: var(--text-1);
+  }
+  .sheet-framebar-title > strong { font: var(--type-ui-strong); }
+  .sheet-framebar-title > .sheet-framebar-meta { font: var(--type-small); color: var(--text-3); cursor: default; }
+  .sheet-framebar-title > .sheet-framebar-total { margin-inline-start: auto; }
+  .sheet-framebar > .sheet-framebar-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: var(--space-2) var(--space-3);
+  }
+  .sheet-framebar-grid > .sheet-framebar-row { min-block-size: var(--control-md); gap: var(--space-2); min-inline-size: 0; }
+  .sheet-framebar-row > .ui-row-label { color: var(--text-3); }
+  .sheet-framebar-row > .ui-stepper { block-size: var(--control-md); }
+  .sheet-framebar-stepper > .ui-stepper-input { inline-size: 36px; min-inline-size: 36px; }
+  .sheet-framebar-grid > .ui-field { inline-size: 100%; }
+  .sheet-framebar-grid > .sheet-framebar-actions {
+    display: flex; align-items: center; justify-content: flex-start; gap: var(--space-1); margin: 0 0 0 calc(-1 * var(--space-1));
+  }
+  .sheet-framebar-actions > .ui-button { --_px: var(--space-2); color: var(--text-2); }
+  .sheet-framebar-actions > .ui-icon-button { --_s: var(--control-md); }
+  .sheet-framebar > .sheet-framebar-layer {
+    --_px: var(--space-2); justify-self: start; justify-content: flex-start; gap: var(--space-1-5);
+    max-inline-size: calc(100% + var(--space-2)); margin-inline-start: calc(-1 * var(--space-2));
+  }
+  .sheet-framebar-layer > .ui-dot { margin-inline-start: var(--space-0-5); }
+  .sheet-framebar-layer > .sheet-framebar-layer-name { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  .sheet-framebar-layer > .sheet-framebar-chev { inline-size: 12px; block-size: 12px; color: var(--text-3); }
+  /* Compact and minimal width: one 212px column; the whole length leaves the first line. */
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .sheet-filmstrip > .sheet-framebar { inline-size: 212px; row-gap: var(--space-1-5); }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .sheet-framebar > .sheet-framebar-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-1-5); }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .sheet-framebar-title > .sheet-framebar-total { display: none; }
+  /* The short height tier: the first line drops, the rows keep their room. */
+  :where(:root[data-height="short"], :root[data-height="low"]) .sheet-framebar > .sheet-framebar-title { display: none; }
+  :where(:root[data-height="short"], :root[data-height="low"]) .sheet-filmstrip > .sheet-framebar { padding-block: var(--space-2) var(--space-1-5); row-gap: var(--space-1-5); }
+
+  /* ---- The strip ---- */
+  .sheet-filmstrip > .sheet-filmstrip-scroll {
+    scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; background: var(--surface);
+  }
+  .sheet-filmstrip-spacer > .sheet-filmstrip-card { inset-block: 0 auto; inline-size: var(--filmstrip-card); gap: 0; row-gap: var(--space-1); }
+  .sheet-filmstrip-card > .sheet-frame-number { font-size: inherit; }
+  /* While playing the cards stay still: a short line moves along their duration bars to where playback is (only its
+   * transform changes; sheet-filmstrip.mjs BAR_INSET matches the card's and the bar's insets). */
+  .sheet-filmstrip-spacer > .sheet-filmstrip-playhead {
+    inset-block: calc(var(--space-2) + (var(--filmstrip-card) - 2 * var(--space-1-5)) * 0.6 + 25px) auto;
+    inline-size: 2px; block-size: 13px; margin-inline-start: -1px; border-radius: 1px;
+    background: var(--accent-line); z-index: 2; pointer-events: none;
+  }
+
+  /* ---- Keyframe easing (keyframe-easing-popover.mjs injects its layout into the legacy layer): the kit's menu —
+   * the raised surface, Easing as a group name, 32px rows with the chosen mode's check in Styk blue — then, for
+   * Bezier, the curve in a sunken well, its four points as small wells and Apply as the primary pill. ---- */
+  .styk-easing-popover {
+    inline-size: 256px; padding: var(--space-1-5); border: 0; border-radius: var(--radius-xl);
+    background: var(--surface-raised); color: var(--text-1); box-shadow: var(--elevation-3); font: var(--type-ui);
+  }
+  .styk-easing-header { padding: var(--space-0-5) 0 var(--space-1) var(--space-2-5); font: var(--type-eyebrow); color: var(--text-3); }
+  .styk-easing-header > button {
+    display: inline-grid; place-items: center; inline-size: var(--control-sm); block-size: var(--control-sm); padding: 0;
+    border-radius: var(--radius-sm); color: var(--text-2);
+  }
+  .styk-easing-header > button > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .styk-easing-header > button:where(:hover) { background: var(--surface-hover); color: var(--text-1); }
+  .styk-easing-options { gap: 0; }
+  .styk-easing-options > button {
+    block-size: var(--control-md); padding: 0 var(--space-2-5); border-radius: var(--radius-sm);
+    background: transparent; color: var(--text-1); font: var(--type-ui);
+  }
+  .styk-easing-options > button:where(:hover, :focus-visible) { background: var(--surface-hover); }
+  .styk-easing-options > button:where([aria-checked="true"]) { background: transparent; color: var(--text-1); font-weight: var(--weight-semibold); }
+  .styk-easing-options > button:where([aria-checked="true"])::after { color: var(--accent); }
+  .styk-easing-options > button:where([aria-checked="true"]):where(:hover, :focus-visible) { background: var(--surface-hover); }
+  .styk-easing-curve { margin-block-start: var(--space-2); border: 0; border-radius: var(--radius-md); background: var(--surface-sunken); }
+  .styk-easing-points { gap: var(--space-1); margin-block: var(--space-2); }
+  .styk-easing-points label { font: var(--type-micro); color: var(--text-3); }
+  .styk-easing-points input {
+    block-size: var(--control-sm); margin-block-start: var(--space-1); padding: 0 var(--space-1-5); border: 0; border-radius: var(--radius-sm);
+    background: var(--surface-sunken); color: var(--text-1); font: var(--type-small); font-variant-numeric: tabular-nums;
+  }
+  .styk-easing-points input:focus { outline: none; background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo); }
+  .styk-easing-apply { block-size: var(--control-md); border-radius: var(--radius-pill); background: var(--primary); color: var(--on-primary); font: var(--type-button); box-shadow: var(--primary-shadow); }
+  .styk-easing-apply:where(:hover:not(:disabled)) { background: var(--primary-hover); }
+  .styk-easing-error { font: var(--type-small); color: var(--danger-text); }
+
+  /* ---- The Layers popover ---- */
+  .tl-layers-popover .ui-popover-body { padding-block: var(--space-1); }
+  .tl-layers-list { display: grid; gap: var(--space-0-5); min-inline-size: 240px; }
+  .tl-layers-row { padding-inline-start: var(--space-1); }
+  .tl-layers-row > .tl-layers-pick {
+    display: flex; align-items: center; justify-content: flex-start; gap: var(--space-2); flex: 1 1 auto; min-inline-size: 0; block-size: 100%;
+    padding: 0 var(--space-1-5); border: 0; border-radius: var(--radius-sm); background: none; color: inherit; font: inherit; text-align: start;
+  }
+  .tl-layers-pick:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset-inset); }
+  .tl-layers-pick[aria-pressed="true"] > .ui-list-row-label { font-weight: var(--weight-semibold); }
+  .tl-layers-pick > .tl-layers-kind { inline-size: var(--icon-sm); block-size: var(--icon-sm); flex: none; color: var(--text-3); }
+  .tl-layers-popover .ui-popover-foot { justify-content: flex-start; gap: var(--space-1); }
+  .tl-layers-foot { display: flex; align-items: center; gap: var(--space-0-5); inline-size: 100%; }
+  .tl-layers-foot > .tl-layers-filter { margin-inline-start: auto; }
+  .tl-layers-body { display: grid; gap: var(--space-1); }
+  .tl-layers-row:where([data-selected="true"]) { background: var(--accent-soft); }
+  .tl-layers-rename { min-inline-size: 0; inline-size: 100%; block-size: var(--control-md); padding-inline: var(--space-2); border: 1px solid var(--accent-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--text-1); font: var(--type-ui); }
+
+  /* The row filter is independent of the artwork's eye controls. Its checklist
+   * keeps a bounded row window even in projects with thousands of layers. */
+  .tl-layer-filter-popover { inline-size: min(340px, calc(100vw - var(--space-4))); }
+  .tl-layer-filter-body { display: grid; gap: var(--space-2); min-inline-size: 0; }
+  .tl-layer-filter-help, .tl-layer-filter-empty { margin: 0; color: var(--text-3); font: var(--type-small); white-space: normal; }
+  .tl-layer-filter-search { display: flex; align-items: center; gap: var(--space-2); padding-inline: var(--space-2-5); border-radius: var(--radius-md); background: var(--surface-sunken); }
+  .tl-layer-filter-search:focus-within { box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+  .tl-layer-filter-search > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); color: var(--text-3); flex: none; }
+  .tl-layer-filter-search > input { min-inline-size: 0; inline-size: 100%; block-size: var(--control-lg); padding: 0; border: 0; background: transparent; outline: none; color: var(--text-1); font: var(--type-ui); }
+  .tl-layer-filter-tools { display: flex; align-items: center; justify-content: space-between; gap: var(--space-1); }
+  .tl-layer-filter-focus { display: flex; align-items: center; justify-content: space-between; gap: var(--space-1); padding: var(--space-1); border-radius: var(--radius-md); background: var(--accent-soft); color: var(--accent-text-strong); font: var(--type-small); }
+  .tl-layer-filter-count { color: var(--text-3); font: var(--type-small); font-variant-numeric: tabular-nums; }
+  .tl-layer-filter-list { position: relative; block-size: min(var(--filter-list-height, 288px), 35dvh); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; border-block: 1px solid var(--line-1); }
+  .tl-layer-filter-spacer { position: relative; }
+  .tl-layer-filter-item { position: absolute; inset-inline: 0; block-size: 36px; }
+  .tl-layer-filter-item > .ui-check-row { block-size: 100%; gap: var(--space-2); padding-inline: var(--space-2); border-radius: var(--radius-sm); }
+  .tl-layer-filter-item:where([data-child="true"]) > .ui-check-row { padding-inline-start: var(--space-5); }
+  .tl-layer-filter-item:where([data-folder="true"]) > .ui-check-row { font-weight: var(--weight-semibold); }
+  .tl-layer-filter-item > .ui-check-row:where(:hover, :focus-within) { background: var(--surface-hover); }
+  .tl-layer-filter-icon { display: inline-flex; flex: none; color: var(--text-3); }
+  .tl-layer-filter-icon > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .tl-layer-filter-name { flex: 1; }
+  .tl-layer-filter-folder-count { color: var(--text-3); font: var(--type-small); font-variant-numeric: tabular-nums; }
+  .tl-layer-filter-foot { display: flex; justify-content: space-between; gap: var(--space-2); inline-size: 100%; }
+
+  /* ==== The Advanced sheet (layer-timeline.mjs, timeline-rows.mjs) ==== */
+  /* The ruler is 32px (24 at the short tier) and Camera and Scene are 24px rows pinned under it: the painter writes
+   * --sheet-ruler and each row's height, which the label column follows. */
+  .layer-timeline .sheet-label-head { block-size: var(--sheet-ruler, var(--timeline-header)); }
+  .layer-timeline .sheet-labels { inset-block-start: var(--sheet-ruler, var(--timeline-header)); }
+  .layer-timeline .vfx-timeline-overlay { inset-block-start: var(--sheet-ruler, var(--timeline-header)); }
+  /* Rows: lanes with the grid's hairline under each; one marker each (a type glyph, a colour dot, a drawing's brush after its name). */
+  .sheet-labels > .sheet-layer { border-block-end: 0; box-shadow: inset 0 -1px 0 var(--sheet-lane); font: var(--type-ui); }
+  .sheet-labels > .sheet-layer[data-pinned] { z-index: 1; }
+  .sheet-labels > .sheet-layer:where([data-kind="camera"], [data-kind="scene"]) { background: var(--sheet-surface); }
+  .sheet-labels > .sheet-layer:where([data-kind="camera"]) { --track-accent: var(--sheet-camera-accent); --track-tint: var(--sheet-camera-tint); --track-ink: var(--sheet-camera-line); }
+  .sheet-labels > .sheet-layer:where([data-kind="scene"]) { --track-accent: var(--sheet-scene-accent); --track-tint: var(--sheet-scene-tint); --track-ink: var(--sheet-scene-line); }
+  /* Camera and Scene say what they are in their own colour (their keys use it too); layers keep ink names and a colour dot. */
+  .sheet-labels > .sheet-layer:where([data-kind="camera"], [data-kind="scene"]) > .sheet-layer-name,
+  .sheet-labels > .sheet-layer:where([data-kind="camera"], [data-kind="scene"]) > .sheet-layer-name > svg { color: var(--track-ink); }
+  .sheet-labels > .sheet-layer[data-selected="true"] { background: var(--sheet-selected); }
+  .sheet-labels > .sheet-layer:where([data-kind="camera"], [data-kind="scene"])[data-selected="true"] { background: var(--track-tint); }
+  /* The name fills its row (24px pinned rows, 28 or 32 content rows) without ever overflowing it. */
+  .sheet-layer > .sheet-layer-name { block-size: min(var(--control-md), 100%); gap: var(--space-2); color: var(--text-1); font: var(--type-ui); }
+  .sheet-layer:where([data-active="true"]) > .sheet-layer-name { font-weight: var(--weight-semibold); }
+  .sheet-layer > .sheet-layer-name > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); flex: none; color: var(--text-3); }
+  .sheet-layer-name > .sheet-layer-dot { --_s: 8px; margin-inline: 3px; }
+  .sheet-layer-name > .sheet-layer-kind { inline-size: 12px; block-size: 12px; margin-inline-start: calc(-1 * var(--space-1)); color: var(--text-3); }
+  /* The dot is a layer's one colour mark: no colour bar at the row's edge, and a drawing layer's brush replaces its badge. */
+  .sheet-labels > .sheet-layer:where([data-color]:not([data-color=""])) { border-inline-start: 0; padding-inline-start: var(--space-2); }
+  .sheet-layer-name > .sheet-layer-text::after { content: none; }
+  .sheet-layer:where([data-hidden="true"]) > .sheet-layer-name { color: var(--text-3); opacity: 1; }
+  /* Eye and lock at rest on every row: quiet glyphs, full contrast while hidden or locked (and on hover). */
+  .sheet-layer > .sheet-layer-state { opacity: 1; color: var(--text-3); }
+  .sheet-layer > .sheet-layer-state:where(:hover, :focus-visible, [data-on="true"]) { color: var(--text-1); }
+  /* The playhead: a 1.5px line under the keys and a white-on-blue tab inside the ruler. */
+  .layer-timeline .sheet-playhead { inline-size: 1.5px; margin-inline-start: -0.75px; background: var(--sheet-playhead); }
+  /* With the audio lanes open the line breaks over the audio bar (audio-timeline.mjs writes its top and bottom). */
+  .layer-timeline:where(.audio-visible) .sheet-playhead {
+    background: linear-gradient(to bottom, var(--sheet-playhead) 0 var(--audio-toolbar-top), transparent var(--audio-toolbar-top) var(--audio-toolbar-bottom), var(--sheet-playhead) var(--audio-toolbar-bottom));
+  }
+  .layer-timeline .sheet-playhead > span {
+    inset-block-start: calc((var(--sheet-ruler, var(--timeline-header)) - 20px) / 2); min-inline-size: 30px; block-size: 20px;
+    padding: 0 var(--space-1); border-radius: 6px; background: var(--sheet-playhead-tab); color: var(--sheet-playhead-ink);
+    font: var(--weight-semibold) 11px/20px var(--font-ui); font-variant-numeric: tabular-nums;
+  }
+  /* Onion range markers on the ruler (onion-timeline-range.mjs): a tinted band over the frames in each range and
+   * a bracket at its outer end. A marker's 14px target spans the ruler beside the frame it marks and never covers
+   * the playhead's tab; its count shows while it is hovered, focused or dragged. */
+  .layer-timeline .onion-range-overlay { block-size: var(--sheet-ruler, var(--timeline-header)); }
+  .layer-timeline .onion-range-band {
+    inset-block: auto 0; block-size: 6px; border-radius: 3px 3px 0 0; opacity: 1;
+    background: color-mix(in srgb, var(--_onion) 26%, transparent); box-shadow: inset 0 -2px 0 var(--_onion);
+  }
+  .layer-timeline .onion-range-band.before { --_onion: var(--onion-before); }
+  .layer-timeline .onion-range-band.after { --_onion: var(--onion-after); }
+  .layer-timeline .onion-range-end {
+    inset-block: 0; inline-size: 14px; block-size: auto; border-radius: var(--radius-sm); transform: none;
+    background: transparent; transition: background-color var(--duration-fast, 120ms) ease;
+  }
+  .layer-timeline .onion-range-end.before { translate: -100% 0; --_mark: var(--onion-before); }
+  .layer-timeline .onion-range-end.after { --_mark: var(--onion-after); }
+  .layer-timeline .onion-range-end:where(:hover, [data-dragging]) { background: color-mix(in srgb, currentColor 14%, transparent); }
+  /* The bracket opens toward the playhead: "[" before it, "]" after it. */
+  .layer-timeline .onion-range-end::after {
+    inset-block: 5px 0; inline-size: 6px; block-size: auto; border: 2.5px solid currentColor; border-radius: 2px; background: none;
+  }
+  .layer-timeline .onion-range-end.before::after { inset-inline: auto 2px; border-inline-end: 0; border-radius: 2px 0 0 2px; }
+  .layer-timeline .onion-range-end.after::after { inset-inline: 2px auto; border-inline-start: 0; border-radius: 0 2px 2px 0; }
+  .layer-timeline .onion-range-end:where(:hover, [data-dragging])::after { border-width: 3px; }
+  .layer-timeline .onion-range-end:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+  .layer-timeline .onion-range-count {
+    position: absolute; inset-block-start: 2px; min-inline-size: 18px; padding: 0 4px; border-radius: 8px;
+    background: var(--_mark); color: var(--sheet-playhead-ink); font: var(--weight-semibold) 10px/14px var(--font-ui); font-variant-numeric: tabular-nums;
+    text-align: center; pointer-events: none; opacity: 0; transition: opacity var(--duration-fast, 120ms) ease;
+  }
+  .layer-timeline :where(.onion-range-end.before) .onion-range-count { inset-inline-end: 16px; }
+  .layer-timeline :where(.onion-range-end.after) .onion-range-count { inset-inline-start: 16px; }
+  .layer-timeline .onion-range-end:where(:hover, :focus-visible, [data-dragging]) .onion-range-count { opacity: 1; }
+  /* The grid scrolls with thin scrollbars; while rows are below it, "N more" waits at the foot of the tools' column
+   * (a click scrolls to them) and a soft fade shows the rows go on. */
+  /* The grid's scrollbars keep a 14px target (scrubbing a long animation by its bar) but draw a slim, quiet thumb:
+   * a transparent track and a thumb inset by a border in the sheet's colour. */
+  .layer-timeline .sheet-scroll::-webkit-scrollbar { inline-size: 14px; block-size: 14px; }
+  .layer-timeline .sheet-scroll::-webkit-scrollbar-track { background: transparent; }
+  .layer-timeline .sheet-scroll::-webkit-scrollbar-corner { background: var(--sheet-surface); }
+  .layer-timeline .sheet-scroll::-webkit-scrollbar-thumb {
+    min-inline-size: 32px; min-block-size: 32px; border: 4px solid var(--sheet-surface); border-radius: 7px; background: var(--scrollbar-thumb);
+  }
+  .layer-timeline .sheet-scroll::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+  /* The motion under the pointer (camera-motion-timeline.mjs): its name and frames above the pill, with a dot in its
+   * type's colour; while a clip is dragged it shows the frames it will land on. */
+  .layer-timeline .sheet-motion-tip {
+    position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 3; display: inline-flex; align-items: center; gap: var(--space-1-5);
+    padding: 2px var(--space-2); border-radius: var(--radius-sm); background: var(--surface-inverse); color: var(--text-inverse);
+    font: var(--type-small); font-weight: var(--weight-medium); white-space: nowrap; pointer-events: none; font-variant-numeric: tabular-nums;
+  }
+  .layer-timeline .sheet-motion-tip::before { content: ""; inline-size: 8px; block-size: 8px; border-radius: 50%; background: var(--motion); }
+  .layer-timeline .sheet-motion-tip[hidden] { display: none; }
+  .layer-timeline .sheet-more-rows {
+    --_px: var(--space-2); position: absolute; inset: auto var(--space-1) calc(var(--sheet-scrollbar-x, 0px) + var(--space-1)) auto;
+    z-index: 2; color: var(--text-2); font: var(--type-small-strong);
+  }
+  .layer-timeline:where([data-more-below]) > .sheet-main::after {
+    content: ""; position: absolute; z-index: 1; pointer-events: none;
+    inset: auto var(--sheet-scrollbar-y, 0px) var(--sheet-scrollbar-x, 0px) 0;
+    block-size: 14px; background: linear-gradient(to bottom, transparent, var(--sheet-surface));
+  }
+}

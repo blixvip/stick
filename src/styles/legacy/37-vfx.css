@@ -1,0 +1,5 @@
+/* The VFX panel, its catalogue and the Visible keys menu are drawn by features/vfx.css; these rules still need legacy's !important or predate it. */
+#vfx-panel[hidden],#inspector[hidden]{display:none!important}
+#vfx-preview[aria-pressed=false]{opacity:.45}#vfx-preview[aria-pressed=true]{color:var(--theme-action,#0d99ff)}
+.vfx-channel-menu [hidden]{display:none!important}
+.vfx-aim-picking{cursor:crosshair!important}

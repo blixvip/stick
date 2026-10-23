@@ -1,0 +1,25 @@
+@layer features {
+  .sheet-layer-name { margin-inline-start: var(--folder-indent, 0px); }
+  .sheet-layer[data-kind="folder"] { background: var(--surface-2); }
+  .sheet-layer[data-kind="folder"] .sheet-layer-name { font-weight: 600; }
+  .sheet-layer:where([data-kind="folder"]) .sheet-camera-disclosure[aria-expanded="true"] svg { transform: rotate(90deg); }
+  /* Reordering by drag (timeline-layer-drag.mjs): the dragged rows fade, a line marks the gap they land in (indented
+   * inside a folder), a folder lights up when the drop goes into it, and a chip with the name follows the pointer. */
+  .layer-timeline[data-layer-drag], .layer-timeline[data-layer-drag] * { cursor: grabbing; }
+  .sheet-labels > .sheet-layer[data-dragging="true"] > * { opacity: .4; }
+  .sheet-labels > .sheet-layer[data-drop="inside"] { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent-line); }
+  .sheet-layer-drop {
+    position: absolute; inset-block-start: 0; inset-inline: var(--space-2) var(--space-1); z-index: 3; block-size: 2px;
+    border-radius: 1px; background: var(--accent-line); pointer-events: none;
+  }
+  .sheet-layer-drop::before {
+    content: ""; position: absolute; inset-block-start: -3px; inset-inline-start: -4px; box-sizing: border-box;
+    inline-size: 8px; block-size: 8px; border: 2px solid var(--accent-line); border-radius: 50%; background: var(--sheet-surface);
+  }
+  .sheet-layer-drag-chip {
+    position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 3; max-inline-size: 200px;
+    padding: var(--space-1) var(--space-2); overflow: hidden; border: 1px solid var(--accent-line); border-radius: var(--radius-sm);
+    background: var(--sheet-surface); box-shadow: var(--shadow-thumb); color: var(--text-1);
+    font: var(--type-ui); white-space: nowrap; text-overflow: ellipsis; pointer-events: none;
+  }
+}

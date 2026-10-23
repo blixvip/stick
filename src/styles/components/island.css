@@ -1,0 +1,26 @@
+/* Island (components.md "Island"): a white panel floating on the window's
+ * cool field, radius 16 with the island elevation (a hairline and a soft
+ * drop), like the site's tiles. A floating island (VFX or Library over the
+ * stage) takes the raised elevation. Used by the shell (src/shell/dock-host.mjs)
+ * for the stage, the docks, the timeline, sheets and floating panels. */
+@layer components {
+  .ui-island {
+    position: relative; display: flex; flex-direction: column; min-inline-size: 0; min-block-size: 0;
+    border-radius: var(--radius-xl); background: var(--surface); color: var(--text-1);
+    box-shadow: var(--elevation-island);
+    outline: 1px solid transparent; outline-offset: -1px;
+  }
+  .ui-island[data-floating] { box-shadow: var(--elevation-3); }
+  .ui-island[data-dock="flush"] { border-radius: 0; box-shadow: none; }
+  .ui-island-head {
+    container: island-head / inline-size;
+    display: flex; align-items: center; gap: var(--space-2); flex: none;
+    block-size: var(--control-2xl); padding: 0 var(--space-2) 0 var(--island-pad);
+  }
+  .ui-island-title { flex: 1; min-inline-size: 0; font: var(--type-section); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-island-body { flex: 1 1 auto; min-block-size: 0; overflow: auto; }
+
+  @media (forced-colors: active) {
+    .ui-island { outline-color: CanvasText; }
+  }
+}

@@ -1,0 +1,38 @@
+/* Menubar (components.md "Menubar", experience.md §2): File, Edit, View,
+ * Animation (Figure in Build) and Help as quiet 28px text items, 13/500
+ * --text-2, docked at every width down to the minimal tier, where it folds
+ * into the mark. Access keys are underlined only while Alt is down
+ * (:root[data-alt]). ui-menu.mjs's installMenuBar gives the roles, the
+ * roving tab stop and the keyboard; every item keeps data-app-menu.
+ *
+ *   <nav class="ui-menubar" role="menubar" aria-label="Application menu">
+ *     <button class="ui-menubar-item" role="menuitem" data-app-menu="file" aria-haspopup="menu"><u>F</u>ile</button>…
+ *   </nav>
+ *
+ * data-overlay: the minimal tier's Alt overlay above the band's start (a
+ * raised pill that never widens the band). */
+@layer components {
+  .ui-menubar { display: flex; align-items: center; gap: 0; flex: none; min-inline-size: 0; }
+  .ui-menubar-item {
+    display: inline-flex; align-items: center; gap: 0; flex: none;
+    block-size: var(--control-md); padding: 0 var(--space-2);
+    border: 0; border-radius: var(--radius-md);
+    background: transparent; color: var(--text-2);
+    font: var(--type-ui); white-space: nowrap;
+    -webkit-app-region: no-drag;
+  }
+  .ui-menubar-item > u { text-decoration: none; }
+  :where(:root[data-alt]) .ui-menubar-item > u { text-decoration: underline; text-underline-offset: 3px; }
+  .ui-menubar-item:where(:hover, [aria-expanded="true"]) { background: var(--surface-hover); color: var(--text-1); }
+  .ui-menubar-item:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset-inset); }
+
+  .ui-menubar[data-overlay] {
+    padding-inline: var(--space-1);
+    border-radius: var(--radius-lg); background: var(--surface-raised); box-shadow: var(--elevation-1);
+  }
+
+  @media (forced-colors: active) {
+    .ui-menubar-item:where(:hover, [aria-expanded="true"]) { outline: 1px solid Highlight; }
+    .ui-menubar-item > u { text-decoration: underline; }
+  }
+}

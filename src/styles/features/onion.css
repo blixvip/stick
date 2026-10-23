@@ -1,0 +1,76 @@
+/* Onion skin settings (onion-controls.mjs, onion-frame-field.mjs) on the kit
+ * (experience.md revision 5): the kit's popover with the title's on/off
+ * switch, then
+ *
+ *   Before / After   the side's colour dot (its picker), its name (drag it to
+ *                    scrub the span) and the kit's stepper
+ *   Opacity          a slider row with a typeable value
+ *   whose            All figures / Selected as a full-width segmented control
+ *   the look         Tint and Fade as switch rows
+ *   More             a disclosure row: sampling, spacing and drawing order
+ *
+ * While onion skin is off the settings stay editable, drawn quieter. */
+@layer features {
+  .onion-popover { inline-size: 288px; max-inline-size: calc(100vw - var(--space-4)); max-block-size: calc(100dvh - var(--space-4)); }
+  .onion-popover .ui-popover-title { display: flex; align-items: center; gap: var(--space-2); }
+  .onion-popover .ui-popover-title > svg { flex: none; inline-size: var(--icon-md); block-size: var(--icon-md); color: var(--text-2); }
+  .onion-popover .onion-power { margin-inline-end: var(--space-1); }
+  .onion-body { gap: var(--space-1); padding-block-end: var(--space-2); transition: opacity var(--dur-fast) var(--ease-out); }
+  .onion-popover:where([data-enabled="false"]) .onion-body { opacity: 0.6; }
+
+  /* Before / After: colour, name, stepper. */
+  .onion-frame-pair { display: grid; gap: var(--space-1); }
+  .onion-frame-field { display: flex; align-items: center; gap: var(--space-2); min-block-size: var(--control-lg); }
+  .onion-frame-field .onion-scrub {
+    display: flex; align-items: center; justify-content: flex-start; flex: 1; min-inline-size: 0; block-size: var(--control-md);
+    padding: 0; border: 0; border-radius: var(--radius-sm);
+    background: none; color: var(--text-2); font: var(--type-small); text-align: start; cursor: ew-resize; touch-action: none;
+  }
+  .onion-frame-field .onion-scrub:where(:hover:not(:disabled)) { color: var(--text-1); }
+  .onion-frame-field .onion-scrub:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .onion-frame-field .onion-scrub:disabled { cursor: default; }
+  .onion-color { display: grid; place-items: center; flex: none; inline-size: 20px; block-size: 20px; margin: 0; }
+  .onion-color > input {
+    inline-size: 14px; block-size: 14px; padding: 0; border: 0; border-radius: 50%; background: none;
+    box-shadow: 0 0 0 1px var(--line-2);
+  }
+  .onion-color > input::-webkit-color-swatch-wrapper { padding: 0; }
+  .onion-color > input::-webkit-color-swatch { border: 0; border-radius: 50%; }
+  .onion-color > input::-moz-color-swatch { border: 0; border-radius: 50%; }
+  .onion-color > input:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* A typeable value in a quiet well (Opacity's percent, the sample spacing). */
+  .onion-popover .onion-value {
+    display: inline-flex; align-items: center; justify-content: flex-end; flex: none; inline-size: 56px; block-size: var(--control-md);
+    margin: 0; padding-inline: var(--space-1-5); border-radius: var(--radius-md); background: var(--surface-sunken);
+    color: var(--text-1); font: var(--type-value);
+  }
+  .onion-popover .onion-value:focus-within { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo); }
+  .onion-popover .onion-value > input {
+    inline-size: 100%; min-inline-size: 0; padding: 0; border: 0; outline: none; background: transparent; color: inherit;
+    font: inherit; font-variant-numeric: tabular-nums; text-align: end; appearance: textfield;
+  }
+  .onion-popover .onion-value > input::-webkit-inner-spin-button,
+  .onion-popover .onion-value > input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+  .onion-popover .onion-value > small { margin-inline-start: 1px; font: var(--type-small); color: var(--text-3); }
+  .onion-opacity { grid-template-columns: minmax(56px, max-content) minmax(0, 1fr) 56px; min-block-size: var(--control-lg); }
+  .onion-scope { margin-block: var(--space-1); }
+  .onion-looks, .onion-more-body { display: grid; }
+  .onion-row > .ui-select { flex: 0 1 160px; }
+
+  /* More: a disclosure row with a chevron that turns when it opens. */
+  .onion-more { margin: var(--space-1) calc(-1 * var(--space-4)) calc(-1 * var(--space-2)); padding: var(--space-1) var(--space-4) var(--space-2); box-shadow: inset 0 1px 0 var(--line-1); }
+  .onion-more > summary {
+    display: flex; align-items: center; gap: var(--space-1-5); min-block-size: var(--control-md); list-style: none;
+    font: var(--type-small-strong); color: var(--text-2); cursor: default;
+  }
+  .onion-more > summary::-webkit-details-marker { display: none; }
+  .onion-more > summary::before {
+    content: ""; inline-size: 12px; block-size: 12px; background: var(--text-3);
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M6 4l4 4-4 4' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/></svg>") center / contain no-repeat;
+    transition: rotate var(--dur-fast) var(--ease-out);
+  }
+  .onion-more:where([open]) > summary::before { rotate: 90deg; }
+  .onion-more > summary:where(:hover) { color: var(--text-1); }
+  .onion-more > summary:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--radius-sm); }
+}

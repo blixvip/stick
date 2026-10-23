@@ -1,0 +1,51 @@
+/* Slider row (components.md "Slider row"): a 56px label, a 4px track
+ * (--slider-fill up to --_p on --slider-track), a 14px thumb with a
+ * --line-control ring and the one rest lift, and a 44px regular value.
+ * Bounded values only. data-quiet gives a view slider (the timeline zoom, the
+ * filmstrip zoom) a neutral fill. The inspector kit writes --_p and the
+ * readout, and keeps them with the value while the thumb is dragged. */
+@layer components {
+  .ui-slider-row {
+    display: grid; grid-template-columns: minmax(56px, max-content) minmax(0, 1fr) 44px; align-items: center; gap: var(--space-2-5);
+    min-block-size: var(--control-md);
+  }
+  .ui-slider-label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--type-small); color: var(--text-2); }
+  .ui-slider-value {
+    white-space: nowrap; text-align: end; color: var(--text-1);
+    font: var(--type-value); font-variant-numeric: tabular-nums;
+  }
+  .ui-slider {
+    --_p: 50%;
+    appearance: none; margin: 0; inline-size: 100%; block-size: var(--control-sm);
+    background: transparent; cursor: default;
+  }
+  .ui-slider::-webkit-slider-runnable-track {
+    block-size: 4px; border-radius: 2px;
+    background: linear-gradient(to right, var(--slider-fill) var(--_p), var(--slider-track) var(--_p));
+  }
+  .ui-slider:dir(rtl)::-webkit-slider-runnable-track { background: linear-gradient(to left, var(--slider-fill) var(--_p), var(--slider-track) var(--_p)); }
+  .ui-slider::-webkit-slider-thumb {
+    appearance: none; inline-size: 14px; block-size: 14px;
+    margin-block-start: -5px; /* geometry: centres the 14px thumb on the 4px track */
+    border-radius: 50%; background: var(--slider-thumb);
+    box-shadow: 0 0 0 1px var(--line-control), var(--elevation-1);
+    transition: box-shadow var(--dur-fast);
+  }
+  .ui-slider::-moz-range-track { block-size: 4px; border-radius: 2px; background: var(--slider-track); }
+  .ui-slider::-moz-range-progress { block-size: 4px; border-radius: 2px; background: var(--slider-fill); }
+  .ui-slider::-moz-range-thumb {
+    inline-size: 14px; block-size: 14px; border: 0; border-radius: 50%; background: var(--slider-thumb);
+    box-shadow: 0 0 0 1px var(--line-control), var(--elevation-1);
+  }
+  .ui-slider:focus-visible { outline: none; }
+  .ui-slider:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 1px var(--line-control), 0 0 0 2px var(--surface), 0 0 0 4px var(--focus-ring); }
+  .ui-slider:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 1px var(--line-control), 0 0 0 2px var(--surface), 0 0 0 4px var(--focus-ring); }
+  .ui-slider:disabled { opacity: 0.42; }
+  .ui-slider[data-quiet] { --slider-fill: var(--line-control); }
+
+  @media (forced-colors: active) {
+    .ui-slider::-webkit-slider-runnable-track { background: CanvasText; }
+    .ui-slider::-webkit-slider-thumb { background: ButtonText; }
+    .ui-slider:focus-visible { outline: 2px solid Highlight; }
+  }
+}

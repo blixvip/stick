@@ -1,0 +1,931 @@
+/* ==========================================================================
+   StykAnimate design tokens, v1 ("Islands")
+   --------------------------------------------------------------------------
+   Load order: this file is the `tokens` layer. The layer order is declared
+   once, in the entry sheet (src/styles/app.css):
+     @layer legacy, reset, tokens, base, layout, components, features, states, utilities;
+   (`legacy` holds the sheets that predate the layers until they are rebuilt.)
+   legacy-bridge.css, in the same layer, points the older --theme-*, --ds-*
+   and alias names at these tokens, so the legacy stylesheets use the brand
+   palette too. See docs/DESIGN-SYSTEM.md.
+
+   Three tiers:
+     1. Primitives  - the brand palette. Raw hex lives ONLY in this tier.
+     2. Semantic    - roles per theme (`:root` = light, the brand default;
+                      `:root[data-theme="dark"]` = dark). Components read ONLY
+                      these tokens and the scale tokens.
+     3. Component   - private `--_x` tokens declared inside each component.
+
+   Rules
+   - No `var(--x, #fallback)` anywhere. Tokens always exist.
+   - No `light-dark()` or `color-mix()` in any token that JavaScript reads
+     (canvas painters). Those tokens resolve to plain hex / rgba strings.
+   - Never put white text or icons on --blue-500 (#0d99ff, 2.99:1).
+   - No text token below 11px.
+   - Contrast ratios in comments are WCAG 2.x, measured against the surface
+     named in brackets (see visual-system.md section 3 for the full matrix).
+   ========================================================================== */
+
+@layer tokens {
+
+  /* ------------------------------------------------------------------------
+     TIER 1 - PRIMITIVES (brand palette, from StykAnimate-Site base.css,
+     extended into tool-scale ramps). Never referenced by components.
+     ------------------------------------------------------------------------ */
+  :root {
+    /* Light neutrals (mist) */
+    --paper: #ffffff;
+    --mist-50: #fbfcfd;       /* timeline row, stage surround */
+    --mist-100: #f5f6f9;      /* site --mist */
+    --mist-125: #f3f4f8;      /* fields: a quiet well on white */
+    --mist-150: #f1f3f7;      /* hover */
+    --mist-175: #eceff4;      /* the window field under the white islands */
+    --mist-200: #eceef3;      /* site --mist-2 */
+    --mist-250: #e7e9ef;      /* site --line */
+    --mist-300: #e2e5ec;      /* site .btn--light:hover */
+    --mist-400: #d9dce5;      /* site --line-2 */
+    --mist-500: #c8ccd6;      /* timeline hold bars: a clear step off white */
+
+    /* Mid neutrals (slate) */
+    --slate-300: #b4bac7;
+    --slate-350: #a9aebb;     /* dark text-2 */
+    --slate-400: #9aa0ae;     /* site placeholder (decorative only, 2.62:1) */
+    --slate-450: #8f95a4;     /* dark text-3 */
+    --slate-500: #80879a;     /* control boundary, 3.59:1 [paper] */
+    --slate-550: #737a8c;     /* dark control boundary */
+    --slate-600: #676c7a;     /* site --text-3, 5.25:1 [paper] */
+    --slate-700: #525868;     /* site --text-2, 7.11:1 [paper] */
+
+    /* Dark neutrals (ink / night) */
+    --ink-400: #5d6272;
+    --ink-500: #3a3f4f;
+    --ink-550: #2a2e3a;       /* site --ink-2 */
+    --ink-600: #262833;       /* site primary hover */
+    --ink-650: #22242e;
+    --ink-700: #1e2029;
+    --ink-750: #1b1c23;
+    --ink-800: #15161c;
+    --ink-850: #111217;
+    --ink-880: #0f1014;       /* site --night */
+    --ink-900: #0c0d12;       /* site --ink, 19.41:1 [paper] */
+    --ink-950: #0a0b0f;
+
+    /* Blue - Styk Blue, the one interaction colour */
+    --blue-50: #eaf5ff;       /* site --blue-soft */
+    --blue-100: #dcefff;      /* site blue-soft hover */
+    --blue-400: #45b0ff;      /* text on dark, 7.66:1 [ink-800] */
+    --blue-500: #0d99ff;      /* site --blue. Fills and graphics only on light */
+    --blue-550: #0a8ae6;      /* 1-2px rings on light, 3.12:1 [mist-200] */
+    --blue-600: #006dd1;      /* site --blue-ink, 5.11:1 [paper] */
+    --blue-700: #0059ab;      /* blue text on mist-200, 6.00:1 */
+    --blue-850: #17344d;
+    --blue-900: #132a3e;
+
+    /* Violet - time */
+    --violet-50: #f0ecff;
+    --violet-300: #a898ff;    /* 7.39:1 [ink-800] */
+    --violet-500: #7c5cff;
+    --violet-600: #6a47f5;    /* 5.48:1 [paper], 4.73:1 [violet-50] */
+    --violet-900: #231f3d;
+
+    /* Mint - made, kept, done */
+    --mint-50: #e5f8f0;
+    --mint-300: #3ddc9f;      /* 10.26:1 [ink-800] */
+    --mint-500: #12c98a;
+    --mint-700: #097e56;      /* site --mint-ink, 5.08:1 [paper] */
+    --mint-900: #132e25;
+
+    /* Orange - draw */
+    --orange-50: #fff0e8;
+    --orange-300: #ff8f63;    /* 8.05:1 [ink-800] */
+    --orange-500: #ff6a2b;
+    --orange-700: #b04818;    /* 5.55:1 [paper], 4.99:1 [orange-50] */
+    --orange-900: #33201a;
+
+    /* Gold - camera, warnings */
+    --gold-50: #fff4de;
+    --gold-300: #ffc05a;
+    --gold-500: #f5a524;
+    --gold-800: #8a4b00;      /* 6.80:1 [paper] */
+    --gold-900: #33291a;
+
+    /* Rose - effects (the site's FX layer chip) */
+    --rose-50: #ffe9ec;
+    --rose-300: #ff7a93;
+    --rose-500: #ff3d5e;
+    --rose-700: #c8163a;      /* 5.78:1 [paper] */
+    --rose-900: #3a1a22;
+
+    /* Red - danger (deeper than rose so errors never read as effects) */
+    --red-50: #fdecea;
+    --red-300: #ff8a80;
+    --red-600: #d93025;
+    --red-700: #b3261e;       /* 6.54:1 [paper] */
+    --red-900: #3a1c1f;
+
+    /* Lime - export. A SURFACE colour only; never text, never on light surfaces as a graphic */
+    --lime-400: #d4f57c;
+    --lime-500: #c7f25a;
+    --lime-600: #b6e03f;
+    --lime-900: #2c3d05;      /* small text on lime, 9.16:1 */
+
+    /* Teal - the sixth layer tag (LAYER_COLORS.teal) */
+    --teal-500: #36a8b5;
+  }
+
+  /* ------------------------------------------------------------------------
+     SCALE - theme independent
+     ------------------------------------------------------------------------ */
+  :root {
+    /* Families. Inter / Inter Tight are bundled (see fonts.css). The system
+       fallbacks cover Arabic, Hebrew and Simplified Chinese, which Inter lacks. */
+    --font-ui: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system,
+      "Noto Sans", "Noto Sans Arabic", "Noto Sans Hebrew", "Noto Sans CJK SC", "Noto Sans CJK TC", "Microsoft YaHei UI", "PingFang SC", sans-serif;
+    --font-display: "Inter Tight", "Inter", "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system,
+      "Noto Sans", "Noto Sans Arabic", "Noto Sans Hebrew", "Noto Sans CJK SC", "Noto Sans CJK TC", "Microsoft YaHei UI", "PingFang SC", sans-serif;
+    --font-mono: "Cascadia Mono", "Cascadia Code", Consolas, ui-monospace, Menlo, monospace;
+    --font-features: "cv11", "ss01";            /* single-storey a, open digits: part of the brand look */
+
+    /* Type scale: size / line-height. 11px is the floor. */
+    --text-11: 11px;  --leading-11: 14px;       /* micro: kbd, frame numbers, badges, tags, ruler */
+    --text-12: 12px;  --leading-12: 16px;       /* small: field labels and values, meta, shortcuts */
+    --text-13: 13px;  --leading-13: 18px;       /* UI base: buttons, tabs, menus, rows, body */
+    --text-14: 14px;  --leading-14: 20px;       /* emphasis: readouts, palette input */
+    --text-16: 16px;  --leading-16: 20px;       /* heading: dialog sections, first-run card title */
+    --text-18: 18px;  --leading-18: 24px;       /* panel title: the selection's name */
+    --text-20: 20px;  --leading-20: 26px;       /* title: dialogs */
+    --text-28: 28px;  --leading-28: 32px;       /* display: export hero, welcome */
+
+    --weight-regular: 400;                      /* prose only */
+    --weight-medium: 500;                       /* UI default */
+    --weight-semibold: 600;                     /* labels, buttons, section titles */
+    --weight-heading: 650;                      /* Inter Tight headings */
+    --weight-value: 450;                        /* field values: regular, never bold (calm) */
+    --weight-bold: 700;                         /* titles, numerals, badges */
+    --weight-display: 760;
+
+    --tracking-display: -0.03em;                /* >= 24px only */
+    --tracking-title: -0.02em;                  /* 20px */
+    --tracking-heading: -0.01em;                /* 16px */
+    --tracking-caps: 0.04em;                    /* the rare UPPERCASE kind tag */
+
+    /* Composite type roles (use with `font:`) */
+    --type-micro: var(--weight-semibold) var(--text-11)/var(--leading-11) var(--font-ui);
+    --type-small: var(--weight-medium) var(--text-12)/var(--leading-12) var(--font-ui);
+    --type-small-strong: var(--weight-semibold) var(--text-12)/var(--leading-12) var(--font-ui);
+    --type-ui: var(--weight-medium) var(--text-13)/var(--leading-13) var(--font-ui);
+    --type-ui-strong: var(--weight-semibold) var(--text-13)/var(--leading-13) var(--font-ui);
+    --type-value: var(--weight-value) var(--text-13)/var(--leading-13) var(--font-ui);   /* inspector values */
+    --type-body: var(--weight-regular) var(--text-13)/var(--leading-13) var(--font-ui);
+    --type-emphasis: var(--weight-semibold) var(--text-14)/var(--leading-14) var(--font-ui);
+    --type-numeral: var(--weight-bold) var(--text-14)/var(--leading-14) var(--font-display);
+    --type-heading: var(--weight-heading) var(--text-16)/var(--leading-16) var(--font-display);
+    --type-title: var(--weight-bold) var(--text-20)/var(--leading-20) var(--font-display);
+    --type-display: var(--weight-display) var(--text-28)/var(--leading-28) var(--font-display);
+    --type-button-prominent: var(--weight-heading) var(--text-13)/1 var(--font-display);
+    --type-button: var(--weight-heading) var(--text-13)/1 var(--font-display);            /* every button's words */
+    --type-panel-title: var(--weight-bold) var(--text-18)/var(--leading-18) var(--font-display);
+    --type-section: var(--weight-heading) var(--text-13)/var(--leading-13) var(--font-display);  /* section titles */
+    --type-eyebrow: var(--weight-semibold) var(--text-11)/var(--leading-11) var(--font-ui);     /* menu group names */
+
+    /* Space: 4px grid, 2 and 6 for tight groups */
+    --space-0: 0;
+    --space-0-5: 2px;
+    --space-1: 4px;
+    --space-1-5: 6px;
+    --space-2: 8px;
+    --space-2-5: 10px;          /* text-button padding, tooltip and chip insets */
+    --space-3: 12px;
+    --space-3-5: 14px;          /* section rhythm, filmstrip padding */
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+
+    /* Radius. Nesting rule: inner = outer - padding. */
+    --radius-2xs: 4px;    /* colour chips, checkboxes, key chips, dock-map blocks */
+    --radius-xs: 6px;     /* kbd, format badges, icon badges */
+    --radius-sm: 8px;     /* list rows, menu items (4 at 16px checkboxes) */
+    --radius-md: 10px;    /* fields, icon buttons, frame cards, tooltips */
+    --radius-lg: 12px;    /* tool buttons, cards */
+    --radius-xl: 16px;    /* islands, menus, popovers, toasts */
+    --radius-2xl: 20px;   /* dialogs, the floating tool bar */
+    --radius-3xl: 24px;   /* export sheet only */
+    --radius-pill: 999px; /* buttons, chips, segmented, HUD pills */
+
+    /* Control sizes. Interactive targets are never below 24px. */
+    --size-badge: 18px;       /* non-interactive badges only */
+    --size-kbd: 20px;         /* keycaps */
+    --control-xs: 24px;       /* dense rows: layer eye and lock, inline row actions */
+    --control-sm: 28px;       /* compact: toolbars, chips, header controls */
+    --control-md: 32px;       /* regular: fields, buttons, menu rows */
+    --control-lg: 36px;       /* prominent: Export, dialog confirm, Play */
+    --control-xl: 40px;       /* tools in the floating tool bar */
+    --control-2xl: 44px;      /* island header rows */
+
+    --icon-xs: 12px;          /* chevrons, inline row glyphs (stroke 2) */
+    --icon-sm: 14px;          /* fields, chips, compact (24px) buttons (stroke 2) */
+    --icon-md: 16px;          /* buttons, toolbars, tabs, menus, list rows (stroke 1.75) */
+    --icon-lg: 18px;          /* island header, transport */
+    --icon-xl: 20px;          /* rail tools */
+    --icon-2xl: 24px;         /* empty states, tiles */
+    --icon-stroke: 1.75;
+    --icon-stroke-small: 2;
+
+    --focus-width: 2px;
+    --focus-offset: 2px;
+    --focus-offset-inset: -2px;
+
+    /* Motion */
+    --dur-fast: 100ms;        /* hover, press colour */
+    --dur-base: 160ms;        /* menus, popovers, tooltips */
+    --dur-slow: 240ms;        /* dialogs, toasts, sheets */
+    --dur-thumb: 200ms;       /* segmented thumb */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+    --press-scale: 0.97;      /* only on controls >= 28px */
+
+    /* In-flow stacking only. Menus, popovers, tooltips, toasts, dialogs use the top layer. */
+    --z-sticky: 5;
+    --z-canvas-overlay: 10;
+    --z-canvas-hud: 20;
+    --z-floating: 30;
+
+    /* Shell geometry. Tier thresholds are CSS px after UI scale, measured by the
+       layout solver on the #app content box (the window) and written as
+       :root[data-tier]; CSS cannot use tokens in @media:
+       wide >= 1367, regular <= 1366, narrow <= 1180,
+       compact <= 900 or height <= 640, minimal <= 600 or height <= 440 */
+    --ui-scale: 1;                /* written by the UI from settings.uiScale (0.75-2) */
+    --topbar-h: max(52px, calc(44px / var(--ui-scale)));  /* 52 (44 in the compact chrome), never below
+                                     44 window points, so the macOS traffic lights (fixed at {14,16}) stay inside */
+    --rail-w: 48px;
+    --inspector-w: 304px;         /* user-resizable 256-400 */
+    --gutter: 6px;                /* wide/regular; 4 narrow; 0 (flush) compact/minimal */
+    --island-pad: 16px;
+    --lane-inset: 8px;            /* HUD lanes inside the stage island */
+    --stage-inset-block: 46px;    /* fit inset: lane inset 8 + HUD 36 + 2 air (the solver mirrors it) */
+    --stage-inset-inline: 12px;   /* fit inset at the sides */
+    --dot-gap: 20px;              /* dotted stage grid pitch */
+    --dot-size: 1px;
+
+    /* Geometry mirrored by JavaScript constants. Change both together. */
+    --timeline-row: 32px;         /* layer-timeline.mjs ROW */
+    --timeline-header: 32px;      /* layer-timeline.mjs HEADER */
+    --audio-row: 64px;            /* audio-timeline.mjs ROW (unchanged in this programme) */
+    --audio-ruler: 22px;          /* audio-timeline.mjs RULER */
+    --audio-toolbar: 36px;        /* audio-timeline.mjs TOOLBAR */
+    --outliner-row: 30px;         /* builder-outliner.mjs ROW_HEIGHT */
+    --asset-row: 74px;            /* asset-library.mjs ROW_HEIGHT: #insert-dialog compatibility list until M7c */
+  }
+  /* The compact chrome of windows under 801px tall gives the stage the band's air (layout-solver.mjs chromeFor). */
+  :root[data-chrome="compact"] { --topbar-h: max(44px, calc(44px / var(--ui-scale))); }
+
+  /* The touch interface (docs/TOUCH.md): every control grows to a fingertip's target, the icons with it. A phone's
+     targets are at least 44px, a tablet's 40; the safe areas keep controls off notches and the home indicator. */
+  :root[data-input="touch"] {
+    --control-xs: 40px;
+    --control-sm: 44px;
+    --control-md: 44px;
+    --control-lg: 44px;
+    --control-xl: 48px;
+    --control-2xl: 52px;
+    --icon-xs: 14px;
+    --icon-sm: 16px;
+    --icon-md: 20px;
+    --icon-lg: 22px;
+    --icon-xl: 24px;
+    --touch-target: 44px;
+    --topbar-h: 52px;
+    --rail-w: 56px;
+    --tabbar-h: 60px;
+    --wing-w: calc(var(--control-md) * 2 + var(--space-1) + var(--space-2) * 2);   /* a phone on its side: the band's two columns */
+    --sheet-grip: 24px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --text-field: 16px;       /* a field under 16px makes iOS zoom the page when it takes focus */
+    /* A step up the type scale: words read at arm's length on a small screen. */
+    --text-11: 12px;  --leading-11: 15px;
+    --text-12: 13px;  --leading-12: 17px;
+    --text-13: 14px;  --leading-13: 19px;
+    --text-14: 15px;  --leading-14: 21px;
+  }
+  :root[data-input="touch"][data-form="tablet"] {
+    --control-xs: 36px;
+    --control-sm: 40px;
+    --control-md: 40px;
+    --control-lg: 42px;
+    --control-xl: 48px;
+    --control-2xl: 52px;
+    --touch-target: 40px;
+    --rail-w: 60px;
+  }
+
+  /* ------------------------------------------------------------------------
+     TIER 2 - SEMANTIC, LIGHT (brand default)
+     ------------------------------------------------------------------------ */
+  :root,
+  :root[data-theme="light"] {
+    color-scheme: light;
+
+    /* Surfaces, back to front */
+    --surface-field: var(--mist-175);         /* the window: a cool field the white islands float on */
+    --surface: var(--paper);                  /* islands, docked panels */
+    --surface-raised: var(--paper);           /* menus, popovers, HUD pills, dialogs */
+    --surface-sunken: var(--mist-125);        /* fields, wells */
+    --surface-well: var(--mist-200);          /* segmented track, soft button */
+    --surface-hover: var(--mist-150);
+    --surface-pressed: var(--mist-300);
+    --surface-selected: var(--blue-50);
+    --surface-selected-hover: var(--blue-100); /* only --text-1, --text-2, --accent-text-strong on it */
+    --surface-inverse: var(--ink-900);        /* toasts, tooltips, range chip */
+    --surface-stage: var(--mist-100);         /* the dotted desk around the artboard (the site's canvas) */
+    --surface-construction: var(--mist-100);  /* Build: dotted construction desk */
+    --surface-backdrop: rgba(12, 13, 18, 0.36); /* modal backdrop. No blur over WebGPU */
+    --stage-dot: rgba(12, 13, 18, 0.14);
+    --construction-dot: rgba(12, 13, 18, 0.14);
+
+    /* Text */
+    --text-1: var(--ink-900);                 /* 19.41 [surface] 17.96 [sunken] */
+    --text-2: var(--slate-700);               /* 7.11 [surface] 6.12 [well] */
+    --text-3: var(--slate-600);               /* 5.25 [surface] 4.85 [sunken] 4.52 [well] */
+    --text-disabled: var(--slate-400);        /* exempt (inactive), 2.62 */
+    --text-placeholder: var(--slate-600);
+    --text-inverse: var(--paper);             /* on --surface-inverse, 19.41 */
+    --text-inverse-2: rgba(255, 255, 255, 0.68);
+    --text-on-accent: var(--ink-900);         /* on --accent #0d99ff, 6.49 */
+    --text-on-strong: var(--paper);           /* on --accent-strong (#0a8ae6): 3.63, glyphs and bold words only */
+    --text-link: var(--blue-600);
+
+    /* Lines. line-1..3 are decorative; line-control meets 3:1 for control boundaries */
+    --line-1: var(--mist-200);                /* inner hairlines */
+    --line-2: var(--mist-250);                /* dividers, field ring */
+    --line-3: var(--mist-400);                /* strong decorative: dashed ghost cards */
+    --line-control: var(--slate-500);         /* checkbox, radio, switch-off: 3.59 [surface] 3.09 [well] */
+
+    /* Accent: one blue, four jobs */
+    --accent: var(--blue-500);                /* fills and graphics: playhead, keys, selection marks */
+    --accent-strong: var(--blue-550);         /* vivid fills behind white glyphs: the active tool, switch on, checkbox */
+    --accent-line: var(--blue-550);           /* 1-2px rings: selection outline, focus, drop zones */
+    --accent-text: var(--blue-600);           /* small blue text: 5.11 [surface] 4.63 [selected] */
+    --accent-text-strong: var(--blue-700);    /* blue text on well, pressed and hover tints: 6.00 [well] 5.91 [accent-soft-hover] */
+    --accent-soft: var(--blue-50);
+    --accent-soft-hover: var(--blue-100);
+
+    /* Selection */
+    --selection-fill: var(--blue-50);
+    --selection-line: var(--blue-550);
+    --selection-text: var(--blue-600);
+    --text-selection: rgba(13, 153, 255, 0.22); /* ::selection */
+
+    /* Focus */
+    --focus-ring: var(--blue-550);            /* outset rings: 3.63 [surface] 3.36 [sunken, field] 3.12 [well] */
+    --inverse-focus: var(--blue-400);         /* ring on --surface-inverse (toasts, range chip): 8.23 */
+    --export-focus: var(--ink-900);           /* ring on the lime export pane: 15.04 */
+    --focus-halo: rgba(13, 153, 255, 0.18);   /* field double ring */
+
+    /* Primary action: the ink pill. One per surface. */
+    --primary: var(--ink-900);
+    --primary-hover: var(--ink-600);
+    --primary-pressed: var(--ink-550);
+    --on-primary: var(--paper);               /* 19.41 */
+    --primary-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 8px 18px -10px rgba(12, 13, 18, 0.55);
+
+    /* Secondary (soft) controls */
+    --control-soft: var(--mist-200);
+    --control-soft-hover: var(--mist-300);
+    --control-soft-pressed: var(--mist-400);
+    --control-thumb: var(--paper);            /* segmented thumb */
+    --control-mode-thumb: var(--ink-900);     /* mode switch and export format thumb */
+    --on-control-mode-thumb: var(--paper);
+    --switch-knob-off: var(--slate-600);
+    --switch-knob-on: var(--paper);
+    --slider-track: var(--mist-300);
+    --slider-fill: var(--blue-500);
+    --slider-thumb: var(--paper);
+    --kbd-bg: var(--paper);
+    --kbd-line: var(--mist-400);
+    --inverse-hover: rgba(255, 255, 255, 0.12);
+    --inverse-line: rgba(255, 255, 255, 0.16);
+    --inverse-track: rgba(255, 255, 255, 0.16);  /* progress track inside toasts */
+    --inverse-accent: var(--blue-400);         /* 8.23 [inverse] */
+    --inverse-time: var(--violet-300);         /* 7.95 [inverse] */
+    --inverse-success: var(--mint-300);        /* 11.03 [inverse] */
+    --inverse-danger: var(--red-300);          /* 8.50 [inverse] */
+    --scrollbar-thumb: rgba(12, 13, 18, 0.18);
+    --scrollbar-thumb-hover: rgba(12, 13, 18, 0.32);
+    --swatch-ring: rgba(12, 13, 18, 0.14);    /* keeps white swatches visible */
+    --checker-a: var(--paper);
+    --checker-b: var(--mist-300);
+
+    /* Status */
+    --danger-text: var(--red-700);            /* 6.54 [surface] 5.72 [danger-soft] */
+    --danger-soft: var(--red-50);
+    --danger-strong: var(--red-700);          /* destructive button fill */
+    --on-danger: var(--paper);                /* 6.54 */
+    --danger-dot: var(--red-600);
+    --warning-text: var(--gold-800);          /* 6.80 [surface] 6.23 [warning-soft] */
+    --warning-soft: var(--gold-50);
+    --warning-dot: var(--gold-500);
+    --success-text: var(--mint-700);          /* 5.08 [surface] 4.60 [success-soft] */
+    --success-soft: var(--mint-50);
+    --success-dot: var(--mint-500);
+    --neutral-dot: var(--slate-400);          /* "Edited": calm, never red */
+
+    /* Concept tints. -fill: dots, chips, bars, key glyphs (graphics).
+       -soft: row and chip backgrounds. -ink: small text and icons (>= 4.5:1
+       on surface, sunken and its own soft). */
+    --tint-select: var(--blue-500);
+    --tint-select-soft: var(--blue-50);
+    --tint-select-ink: var(--blue-600);       /* 4.63 [soft] */
+    --tint-time: var(--violet-500);
+    --tint-time-soft: var(--violet-50);
+    --tint-time-ink: var(--violet-600);       /* 4.73 [soft] */
+    --tint-library: var(--mint-500);
+    --tint-library-soft: var(--mint-50);
+    --tint-library-ink: var(--mint-700);      /* 4.60 [soft] */
+    --tint-draw: var(--orange-500);
+    --tint-draw-soft: var(--orange-50);
+    --tint-draw-ink: var(--orange-700);       /* 4.99 [soft] */
+    --tint-fx: var(--rose-500);
+    --tint-fx-soft: var(--rose-50);
+    --tint-fx-ink: var(--rose-700);           /* 4.99 [soft] */
+    --tint-camera: var(--gold-500);
+    --tint-camera-soft: var(--gold-50);
+    --tint-camera-ink: var(--gold-800);       /* 6.23 [soft] */
+    --tint-export: var(--lime-500);           /* surface only */
+    --tint-export-hover: var(--lime-400);
+    --tint-export-ink: var(--lime-900);       /* 9.16 [lime] */
+    --on-export: var(--ink-900);              /* 15.04 [lime] */
+
+    /* Aliases (one meaning each) */
+    --mode-animate: var(--tint-select);
+    --mode-draw: var(--tint-draw);
+    --mode-build: var(--tint-library);
+    --kind-figure: var(--tint-select);
+    --kind-movieclip: var(--tint-library);
+    --kind-project: var(--tint-time);
+    --hold: var(--slate-500);                 /* filmstrip duration bar: neutral, 3.59 [surface]; the current frame uses --accent-line */
+    --hold-line: var(--mint-700);             /* 1px hold-bar edge: 5.08 [surface] */
+    --easing-ink: var(--tint-time-ink);
+    --easing-soft: var(--tint-time-soft);
+    --badge-accent: var(--blue-600);          /* white text 5.11 */
+    --badge-time: var(--violet-600);          /* white text 5.48 */
+    --badge-library: var(--mint-700);         /* white text 5.08 */
+    --badge-new: var(--orange-700);           /* white text 5.55 */
+    --badge-camera: var(--gold-800);          /* white text 6.80 */
+    --on-badge: var(--paper);                 /* white on every --badge-* fill, both themes */
+    --artboard-placeholder: var(--paper);     /* thumbnails before the worker paints; artwork ignores the theme */
+
+    /* Elevation: 1px ink hairline ring + soft negative-spread drop (the brand pattern) */
+    --elevation-1: 0 0 0 1px rgba(12, 13, 18, 0.06), 0 1px 2px rgba(12, 13, 18, 0.04);
+    --elevation-island: 0 0 0 1px rgba(12, 13, 18, 0.05), 0 1px 2px rgba(12, 13, 18, 0.04), 0 8px 24px -14px rgba(12, 13, 18, 0.2);
+    --elevation-2: 0 0 0 1px rgba(12, 13, 18, 0.07), 0 2px 6px -2px rgba(12, 13, 18, 0.1), 0 10px 22px -14px rgba(12, 13, 18, 0.3);
+    --elevation-3: 0 0 0 1px rgba(12, 13, 18, 0.07), 0 8px 18px -10px rgba(12, 13, 18, 0.16), 0 24px 48px -24px rgba(12, 13, 18, 0.45);
+    --elevation-4: 0 0 0 1px rgba(12, 13, 18, 0.06), 0 16px 40px -24px rgba(12, 13, 18, 0.3), 0 40px 100px -30px rgba(12, 13, 18, 0.55);
+    --shadow-thumb: 0 0 0 1px rgba(12, 13, 18, 0.06), 0 1px 2px rgba(12, 13, 18, 0.1), 0 2px 6px -2px rgba(12, 13, 18, 0.12);
+    --shadow-artboard: 0 0 0 1px rgba(12, 13, 18, 0.07), 0 18px 40px -28px rgba(12, 13, 18, 0.32);
+    --shadow-knob: 0 1px 3px rgba(12, 13, 18, 0.2);         /* slider thumb */
+    --drop-color: rgba(12, 13, 18, 0.25);                 /* filter drop-shadow for the coach cursor */
+  }
+
+  /* ------------------------------------------------------------------------
+     TIER 2 - SEMANTIC, DARK (first-class, neutral ink, true brand blue)
+     ------------------------------------------------------------------------ */
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --surface-field: var(--ink-950);
+    --surface: var(--ink-800);
+    --surface-raised: var(--ink-750);
+    --surface-sunken: var(--ink-700);
+    --surface-well: var(--ink-650);
+    --surface-hover: var(--ink-600);
+    --surface-pressed: var(--ink-550);
+    --surface-selected: var(--blue-900);
+    --surface-selected-hover: var(--blue-850);
+    --surface-inverse: var(--mist-100);
+    --surface-stage: var(--ink-850);
+    --surface-construction: var(--ink-850);
+    --surface-backdrop: rgba(4, 5, 8, 0.62);
+    --stage-dot: rgba(255, 255, 255, 0.065);
+    --construction-dot: rgba(255, 255, 255, 0.1);
+
+    --text-1: var(--mist-200);                /* 15.55 [surface] 13.98 [sunken] */
+    --text-2: var(--slate-350);               /* 8.13 [surface] 6.60 [hover] */
+    --text-3: var(--slate-450);               /* 6.02 [surface] 5.15 [well] 4.52 [pressed] */
+    --text-disabled: var(--ink-400);
+    --text-placeholder: var(--slate-450);
+    --text-inverse: var(--ink-900);
+    --text-inverse-2: rgba(12, 13, 18, 0.64);
+    --text-on-accent: var(--ink-900);         /* 6.49 on #0d99ff */
+    --text-on-strong: var(--ink-900);         /* dark --accent-strong is #0d99ff: ink, never white */
+    --text-link: var(--blue-400);
+
+    --line-1: var(--ink-650);
+    --line-2: var(--ink-550);
+    --line-3: var(--ink-500);
+    --line-control: var(--slate-550);         /* 4.20 [surface] 3.41 [hover] */
+
+    --accent: var(--blue-500);                /* true brand blue in dark: 6.03 [surface] */
+    --accent-strong: var(--blue-500);
+    --accent-line: var(--blue-500);           /* 4.91 [selected] */
+    --accent-text: var(--blue-400);           /* 7.66 [surface] 6.24 [selected] */
+    --accent-text-strong: var(--blue-400);   /* 5.45 [accent-soft-hover] */
+    --accent-soft: var(--blue-900);
+    --accent-soft-hover: var(--blue-850);
+
+    --selection-fill: var(--blue-900);
+    --selection-line: var(--blue-500);
+    --selection-text: var(--blue-400);
+    --text-selection: rgba(13, 153, 255, 0.34);
+
+    --focus-ring: var(--blue-500);            /* 6.03 [surface] */
+    --inverse-focus: var(--blue-600);         /* ring on the light inverse surface: 4.73 */
+    --export-focus: var(--ink-900);
+    --focus-halo: rgba(13, 153, 255, 0.28);
+
+    --primary: var(--mist-100);               /* white pill, ink label: 17.96 */
+    --primary-hover: var(--paper);
+    --primary-pressed: var(--mist-300);
+    --on-primary: var(--ink-900);
+    --primary-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.8);
+
+    --control-soft: var(--ink-650);
+    --control-soft-hover: var(--ink-600);
+    --control-soft-pressed: var(--ink-550);
+    --control-thumb: var(--ink-550);
+    --control-mode-thumb: var(--mist-100);
+    --on-control-mode-thumb: var(--ink-900);
+    --switch-knob-off: var(--slate-450);
+    --switch-knob-on: var(--ink-900);
+    --slider-track: var(--ink-550);
+    --slider-fill: var(--blue-500);
+    --slider-thumb: var(--mist-200);
+    --kbd-bg: var(--ink-650);
+    --kbd-line: var(--ink-500);
+    --inverse-hover: rgba(12, 13, 18, 0.08);
+    --inverse-line: rgba(12, 13, 18, 0.14);
+    --inverse-track: var(--ink-900);           /* lime fill stays visible on the light toast */
+    --inverse-accent: var(--blue-600);         /* 4.73 [mist-100] */
+    --inverse-time: var(--violet-600);         /* 5.07 [mist-100] */
+    --inverse-success: var(--mint-700);        /* 4.70 [mist-100] */
+    --inverse-danger: var(--red-700);          /* 6.05 [mist-100] */
+    --scrollbar-thumb: rgba(255, 255, 255, 0.16);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
+    --swatch-ring: rgba(255, 255, 255, 0.2);  /* dark swatches never vanish */
+    --checker-a: var(--ink-500);
+    --checker-b: var(--ink-400);
+
+    --danger-text: var(--red-300);            /* 7.91 [surface] 6.74 [danger-soft] */
+    --danger-soft: var(--red-900);
+    --danger-strong: var(--red-300);
+    --on-danger: var(--ink-900);              /* 8.50 */
+    --danger-dot: var(--red-300);
+    --warning-text: var(--gold-300);
+    --warning-soft: var(--gold-900);
+    --warning-dot: var(--gold-500);
+    --success-text: var(--mint-300);
+    --success-soft: var(--mint-900);
+    --success-dot: var(--mint-500);
+    --neutral-dot: var(--slate-450);
+
+    --tint-select: var(--blue-500);
+    --tint-select-soft: var(--blue-900);
+    --tint-select-ink: var(--blue-400);       /* 6.24 [soft] */
+    --tint-time: var(--violet-500);
+    --tint-time-soft: var(--violet-900);
+    --tint-time-ink: var(--violet-300);       /* 6.44 [soft]. Never #7c5cff/#6a47f5 as text on dark */
+    --tint-library: var(--mint-500);
+    --tint-library-soft: var(--mint-900);
+    --tint-library-ink: var(--mint-300);      /* 8.26 [soft] */
+    --tint-draw: var(--orange-500);
+    --tint-draw-soft: var(--orange-900);
+    --tint-draw-ink: var(--orange-300);       /* 6.87 [soft] */
+    --tint-fx: var(--rose-500);
+    --tint-fx-soft: var(--rose-900);
+    --tint-fx-ink: var(--rose-300);           /* 6.26 [soft] */
+    --tint-camera: var(--gold-500);
+    --tint-camera-soft: var(--gold-900);
+    --tint-camera-ink: var(--gold-300);       /* 8.79 [soft] */
+    --tint-export: var(--lime-500);
+    --tint-export-hover: var(--lime-400);
+    --tint-export-ink: var(--lime-900);
+    --on-export: var(--ink-900);
+
+    --hold: var(--slate-550);                 /* 4.20 [surface] */
+    --hold-line: var(--mint-500);
+    --badge-accent: var(--blue-600);
+    --badge-time: var(--violet-600);
+    --badge-library: var(--mint-700);
+    --badge-new: var(--orange-700);
+    --badge-camera: var(--gold-800);
+    --on-badge: var(--paper);
+    --artboard-placeholder: var(--paper);
+
+    --elevation-1: 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+    --elevation-island: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 10px 28px -16px rgba(0, 0, 0, 0.7);
+    --elevation-2: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.5), 0 12px 26px -14px rgba(0, 0, 0, 0.7);
+    --elevation-3: 0 0 0 1px rgba(255, 255, 255, 0.09), 0 10px 24px -10px rgba(0, 0, 0, 0.6), 0 30px 60px -26px rgba(0, 0, 0, 0.8);
+    --elevation-4: 0 0 0 1px rgba(255, 255, 255, 0.09), 0 40px 100px -30px rgba(0, 0, 0, 0.85);
+    --shadow-thumb: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-artboard: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 24px 50px -24px rgba(0, 0, 0, 0.8);
+    --shadow-knob: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --drop-color: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Before the desktop app has read its settings it hides the editor on this
+     colour, whatever the theme turns out to be. It matches the window
+     background in desktop/main.cjs and the dark theme-color in
+     src/theme-bootstrap.js. */
+  :root {
+    --surface-prepaint: var(--ink-950);
+  }
+
+  /* The bars a video platform adds around a picture of another shape, black in
+     either theme: the export dialog's vertical preview shows them. */
+  :root {
+    --surface-letterbox: var(--ink-950);
+  }
+
+  /* Artwork that shows a theme whatever the current one is: the Theme tiles in
+     Settings draw a small light and a small dark editor window. */
+  :root {
+    --preview-light-field: var(--mist-175);
+    --preview-light-surface: var(--paper);
+    --preview-light-stage: var(--mist-100);
+    --preview-light-line: var(--mist-400);
+    --preview-dark-field: var(--ink-950);
+    --preview-dark-surface: var(--ink-750);
+    --preview-dark-stage: var(--ink-850);
+    --preview-dark-line: var(--ink-500);
+    --preview-accent: var(--blue-500);
+  }
+
+  /* ------------------------------------------------------------------------
+     CANVAS-READ TOKENS - concrete colours per theme.
+     Read with getComputedStyle(root).getPropertyValue() by:
+       layer-timeline.mjs  --sheet-{surface,hover,line,ink,muted,accent,selected,span,tween,
+                           camera-accent,camera-tint,scene-accent,scene-tint,cell,cell-tween,cell-divider,cell-blank,cell-selected}
+       audio-timeline.mjs  --audio-ink, --audio-fill
+     and by the planned UI-layer `canvasChromeTheme` (--canvas-*) and the
+     timeline painter update (--sheet-* marked NEW, --layer-*).
+     Values are var() chains that end in a hex or rgba literal, so the computed
+     value is a plain colour string. Feature CSS must not redefine them. Until
+     the timelines are rebuilt, the legacy .layer-timeline and .audio-timeline
+     rules still set the values those painters read (a declaration on the
+     element beats inheritance from :root), through the bridged legacy names.
+     All painters repaint on `styk-theme-change` and when fonts finish loading.
+     ------------------------------------------------------------------------ */
+  :root,
+  :root[data-theme="light"] {
+    --sheet-surface: var(--paper);
+    --sheet-hover: var(--mist-150);           /* the quiet area past the end (no hatch, no label) */
+    --sheet-line: var(--mist-200);
+    --sheet-ink: var(--ink-900);              /* key fill without a layer colour */
+    --sheet-muted: var(--slate-600);          /* ruler numerals: 5.25 */
+    --sheet-accent: var(--blue-550);          /* keys, tween lines, range outline: 3.63 on white */
+    --sheet-selected: var(--blue-50);
+    --sheet-span: var(--mist-400);            /* a hold's thin line */
+    --sheet-tween: var(--blue-100);           /* tween span */
+    --sheet-camera-accent: var(--gold-500);   /* the camera's colour everywhere (its section badge, the stage frame) */
+    --sheet-camera-tint: var(--gold-50);
+    --sheet-layer: var(--blue-500);           /* keys of a layer without a colour of its own */
+    --sheet-lane: var(--mist-200);            /* the hairline under each lane and, zoomed in, each frame's edge */
+    --sheet-tick: var(--mist-400);            /* the ruler's frame ticks */
+    --sheet-scene-accent: var(--violet-500);
+    --sheet-scene-tint: var(--violet-50);
+    /* Camera motions by type (the Motion row's pills, the collapsed Camera ribbon, the Motion tab's icons); gold stays
+     * the camera's own colour. The pills tint the surface with 20% of these, so they serve light and dark alike. */
+    --sheet-motion-follow: var(--blue-500);
+    --sheet-motion-shake: var(--orange-500);
+    --sheet-motion-impact: var(--rose-500);
+    --sheet-motion-handheld: var(--teal-500);
+    --sheet-motion-wobble: var(--mint-500);
+    --sheet-motion-pulse: var(--violet-500);
+    /* NEW - read after the painter update */
+    --sheet-row-alt: var(--mist-100);         /* every 5th frame's column */
+    --sheet-cell: var(--mist-500);            /* a held pose's bar, key to next key; ink keys on it 12.9:1 */
+    --sheet-cell-tween: rgba(124, 92, 255, 0.3);  /* a tween's bar: time's violet */
+    --sheet-cell-divider: var(--paper);       /* the 1px seams that count frames inside a bar */
+    --sheet-cell-blank: var(--slate-400);     /* a blank span's dashed outline */
+    --sheet-cell-selected: rgba(13, 153, 255, 0.32);  /* the selected frames' wash, over the bars */
+    --sheet-hatch: rgba(12, 13, 18, 0.05);
+    --sheet-end: var(--slate-500);            /* the end line: 3.59 [paper] */
+    --sheet-playhead: var(--blue-550);        /* 1.5px line needs 3:1: 3.63 on white */
+    --sheet-playhead-tab: var(--blue-600);    /* the playhead tab fill */
+    --sheet-playhead-ink: var(--paper);       /* white numerals on the tab: 5.11 */
+    --sheet-cel: var(--mist-100);             /* drawing cels and effect clips: neutral blocks, the keys carry the colour */
+    --sheet-cel-line: var(--mist-400);
+    --sheet-easing: var(--violet-600);
+    --sheet-easing-soft: var(--violet-50);
+    --sheet-fx: var(--rose-500);
+    --sheet-fx-tint: var(--rose-50);
+    --sheet-draw: var(--orange-500);
+    --sheet-draw-tint: var(--orange-50);
+    /* Thin marks (tween lines, hollow keys, cel and clip edges) need 3:1 on the rows:
+       the base hues above are fills only in light (gold 2.04, orange 2.86 on white). */
+    --sheet-camera-line: var(--gold-800);     /* 6.80 [sheet-surface]; also the camera frame in a session */
+    --sheet-scene-line: var(--violet-600);    /* 5.48 */
+    --sheet-fx-line: var(--rose-700);         /* 5.78 */
+    --sheet-draw-line: var(--orange-700);     /* 5.55 */
+    --sheet-key-outline: rgba(12, 13, 18, 0.28);  /* 1px edge: defines light hues (gold) on white without a black ring */
+
+    --audio-ink: var(--mint-700);
+    --audio-fill: var(--mint-50);
+
+    /* LAYER_COLORS keys stay in the document; the UI maps them to brand hues */
+    --layer-blue: var(--blue-500);
+    --layer-violet: var(--violet-500);
+    --layer-rose: var(--rose-500);
+    --layer-orange: var(--orange-500);
+    --layer-green: var(--mint-500);
+    --layer-teal: var(--teal-500);
+
+    /* canvasChromeTheme (UI-drawn canvas overlays; joint handles stay renderer-owned) */
+    --canvas-selection: var(--blue-550);      /* thin marks on the white artboard: 3.63 */
+    --canvas-selection-fill: rgba(13, 153, 255, 0.08);
+    --canvas-pivot: var(--ink-900);          /* neutral: gold means camera on the stage */
+    --canvas-snap: var(--mint-500);
+    --canvas-guide: var(--teal-500);          /* off rose, so guides never read as effects */
+    --canvas-label-bg: var(--ink-900);
+    --canvas-label-text: var(--paper);
+    --canvas-muted: var(--slate-600);
+  }
+
+  :root[data-theme="dark"] {
+    --sheet-surface: var(--ink-800);
+    --sheet-hover: var(--ink-850);
+    --sheet-line: var(--ink-650);
+    --sheet-ink: var(--mist-200);
+    --sheet-muted: var(--slate-450);          /* 6.02 */
+    --sheet-accent: var(--blue-500);
+    --sheet-selected: var(--blue-900);
+    --sheet-span: var(--ink-500);
+    --sheet-tween: var(--blue-850);
+    --sheet-camera-accent: var(--gold-500);
+    --sheet-camera-tint: var(--gold-900);
+    --sheet-layer: var(--blue-500);
+    --sheet-lane: var(--ink-700);
+    --sheet-tick: var(--ink-500);
+    --sheet-scene-accent: var(--violet-500);
+    --sheet-scene-tint: var(--violet-900);
+    --sheet-row-alt: var(--ink-750);
+    --sheet-cell: var(--ink-500);             /* 1.8:1 off the rows; mist keys on it 9.4:1 */
+    --sheet-cell-tween: rgba(124, 92, 255, 0.5);
+    --sheet-cell-divider: var(--ink-700);
+    --sheet-cell-blank: var(--ink-400);
+    --sheet-cell-selected: rgba(13, 153, 255, 0.42);
+    --sheet-hatch: rgba(255, 255, 255, 0.04);
+    --sheet-end: var(--slate-450);
+    --sheet-playhead: var(--blue-500);
+    --sheet-playhead-tab: var(--blue-600);
+    --sheet-playhead-ink: var(--paper);       /* 5.11 */
+    --sheet-cel: var(--ink-700);
+    --sheet-cel-line: var(--ink-500);
+    --sheet-easing: var(--violet-300);
+    --sheet-easing-soft: var(--violet-900);
+    --sheet-fx: var(--rose-500);
+    --sheet-fx-tint: var(--rose-900);
+    --sheet-draw: var(--orange-500);
+    --sheet-draw-tint: var(--orange-900);
+    --sheet-camera-line: var(--gold-300);     /* base hues clear 3:1 on dark rows */
+    --sheet-scene-line: var(--violet-300);    /* 6.95 */
+    --sheet-fx-line: var(--rose-300);         /* 6.84 */
+    --sheet-draw-line: var(--orange-500);     /* 5.94 */
+    --sheet-key-outline: rgba(0, 0, 0, 0.55);  /* decorative in dark: every layer hue is >= 3:1 on the rows */
+
+    --audio-ink: var(--mint-300);
+    --audio-fill: var(--mint-900);
+
+    --canvas-selection: var(--blue-550);      /* the artboard stays white in dark too: 3.63 */
+    --canvas-selection-fill: rgba(13, 153, 255, 0.12);
+    --canvas-label-bg: var(--mist-100);
+    --canvas-label-text: var(--ink-900);
+    --canvas-pivot: var(--ink-900);          /* the artboard stays white in dark */
+    --canvas-muted: var(--slate-450);
+  }
+
+  /* ------------------------------------------------------------------------
+     PREFERENCES
+     ------------------------------------------------------------------------ */
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --dur-fast: 0.01ms;
+      --dur-base: 0.01ms;
+      --dur-slow: 0.01ms;
+      --dur-thumb: 0.01ms;
+      --ease-spring: linear;
+      --press-scale: 1;
+    }
+  }
+
+  /* Windows High Contrast / forced colours: map roles to system colours.
+     The selector list names both theme blocks, so it wins over them by source
+     order at equal specificity (the app always sets data-theme). Components
+     also carry transparent borders so outlines survive (box-shadow rings are
+     removed in this mode). Canvas painters read the same tokens: Canvas 2D
+     accepts system colour keywords, and canvasChromeTheme resolves every token
+     through a probe element to a plain rgb() string. */
+  @media (forced-colors: active) {
+    :root,
+    :root[data-theme="light"],
+    :root[data-theme="dark"] {
+      --surface-field: Canvas;
+      --surface: Canvas;
+      --surface-raised: Canvas;
+      --surface-sunken: Field;
+      --surface-well: Canvas;
+      --surface-hover: Canvas;
+      --surface-pressed: Canvas;
+      --surface-selected: Canvas;          /* selection is a Highlight ring or bar, never a fill under CanvasText */
+      --surface-selected-hover: Canvas;
+      --surface-inverse: CanvasText;
+      --surface-stage: Canvas;
+      --surface-construction: Canvas;
+      --text-1: CanvasText;
+      --text-2: CanvasText;
+      --text-3: GrayText;
+      --text-disabled: GrayText;
+      --text-inverse: Canvas;
+      --text-inverse-2: Canvas;
+      --text-on-accent: HighlightText;
+      --text-on-strong: HighlightText;
+      --line-1: GrayText;
+      --line-2: GrayText;
+      --line-3: CanvasText;
+      --line-control: CanvasText;
+      --accent: Highlight;
+      --accent-strong: Highlight;
+      --accent-line: Highlight;
+      --accent-text: LinkText;
+      --accent-text-strong: LinkText;
+      --accent-soft: Canvas;
+      --accent-soft-hover: Canvas;
+      --selection-fill: Canvas;
+      --selection-line: Highlight;
+      --focus-ring: Highlight;
+      --inverse-focus: Highlight;
+      --export-focus: Highlight;
+      --primary: ButtonText;
+      --primary-hover: ButtonText;
+      --primary-pressed: ButtonText;
+      --on-primary: ButtonFace;
+      --control-soft: ButtonFace;
+      --control-soft-hover: ButtonFace;
+      --control-soft-pressed: ButtonFace;
+      --control-thumb: Highlight;
+      --control-mode-thumb: Highlight;
+      --on-control-mode-thumb: HighlightText;
+      --tint-select-soft: Canvas; --tint-time-soft: Canvas; --tint-library-soft: Canvas;
+      --tint-draw-soft: Canvas; --tint-fx-soft: Canvas; --tint-camera-soft: Canvas;
+      --tint-select-ink: CanvasText; --tint-time-ink: CanvasText; --tint-library-ink: CanvasText;
+      --tint-draw-ink: CanvasText; --tint-fx-ink: CanvasText; --tint-camera-ink: CanvasText;
+      --tint-export: Canvas; --on-export: CanvasText; --tint-export-ink: CanvasText;
+      --hold: CanvasText; --hold-line: CanvasText;
+      --elevation-1: none;
+      --elevation-2: none;
+      --elevation-3: none;
+      --elevation-4: none;
+      /* canvas-read tokens */
+      --sheet-surface: Canvas; --sheet-hover: Canvas; --sheet-row-alt: Canvas; --sheet-line: GrayText;
+      --sheet-ink: CanvasText; --sheet-muted: CanvasText; --sheet-accent: Highlight; --sheet-selected: Canvas;
+      --sheet-span: GrayText; --sheet-tween: GrayText; --sheet-playhead: Highlight; --sheet-playhead-ink: HighlightText; --sheet-playhead-tab: Highlight; --sheet-cel: Canvas; --sheet-cel-line: CanvasText;
+      --sheet-end: CanvasText; --sheet-hatch: GrayText; --sheet-key-outline: CanvasText;
+      --sheet-cell: GrayText; --sheet-cell-tween: GrayText; --sheet-cell-divider: Canvas; --sheet-cell-blank: CanvasText; --sheet-cell-selected: Highlight;
+      --canvas-selection: Highlight;
+      --canvas-label-bg: CanvasText; --canvas-label-text: Canvas; --canvas-muted: GrayText;
+      --sheet-camera-accent: CanvasText; --sheet-camera-tint: Canvas; --sheet-scene-accent: CanvasText; --sheet-scene-tint: Canvas;
+      --sheet-motion-follow: CanvasText; --sheet-motion-shake: CanvasText; --sheet-motion-impact: CanvasText; --sheet-motion-handheld: CanvasText; --sheet-motion-wobble: CanvasText; --sheet-motion-pulse: CanvasText;
+      --sheet-easing: Highlight; --sheet-easing-soft: Canvas; --sheet-fx: CanvasText; --sheet-fx-tint: Canvas;
+      --sheet-draw: CanvasText; --sheet-draw-tint: Canvas;
+      --sheet-camera-line: CanvasText; --sheet-scene-line: CanvasText; --sheet-fx-line: CanvasText; --sheet-draw-line: CanvasText;
+      --audio-ink: CanvasText; --audio-fill: Canvas;
+      --layer-blue: CanvasText; --layer-violet: CanvasText; --layer-rose: CanvasText;
+      --layer-orange: CanvasText; --layer-green: CanvasText; --layer-teal: CanvasText;
+      --canvas-selection-fill: transparent; --canvas-pivot: Highlight; --canvas-snap: Highlight; --canvas-guide: GrayText;
+      /* remaining roles */
+      --text-placeholder: GrayText; --text-link: LinkText; --selection-text: CanvasText; --focus-halo: transparent;
+      --switch-knob-off: CanvasText; --switch-knob-on: HighlightText;
+      --slider-track: GrayText; --slider-fill: Highlight; --slider-thumb: ButtonFace;
+      --kbd-bg: Canvas; --kbd-line: CanvasText; --swatch-ring: CanvasText;
+      --inverse-hover: CanvasText; --inverse-line: Canvas; --inverse-track: Canvas;
+      --inverse-accent: Canvas; --inverse-time: Canvas; --inverse-success: Canvas; --inverse-danger: Canvas;
+      --danger-text: CanvasText; --danger-soft: Canvas; --danger-strong: ButtonText; --on-danger: ButtonFace; --danger-dot: CanvasText;
+      --warning-text: CanvasText; --warning-soft: Canvas; --warning-dot: CanvasText;
+      --success-text: CanvasText; --success-soft: Canvas; --success-dot: CanvasText; --neutral-dot: GrayText;
+      --tint-select: CanvasText; --tint-time: CanvasText; --tint-library: CanvasText;
+      --tint-draw: CanvasText; --tint-fx: CanvasText; --tint-camera: CanvasText; --tint-export-hover: Canvas;
+      --badge-accent: ButtonText; --badge-time: ButtonText; --badge-library: ButtonText; --badge-new: ButtonText; --badge-camera: ButtonText; --on-badge: ButtonFace;
+      --primary-shadow: none; --shadow-thumb: none; --shadow-artboard: none; --shadow-knob: none; --drop-color: transparent;
+      /* Deliberately unchanged: --surface-backdrop, --stage-dot, --construction-dot, --checker-a/-b,
+         --artboard-placeholder (artwork ignores the theme), --scrollbar-thumb* and --text-selection
+         (the UA forces them). Aliases (--mode-*, --kind-*, --easing-*, --hold) follow their sources. */
+    }
+  }
+}

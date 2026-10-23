@@ -1,0 +1,6 @@
+/* The shared support center's styles, linked by support-desktop-ui.mjs when
+ * Feedback first opens. src/support-center.css is shared byte for byte with the
+ * website, so it stays in place and unedited. It joins the legacy layer after
+ * every sheet app.css imports; features/support-desktop.css restyles it for the
+ * editor from the features layer, which beats legacy whatever the specificity. */
+@import url("../support-center.css") layer(legacy);

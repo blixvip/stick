@@ -1,0 +1,75 @@
+.has-audio-timeline{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.has-audio-timeline>.layer-timeline{flex:1;min-height:110px;height:auto}
+.has-audio-timeline>.sheet-filmstrip{flex:1;min-height:180px;height:auto}
+.has-audio-timeline.audio-tab-open>.sheet-filmstrip{position:absolute;left:0;right:0;top:0;height:180px;visibility:hidden;pointer-events:none}
+.audio-timeline{--audio-ink:#227d73;--audio-fill:#d9eeea;--audio-label:220px;container-type:inline-size;flex:none;min-width:0;background:var(--panel,#fff);color:var(--text,#292929);border-top:1px solid var(--border,#ddd);font:inherit;user-select:none}
+.timeline-audio-toggle{position:relative}.timeline-audio-toggle[aria-pressed=true]{color:var(--theme-action,#0d99ff);background:var(--theme-selected,#e5f4ff)}.timeline-audio-toggle[data-has-audio=true]::after{content:"";position:absolute;right:3px;bottom:3px;width:5px;height:5px;border-radius:50%;background:#299988;border:1px solid var(--panel,#fff)}
+.audio-heading-icon{display:flex;color:var(--audio-ink)}.audio-heading-icon .icon{width:16px;height:16px}
+.audio-tab{flex:1;min-height:0;border:0}.audio-tab:not([hidden]){display:flex;flex-direction:column}.audio-tab>.audio-body{flex:1;min-height:48px}.audio-tab>.audio-toolbar,.audio-tab>.audio-editbar{flex:none}
+.audio-horizontal{flex:none;height:14px;margin-left:var(--audio-label);overflow-x:auto;overflow-y:hidden;outline-offset:-2px}.audio-horizontal>div{height:1px}
+.audio-horizontal::-webkit-scrollbar{height:14px}.audio-horizontal::-webkit-scrollbar-track{background:var(--theme-field,#eef0f2)}.audio-horizontal::-webkit-scrollbar-thumb{background:var(--muted,#767676);border:3px solid var(--theme-field,#eef0f2);border-radius:8px;min-width:30px}
+.audio-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16px;padding:16px;color:var(--muted,#777)}.audio-empty strong{display:block;color:var(--text,#292929);font-size:12px;font-weight:600}.audio-empty p{font-size:11px;margin:5px 0 0}.audio-empty-icon{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:var(--audio-fill);color:var(--audio-ink)}.audio-empty-icon .icon{width:23px;height:23px}
+.audio-integrated{position:absolute;left:0;right:0;border:0;z-index:2}.audio-integrated>.audio-toolbar{position:relative;z-index:3;background:var(--panel,#fff);box-shadow:inset 0 1px var(--border,#ddd),inset 0 -1px var(--border,#ddd)}.audio-integrated>.audio-body{overflow:visible;border:0;scrollbar-gutter:auto}.audio-integrated .audio-playhead{display:none}
+.layer-timeline{--audio-ink:#227d73;--audio-fill:#d9eeea}.layer-timeline .sheet-playhead-clip{z-index:4}.layer-timeline .sheet-label-head{z-index:4}
+.layer-timeline.audio-visible .sheet-playhead{background:linear-gradient(to bottom,var(--sheet-accent) 0,var(--sheet-accent) var(--audio-toolbar-top),transparent var(--audio-toolbar-top),transparent var(--audio-toolbar-bottom),var(--sheet-accent) var(--audio-toolbar-bottom))}
+.sheet-footer>.audio-editbar{flex:1;min-width:0;border:0;padding:0;background:transparent}.sheet-footer.audio-selection>.sheet-layer-tools,.sheet-footer.audio-selection>.sheet-frame-tools,.sheet-footer.audio-selection>.sheet-position{display:none}
+.audio-toolbar{height:36px;display:flex;align-items:center;gap:7px;padding:0 10px;overflow:hidden}
+.audio-toolbar strong{font-size:11px;white-space:nowrap;margin-right:8px}.audio-hint{color:var(--muted,#777);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left:6px;flex:1}
+.audio-button{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex-shrink:0;height:28px;min-width:28px;padding:0 7px;border:1px solid transparent;border-radius:5px;background:transparent;color:inherit;font:inherit;cursor:pointer;white-space:nowrap}.audio-button .icon{height:15px;width:15px}.audio-button:hover{background:var(--theme-field,#f0f0f0);border-color:var(--border,#ddd)}.audio-button:focus-visible{outline:2px solid var(--audio-ink);outline-offset:-2px}.audio-button:disabled{opacity:.35;cursor:default}.audio-button[aria-pressed=true]{background:var(--audio-fill);color:var(--audio-ink)}
+.audio-toolbar>.audio-button[aria-label="Import audio"]{background:var(--audio-fill);color:var(--audio-ink);font-weight:600}
+.audio-check{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:10px;color:var(--muted,#777);cursor:pointer}.audio-check input{width:13px;height:13px;accent-color:var(--audio-ink);order:-1}.audio-toolbar>.audio-check:first-of-type{margin-left:auto}
+.audio-body{position:relative;height:172px;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;outline-offset:-2px;border-top:1px solid var(--border,#ddd);scrollbar-gutter:stable}
+.audio-ruler{position:sticky;top:0;height:0;z-index:5;pointer-events:none}.audio-ruler>span{position:absolute;left:0;width:var(--audio-label);height:22px;box-sizing:border-box;padding:5px 12px;background:var(--panel,#fff);color:var(--muted,#777);font-size:9px;letter-spacing:.4px;border-bottom:1px solid var(--border,#ddd)}.audio-ruler>canvas{position:absolute;left:var(--audio-label);top:0;height:22px;background:var(--panel,#fff);border-bottom:1px solid var(--border,#ddd)}
+.audio-labels{position:absolute;top:0;left:0;width:var(--audio-label);border-right:1px solid var(--border,#ddd)}
+.audio-track{position:absolute;height:64px;left:0;right:0;display:grid;grid-template-columns:minmax(0,1fr) 24px 24px;grid-template-rows:28px 24px;align-items:center;gap:2px;padding:4px 8px;border-bottom:1px solid var(--border,#ddd)}
+.audio-track[data-selected=true]{background:color-mix(in srgb,var(--audio-fill) 45%,transparent)}.audio-track[data-drop=true]{background:var(--audio-fill);box-shadow:inset 3px 0 var(--audio-ink)}
+.audio-track-name{width:100%;min-width:0;background:transparent;border:1px solid transparent;border-radius:4px;padding:4px;color:inherit;font:inherit;font-weight:600;text-overflow:ellipsis}.audio-track-name:hover{border-color:var(--border,#ddd)}.audio-track-name:focus{border-color:var(--audio-ink);outline:none}.audio-track>.audio-button{font-weight:600;min-width:22px;height:24px;padding:0 3px}
+.audio-track-volume{grid-column:1/3;display:flex;align-items:center;gap:5px;min-width:0;padding:0 4px}.audio-track-volume input{width:100%;min-width:0;height:16px;accent-color:var(--audio-ink);cursor:pointer}.audio-track-volume output{width:34px;flex:none;text-align:right;color:var(--muted,#777);font-size:10px;font-variant-numeric:tabular-nums}
+.audio-lanes{position:relative;margin-left:var(--audio-label);margin-right:2px;overflow:hidden;touch-action:none}.audio-lanes canvas{position:absolute;left:0;pointer-events:none}.audio-clips{position:absolute;inset:0;pointer-events:none}
+.audio-clip{position:absolute;height:58px;border:1px solid color-mix(in srgb,var(--audio-ink) 40%,transparent);border-radius:6px;background:transparent;color:var(--audio-ink);padding:0 9px;overflow:hidden;text-align:left;font:10px inherit;cursor:grab;pointer-events:auto;touch-action:none}.audio-clip[data-selected=true]{border:2px solid var(--audio-ink);padding:0 8px;box-shadow:inset 0 0 0 1px var(--panel,#fff)}.audio-clip:focus-visible{outline:2px solid var(--audio-ink);outline-offset:1px}.audio-clip[data-muted=true]{opacity:.45}.audio-clip[data-dragging=true]{cursor:grabbing;z-index:3;box-shadow:0 3px 8px #0002,inset 0 0 0 1px var(--panel,#fff)}
+.audio-clip-title{position:absolute;top:2px;left:14px;right:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;font-weight:600;line-height:14px}
+.audio-clip:hover:not(:disabled){background:transparent}
+.audio-clip[data-compact=true] .audio-trim{top:auto;height:12px}.audio-clip[data-compact=true] .audio-trim::after{top:2px;bottom:2px}
+.audio-trim{position:absolute;top:0;bottom:0;width:9px;cursor:ew-resize}.audio-trim-left{left:0}.audio-trim-right{right:0}.audio-trim::after{content:"";position:absolute;top:19px;bottom:15px;width:2px;left:3px;border-radius:2px;background:var(--audio-ink);opacity:.35}.audio-clip:hover .audio-trim{background:color-mix(in srgb,var(--audio-ink) 16%,transparent)}
+.audio-fade{position:absolute;top:17px;width:10px;height:10px;border:1px solid var(--audio-ink);border-radius:50%;background:var(--panel,#fff);transform:translateX(-50%);cursor:ew-resize;opacity:0;z-index:2}.audio-clip:hover .audio-fade,.audio-clip[data-selected=true] .audio-fade{opacity:1}
+.audio-new-lane{position:absolute;left:8px;right:8px;height:30px;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border,#ddd);border-radius:5px;color:var(--muted,#777);font-size:10px;pointer-events:auto}.audio-new-lane[data-active=true]{background:var(--audio-fill);border-color:var(--audio-ink);color:var(--audio-ink);font-weight:600}
+.audio-playhead,.audio-snap-line{position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--purple,#0d99ff);pointer-events:none;z-index:4}.audio-snap-line{background:var(--audio-ink);border-left:1px dashed var(--panel,#fff)}
+.audio-editbar{height:36px;display:flex;align-items:center;gap:12px;padding:0 10px;background:var(--theme-field,#f6f7f8);border-top:1px solid var(--border,#ddd)}.audio-selection-info{flex:1;min-width:100px;display:flex;align-items:center;gap:12px;overflow:hidden}.audio-selection-info strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;font-size:11px}.audio-selection-info>span{color:var(--muted,#777);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px;font-variant-numeric:tabular-nums}.audio-clip-controls{display:flex;align-items:center;gap:4px;flex:none}
+.audio-volume{display:flex;align-items:center;gap:6px;margin-right:10px;font-size:10px;color:var(--muted,#777)}.audio-volume input{width:85px;height:18px;accent-color:var(--audio-ink);cursor:pointer}.audio-volume output{min-width:32px;font-variant-numeric:tabular-nums}
+.audio-live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.audio-timeline[data-drop=true]{box-shadow:inset 0 0 0 2px var(--audio-ink)}
+.audio-properties{position:fixed;inset:0;margin:auto;width:min(390px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto;padding:16px;background:var(--panel,#fff);color:var(--text,#292929);border:1px solid var(--border,#ddd);border-radius:12px;box-shadow:0 10px 40px #0003;font:12px inherit}.audio-properties-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}.audio-properties-title strong{flex:1;overflow:hidden;text-overflow:ellipsis}.audio-properties-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.audio-properties label{display:flex;flex-direction:column;gap:5px;color:var(--muted,#777);font-size:11px}.audio-properties input,.audio-properties select{min-width:0;width:100%;height:30px;border:1px solid var(--border,#ddd);border-radius:5px;background:var(--theme-field,#f7f7f7);color:var(--text,#292929);padding:0 7px;font:12px inherit}.audio-properties-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:12px}.audio-properties p{font-size:11px;color:var(--muted,#777);margin:10px 0 0}
+[data-theme=dark] .audio-timeline,[data-theme=dark] .layer-timeline{--audio-ink:#86d6c7;--audio-fill:#1d3b37}
+@container(max-width:1000px){.audio-selection-info{display:block}.audio-selection-info strong,.audio-selection-info>span{display:block;max-width:none}.audio-selection-info>span{font-size:9px}.audio-hint{display:none}}
+@container(max-width:760px){.audio-toolbar{gap:3px;padding:0 6px}.audio-toolbar strong{margin-right:2px}.audio-check{font-size:9px}.audio-button{padding:0 4px}.audio-clip-controls .audio-button>span{display:none}.audio-volume input{width:60px}.audio-volume{margin-right:2px}}
+@container(max-width:560px){.audio-toolbar>.audio-button>span{display:none}.audio-toolbar>.audio-button[aria-label="Import audio"]>span{display:inline}.audio-check{gap:1px}.audio-editbar{gap:5px;padding:0 5px}.audio-volume{font-size:0}.audio-volume output{font-size:10px}}
+
+/* Shared clip controls stay contextual in both timeline modes. */
+.audio-toolbar{gap:5px;padding:0 8px}
+.audio-toolbar>.audio-heading-icon,.audio-toolbar>.audio-hint{display:none}
+.audio-toolbar strong{margin-right:3px}
+.audio-clip-popover:not(:popover-open){display:none}
+.audio-clip-popover:popover-open{display:flex}
+.audio-clip-popover{position:fixed;inset:auto;margin:0;width:278px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;height:auto;flex-wrap:wrap;gap:10px;padding:12px;border:1px solid var(--border,#ddd);border-radius:9px;background:var(--panel,#fff);color:var(--text,#333);box-shadow:0 8px 28px #0002;font-size:11px}
+.audio-clip-popover .audio-selection-info{display:block;width:100%;flex-basis:100%;min-width:0}
+.audio-clip-popover .audio-selection-info strong{display:block;max-width:100%;margin-bottom:4px}
+.audio-clip-popover .audio-selection-info>span{display:block;max-width:100%;font-size:10px}
+.audio-clip-popover .audio-clip-controls{width:100%;min-width:0;flex-wrap:wrap;gap:5px}
+.audio-clip-popover .audio-volume{width:100%;margin:0 0 5px;gap:8px}
+.audio-clip-popover .audio-volume input{min-width:0;flex:1}
+.audio-track .audio-button{border-radius:4px}.audio-track:hover{background:color-mix(in srgb,var(--audio-fill) 25%,transparent)}
+.audio-clip{border-radius:5px;box-shadow:inset 0 1px #ffffff20}
+.audio-clip[data-selected=true]{box-shadow:inset 0 0 0 1px var(--audio-ink)}
+.audio-new-lane{opacity:.65}.audio-new-lane:hover,.audio-new-lane[data-active=true]{opacity:1}
+@container(max-width:850px){.audio-toolbar>.audio-button>span{display:none}.audio-toolbar>.audio-button[aria-label="Import audio"]>span{display:inline}.audio-toolbar .audio-check{font-size:10px}.audio-toolbar strong{display:none}}
+@container(max-width:480px){.audio-toolbar>.audio-button[aria-label="Import audio"]>span{display:none}.audio-toolbar{gap:2px;padding:0 4px}.audio-toolbar .audio-button{padding:0 4px}.audio-check{gap:2px}}
+
+/* Options popover, labelled clip tools and an actionable empty state. */
+.audio-toolbar>.audio-button[aria-label="Audio clip controls"]{margin-left:auto}
+.audio-toolbar>.audio-button[aria-label="Audio clip controls"]:disabled{display:none}
+.audio-toolbar>.audio-options-button{margin-left:auto}
+.audio-toolbar>.audio-button[aria-label="Audio clip controls"]:not(:disabled)~.audio-options-button{margin-left:0}
+.audio-options:not(:popover-open){display:none}
+.audio-options{position:fixed;inset:auto;margin:0;width:300px;max-width:calc(100vw - 16px);padding:6px 14px;color:var(--text,#1f2328);font-size:11px}
+.audio-options .ds-switch>input{accent-color:var(--audio-ink)}
+.audio-options .ds-switch>input:checked{background:var(--audio-ink)}
+.audio-empty-actions{display:flex;gap:8px;margin-top:10px}

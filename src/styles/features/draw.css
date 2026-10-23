@@ -1,0 +1,132 @@
+/* Draw (experience.md revision 5): the brush bar in the stage header and the
+ * tool's panel in Properties on the kit's look, until Draw's tools move to
+ * descriptors (drawing-view.mjs keeps its markup, ids and data hooks).
+ *
+ * The bar: the tool as a chip (its glyph in Draw's orange and its name),
+ * scrub fields for Size, Opacity, Flow and Smooth (a quiet well whose value
+ * fills from the left in Styk blue with a line at the value), the preset and
+ * the tool's choices as soft buttons, the colour pair, and hairlines between
+ * groups. The panel: the drawing-view sections as kit sections (an orange
+ * badge and an ink title), the presets as tiles, the sliders as the same scrub
+ * fields, switches for its toggles, fields for its selects and titled
+ * disclosures with a chevron. */
+@layer features {
+  /* ==== The brush bar (stage header) ==== */
+  .drawing-quickbar .draw-quick-row { gap: var(--space-1); align-items: center; }
+  .drawing-quickbar .draw-quick-divider { inline-size: 1px; block-size: 20px; margin-inline: var(--space-0-5); background: var(--line-1); }
+  .drawing-quickbar .draw-quick-tool {
+    gap: var(--space-1-5); padding: 0 var(--space-2) 0 var(--space-1); color: var(--text-1); font: var(--type-ui-strong);
+  }
+  .drawing-quickbar .draw-quick-tool > svg { inline-size: var(--icon-md); block-size: var(--icon-md); color: var(--tint-draw-ink); }
+  :where(.drawing-quickbar) :is(.draw-quick-preset, .draw-quick-choice) {
+    block-size: var(--control-md); gap: var(--space-1-5); padding: 0 var(--space-2-5);
+    border: 0; border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-1); font: var(--type-button);
+  }
+  :where(.drawing-quickbar) :is(.draw-quick-preset, .draw-quick-choice):where(:hover) { background: var(--surface-hover); }
+  :where(.drawing-quickbar) :is(.draw-quick-choice, .draw-quick-toggle):where([aria-pressed="true"]),
+  :where(.drawing-quickbar) .draw-quick-preset:where([aria-expanded="true"]) {
+    background: var(--accent-soft); color: var(--accent-text-strong); box-shadow: none;
+  }
+  :where(.drawing-quickbar) .draw-quick-toggle { inline-size: var(--control-md); block-size: var(--control-md); border: 0; border-radius: var(--radius-md); }
+  :where(.drawing-quickbar) .draw-quick-swatch { inline-size: 18px; block-size: 18px; border: 0; border-radius: var(--radius-xs); box-shadow: inset 0 0 0 1px var(--line-2); }
+  :where(.drawing-quickbar) .draw-quick-swatch:where([aria-pressed="true"]) { outline: 2px solid var(--accent-line); outline-offset: 1px; }
+  /* The rail's +N (the rest of the palette, in the picker) and + (save the brush colour to the project). */
+  :where(.drawing-quickbar) :is(.draw-quick-more, .draw-quick-add) {
+    display: inline-grid; place-items: center; min-inline-size: 18px; block-size: 18px; padding: 0 var(--space-1);
+    border: 0; border-radius: var(--radius-xs); background: var(--surface-sunken); color: var(--text-2); font: var(--type-micro); cursor: pointer;
+  }
+  :where(.drawing-quickbar) .draw-quick-add { padding: 0; background: transparent; box-shadow: inset 0 0 0 1px var(--line-3); }
+  :where(.drawing-quickbar) .draw-quick-add > svg { inline-size: 12px; block-size: 12px; }
+  :where(.drawing-quickbar) :is(.draw-quick-more, .draw-quick-add):where(:hover) { background: var(--accent-soft); color: var(--accent-text-strong); box-shadow: none; }
+
+  /* A scrub field: a quiet well, the value filling from the left in Styk blue up to a line at the value. */
+  .draw-slider {
+    block-size: var(--control-md); gap: var(--space-2); padding: 0 var(--space-2-5); overflow: hidden;
+    border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-1); font: var(--type-small);
+  }
+  .draw-slider.is-compact { block-size: var(--control-md); min-inline-size: 100px; padding: 0 var(--space-2); font: var(--type-small); border-radius: var(--radius-md); }
+  .draw-slider > .draw-slider-fill { background: var(--accent-soft); border-inline-end: 2px solid var(--accent); }
+  .draw-slider:where(.is-dragging) > .draw-slider-fill { background: var(--accent-soft-hover); }
+  .draw-slider > .draw-slider-label { color: var(--text-3); }
+  .draw-slider > .draw-slider-value { color: var(--text-1); font-weight: var(--weight-semibold); }
+  .draw-slider:where(:hover) { box-shadow: inset 0 0 0 1px var(--line-3); }
+  .draw-slider:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; box-shadow: none; }
+
+  /* The colour pair: the main colour over the second, rounded like the kit's swatches. */
+  :where(.drawing-quickbar, .inspector-bare) .draw-color-pair > input { border: 0; border-radius: var(--radius-xs); box-shadow: inset 0 0 0 1px var(--line-2); }
+  :where(.drawing-quickbar, .inspector-bare) .draw-color-primary { box-shadow: 0 0 0 2px var(--surface), inset 0 0 0 1px var(--line-2); }
+  :where(.drawing-quickbar, .inspector-bare) .draw-color-swap { border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-2); }
+
+  /* ==== The tool's panel (Properties) ==== */
+  /* The panel's title names the tool; the legacy heading row repeats it, so it steps aside. */
+  .inspector-bare:where([data-section="drawing"]) > .property-context-heading { display: none; }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-section {
+    margin: 0; padding: var(--space-4) var(--island-pad); border: 0; background: none;
+  }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-section + .inspector-section { box-shadow: inset 0 1px 0 var(--line-1); }
+  /* A section's title: the draw tint's badge (a brush) and an ink title; an untitled section shows no title row. */
+  .inspector-bare:where([data-section="drawing"]) .inspector-section > .inspector-title {
+    display: flex; align-items: center; justify-content: flex-start; gap: var(--space-2); min-block-size: var(--control-sm); margin: 0 0 var(--space-3); padding: 0;
+    border: 0; background: none; font: var(--type-section); letter-spacing: -0.005em; color: var(--text-1); text-transform: none;
+  }
+  .inspector-bare:where([data-section="drawing"]) .inspector-section > .inspector-title > span { flex: 1; min-inline-size: 0; }
+  .inspector-bare:where([data-section="drawing"]) .inspector-section > .inspector-title::before {
+    content: ""; flex: none; inline-size: 22px; block-size: 22px; border-radius: var(--radius-xs);
+    background: radial-gradient(circle, var(--tint-draw-ink) 0 3.5px, transparent 4px) var(--tint-draw-soft);
+  }
+  .inspector-bare:where([data-section="drawing"]) .inspector-section > .inspector-title:where(:has(> span:empty:only-child)) { display: none; }
+  /* A disclosure: one row with its chevron at the end, open or closed. */
+  .inspector-bare:where([data-section="drawing"]) > .inspector-disclosure > summary.inspector-title {
+    display: flex; align-items: center; gap: var(--space-2); block-size: var(--control-lg); margin: 0 calc(-1 * var(--space-2));
+    padding: 0 var(--space-2); border-radius: var(--radius-md); list-style: none; cursor: default;
+  }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-disclosure > summary.inspector-title::-webkit-details-marker { display: none; }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-disclosure > summary.inspector-title::after {
+    content: ""; margin-inline-start: auto; inline-size: 14px; block-size: 14px; background: var(--text-3);
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M6 4l4 4-4 4' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/></svg>") center / contain no-repeat;
+    transition: rotate var(--dur-fast) var(--ease-out);
+  }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-disclosure:where([open]) > summary.inspector-title::after { rotate: 90deg; }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-disclosure > summary.inspector-title:where(:hover) { background: var(--surface-hover); }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-disclosure:where([open]) > summary.inspector-title { margin-block-end: var(--space-2); }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-disclosure { padding-block: var(--space-1-5); padding-inline: var(--island-pad); box-shadow: inset 0 1px 0 var(--line-1); }
+  .inspector-bare:where([data-section="drawing"]) > .inspector-disclosure[open] { padding-block-end: var(--space-4); }
+
+  /* Presets: tiles like the quick tiles, the chosen one in Styk blue. */
+  .inspector-bare .drawing-presets { gap: var(--space-1); }
+  .inspector-bare .drawing-preset {
+    border: 0; border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-1);
+    font: var(--weight-semibold) 11px/13px var(--font-ui); padding: var(--space-1-5) var(--space-1);
+  }
+  .inspector-bare .drawing-preset:where(:hover) { background: var(--surface-hover); }
+  .inspector-bare .drawing-preset[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-text-strong); box-shadow: inset 0 0 0 1.5px var(--accent-line); }
+  .inspector-bare .drawing-preview { border: 0; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1px var(--line-1); }
+
+  /* Buttons: the kit's soft buttons, full width in a row of one. */
+  .inspector-bare .property-context-actions { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-block-start: var(--space-3); }
+  .inspector-bare .property-context-actions > .button {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1-5); flex: 1 1 auto;
+    block-size: var(--control-md); padding: 0 var(--space-3); border: 0; border-radius: var(--radius-md);
+    background: var(--surface-sunken); color: var(--text-1); font: var(--type-button); box-shadow: none;
+  }
+  .inspector-bare .property-context-actions > .button:where(:hover:not(:disabled)) { background: var(--surface-hover); }
+  .inspector-bare .property-context-actions > .button > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); color: var(--text-2); }
+  .inspector-bare .property-context-actions > :where(.icon-button) { inline-size: var(--control-md); block-size: var(--control-md); border: 0; border-radius: var(--radius-md); background: var(--surface-sunken); }
+
+  /* Words: hints and empty states in the quiet small type. */
+  .inspector-bare :is(.drawing-hint, .drawing-empty, .drawing-resolution-info) { margin-block-start: var(--space-2); font: var(--type-small); color: var(--text-3); line-height: 1.5; }
+  /* A select row: its label, then the kit's field. */
+  .inspector-bare .drawing-resolution { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-block-size: var(--control-md); font: var(--type-ui); color: var(--text-2); }
+  .inspector-bare .drawing-resolution > select {
+    min-inline-size: 0; max-inline-size: 60%; block-size: var(--control-md); padding: 0 var(--space-2-5);
+    border: 0; border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-1); font: var(--type-ui);
+  }
+  .inspector-bare .drawing-resolution > select:focus { outline: none; box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo); }
+  .inspector-bare .draw-sliders { gap: var(--space-1); margin-block: var(--space-2); }
+  /* The toggles: switch rows. */
+  .inspector-bare .property-toggle-grid { gap: var(--space-1); }
+  .inspector-bare .property-toggle { min-block-size: var(--control-md); border: 0; border-radius: var(--radius-md); background: var(--surface-sunken); }
+  .inspector-bare .property-toggle:where(:hover) { background: var(--surface-hover); }
+  .inspector-bare .drawing-swatch { border: 0; border-radius: var(--radius-xs); box-shadow: inset 0 0 0 1px var(--line-2); }
+  .inspector-bare .drawing-swatch[aria-pressed="true"] { outline: 2px solid var(--accent-line); outline-offset: 1px; }
+}

@@ -1,0 +1,44 @@
+/* Checkbox and radio (components.md "Checkbox"): 16px native inputs with a
+ * --line-control ring, --accent-strong when checked; a checkbox shows mixed
+ * with :indeterminate or aria-checked="mixed". .ui-check-row is a label with
+ * the box first and its words after it (the layer's Visible and Locked, the
+ * range's "Apply to 3 selected frames"). */
+@layer components {
+  .ui-checkbox, .ui-radio {
+    appearance: none; flex: none; margin: 0;
+    display: inline-grid; place-content: center;
+    inline-size: 16px; block-size: 16px;
+    background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line-control);
+    cursor: default;
+    transition: background-color var(--dur-fast), box-shadow var(--dur-fast);
+  }
+  .ui-checkbox { border-radius: var(--radius-2xs); }
+  .ui-checkbox::before {
+    content: ""; inline-size: 9px; block-size: 5px;
+    border: solid var(--text-on-strong); border-width: 0 0 2px 2px;
+    translate: 0 -1px; rotate: -45deg; scale: 0;
+    transition: scale var(--dur-fast) var(--ease-out);
+  }
+  .ui-checkbox:is(:checked, :indeterminate, [aria-checked="mixed"]) { background: var(--accent-strong); box-shadow: none; }
+  .ui-checkbox:checked::before { scale: 1; }
+  .ui-checkbox:is(:indeterminate, [aria-checked="mixed"])::before { inline-size: 8px; block-size: 0; border-width: 0 0 2px 0; rotate: 0deg; translate: 0 0; scale: 1; }
+  .ui-radio { border-radius: 50%; }
+  .ui-radio:checked { box-shadow: inset 0 0 0 5px var(--accent-strong); }
+  :is(.ui-checkbox, .ui-radio):where(:hover):not(:checked, :indeterminate, :disabled) { box-shadow: inset 0 0 0 1.5px var(--text-2); }
+  :is(.ui-checkbox, .ui-radio):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  :is(.ui-checkbox, .ui-radio):disabled { opacity: 0.42; }
+
+  .ui-check-row {
+    display: flex; align-items: center; gap: var(--space-2);
+    min-block-size: var(--control-lg); font: var(--type-ui); color: var(--text-1); user-select: none;
+  }
+  .ui-check-row > span { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-check-row:has(input:disabled) { color: var(--text-disabled); }
+
+  @media (forced-colors: active) {
+    .ui-checkbox, .ui-radio { border: 1px solid CanvasText; }
+    .ui-checkbox:checked { background: Highlight; }
+    .ui-checkbox::before { border-color: HighlightText; }
+    .ui-radio:checked { box-shadow: inset 0 0 0 5px Highlight; }
+  }
+}

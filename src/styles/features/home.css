@@ -1,0 +1,358 @@
+/* Home and the tutorials it leads into (docs/HOME.md, docs/TUTORIALS.md).
+ *
+ * Home (src/home/home-view.mjs) is a page over the workspace: it covers the
+ * editor without moving it, so showing and leaving Home lays nothing out
+ * again. The editor's parts under it are hidden (visibility), which also takes
+ * them out of the tab order; the band keeps the mark, the Home button, the open
+ * projects and the workspaces, and hides what acts on the animation.
+ *
+ *   .home > .home-page (scrolls) > .home-body
+ *     .home-main   .home-head, .home-start, .home-projects
+ *     .home-side   .home-learn, .home-help
+ *
+ * A tutorial (src/tutorials/tutorial-presenter.mjs) adds no row: its strip
+ * takes the stage header's start in Animate, its mark and Show me's pointer
+ * are fixed boxes above the editor and below menus and dialogs. Its colour is
+ * the rose of hints (--tint-fx), the one tint no editor state uses on the
+ * stage. */
+@layer features {
+  /* ---- Home: the page ------------------------------------------------------------------------------------------ */
+  .home {
+    position: absolute; inset: 0; z-index: var(--z-floating);
+    background: var(--surface-field); color: var(--text-1);
+  }
+  .home[hidden] { display: none; }
+  :where(.workspace[data-home]) > :not(.home) { visibility: hidden; }
+  /* The band on Home: what acts on the animation steps out without moving anything (the band is not measured again). */
+  :where(.shell[data-home]) :is(.band-history, .band-save, .band-export, .shell-sheet-button, [data-band-session]) { visibility: hidden; }
+  :where(.shell[data-home]) .project-tab[aria-selected="true"] { background: transparent; box-shadow: none; }
+  .ui-icon-button.band-home[aria-pressed="true"] { --_bg: var(--surface); --_fg: var(--text-1); box-shadow: var(--elevation-1); }
+
+  .home-page {
+    block-size: 100%; overflow: hidden auto; scrollbar-gutter: stable both-edges;
+    container: home / inline-size; outline: none;
+  }
+  .home-body {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 340px); align-items: start; gap: var(--space-6);
+    max-inline-size: 1240px; margin-inline: auto; padding: var(--space-6) var(--space-6) var(--space-8);
+  }
+  .home-main { display: grid; gap: var(--space-6); min-inline-size: 0; }
+  .home-side { display: grid; gap: var(--space-4); min-inline-size: 0; }
+  .home-section { display: grid; gap: var(--space-3); min-inline-size: 0; }
+  .home-section-title { margin: 0; font: var(--type-heading); letter-spacing: var(--tracking-heading); color: var(--text-1); }
+
+  .home-head { display: flex; align-items: end; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+  .home-head-text { display: grid; gap: var(--space-1); min-inline-size: 0; }
+  .home-title { margin: 0; font: var(--type-display); letter-spacing: var(--tracking-display); color: var(--text-1); text-wrap: balance; }
+  .home-lede { margin: 0; font: var(--type-body); color: var(--text-2); text-wrap: pretty; }
+  .home-continue { max-inline-size: 100%; }
+  .home-continue > .ui-label { overflow: hidden; text-overflow: ellipsis; }
+
+  /* ---- Start: a new animation in three shapes, or a file --------------------------------------------------------- */
+  .home-start-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: var(--space-3); }
+  .home-start-tile {
+    display: flex; align-items: center; justify-content: flex-start; gap: var(--space-3); min-inline-size: 0;
+    padding: var(--space-3); border: 0; border-radius: var(--radius-lg);
+    background: var(--surface); color: var(--text-1); box-shadow: var(--elevation-1); text-align: start;
+    transition: box-shadow var(--dur-fast) var(--ease-out), translate var(--dur-fast) var(--ease-out);
+  }
+  .home-start-tile:where(:hover) { box-shadow: var(--elevation-2); translate: 0 -1px; }
+  .home-start-tile:where(:active) { translate: 0 0; box-shadow: var(--elevation-1); }
+  .home-start-tile:focus-visible, .home-project-open:focus-visible, .home-lesson-row:focus-visible, .home-help-row:focus-visible {
+    outline: var(--focus-width) solid var(--focus-ring); outline-offset: var(--focus-offset);
+  }
+  .home-start-art {
+    display: grid; place-items: center; flex: none; inline-size: 44px; block-size: 44px;
+    border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-2);
+  }
+  .home-start-sheet {
+    inline-size: min(70%, calc(70% * var(--ratio, 1))); aspect-ratio: var(--ratio, 1);
+    border-radius: 3px; background: var(--surface); box-shadow: 0 0 0 1.5px var(--accent-line);
+  }
+  .home-start-icon > svg { inline-size: var(--icon-lg); block-size: var(--icon-lg); }
+  .home-start-text { display: grid; gap: 2px; min-inline-size: 0; }
+  .home-start-text > b { font: var(--type-ui-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .home-start-text > small { font: var(--type-small); color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ---- Projects ------------------------------------------------------------------------------------------------ */
+  .home-projects-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+  .home-projects-tools { display: flex; align-items: center; gap: var(--space-2); min-inline-size: 0; }
+  .home-projects-tools[hidden], .home-scopes[hidden] { display: none; }
+  .home-search { inline-size: 220px; max-inline-size: 100%; background: var(--surface); }
+  .home-search > svg { flex: none; inline-size: var(--icon-sm); block-size: var(--icon-sm); color: var(--text-3); }
+  .home-scopes { display: flex; flex-wrap: wrap; gap: var(--space-1-5); }
+  .home-scope { --_bg: var(--surface); box-shadow: var(--elevation-1); }
+  .home-scope-count { font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .home-scope-new { --_bg: transparent; --_fg: var(--text-2); box-shadow: inset 0 0 0 1px var(--line-3); }
+
+  .home-list { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(188px, 1fr)); min-inline-size: 0; }
+  .home-list > :is(.home-empty, .home-loading) { grid-column: 1 / -1; }
+  .home-empty { border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--elevation-1); }
+  .home-empty > .ui-empty-text { max-inline-size: 52ch; }
+  .home-loading { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(188px, 1fr)); }
+  .home-skeleton { display: block; aspect-ratio: 16 / 12; border-radius: var(--radius-lg); background: var(--surface); opacity: 0.6; animation: home-wait 1.4s var(--ease-in-out) infinite alternate; }
+  @keyframes home-wait { to { opacity: 0.25; } }
+
+  .home-project {
+    position: relative; display: grid; align-content: start; min-inline-size: 0; border-radius: var(--radius-lg);
+    background: var(--surface); box-shadow: var(--elevation-1);
+    transition: box-shadow var(--dur-fast) var(--ease-out), translate var(--dur-fast) var(--ease-out);
+  }
+  .home-project:where(:hover, :focus-within) { box-shadow: var(--elevation-2); translate: 0 -1px; }
+  /* An open project says so in its line, with a small accent dot: several can be open at once, so no ring. */
+  .home-project[data-state="open"] .home-project-meta::before,
+  :where(.home-list[data-layout="list"]) .home-project[data-state="open"] .home-project-name::before {
+    content: ""; display: inline-block; inline-size: 6px; block-size: 6px; margin-inline-end: var(--space-1-5); vertical-align: 0.1em;
+    border-radius: var(--radius-pill); background: var(--accent);
+  }
+  /* The open button covers the card (its picture and words are not inside it: a button shrink-wraps what it holds). */
+  .home-project-open {
+    position: absolute; inset: 0; z-index: 1; padding: 0; border: 0; border-radius: inherit; background: transparent;
+  }
+  .home-project-open:disabled { cursor: progress; }
+  .home-project-more { z-index: 2; }
+  /* A grid item with an aspect ratio does not stretch by default: the picture's box is the card's width. */
+  .home-project-art {
+    position: relative; display: grid; place-items: center; justify-self: stretch; inline-size: 100%; aspect-ratio: 16 / 9; overflow: hidden;
+    border-start-start-radius: inherit; border-start-end-radius: inherit;
+    background: var(--surface-sunken); color: var(--text-3);
+  }
+  .home-project-art[data-origin="pivot"], .home-project-art[data-origin="sticknodes"] { background: var(--tint-time-soft); color: var(--tint-time-ink); }
+  .home-project-glyph > svg { inline-size: var(--icon-xl); block-size: var(--icon-xl); }
+  /* The whole stage, as the person framed it: a vertical or square animation sits in the middle of the card. */
+  .home-project-image { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; }
+  .home-project-image[hidden] { display: none; }
+  .home-project-text { display: grid; gap: 2px; min-inline-size: 0; padding: var(--space-2-5) var(--space-3) var(--space-3); padding-inline-end: var(--space-8); }
+  .home-project-name { font: var(--type-ui-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .home-project-meta { font: var(--type-small); color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .home-project-col { display: none; }
+  .home-project[data-state="missing"] :is(.home-project-art, .home-project-name) { color: var(--text-3); }
+  .home-project[data-state="missing"] .home-project-meta { color: var(--warning-text); }
+  .home-project[aria-busy="true"] { opacity: 0.6; }
+  .home-project-pin {
+    position: absolute; inset-block-start: var(--space-2); inset-inline-start: var(--space-2);
+    display: grid; place-items: center; inline-size: 22px; block-size: 22px; border-radius: var(--radius-pill);
+    background: var(--surface-raised); color: var(--accent-text); box-shadow: var(--elevation-1); pointer-events: none;
+  }
+  .home-project-pin > svg { inline-size: var(--icon-xs); block-size: var(--icon-xs); }
+  .home-project-more { position: absolute; inset-block-end: var(--space-2); inset-inline-end: var(--space-1-5); }
+
+  /* The list: one row per project, its facts in columns. */
+  .home-list[data-layout="list"] { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
+  .home-list-head, .home-list[data-layout="list"] .home-project {
+    display: grid; align-items: center; gap: var(--space-3);
+    grid-template-columns: 56px minmax(0, 2.4fr) minmax(0, 1.2fr) 84px minmax(0, 1.2fr) 72px var(--control-md);
+  }
+  .home-list-head { padding: 0 var(--space-2); font: var(--type-eyebrow); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--text-3); }
+  .home-list-head > :first-child { grid-column: 1 / span 2; }
+  .home-list[data-layout="list"] .home-project { padding: var(--space-1-5) var(--space-2); }
+  .home-list[data-layout="list"] .home-project-art { aspect-ratio: 16 / 10; border-radius: var(--radius-sm); }
+  .home-list[data-layout="list"] .home-project-glyph > svg { inline-size: var(--icon-md); block-size: var(--icon-md); }
+  .home-list[data-layout="list"] .home-project-text { display: contents; }
+  .home-list[data-layout="list"] .home-project-meta { display: none; }
+  .home-list[data-layout="list"] .home-project-col { display: block; font: var(--type-small); color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .home-list[data-layout="list"] .home-project-pin { inset-block-start: 2px; inset-inline-start: 2px; inline-size: 18px; block-size: 18px; }
+  .home-list[data-layout="list"] .home-project-more { inset-block: 0; margin-block: auto; }
+
+  /* ---- Learn and Help -------------------------------------------------------------------------------------------- */
+  .home-card { gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-xl); }
+  .home-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); }
+  .home-card-note { font: var(--type-small); color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .home-learn-bar { --_fill: var(--tint-fx); }
+  .home-lesson {
+    --_tint: var(--tint-select); --_soft: var(--tint-select-soft); --_ink: var(--tint-select-ink);
+    display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-2) var(--space-3); align-items: start;
+    padding: var(--space-3); border-radius: var(--radius-lg); background: var(--_soft);
+  }
+  .home-lesson[data-tint="time"] { --_tint: var(--tint-time); --_soft: var(--tint-time-soft); --_ink: var(--tint-time-ink); }
+  .home-lesson[data-tint="library"] { --_tint: var(--tint-library); --_soft: var(--tint-library-soft); --_ink: var(--tint-library-ink); }
+  .home-lesson[data-tint="camera"] { --_tint: var(--tint-camera); --_soft: var(--tint-camera-soft); --_ink: var(--tint-camera-ink); }
+  .home-lesson[data-tint="draw"] { --_tint: var(--tint-draw); --_soft: var(--tint-draw-soft); --_ink: var(--tint-draw-ink); }
+  .home-lesson-done { --_soft: var(--success-soft); --_ink: var(--success-text); }
+  .home-lesson-icon { display: grid; place-items: center; inline-size: 36px; block-size: 36px; border-radius: var(--radius-md); background: var(--surface); color: var(--_ink); box-shadow: var(--elevation-1); }
+  .home-lesson-icon > svg { inline-size: var(--icon-lg); block-size: var(--icon-lg); }
+  .home-lesson-text { display: grid; gap: 2px; min-inline-size: 0; }
+  .home-lesson-eyebrow { font: var(--type-eyebrow); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--_ink); }
+  .home-lesson-title { font: var(--type-emphasis); color: var(--text-1); }
+  .home-lesson-line { margin: 0; font: var(--type-small); color: var(--text-2); text-wrap: pretty; }
+  .home-lesson-start { grid-column: 1 / -1; justify-self: stretch; }
+  .home-lessons, .home-help-rows { display: grid; gap: 2px; margin-inline: calc(-1 * var(--space-2)); }
+  .home-lesson-row, .home-help-row {
+    display: flex; align-items: center; justify-content: flex-start; gap: var(--space-2-5); min-inline-size: 0;
+    padding: var(--space-1-5) var(--space-2); border: 0; border-radius: var(--radius-sm);
+    background: transparent; color: var(--text-1); text-align: start;
+  }
+  .home-lesson-row:where(:hover), .home-help-row:where(:hover) { background: var(--surface-hover); }
+  .home-lesson-mark {
+    display: grid; place-items: center; flex: none; inline-size: 22px; block-size: 22px; border-radius: var(--radius-pill);
+    background: var(--surface-well); color: var(--text-2); font: var(--type-micro); font-variant-numeric: tabular-nums;
+  }
+  .home-lesson-mark[data-state="done"] { background: var(--success-soft); color: var(--success-text); }
+  .home-lesson-mark > svg { inline-size: var(--icon-xs); block-size: var(--icon-xs); }
+  .home-lesson-row-text, .home-help-text { display: grid; gap: 1px; min-inline-size: 0; }
+  .home-lesson-row-text > b, .home-help-text > b { font: var(--type-ui-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .home-lesson-row-text > small, .home-help-text > small { font: var(--type-small); color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .home-help-icon { display: grid; place-items: center; flex: none; inline-size: 22px; block-size: 22px; color: var(--text-2); }
+  .home-help-icon > svg { inline-size: var(--icon-md); block-size: var(--icon-md); }
+
+  /* ---- Home in less room ----------------------------------------------------------------------------------------- */
+  @container home (inline-size < 900px) {
+    .home-body { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); padding: var(--space-4) var(--space-4) var(--space-6); }
+    .home-side { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: start; }
+    .home-title { font: var(--type-title); letter-spacing: var(--tracking-title); }
+  }
+  @container home (inline-size < 760px) {
+    .home-list-head, .home-list[data-layout="list"] .home-project { grid-template-columns: 48px minmax(0, 1fr) 96px var(--control-md); }
+    .home-list-head > :not(:first-child, :nth-child(4)), :where(.home-list[data-layout="list"]) .home-project-col:not(:nth-of-type(5)) { display: none; }
+  }
+  @container home (inline-size < 520px) {
+    .home-body { padding: var(--space-3) var(--space-3) var(--space-5); gap: var(--space-4); }
+    .home-main { gap: var(--space-4); }
+    .home-start-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+    .home-start-tile { padding: var(--space-2); gap: var(--space-2); }
+    .home-start-art { inline-size: 36px; block-size: 36px; }
+    .home-start-text > small { display: none; }
+    .home-search { flex: 1 1 0; inline-size: auto; }
+    .home-projects-tools { flex: 1 1 100%; }
+    .home-list, .home-loading { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+    .home-lede { display: none; }
+  }
+  /* A short window keeps the first screen for what starts work: less air above it. */
+  :where(:root[data-height="low"]) .home-body { padding-block-start: var(--space-3); }
+  :where(:root[data-height="low"]) .home-main { gap: var(--space-4); }
+  :where(:root[data-height="low"]) .home-title { font: var(--type-title); letter-spacing: var(--tracking-title); }
+  /* Under a finger the card's menu is always there to press. */
+  :where(:root:not([data-input="touch"])) .home-project:not(:hover, :focus-within) > .home-project-more { opacity: 0; }
+
+  /* ---- A tutorial: the strip in the stage header ------------------------------------------------------------------- */
+  /* In Animate the lesson has the header's start to itself; in Draw and Build their own bar keeps it and the lesson waits. */
+  :where(.stage-head[data-lesson][data-workspace="animate"]) > .stage-head-start > :not(.tutorial-strip) { display: none; }
+  :where(.stage-head[data-lesson]:not([data-workspace="animate"])) > .stage-head-start > .tutorial-strip { display: none; }
+  /* The view toggles keep their glyphs: the sentence gets the room. */
+  :where(.stage-head[data-lesson]) .ui-button.stage-toggle { --_px: 0; inline-size: var(--control-md); }
+  :where(.stage-head[data-lesson]) .stage-toggle > .ui-label { display: none; }
+  .tutorial-strip {
+    flex: 1 1 0; display: flex; align-items: center; gap: var(--space-1-5); min-inline-size: 0;
+    block-size: var(--control-lg); padding-inline: 2px var(--space-1);
+    border-radius: var(--radius-pill); background: var(--tint-fx-soft); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint-fx) 34%, transparent);
+    container: lesson / inline-size;
+  }
+  .tutorial-strip[data-state="done"], .tutorial-strip[data-state="finished"] { background: var(--success-soft); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--success-dot) 40%, transparent); }
+  .tutorial-strip > [hidden] { display: none; }
+  .ui-button.tutorial-strip-title { --_px: var(--space-2); --_h: var(--control-md); flex: none; gap: var(--space-1); color: var(--tint-fx-ink); font-variant-numeric: tabular-nums; }
+  .tutorial-strip-count { font: var(--type-small-strong); white-space: nowrap; }
+  .ui-button > .tutorial-strip-chevron { inline-size: var(--icon-xs); block-size: var(--icon-xs); opacity: 0.7; }
+  .tutorial-dots { display: inline-flex; align-items: center; gap: 3px; flex: none; }
+  .tutorial-dots > i { inline-size: 6px; block-size: 6px; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--tint-fx) 26%, transparent); transition: inline-size var(--dur-base) var(--ease-out), background-color var(--dur-base); }
+  .tutorial-dots > i[data-state="done"] { background: var(--tint-fx); }
+  .tutorial-dots > i[data-state="current"] { inline-size: 16px; background: var(--tint-fx); }
+  .tutorial-say {
+    flex: 1 1 0; display: flex; align-items: center; gap: var(--space-1); min-inline-size: 0; margin: 0;
+    font: var(--type-ui-strong); color: var(--text-1);
+  }
+  .tutorial-say-text { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tutorial-say-check { display: none; flex: none; color: var(--success-text); }
+  .tutorial-say-check > svg { display: block; inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .tutorial-strip:where([data-state="done"], [data-state="finished"]) .tutorial-say-check { display: block; }
+  .tutorial-strip:where([data-state="done"], [data-state="finished"]) .tutorial-say { color: var(--success-text); }
+  .tutorial-strip > :is(.ui-button, .ui-icon-button) { flex: none; }
+  .tutorial-strip > .ui-button { --_h: var(--control-md); --_px: var(--space-3); }
+  .tutorial-strip > .ui-icon-button { --_s: var(--control-md); --_r: var(--radius-pill); }
+  /* The sentence is never cut: where it does not fit the strip it shows on the caption under the header instead
+   * (tutorial-presenter.mjs syncSay; the strip's own keeps its place so the measurement holds). */
+  .tutorial-strip[data-say-below] > .tutorial-say { visibility: hidden; }
+  .tutorial-caption {
+    display: flex; align-items: flex-start; gap: var(--space-1); max-inline-size: var(--w, 320px); margin: 0;
+    padding: var(--space-1-5) var(--space-3); border-radius: var(--radius-lg);
+    background: var(--surface-raised); color: var(--text-1); font: var(--type-ui-strong); text-wrap: pretty;
+    box-shadow: 0 0 0 1.5px var(--tint-fx), var(--elevation-2);
+  }
+  .tutorial-caption:where([data-state="done"], [data-state="finished"]) { color: var(--success-text); box-shadow: 0 0 0 1.5px var(--success-dot), var(--elevation-2); }
+  .tutorial-caption:where([data-state="done"], [data-state="finished"]) > .tutorial-say-check { display: block; margin-block-start: 1px; }
+  /* A narrower header: the dots go (the count says the same), Show me keeps its glyph, then Back and Leave move to the details. */
+  @container lesson (inline-size < 620px) {
+    .tutorial-dots { display: none; }
+    .tutorial-show > .ui-label { display: none; }
+    .tutorial-strip > .tutorial-show { --_px: 0; inline-size: var(--control-md); }
+  }
+  @container lesson (inline-size < 300px) {
+    .tutorial-strip-title > svg:first-child, .tutorial-back, .tutorial-home { display: none; }
+    .tutorial-strip > .ui-button { --_px: var(--space-2); }
+  }
+  @container lesson (inline-size < 190px) {
+    .tutorial-leave, .tutorial-show { display: none; }
+  }
+
+  /* The details: every step, the longer explanation. */
+  .tutorial-popover { inline-size: min(360px, calc(100vw - var(--space-4))); }
+  .tutorial-pop-line { margin: 0 0 var(--space-3); font: var(--type-small); color: var(--text-2); text-wrap: pretty; }
+  .tutorial-steps { display: grid; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
+  .tutorial-step { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-2); align-items: start; padding: var(--space-1-5) var(--space-2); border-radius: var(--radius-sm); }
+  .tutorial-step[data-state="current"] { background: var(--tint-fx-soft); }
+  .tutorial-step-mark {
+    display: grid; place-items: center; inline-size: 20px; block-size: 20px; border-radius: var(--radius-pill);
+    background: var(--surface-well); color: var(--text-2); font: var(--type-micro); font-variant-numeric: tabular-nums;
+  }
+  .tutorial-step-mark > svg { inline-size: var(--icon-xs); block-size: var(--icon-xs); }
+  .tutorial-step[data-state="done"] > .tutorial-step-mark { background: var(--success-soft); color: var(--success-text); }
+  .tutorial-step[data-state="current"] > .tutorial-step-mark { background: var(--tint-fx); color: var(--on-badge); }
+  .tutorial-step-text { display: grid; gap: var(--space-1); min-inline-size: 0; }
+  .tutorial-step-name { padding: 0; border: 0; background: none; color: var(--text-2); font: var(--type-ui); text-align: start; text-wrap: pretty; }
+  button.tutorial-step-name:where(:hover) { color: var(--text-1); text-decoration: underline; }
+  button.tutorial-step-name:focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: var(--focus-offset); border-radius: var(--radius-2xs); }
+  .tutorial-step[data-state="current"] .tutorial-step-name { color: var(--text-1); font: var(--type-ui-strong); }
+  .tutorial-step[data-state="todo"] .tutorial-step-name { color: var(--text-3); }
+  .tutorial-step-more { margin: 0; font: var(--type-small); color: var(--text-2); text-wrap: pretty; }
+  .tutorial-step-shortcut { margin: 0; font: var(--type-small-strong); color: var(--tint-fx-ink); }
+  .tutorial-pop-foot { display: flex; justify-content: space-between; gap: var(--space-2); inline-size: 100%; }
+
+  /* ---- The mark and Show me's pointer -------------------------------------------------------------------------------- */
+  .tutorial-mark, .tutorial-ghost, .tutorial-caption { position: fixed; inset-block-start: 0; inset-inline-start: 0; z-index: var(--z-floating); pointer-events: none; translate: var(--x, 0) var(--y, 0); }
+  .tutorial-mark[hidden], .tutorial-ghost[hidden], .tutorial-caption[hidden] { display: none; }
+  .tutorial-mark[data-kind="ring"] {
+    inline-size: var(--w, 0); block-size: var(--h, 0); border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 2px var(--tint-fx), 0 0 0 6px color-mix(in srgb, var(--tint-fx) 24%, transparent);
+    transition: translate var(--dur-base) var(--ease-out), inline-size var(--dur-base) var(--ease-out), block-size var(--dur-base) var(--ease-out);
+  }
+  .tutorial-mark[data-kind="ring"].is-pulsing { animation: tutorial-ring 0.9s var(--ease-out) 3; }
+  @keyframes tutorial-ring {
+    from { box-shadow: 0 0 0 2px var(--tint-fx), 0 0 0 2px color-mix(in srgb, var(--tint-fx) 55%, transparent); }
+    to { box-shadow: 0 0 0 2px var(--tint-fx), 0 0 0 16px color-mix(in srgb, var(--tint-fx) 0%, transparent); }
+  }
+  /* A dot marks the exact place to drag from: it sits on the joint and breathes until the step is done. */
+  .tutorial-mark[data-kind="dot"]::before, .tutorial-mark[data-kind="dot"]::after {
+    content: ""; position: absolute; inset-block-start: -9px; inset-inline-start: -9px; inline-size: 18px; block-size: 18px; border-radius: 50%;
+  }
+  .tutorial-mark[data-kind="dot"]::before { background: var(--tint-fx); box-shadow: 0 0 0 2px var(--surface), var(--elevation-2); }
+  .tutorial-mark[data-kind="dot"]::after { box-shadow: 0 0 0 2px var(--tint-fx); animation: tutorial-dot 1.6s var(--ease-out) infinite; }
+  @keyframes tutorial-dot { from { scale: 1; opacity: 0.9; } to { scale: 2.6; opacity: 0; } }
+
+  .tutorial-ghost-pointer { position: absolute; inset-block-start: -3px; inset-inline-start: -5px; display: block; color: var(--text-1); transition: scale var(--dur-fast) var(--ease-out); transform-origin: 20% 12%; }
+  .tutorial-ghost-pointer > svg { display: block; inline-size: 28px; block-size: 28px; fill: var(--surface-raised); filter: drop-shadow(0 2px 3px color-mix(in srgb, var(--text-1) 35%, transparent)); }
+  .tutorial-ghost::before {
+    content: ""; position: absolute; inset-block-start: -14px; inset-inline-start: -14px; inline-size: 28px; block-size: 28px; border-radius: 50%;
+    background: color-mix(in srgb, var(--tint-fx) 30%, transparent); box-shadow: 0 0 0 2px var(--tint-fx); scale: 0; opacity: 0;
+    transition: scale var(--dur-fast) var(--ease-out), opacity var(--dur-fast);
+  }
+  .tutorial-ghost.is-down::before { scale: 1; opacity: 1; }
+  .tutorial-ghost.is-down > .tutorial-ghost-pointer { scale: 0.86; }
+  .tutorial-ghost.is-scrolling > .tutorial-ghost-pointer { animation: tutorial-scroll 0.5s var(--ease-in-out) 3 alternate; }
+  @keyframes tutorial-scroll { to { translate: 0 -10px; } }
+  .tutorial-ghost-note {
+    position: absolute; inset-block-start: 30px; inset-inline-start: 14px; inline-size: max-content; max-inline-size: 260px;
+    padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm);
+    background: var(--surface-inverse); color: var(--text-inverse); font: var(--type-small-strong); box-shadow: var(--elevation-2);
+  }
+  .tutorial-ghost-note[hidden] { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-skeleton, .tutorial-mark[data-kind="dot"]::after, .tutorial-mark[data-kind="ring"].is-pulsing, .tutorial-ghost.is-scrolling > .tutorial-ghost-pointer { animation: none; }
+    .tutorial-mark[data-kind="ring"], .home-start-tile, .home-project { transition: none; }
+  }
+  @media (forced-colors: active) {
+    .home-start-tile, .home-project, .home-empty { outline: 1px solid CanvasText; }
+    .tutorial-strip { outline: 1px solid CanvasText; }
+    .tutorial-mark[data-kind="ring"] { outline: 3px solid Highlight; box-shadow: none; }
+    .tutorial-mark[data-kind="dot"]::before { background: Highlight; forced-color-adjust: none; }
+  }
+}

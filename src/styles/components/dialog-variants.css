@@ -1,0 +1,78 @@
+/* Dialog variants (components.md "Dialog" and "Range strip"). Import after
+ * components/dialog.css: these rules share its specificity and win on order.
+ *
+ * Export (`data-variant="export"`): 960 × min(700, window − 32), one height
+ * for every type so the preview never jumps. A sunken preview pane (the
+ * stage, the trim strip and its caption) beside the form column; neutral, no
+ * lime and no badge. The export sheet builds it with createDialog({size: 'lg',
+ * variant: 'export'}), adds `.ui-export-form` to the dialog's form and
+ * prepends `.ui-export-preview` to that form, so the caption's From and To
+ * are form fields: Enter in them submits and the form's validation covers
+ * them. The form is a two-column grid: the preview spans the rows of the
+ * head, body and foot. At the compact and minimal tiers the dialog fills the
+ * window as one column and the preview is a 48px strip above the head.
+ *
+ * Range strip: the export trim. Mini thumbnails (`<i>`, `data-out` outside
+ * the range; the sheet samples at most 12, so each stays legible) with two
+ * `.ui-range-handle` sliders placed by `--start` and `--end`: 24px targets
+ * around an 8px ink bar, never shorter than a 24px strip. Each handle is
+ * role="slider" with aria-valuemin, aria-valuemax, aria-valuenow and
+ * aria-valuetext ("Frame 12"), moves by a frame on the arrow keys (Shift: 10,
+ * Home and End: the ends) and names the typed field it drives with
+ * aria-controls (#export-start, #export-end: the browser tests fill those). */
+@layer components {
+  .ui-dialog[data-variant="export"] { --_w: 960px; block-size: min(700px, calc(100dvh - 32px)); }
+  .ui-dialog-form.ui-export-form {
+    display: grid; grid-template-columns: 380px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  .ui-export-form > :not(.ui-export-preview) { grid-column: 2; min-inline-size: 0; }
+  .ui-export-preview {
+    display: flex; grid-column: 1; grid-row: 1 / -1; flex-direction: column; justify-content: center; gap: var(--space-4);
+    min-inline-size: 0; min-block-size: 0; padding: var(--space-6); background: var(--surface-sunken);
+  }
+  .ui-export-stage {
+    aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-md);
+    background: var(--artboard-placeholder); box-shadow: var(--shadow-artboard);
+  }
+  .ui-export-stage > :is(canvas, img, svg) { display: block; inline-size: 100%; block-size: 100%; object-fit: contain; }
+  .ui-export-caption {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-2);
+    font: var(--type-small-strong); color: var(--text-2); font-variant-numeric: tabular-nums;
+  }
+
+  .ui-range-strip {
+    --start: 0%;
+    --end: 100%;
+    position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; align-items: center; gap: var(--space-0-5);
+    min-block-size: var(--control-sm); padding: var(--space-1) var(--space-3); border-radius: var(--radius-md); background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+  }
+  .ui-range-strip > i { min-inline-size: 0; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--radius-2xs); background: var(--artboard-placeholder); }
+  .ui-range-strip > i > :is(canvas, img, svg) { display: block; inline-size: 100%; block-size: 100%; }
+  .ui-range-strip > i[data-out] { opacity: 0.35; }
+  .ui-range-handle {
+    position: absolute; inset-block: 0; inset-inline-start: var(--start); translate: -50% 0;
+    display: grid; place-items: center; inline-size: var(--control-sm); padding: 0;
+    border: 0; background: transparent; cursor: ew-resize; touch-action: none;
+  }
+  .ui-range-handle[data-edge="end"] { inset-inline-start: var(--end); }
+  .ui-range-handle::before { content: ""; inline-size: 8px; block-size: 100%; border-radius: var(--radius-pill); background: var(--text-1); }
+  .ui-range-handle::after { content: ""; position: absolute; inline-size: 2px; block-size: 10px; border-radius: 1px; background: var(--surface); }
+  .ui-range-handle:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 0; border-radius: var(--radius-sm); }
+
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-dialog[data-variant="export"] { block-size: 100dvh; }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-dialog-form.ui-export-form {
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto;
+  }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-form > :not(.ui-export-preview) { grid-column: 1; }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-preview {
+    grid-row: auto; flex-direction: row; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-4);
+  }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-stage { flex: none; block-size: 48px; }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .ui-export-preview > .ui-range-strip { flex: 1 1 auto; min-inline-size: 0; }
+
+  @media (forced-colors: active) {
+    .ui-range-strip { border: 1px solid CanvasText; }
+    .ui-range-handle::before { background: CanvasText; }
+  }
+}

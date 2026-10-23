@@ -1,0 +1,81 @@
+/* Panels' own controls on the kit's look (experience.md revision 5), for the
+ * modules that still render native markup inside a panel or popover: the VFX
+ * panel's selects (vfx-*.mjs; the rest of it is features/vfx.css), Library
+ * (asset-library.mjs), the camera's motion and the audio controls. Their ids, data hooks and events stay; only the look joins
+ * the kit, so a select, a disclosure or a group heading reads the same in
+ * every panel.
+ *
+ *   a native select      the kit's field: a quiet well, no border, a caret
+ *   a disclosure         a row whose chevron turns when it opens
+ *   a group heading      sentence case in the eyebrow type (never capitals)
+ *   a range slider       the kit's slider colours */
+@layer features {
+  /* ---- Native selects outside the kit's own .ui-select ---- */
+  :where(#vfx-panel, #user-library, .camera-motion-panel, .audio-properties, .audio-clip-popover) select:not(:where(.ui-select *, .ui-field *)) {
+    appearance: none; min-inline-size: 0; block-size: var(--control-md); padding: 0 var(--space-6) 0 var(--space-2-5);
+    border: 0; border-radius: var(--radius-md); background-color: var(--surface-sunken); color: var(--text-1); font: var(--type-ui);
+    background-image: linear-gradient(45deg, transparent 50%, var(--text-3) 50%), linear-gradient(135deg, var(--text-3) 50%, transparent 50%);
+    background-position: calc(100% - 15px) 55%, calc(100% - 11px) 55%; background-size: 4px 4px; background-repeat: no-repeat;
+    box-shadow: none; cursor: default;
+  }
+  :where(#vfx-panel, #user-library, .camera-motion-panel, .audio-properties, .audio-clip-popover) select:not(:where(.ui-select *, .ui-field *)):where(:hover) {
+    box-shadow: inset 0 0 0 1px var(--line-3);
+  }
+  :where(#vfx-panel, #user-library, .camera-motion-panel, .audio-properties, .audio-clip-popover) select:not(:where(.ui-select *, .ui-field *)):focus-visible {
+    outline: none; box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo);
+  }
+
+  /* ---- The camera's motion (camera-motion-ui.mjs, camera-motion-graph.mjs) ---- */
+  /* The curve's channels on the kit's segmented control, Fit at the toolbar's end. */
+  .motion-graph-toolbar { justify-content: space-between; padding: var(--space-1-5); }
+  /* The Motion tab reads top down: what the moves are (a gallery that explains each preset, then the list), then the
+   * selected move's timing and a few plain sliders; Fine tune holds the exact numbers. */
+  .camera-motion-panel { display: grid; gap: var(--space-3); }
+  .motion-intro, .motion-description { margin: 0; font: var(--type-small); color: var(--text-2); }
+  .motion-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+  .motion-tile {
+    display: flex; align-items: flex-start; gap: var(--space-2); min-inline-size: 0; padding: var(--space-2-5);
+    border: 1px solid var(--line-1); border-radius: var(--radius-md); background: var(--surface-well);
+    color: var(--text-1); text-align: start; cursor: pointer; transition: background-color var(--dur-fast);
+  }
+  .motion-tile:where(:hover):not(:disabled) { background: var(--surface-hover); }
+  .motion-tile:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset); }
+  .motion-tile:disabled { opacity: 0.42; cursor: default; }
+  /* Follow leads the gallery across its full width. */
+  .motion-tile:where([data-kind="follow"]) { grid-column: 1 / -1; border-color: var(--accent-line); background: var(--accent-soft); }
+  .motion-tile:where([data-kind="follow"]):hover { background: var(--accent-soft-hover); }
+  .motion-tile-icon { display: grid; place-items: center; flex: none; inline-size: 28px; block-size: 28px; border-radius: var(--radius-sm); background: var(--surface-raised); color: var(--accent-text); }
+  .motion-tile-icon > svg { inline-size: 16px; block-size: 16px; }
+  .motion-tile-text { display: grid; gap: 2px; min-inline-size: 0; }
+  .motion-tile-text > strong { font: var(--type-small-strong); }
+  .motion-tile-text > small { font: var(--type-micro); color: var(--text-2); white-space: normal; overflow-wrap: anywhere; }
+  .motion-tile-text > strong { white-space: normal; }
+  .motion-list-head, .motion-group-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); font: var(--type-eyebrow); color: var(--text-2); }
+  .motion-select-name { display: grid; min-inline-size: 0; }
+  .motion-select-name > small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--type-micro); color: var(--text-3); }
+  .motion-card-title { display: flex; align-items: center; gap: var(--space-1-5); }
+  .motion-card-title > svg { inline-size: 16px; block-size: 16px; color: var(--accent-text); }
+  /* Each motion type keeps its timeline colour (tokens.css --sheet-motion-*) on its icon here, so a pill on the Motion
+   * row and its card read as the same thing. */
+  :where(.motion-list-row, .motion-card, .motion-tile):where([data-kind="follow"]) { --motion-color: var(--sheet-motion-follow); }
+  :where(.motion-list-row, .motion-card, .motion-tile):where([data-kind="shake"]) { --motion-color: var(--sheet-motion-shake); }
+  :where(.motion-list-row, .motion-card, .motion-tile):where([data-kind="impact"]) { --motion-color: var(--sheet-motion-impact); }
+  :where(.motion-list-row, .motion-card, .motion-tile):where([data-kind="handheld"]) { --motion-color: var(--sheet-motion-handheld); }
+  :where(.motion-list-row, .motion-card, .motion-tile):where([data-kind="wobble"]) { --motion-color: var(--sheet-motion-wobble); }
+  :where(.motion-list-row, .motion-card, .motion-tile):where([data-kind="pulse"]) { --motion-color: var(--sheet-motion-pulse); }
+  .motion-select > svg, .motion-card-title > svg, .motion-tile-icon > svg { color: var(--motion-color, var(--accent-text)); }
+  .motion-group { display: grid; gap: var(--space-1); padding-block: var(--space-2); border-block-start: 1px solid var(--line-1); }
+  .motion-slider-row { grid-template-columns: 78px minmax(0, 1fr) 64px; }
+  .motion-slider-value { display: flex; align-items: center; gap: 2px; padding-inline-end: var(--space-1); border-radius: var(--radius-sm); background: var(--surface-field); }
+  .motion-slider-value > input { inline-size: 100%; min-inline-size: 0; block-size: var(--control-sm); padding: 0 var(--space-1); border: 0; background: transparent; color: var(--text-1); font: var(--type-value); font-variant-numeric: tabular-nums; text-align: end; }
+  .motion-slider-value > input:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 0; border-radius: var(--radius-sm); }
+  .motion-slider-value > small { color: var(--text-3); font: var(--type-micro); }
+  .motion-axes { min-inline-size: 0; grid-column: 2 / -1; }
+  .motion-targets { display: grid; gap: var(--space-0-5); }
+  .motion-target { display: grid; grid-template-columns: minmax(0, 1fr) 84px auto; align-items: center; gap: var(--space-2); min-block-size: var(--control-md); }
+  .motion-target-name { display: flex; align-items: center; gap: var(--space-1); min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--type-small-strong); }
+  .motion-target-name > svg { flex: none; inline-size: 14px; block-size: 14px; color: var(--accent-text); }
+  .motion-target:where(.is-missing) .motion-target-name { color: var(--text-3); font-style: italic; }
+  .motion-follow-add, .motion-keep-framing { justify-self: start; }
+  .motion-offset { margin-block: var(--space-1); }
+}

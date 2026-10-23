@@ -1,0 +1,40 @@
+/* Toolbar (components.md "Toolbar") and the quiet toggle of header rows.
+ *
+ * .ui-toolbar is a named inline-size container for a bar that gets its width
+ * from layout (a stretched flex or grid child), never from its content. Its
+ * labels drop by priority, never all at once: a child marked
+ * data-label-priority="2" keeps its accessible name but hides its word below
+ * 520px of the bar. Header rows (the stage header, the timeline header, the
+ * tool options) fold by the tool options bar's rule instead (tool-options.mjs).
+ *
+ * The quiet toggle (components.md "Icon button"): a view toggle in a header
+ * row (Joints, Motion paths, Grid, Effects preview, Loop, Onion, Audio, Mirror,
+ * Pen pressure, Snapping, Static handles, Highlight part) is marked data-quiet;
+ * on, it is a soft tile with an ink glyph, so a default that is on never adds
+ * colour at rest. Blue stays for selection, the current frame, the active tool
+ * and toggles that change what edits do (Whole branch, Isolate). This rule
+ * must load after button.css and icon-button.css, whose [aria-pressed] rules
+ * it overrides at the same specificity. */
+@layer components {
+  .ui-toolbar {
+    container: toolbar / inline-size;
+    display: flex; align-items: center; gap: var(--space-1); min-inline-size: 0;
+  }
+  .ui-toolbar-spacer { flex: 1 1 0; min-inline-size: 0; }
+  .ui-toolbar-group { display: flex; align-items: center; gap: var(--space-0-5); flex: none; }
+  @container toolbar (width < 520px) {
+    :where(.ui-toolbar) [data-label-priority="2"] > .ui-label {
+      position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+    }
+    :where(.ui-toolbar) .ui-button[data-label-priority="2"] { --_px: 0; inline-size: var(--_h); }
+  }
+
+  :is(.ui-icon-button, .ui-button):where([data-quiet])[aria-pressed="true"] {
+    --_bg: var(--control-soft); --_bg-hover: var(--control-soft-hover); --_bg-active: var(--control-soft-pressed);
+    --_fg: var(--text-1); --_fg-hover: var(--text-1);
+  }
+
+  @media (forced-colors: active) {
+    :is(.ui-icon-button, .ui-button):where([data-quiet])[aria-pressed="true"] { border-color: Highlight; }
+  }
+}

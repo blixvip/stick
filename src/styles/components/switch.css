@@ -1,0 +1,47 @@
+/* Switch (components.md "Switch"): 32×18. Off is a --line-control ring
+ * (3.6:1) with a 10px knob; on is --accent-strong with a 14px knob. In the
+ * inspector it is a field switch (field.css) or a titled section's title
+ * switch (section.css); in popovers and dialogs it sits at the end of a
+ * .ui-switch-row, whose whole 32px row is the target. Always a native
+ * checkbox with role="switch". Today's defaults stay (Use IK off, Pin joint off). */
+@layer components {
+  .ui-switch {
+    appearance: none; position: relative; flex: none; margin: 0;
+    inline-size: 32px; block-size: 18px; border-radius: var(--radius-pill);
+    background: var(--surface-sunken); box-shadow: inset 0 0 0 1.5px var(--line-control);
+    cursor: default;
+    transition: background-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
+  }
+  .ui-switch::before {
+    content: ""; position: absolute; inset-block-start: 4px; inset-inline-start: 4px;
+    inline-size: 10px; block-size: 10px; border-radius: 50%;
+    background: var(--switch-knob-off);
+    transition: translate var(--dur-base) var(--ease-out), inline-size var(--dur-base) var(--ease-out),
+      block-size var(--dur-base) var(--ease-out), inset var(--dur-base) var(--ease-out), background-color var(--dur-fast);
+  }
+  .ui-switch:where(:hover):not(:checked, :disabled) { box-shadow: inset 0 0 0 1.5px var(--text-2); }
+  .ui-switch:where(:hover):not(:checked, :disabled)::before { background: var(--text-2); }
+  .ui-switch:checked { background: var(--accent-strong); box-shadow: none; }
+  .ui-switch:checked::before {
+    inset-block-start: 2px; inset-inline-start: 2px; inline-size: 14px; block-size: 14px;
+    translate: 14px 0; background: var(--switch-knob-on);
+  }
+  .ui-switch:checked:where(:dir(rtl))::before { translate: -14px 0; }
+  .ui-switch:checked:where(:hover:not(:disabled)) { background: color-mix(in srgb, var(--accent-strong) 86%, var(--text-1)); }
+  .ui-switch:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .ui-switch:disabled { opacity: 0.42; }
+
+  .ui-switch-row {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+    min-block-size: var(--control-lg); font: var(--type-ui); color: var(--text-1); user-select: none;
+  }
+  .ui-switch-row > span:first-child { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-switch-row:has(input:disabled) { color: var(--text-disabled); }
+
+  @media (forced-colors: active) {
+    .ui-switch { border: 1px solid CanvasText; }
+    .ui-switch::before { background: CanvasText; }
+    .ui-switch:checked { background: Highlight; }
+    .ui-switch:checked::before { background: HighlightText; }
+  }
+}

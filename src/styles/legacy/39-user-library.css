@@ -1,0 +1,8 @@
+/* What remains of the Library's first stylesheet: the retired inspector switch, the hidden-panel rule and the drag cursors. The Library itself is features/library.css. */
+.inspector-switch{display:flex;gap:4px;padding:6px 10px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--theme-subtle, #fafafa)}
+.inspector-switch button{flex:1;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--theme-muted, #777);padding:5px 8px;font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.inspector-switch button[aria-selected=true]{background:var(--theme-panel, #fff);color:var(--theme-text, #252525);border-color:var(--theme-border, #e1e1e1);box-shadow:0 1px 3px var(--theme-shadow, #00000008)}
+.right-panel>[hidden],#user-library [hidden]{display:none!important}
+.properties-library-save{padding:6px 10px;border-top:1px solid var(--border);margin-top:auto;flex-shrink:0}.properties-library-save .button{width:100%}
+.right-panel:has(.inspector-switch) .inspector-header{min-height:44px;padding:0 16px}.right-panel:has(.inspector-switch) .panel-tab-title{display:none}
+.library-pointer-dragging,.library-pointer-dragging *{cursor:grabbing!important;user-select:none!important}.library-pointer-over-target,.library-pointer-over-target *{cursor:copy!important}

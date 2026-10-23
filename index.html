@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#eceff4" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; media-src 'self' blob: data:; object-src 'none'"
+    />
+    <title>StykAnimate — First steps</title>
+    <link rel="icon" type="image/svg+xml" href="./mark.svg" />
+    <script src="./src/theme-bootstrap.js"></script>
+    <link rel="preload" href="./assets/fonts/inter-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="./src/styles/app.css" />
+  </head>
+  <body>
+    <div id="app" class="shell">
+      <!-- The top band (experience.md §2): where (the mark and its menu, the open
+           projects as tabs) │ the workspaces │ the actions (history, Save, Export, or a
+           session's Export, Cancel, Test rig and Done) and the window controls.
+           src/shell/topbar.mjs measures its folds and shows a session's buttons;
+           src/shell/project-tabs-view.mjs renders the tabs. The menus live in the mark's
+           menu: the menubar stays in the markup as their source. -->
+      <header class="titlebar shell-top">
+        <div class="band-cluster band-start">
+          <button class="brand shell-mark" data-action="menu" aria-label="Main menu" aria-haspopup="menu" aria-expanded="false" data-i18n-aria-label="chrome.mainMenu">
+            <img src="./symbol.svg" alt="" /><span>StykAnimate</span
+            ><span class="chevron" data-icon="chevronDown"></span>
+          </button>
+          <nav class="app-menubar ui-menubar" role="menubar" aria-label="Application menu" data-i18n-aria-label="chrome.applicationMenu">
+            <button class="ui-menubar-item" role="menuitem" data-app-menu="file" aria-haspopup="menu" aria-expanded="false" data-i18n="chrome.file">File</button>
+            <button class="ui-menubar-item" role="menuitem" data-app-menu="edit" aria-haspopup="menu" aria-expanded="false" data-i18n="chrome.edit">Edit</button>
+            <button class="ui-menubar-item" role="menuitem" data-app-menu="view" aria-haspopup="menu" aria-expanded="false" data-i18n="chrome.view">View</button>
+            <button class="ui-menubar-item" role="menuitem" data-app-menu="editor" aria-haspopup="menu" aria-expanded="false" data-i18n="chrome.joint">Joint</button>
+            <button class="ui-menubar-item" role="menuitem" data-app-menu="animation" aria-haspopup="menu" aria-expanded="false" data-i18n="chrome.animation">Animation</button>
+            <button class="ui-menubar-item" role="menuitem" data-app-menu="help" aria-haspopup="menu" aria-expanded="false" data-i18n="chrome.help">Help</button>
+          </nav>
+          <!-- Home (src/home/home.mjs): the page with the projects and the tutorials, and the way back from it. -->
+          <button type="button" class="ui-icon-button band-home" data-action="home" aria-pressed="false" aria-label="Home" data-tooltip="Home" data-icon="home" data-i18n-aria-label="home.home" data-i18n-tooltip="home.home"></button>
+          <div class="project-tabs" id="project-tabs" data-band-reserve="tabs">
+            <div class="project-tabs-list" role="tablist" aria-label="Open projects" data-i18n-aria-label="chrome.openProjects"></div>
+            <button type="button" class="ui-icon-button project-tabs-add" data-size="sm" data-action="new" aria-label="New animation" data-icon="plus" data-i18n-aria-label="chrome.newAnimation"></button>
+          </div>
+        </div>
+        <div class="band-cluster band-center">
+          <div class="workspace-switch ui-segmented" role="group" aria-label="Editing workspace" data-size="lg" data-i18n-aria-label="chrome.editingWorkspace">
+            <button type="button" class="ui-segmented-item" data-workspace-mode="animate" aria-pressed="true" title="Animate"
+               data-i18n-title="chrome.animate"><span class="ui-dot" data-tint="select" aria-hidden="true"></span><span class="band-ws-icon" data-icon="ws-animate"></span
+              ><span class="band-label" data-i18n="chrome.animate">Animate</span></button>
+            <button type="button" class="ui-segmented-item" data-workspace-mode="draw" aria-pressed="false" title="Draw"
+               data-i18n-title="chrome.draw"><span class="ui-dot" data-tint="draw" aria-hidden="true"></span><span class="band-ws-icon" data-icon="ws-draw"></span
+              ><span class="band-label" data-i18n="chrome.draw">Draw</span></button>
+            <button type="button" class="ui-segmented-item" data-workspace-mode="rig" aria-pressed="false" title="Build a figure"
+               data-i18n-title="chrome.buildAFigure"><span class="ui-dot" data-tint="library" aria-hidden="true"></span><span class="band-ws-icon" data-icon="ws-build"></span
+              ><span class="band-label" data-i18n="chrome.build">Build</span></button>
+          </div>
+        </div>
+        <div class="band-cluster band-end">
+          <div class="band-history" role="toolbar" aria-label="Edit history" data-i18n-aria-label="chrome.editHistory">
+            <button class="ui-icon-button" data-action="undo" title="Undo · Ctrl+Z" aria-label="Undo" data-icon="undo" data-i18n-title="chrome.undoCtrlZ" data-i18n-aria-label="chrome.undo"></button>
+            <button class="ui-icon-button band-redo" data-action="redo" title="Redo · Ctrl+Shift+Z" aria-label="Redo" data-icon="redo" data-i18n-title="chrome.redoCtrlShiftZ" data-i18n-aria-label="chrome.redo"></button>
+          </div>
+          <button
+            class="ui-icon-button band-save"
+            data-action="save"
+            title="Save project · Ctrl+S"
+            aria-label="Save"
+            data-icon="save"
+           data-i18n-title="chrome.saveProjectCtrlS" data-i18n-aria-label="chrome.save"></button>
+          <button
+            type="button"
+            class="ui-icon-button shell-sheet-button"
+            data-action="panel-toggle-properties"
+            aria-label="Properties"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            data-icon="inspector"
+            hidden
+           data-i18n-aria-label="chrome.properties"></button>
+          <!-- The one Export: the ink primary at rest, a quiet button beside a session's Done. -->
+          <button class="ui-button band-export" data-variant="primary" data-action="export" title="Export" data-icon="export"
+             data-i18n-title="chrome.export"><span class="band-label" data-i18n-slot data-i18n="chrome.export">Export</span></button>
+          <button type="button" class="ui-button band-cancel" data-variant="ghost" data-action="movieclip-cancel" data-band-session="movieclip"
+            title="Discard the changes to this movieclip" hidden data-i18n-title="chrome.discardTheChangesToThisMovieclip"><span class="band-label" data-i18n="chrome.cancel">Cancel</span></button>
+          <button type="button" class="ui-button band-testrig" data-variant="ghost" data-action="rig-test" data-band-session="build"
+            title="Test rig: pose the figure in a preview" data-icon="test-rig" hidden data-i18n-title="chrome.testRigPoseTheFigureInAPreview"><span class="band-label" data-i18n="chrome.testRig">Test rig</span></button>
+          <button type="button" class="ui-button band-done" data-variant="primary" data-action="movieclip-done" data-band-session="movieclip"
+            title="Finish editing the movieclip" data-icon="check" hidden data-i18n-title="chrome.finishEditingTheMovieclip"><span class="band-label" data-i18n="chrome.done">Done</span></button>
+          <button type="button" class="ui-button band-done" data-variant="primary" data-action="camera-done" data-band-session="camera"
+            title="Finish editing the camera" data-icon="check" hidden data-i18n-title="chrome.finishEditingTheCamera"><span class="band-label" data-i18n="chrome.done">Done</span></button>
+          <button type="button" class="ui-button band-done" id="builder-done" data-variant="primary" data-workspace-mode="animate" data-band-session="build"
+            title="Finish building the figure" data-icon="check" hidden data-i18n-title="chrome.finishBuildingTheFigure"><span class="band-label" data-i18n="chrome.done">Done</span></button>
+          <div id="window-controls" hidden>
+            <button
+              data-action="minimize"
+              aria-label="Minimize"
+              data-icon="window-minimize"
+             data-i18n-aria-label="chrome.minimize"></button
+            ><button
+              data-action="maximize"
+              aria-label="Maximize"
+              data-icon="window-maximize"
+             data-i18n-aria-label="chrome.maximize"></button
+            ><button
+              data-action="close"
+              aria-label="Close"
+              data-icon="x"
+             data-i18n-aria-label="chrome.close"></button>
+          </div>
+        </div>
+      </header>
+      <section class="workspace shell-work" data-mode="animate">
+        <!-- The tool rail (experience.md §3.2): only the current workspace's tools, anchored to the top of its column.
+             The order reads right in each workspace; src/shell/rail.mjs shows the current workspace's tools, names them
+             and adds the corner tick of a tool with variants ([data-rail-menu]). -->
+        <nav class="studio-rail shell-rail" aria-label="Editor tools" data-i18n-aria-label="chrome.editorTools">
+          <div class="tool-dock ui-rail" role="toolbar" aria-label="Tools" aria-orientation="vertical" data-i18n-aria-label="chrome.tools">
+            <button type="button" class="ui-tool-button rail-add" id="open-insert" aria-label="Add" aria-haspopup="menu" data-rail-menu="add" data-icon="plus" data-i18n-aria-label="chrome.add"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="rig" data-icon="nodes" aria-label="Edit joints" data-i18n-aria-label="chrome.editJoints"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="select" data-icon="cursor" aria-label="Select and pose" data-i18n-aria-label="chrome.selectAndPose"></button>
+            <button type="button" class="tool ui-tool-button" id="tweener-button" data-tool="tweener" aria-label="Tweener" data-i18n-aria-label="chrome.tweener"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="line" data-icon="line" aria-label="Line" data-i18n-aria-label="chrome.line"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="chain" data-icon="builder-chain" aria-label="Chain pen" data-i18n-aria-label="chrome.chainPen"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="circle" data-icon="circle" aria-label="Circle" data-i18n-aria-label="chrome.circle"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="polygon" data-icon="polygon" aria-label="Polygon" data-i18n-aria-label="chrome.polygon"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="drawing-brush" data-icon="brush" aria-label="Brush" hidden data-i18n-aria-label="chrome.brush"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="drawing-eraser" data-icon="eraser" aria-label="Eraser" hidden data-i18n-aria-label="chrome.eraser"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="drawing-fill" data-icon="paint-bucket" aria-label="Fill" hidden data-i18n-aria-label="chrome.fill"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="drawing-lasso" data-icon="lasso" aria-label="Select pixels" data-rail-menu="lasso" hidden data-i18n-aria-label="chrome.selectPixels"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="drawing-shape" data-icon="shapes" aria-label="Shapes" data-rail-menu="shape" hidden data-i18n-aria-label="chrome.shapes"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="drawing-transform" data-icon="transform" aria-label="Transform" hidden data-i18n-aria-label="chrome.transform"></button>
+            <button type="button" class="tool ui-tool-button" data-tool="hand" data-icon="hand" aria-label="Pan canvas" data-i18n-aria-label="chrome.panCanvas"></button>
+          </div>
+          <!-- Build's creation commands, paired beneath the drawing tools. -->
+          <div class="rail-quick" role="toolbar" aria-label="Build actions" aria-orientation="vertical" hidden data-i18n-aria-label="chrome.buildActions">
+            <button type="button" class="ui-tool-button" data-action="toggle-builder-branch" aria-pressed="false" aria-label="Whole branch" data-tooltip="Whole branch" data-icon="builder-branch" data-i18n-aria-label="chrome.wholeBranch" data-i18n-tooltip="chrome.wholeBranch"></button>
+            <button type="button" class="ui-tool-button" data-action="split-segment" aria-label="Split part" data-tooltip="Split part" data-icon="builder-split" data-i18n-aria-label="chrome.splitPart" data-i18n-tooltip="chrome.splitPart"></button>
+            <button type="button" class="ui-tool-button" data-action="duplicate-branch" aria-label="Duplicate branch" data-tooltip="Duplicate branch" data-icon="duplicate" data-i18n-aria-label="chrome.duplicateBranch" data-i18n-tooltip="chrome.duplicateBranch"></button>
+            <button type="button" class="ui-tool-button" data-action="mirror-branch" aria-label="Flip branch horizontally" data-tooltip="Flip branch horizontally" data-icon="flip" data-i18n-aria-label="chrome.flipBranchHorizontally" data-i18n-tooltip="chrome.flipBranchHorizontally"></button>
+            <button type="button" class="ui-tool-button" data-action="mirror-branch-vertical" aria-label="Flip branch vertically" data-tooltip="Flip branch vertically" data-icon="flip-vertical" data-i18n-aria-label="chrome.flipBranchVertically" data-i18n-tooltip="chrome.flipBranchVertically"></button>
+            <button type="button" class="ui-tool-button" data-action="delete-single-segment" aria-label="Delete part" data-tooltip="Delete part" data-icon="trash" data-i18n-aria-label="chrome.deletePart" data-i18n-tooltip="chrome.deletePart"></button>
+          </div>
+        </nav>
+        <aside class="shell-left shell-dock" id="left-dock" data-region="left" aria-label="Structure" hidden data-i18n-aria-label="chrome.structure">
+          <div class="ui-island shell-island" data-island="left-0">
+            <div class="ui-tabs shell-tabs" role="tablist" aria-label="Structure" data-ui hidden data-i18n-aria-label="chrome.structure"></div>
+            <div id="builder-outliner" class="builder-outliner shell-panel" data-panel="structure" hidden></div>
+          </div>
+        </aside>
+        <main class="center shell-stage" aria-label="Stage" data-i18n-aria-label="chrome.stage">
+          <div class="stage-head" role="toolbar" aria-label="Stage" data-i18n-aria-label="chrome.stage">
+            <div class="stage-head-start" data-slot="stage-start">
+              <nav class="ui-crumb" aria-label="Location" data-i18n-aria-label="chrome.location">
+                <button type="button" class="ui-crumb-item" data-action="scene-settings" data-crumb="scene" data-tooltip="Scene properties" data-icon="scene" data-i18n-tooltip="chrome.sceneProperties"><span class="ui-crumb-name" data-i18n="chrome.scene">Scene</span><span class="ui-crumb-meta" id="stage-size">960 × 540</span></button>
+                <button type="button" class="ui-crumb-swatch" id="crumb-background" data-paint-picker aria-label="Background colour" data-tooltip="Background colour" data-i18n-aria-label="chrome.backgroundColour" data-i18n-tooltip="chrome.backgroundColour"><span class="ui-crumb-chip"></span></button>
+              </nav>
+              <div id="chain-controls" class="polygon-controls stage-mode-controls" role="group" aria-label="Chain" hidden data-i18n-aria-label="chrome.chain"><span id="chain-count"></span><button type="button" id="chain-finish" class="ui-button" data-variant="outline" data-size="sm" title="Finish chain · Enter" data-i18n-title="chrome.finishChainEnter" data-i18n="chrome.finish">Finish</button><button type="button" id="chain-cancel" class="ui-icon-button" data-size="sm" aria-label="Cancel chain" title="Cancel · Escape" data-icon="x" data-i18n-aria-label="chrome.cancelChain" data-i18n-title="chrome.cancelEscape"></button></div>
+              <div id="polygon-controls" class="polygon-controls stage-mode-controls" role="group" aria-label="Polygon" hidden data-i18n-aria-label="chrome.polygon">
+                <span id="polygon-count" data-i18n="chrome.jointCount">0 joints</span
+                ><button
+                  id="finish-polygon"
+                  class="ui-button"
+                  data-variant="outline"
+                  data-size="sm"
+                  data-action="finish-polygon"
+                  disabled
+                 data-i18n="chrome.finish">
+                  Finish</button
+                ><button
+                  class="ui-icon-button"
+                  data-size="sm"
+                  data-action="cancel-polygon"
+                  aria-label="Cancel polygon"
+                  data-icon="x"
+                 data-i18n-aria-label="chrome.cancelPolygon"></button>
+              </div>
+            </div>
+            <div class="stage-head-msg" data-slot="stage-message"></div>
+            <div class="stage-head-end" data-slot="stage-end">
+              <div class="stage-head-cluster" data-view role="group" aria-label="View" data-i18n-aria-label="chrome.view">
+                <button type="button" class="ui-button stage-toggle" data-variant="ghost" data-size="sm" id="handles-button" data-action="toggle-handles" data-workspaces="animate" aria-pressed="true" aria-label="Joints" data-tooltip="Joints" data-icon="joints" data-i18n-aria-label="chrome.joints" data-i18n-tooltip="chrome.joints"><span class="ui-label" data-i18n="chrome.joints">Joints</span></button>
+                <button type="button" class="ui-button stage-toggle" data-variant="ghost" data-size="sm" id="paths-button" data-action="toggle-motion-paths" data-workspaces="animate" aria-pressed="false" aria-label="Motion paths" data-tooltip="Motion paths" data-icon="motion-path" data-i18n-aria-label="chrome.motionPaths" data-i18n-tooltip="chrome.motionPaths"><span class="ui-label" data-i18n="chrome.paths">Paths</span></button>
+                <div class="ui-split" role="group" aria-label="Grid and guides" data-i18n-aria-label="chrome.gridAndGuides"><button type="button" class="ui-button stage-toggle" data-variant="ghost" data-size="sm" id="canvas-guides-button" data-action="toggle-grid" aria-pressed="false" aria-label="Grid" data-tooltip="Grid" data-icon="grid" data-i18n-aria-label="chrome.grid" data-i18n-tooltip="chrome.grid"><span class="ui-label" data-i18n="chrome.grid">Grid</span></button><button type="button" class="ui-split-more" id="guides-options-button" aria-haspopup="dialog" aria-expanded="false" aria-controls="canvas-guides-panel" aria-label="Grid and guides settings" data-tooltip="Grid and guides settings" data-icon="chevron-down" data-i18n-aria-label="chrome.gridAndGuidesSettings" data-i18n-tooltip="chrome.gridAndGuidesSettings"></button></div>
+                <button type="button" class="ui-button stage-toggle" data-variant="ghost" data-size="sm" id="vfx-preview" data-workspaces="animate draw" aria-pressed="true" aria-label="Effects preview" data-tooltip="Effects preview" data-icon="fx" data-i18n-aria-label="chrome.effectsPreview" data-i18n-tooltip="chrome.effectsPreview"><span class="ui-label" data-i18n="chrome.effects">Effects</span></button>
+                <button type="button" class="ui-button stage-toggle" data-variant="ghost" data-size="sm" data-action="builder-static-handles" data-workspaces="rig" aria-pressed="true" aria-label="Static handles" data-tooltip="Static handles" data-icon="pin" hidden data-i18n-aria-label="chrome.staticHandles" data-i18n-tooltip="chrome.staticHandles"><span class="ui-label" data-i18n="chrome.handles">Handles</span></button>
+                <button type="button" class="ui-button stage-toggle" data-variant="ghost" data-size="sm" data-action="builder-highlight" data-workspaces="rig" aria-pressed="false" aria-label="Highlight part" data-tooltip="Highlight part" data-icon="highlight" hidden data-i18n-aria-label="chrome.highlightPart" data-i18n-tooltip="chrome.highlightPart"><span class="ui-label" data-i18n="chrome.highlight">Highlight</span></button>
+                <button type="button" class="ui-icon-button" data-action="builder-canvas-color" data-quiet data-workspaces="rig" aria-label="Construction background" data-tooltip="Construction background" data-icon="palette" hidden data-i18n-aria-label="chrome.constructionBackground" data-i18n-tooltip="chrome.constructionBackground"></button>
+              </div>
+              <output id="preview-quality" class="stage-head-note" data-tooltip="Preview detail follows your playback quality setting or available memory. Original artwork and export quality are preserved." hidden data-i18n-tooltip="chrome.previewDetailFollowsYourPlaybackQualitySettingOrAvailableMemoryOriginalArtworkAndExportQualityArePreserved" data-i18n="chrome.reducedPreview">Reduced preview</output>
+              <div class="stage-head-cluster" data-zoom role="group" aria-label="Zoom" data-i18n-aria-label="chrome.zoom">
+                <button type="button" class="ui-button stage-zoom" id="zoom-label" data-variant="ghost" data-size="sm" data-action="zoom-menu" aria-haspopup="menu" aria-label="Canvas zoom" title="Zoom options" data-i18n-aria-label="chrome.canvasZoom" data-i18n-title="chrome.zoomOptions"><span class="stage-zoom-value">100%</span><span class="stage-zoom-chevron" data-icon="chevron-down"></span></button>
+                <button type="button" class="ui-icon-button" data-action="zoom-reset" aria-label="Fit canvas" data-tooltip="Fit canvas" data-icon="fit" data-i18n-aria-label="chrome.fitCanvas" data-i18n-tooltip="chrome.fitCanvas"></button>
+              </div>
+            </div>
+          </div>
+          <div class="context-strip"><strong id="tool-context" data-i18n="chrome.select">Select</strong><span id="edit-scope" data-i18n="chrome.currentFrame">Current frame</span><button id="leave-rig" hidden data-i18n="chrome.returnToAnimation">Return to animation →</button></div>
+          <div
+            id="viewport"
+            tabindex="0"
+            role="application"
+            aria-label="Animation canvas. V to select, H to pan. Drag a figure or joint to pose it."
+           data-i18n-aria-label="chrome.animationCanvasVToSelectHToPanDragAFigureOrJointToPoseIt">
+            <div id="artboard"><span class="artboard-name" data-i18n="chrome.scene01">Scene 01</span></div>
+            <canvas id="scene" aria-label="WebGPU animation scene" data-i18n-aria-label="chrome.webgpuAnimationScene"></canvas>
+            <canvas
+              id="overlay"
+              aria-label="Figure selection and joint handles"
+             data-i18n-aria-label="chrome.figureSelectionAndJointHandles"></canvas>
+            <output id="playback-fps" aria-label="Playback frames per second" hidden data-i18n-aria-label="chrome.playbackFramesPerSecond" data-i18n="chrome.fps">— fps</output>
+            <div id="canvas-empty" hidden data-i18n="chrome.dropAStykAnimatePivotOrStickNodesFileHere">Drop a StykAnimate, Pivot or Stick Nodes file here</div>
+            <div id="renderer-error" hidden></div>
+            <div class="viewport-help" id="viewport-hint" hidden></div>
+          </div>
+        </main>
+        <aside class="right-panel shell-right shell-dock" id="right-dock" data-region="right" aria-label="Inspector" data-i18n-aria-label="chrome.inspector">
+          <div class="ui-island shell-island" data-island="right-0">
+            <div class="ui-tabs shell-tabs" role="tablist" aria-label="Inspector" data-ui data-i18n-aria-label="chrome.inspector">
+              <button type="button" role="tab" class="ui-tab" id="properties-tab" data-vfx-tab="properties" data-panel="properties" aria-controls="properties-panel" aria-selected="true" data-i18n="chrome.properties">Properties</button>
+              <button type="button" role="tab" class="ui-tab" id="vfx-tab" data-vfx-tab="vfx" data-panel="vfx" aria-controls="vfx-panel" aria-selected="false" tabindex="-1" data-i18n="chrome.vfx">VFX</button>
+              <button type="button" role="tab" class="ui-tab" id="library-tab" data-panel="library" aria-controls="user-library" aria-selected="false" tabindex="-1" data-i18n="chrome.library">Library</button>
+            </div>
+            <section id="properties-panel" class="shell-panel" data-panel="properties" role="tabpanel" aria-labelledby="properties-tab">
+              <div class="inspector-header" data-slot="inspector-target"><div><span class="panel-tab-title" data-i18n="chrome.properties">Properties</span><span id="inspector-context" data-i18n="chrome.figure">Figure</span></div><button id="object-actions" class="icon-button" aria-label="Selection actions" aria-haspopup="menu" aria-expanded="false" title="Selection actions" data-i18n-aria-label="chrome.selectionActions" data-i18n-title="chrome.selectionActions">•••</button></div>
+              <div class="inspector-head" data-slot="inspector-head" hidden></div>
+              <div id="inspector"></div>
+            </section>
+            <div id="vfx-panel" class="shell-panel" data-panel="vfx" role="tabpanel" aria-labelledby="vfx-tab" hidden></div>
+            <section id="user-library" class="shell-panel" data-panel="library" role="tabpanel" aria-labelledby="library-tab" hidden></section>
+          </div>
+        </aside>
+        <section class="timeline-panel shell-bottom ui-island" id="animation-timeline" aria-label="Timeline" data-i18n-aria-label="chrome.timeline">
+          <div class="timeline-toolbar">
+            <div class="timeline-title" data-i18n="chrome.timeline">Timeline</div>
+            <button type="button" class="icon-button shell-timeline-sheet" data-action="timeline-sheet" aria-label="Timeline…" aria-haspopup="dialog" aria-expanded="false" aria-controls="timeline" data-icon="timeline" hidden data-i18n-aria-label="chrome.timeline2"></button>
+            <div class="timeline-head-cluster" data-slot="start">
+              <div id="timeline-workflow" class="segmented timeline-mode-switch" role="group" aria-label="Timeline mode" data-i18n-aria-label="chrome.timelineMode"><button type="button" data-timeline-mode="simple" aria-pressed="false" data-i18n="chrome.simple">Simple</button><button type="button" data-timeline-mode="advanced" aria-pressed="true" data-i18n="chrome.advanced">Advanced</button></div>
+            </div>
+            <div class="timeline-head-cluster" data-slot="transport">
+              <div class="playback-controls">
+                <button
+                  class="icon-button"
+                  data-action="first-frame"
+                  title="First frame · Home"
+                  data-icon="first"
+                 data-i18n-title="chrome.firstFrameHome"></button
+                ><button
+                  class="icon-button"
+                  data-action="previous-frame"
+                  title="Previous frame · ←"
+                  data-icon="previous"
+                 data-i18n-title="chrome.previousFrame"></button
+                ><button
+                  class="play-button"
+                  id="play-button"
+                  data-action="play"
+                  title="Play / pause · Space"
+                  aria-label="Play"
+                  data-icon="play"
+                 data-i18n-title="chrome.playPauseSpace" data-i18n-aria-label="chrome.play"></button
+                ><button
+                  class="icon-button"
+                  data-action="next-frame"
+                  title="Next frame · →"
+                  data-icon="next"
+                 data-i18n-title="chrome.nextFrame"></button
+                ><button
+                  class="icon-button active"
+                  id="loop-button"
+                  data-action="toggle-loop"
+                  title="Loop playback"
+                  data-icon="loop"
+                 data-i18n-title="chrome.loopPlayback"></button
+                ><span id="time-display">00:00:00</span
+                ><span class="divider"></span
+                ><label class="fps-control"
+                  ><input
+                    id="fps"
+                    type="number"
+                    min="1"
+                    max="120"
+                    value="24"
+                    aria-label="Frames per second"
+                  data-i18n-aria-label="chrome.framesPerSecond" />fps</label
+                >
+              </div>
+            </div>
+            <div class="timeline-head-cluster" data-slot="end">
+              <button type="button" id="range-edit" class="button subtle small" data-action="toggle-range-edit" aria-label="Edit selected frames" aria-pressed="false" title="Select multiple frames to edit them together" disabled data-i18n-aria-label="chrome.editSelectedFrames" data-i18n-title="chrome.selectMultipleFramesToEditThemTogether"><span data-icon="frame"></span><span class="range-edit-label" data-i18n="chrome.editSelectedFrames">Edit selected frames</span><span class="range-edit-count"></span></button>
+              <div class="timeline-onion-controls"><button class="icon-button" id="onion-button" data-action="toggle-onion" data-icon="onion" title="Onion skin · O" aria-label="Onion skin" aria-pressed="false" data-i18n-title="chrome.onionSkinO" data-i18n-aria-label="chrome.onionSkin"></button><button class="icon-button onion-options-button" id="onion-settings-button" title="Onion skin settings" aria-label="Onion skin settings" data-icon="chevron-down" data-i18n-title="chrome.onionSkinSettings" data-i18n-aria-label="chrome.onionSkinSettings"></button></div>
+              <button id="timeline-audio" class="icon-button timeline-audio-toggle" title="Show audio" aria-label="Audio" aria-description="Show or hide audio editing. Audio keeps playing when hidden." aria-controls="timeline-audio-panel" aria-expanded="false" aria-pressed="false" data-icon="music" data-i18n-title="chrome.showAudio" data-i18n-aria-label="chrome.audio" data-i18n-aria-description="chrome.showOrHideAudioEditingAudioKeepsPlayingWhenHidden"></button>
+            </div>
+            <div class="timeline-ruler-tools" data-slot="ruler-tools">
+              <button id="expand-timeline" class="icon-button" title="Expand timeline" aria-label="Expand timeline" aria-pressed="false" data-icon="maximize" data-i18n-title="chrome.expandTimeline" data-i18n-aria-label="chrome.expandTimeline"></button>
+              <div class="timeline-actions">
+                <span data-icon="zoom"></span
+                ><input
+                  type="range"
+                  id="timeline-zoom"
+                  min="5"
+                  max="40"
+                  value="18"
+                  aria-label="Timeline zoom"
+                data-i18n-aria-label="chrome.timelineZoom" />
+              </div>
+            </div>
+          </div>
+          <div id="timeline" class="shell-timeline-body"></div>
+          <div class="timeline-footer">
+            <span id="timeline-summary">24 frames</span
+            ><span id="selection-summary">No figure selected</span>
+          </div>
+        </section>
+        <!-- Home (docs/HOME.md): a page over the workspace, built when it first shows (src/home/home-view.mjs). -->
+        <section id="home" class="home" aria-label="Home" data-i18n-aria-label="home.home" hidden></section>
+      </section>
+      <!-- The editor's activity log (no status bar): #status keeps the latest line, Help › Performance shows the log. -->
+      <footer class="statusbar" hidden>
+        <div>
+          <span class="status-dot" id="status-dot"></span
+          ><span id="status" data-i18n="chrome.ready">Ready</span>
+        </div>
+        <div>
+          <span class="viewport-top" aria-hidden="true"><span id="frame-badge">FRAME 01</span
+            ><span id="preview-badge" hidden data-i18n="chrome.playing">PLAYING</span></span
+          ><span id="renderer-label" data-i18n="chrome.initializingWebGPU">Initializing WebGPU</span
+          ><span class="status-separator">·</span><span id="render-time">—</span
+          ><span class="status-separator">·</span
+          ><span id="object-count">0 figures</span
+          ><button
+            data-action="performance"
+            title="Performance details"
+            data-icon="activity"
+           data-i18n-title="chrome.performanceDetails"></button>
+        </div>
+      </footer>
+    </div>
+    <input
+      type="file"
+      id="file-input"
+      accept=".styk,.stykmov,.stkz,.piv,.stk,.json,.nodes,.nodemc,.stknds,.zip,.png,.jpg,.jpeg,.gif,.bmp,.webp"
+      multiple
+      hidden
+    />
+    <input
+      type="file"
+      id="media-input"
+      accept="image/png,image/jpeg,image/gif,image/bmp,image/webp"
+      hidden
+    />
+    <div id="toast" role="status" hidden></div>
+    <div id="menu" role="menu" hidden></div>
+    <dialog id="insert-dialog" aria-labelledby="insert-title">
+      <div class="dialog-head"><div><span class="eyebrow" data-i18n="chrome.create">CREATE</span><h2 id="insert-title" data-i18n="chrome.addToYourScene">Add to your scene</h2></div><button class="icon-button" id="close-insert" aria-label="Close add dialog" data-icon="x" data-i18n-aria-label="chrome.closeAddDialog"></button></div>
+      <div class="insert-actions">
+        <button data-action="add-figure" data-icon="person"><strong data-i18n="chrome.stickFigure">Stick figure</strong><small data-i18n="chrome.startWithACharacter">Start with a character</small></button>
+        <button data-action="add-text" data-icon="text"><strong data-i18n="chrome.text">Text</strong><small data-i18n="chrome.addATitleOrCaption">Add a title or caption</small></button>
+        <button data-action="import-sprite" data-icon="image"><strong data-i18n="chrome.image">Image</strong><small data-i18n="chrome.placeAnImage">Place an image</small></button>
+        <button data-action="import" data-icon="import"><strong data-i18n="chrome.importFigure">Import figure</strong><small data-i18n="chrome.openAFigureOrMovieClip">Open a figure or movie clip</small></button>
+      </div>
+      <section class="insert-movieclip" aria-labelledby="insert-movieclip-title"><h3 id="insert-movieclip-title"><span data-i18n="movieclipUi.movieclip">Movieclip</span> <span class="insert-movieclip-description" data-i18n="chrome.aReusableAnimatedGroupThatPlaysInsideYourScene">A reusable animated group that plays inside your scene</span></h3><div class="movieclip-actions"><button class="button" data-action="movieclip-new" data-icon="plus" data-i18n="chrome.emptyMovieclip">Empty movieclip</button><button class="button" data-action="movieclip-create" data-icon="frame" title="Turn the selected figures into a movieclip" data-i18n-title="chrome.turnTheSelectedFiguresIntoAMovieclip" data-i18n="chrome.fromSelection">From selection</button><button class="button" data-action="movieclip-range" data-icon="frame" title="Turn a range of frames into a movieclip" data-i18n-title="chrome.turnARangeOfFramesIntoAMovieclip" data-i18n="chrome.fromFrameRange">From frame range</button></div></section>
+      <div class="insert-library"><h3 data-i18n="chrome.projectLibrary">Project library</h3><div id="asset-list"></div></div>
+      <details class="insert-examples"><summary data-i18n="chrome.exampleAnimations">Example animations</summary><div id="sample-list"></div></details>
+    </dialog>
+    <dialog id="dialog"><div id="dialog-content"></div></dialog>
+    <script type="module" src="./src/app.mjs"></script>
+  </body>
+</html>

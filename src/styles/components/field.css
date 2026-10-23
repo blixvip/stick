@@ -1,0 +1,122 @@
+/* Field (components.md "Field"): a 32px sunken box (28 at data-size="sm")
+ * with no ring at rest, a --line-3 ring on hover, the accent ring and halo
+ * while focused or scrubbed, danger while invalid and .5 opacity disabled.
+ * The inline label names the field; on a number field it scrubs
+ * ([data-property-scrub], PropertyControls: drag, Shift ×0.1, Alt ×0.01) and
+ * says so at rest with a quiet dotted underline. Values are regular weight and
+ * tabular. The unit follows its value (.ui-field-suffix): PropertyControls
+ * needs type=number inputs, which cannot hold "px", so the input sizes to its
+ * content and the unit sits right after it ("474.4 px", "100%" with
+ * data-glue). .ui-field-unit is only for file extensions (".mp4").
+ *
+ * Variants: the colour field ([data-color]: a swatch and its hex), the field
+ * switch ([data-switch-field]: the one switch pattern in inspector sections),
+ * the stepper field ([data-steps]: "Order ↓ 2 ↑"), the text field
+ * ([data-text]), the inline field of header rows ([data-inline]) and the
+ * selects (select.css). Rendered by src/inspector-kit.mjs. No key state. */
+@layer components {
+  .ui-field {
+    --_h: var(--control-lg);
+    --_ring: transparent;
+    --_gap: var(--space-2);
+    position: relative;
+    display: flex; align-items: center; gap: var(--_gap);
+    min-inline-size: 0; block-size: var(--_h); margin: 0;
+    padding: 0 var(--space-2) 0 var(--space-2-5);
+    border: 1px solid transparent; border-radius: var(--radius-md);
+    background: var(--surface-sunken); color: var(--text-1);
+    box-shadow: inset 0 0 0 1px var(--_ring);
+    font: var(--type-ui);
+    transition: box-shadow var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  }
+  .ui-field:where(:hover) { --_ring: var(--line-3); }
+  .ui-field:focus-within,
+  .ui-field:where(:has([data-property-scrub]:active), [data-scrubbing="true"]) {
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo);
+  }
+  .ui-field:has([aria-invalid="true"]) { box-shadow: inset 0 0 0 1.5px var(--danger-text), 0 0 0 3px var(--danger-soft); }
+  .ui-field:where([aria-disabled="true"], :has(input:disabled, select:disabled), :disabled) { opacity: 0.5; }
+  .ui-field[data-size="sm"] { --_h: var(--control-md); }
+  button.ui-field { justify-self: stretch; text-align: start; cursor: default; appearance: none; }
+  button.ui-field:focus-visible { outline: none; }
+
+  /* The inline label; a scrub label underlines quietly and takes the accent on hover, focus and while scrubbing. */
+  .ui-field-label {
+    flex: none; font: var(--type-small); color: var(--text-3);
+    user-select: none; white-space: nowrap;
+  }
+  .ui-field-label[data-property-scrub] {
+    cursor: ew-resize; touch-action: none; border-radius: var(--radius-2xs);
+    text-decoration: underline dotted 1px; text-decoration-color: var(--line-3); text-underline-offset: 3px;
+  }
+  .ui-field-label:where([data-property-scrub]):is(:hover, :focus-visible) { color: var(--accent-text); text-decoration-color: currentColor; }
+  .ui-field-label:where([data-property-scrub]):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .ui-field:where(:has([data-property-scrub]:active), [data-scrubbing="true"]) .ui-field-label { color: var(--accent-text); }
+
+  .ui-field-input {
+    flex: 1 1 auto; min-inline-size: 0; inline-size: 100%; block-size: 100%;
+    margin: 0; padding: 0; border: 0; border-radius: 0; outline: none; box-shadow: none;
+    background: transparent; color: var(--text-1);
+    font: var(--type-value);
+    font-variant-numeric: tabular-nums; text-overflow: ellipsis;
+  }
+  /* Names and paths keep proportional punctuation. */
+  .ui-field-input:where([type="text"], [type="search"]):not([inputmode]) { font-variant-numeric: normal; }
+  .ui-field-input::placeholder { color: var(--text-placeholder); opacity: 1; }
+  .ui-field-input[type="number"] { appearance: textfield; }
+  .ui-field-input::-webkit-inner-spin-button,
+  .ui-field-input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+  .ui-field:where([data-mixed]) .ui-field-input::placeholder { color: var(--text-3); }
+
+  /* The unit right after its value: the input sizes to its content, the unit takes the rest of the field. */
+  .ui-field:where(:has(> .ui-field-suffix)) > .ui-field-input { flex: 0 1 auto; inline-size: auto; max-inline-size: 100%; field-sizing: content; min-inline-size: 1ch; }
+  .ui-field-suffix {
+    flex: 1 1 auto; min-inline-size: 0; overflow: hidden;
+    margin-inline-start: calc(0.25em - var(--_gap));
+    font: var(--type-value); color: var(--text-2);
+    white-space: nowrap; user-select: none; cursor: text;
+  }
+  .ui-field-suffix[data-glue] { margin-inline-start: calc(-1 * var(--_gap)); }
+  .ui-field-unit { flex: none; font: var(--type-small); color: var(--text-3); }
+
+  /* Colour field: a 16px swatch and the hex (the paint picker or a native colour input opens the picker). */
+  .ui-field:where([data-color]) > .ui-swatch { --_s: 16px; margin-inline-start: calc(-1 * var(--space-0-5)); border-radius: var(--radius-2xs); }
+  /* A colour that leads its section spans the row: its swatch grows and reads from the start. */
+  .ui-field:where([data-color].ui-span-2) { justify-content: flex-start; }
+  .ui-field:where([data-color].ui-span-2) > .ui-swatch { --_s: 20px; }
+  .ui-field-hex {
+    min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font: var(--type-value);
+    font-variant-numeric: tabular-nums; letter-spacing: 0.01em; color: var(--text-1);
+  }
+
+  /* Field switch: the label inside the field box, the switch at its end, in the same grid as the fields. */
+  .ui-field[data-switch-field] { justify-content: space-between; cursor: default; }
+  .ui-field:where([data-switch-field]) > .ui-field-label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  .ui-field:where([data-switch-field]) > .ui-switch { flex: none; }
+
+  /* Stepper field: "Order ↓ 2 ↑". The label and input share a display:contents
+     property row (PropertyControls finds the input from the label); order puts
+     the value between the two step buttons, which stay out of the tab order
+     (the value steps with ArrowUp/ArrowDown). The value sizes to its text, so
+     the field's min-content holds the label, both steps and the whole value:
+     a grid column sized to it (form.css, 3:2) never cuts it. */
+  .ui-field-core { display: contents; }
+  .ui-field[data-steps] { --_gap: 0; padding-inline: var(--space-0-5); justify-content: space-between; }
+  :where(.ui-field[data-steps]) .ui-field-label { order: 0; padding-inline: var(--space-1) var(--space-0-5); }
+  :where(.ui-field[data-steps]) > .ui-icon-button { order: 1; flex: none; color: var(--text-2); }
+  :where(.ui-field[data-steps]) > .ui-icon-button:last-child { order: 3; }
+  :where(.ui-field[data-steps]) .ui-field-input {
+    order: 2; flex: 1 0 auto; inline-size: auto; min-inline-size: 3ch; field-sizing: content; text-align: center;
+  }
+
+  /* Inline field (header rows: the tool options' Size, Opacity; the frame rate): 28px, sized to its label and value. */
+  .ui-field[data-inline] { --_h: var(--control-md); flex: none; padding-inline: var(--space-2) var(--space-1-5); }
+  .ui-field:where([data-inline]) > .ui-field-input { flex: none; inline-size: auto; field-sizing: content; min-inline-size: calc(var(--_vch, 3) * 1ch); padding-inline-end: 1ch; }
+
+  @media (forced-colors: active) {
+    .ui-field { border-color: CanvasText; }
+    .ui-field:focus-within { outline: 2px solid Highlight; outline-offset: 1px; }
+  }
+}

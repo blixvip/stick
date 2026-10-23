@@ -1,0 +1,29 @@
+# Applied by Cloudflare to the built editor (build/web/_headers). The same rules
+# are honoured by scripts/serve-web.mjs, so local previews and tests run under
+# the policy production uses.
+#
+# This is the policy index.html already declares in its own <meta> tag, plus the
+# directives a meta tag cannot carry (frame-ancestors, form-action). script-src
+# 'wasm-unsafe-eval' lets WebAssembly compile without permitting eval(); the
+# style-src 'unsafe-inline' is for the editor's inline style attributes.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; media-src 'self' blob: data:; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  X-Frame-Options: DENY
+
+# Modules and assets are not content-hashed, so browsers must revalidate them
+# (Cloudflare answers with 304 and an ETag). The runtime below is large; a 304
+# avoids re-downloading it.
+# The service worker and the manifest are what update the installed app; never serve them stale.
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
+/src/*
+  Cache-Control: public, max-age=0, must-revalidate
+/vendor/*
+  Cache-Control: public, max-age=0, must-revalidate
+/python/*
+  Cache-Control: public, max-age=0, must-revalidate

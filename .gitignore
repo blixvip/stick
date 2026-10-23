@@ -1,0 +1,44 @@
+node_modules/
+.cache/
+.npm-cache/
+build/
+release/
+artifacts/
+__pycache__/
+*.pyc
+.pip-cache/
+.desktop-data/
+*.log
+*.obj
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Generated per-package source identity (contains no user information).
+desktop/telemetry-build.json
+
+# Local scratch output, Cloudflare dry-run builds, and sample projects.
+tmp/
+.wrangler/
+samples/
+
+# Native libraries built on Linux/macOS. Windows keeps native/bin/<arch>, which is tracked.
+native/bin/linux-*/
+native/bin/darwin-*/
+
+# Local Python environments.
+.venv/
+
+# Not part of the app: kept outside the public repository.
+/AssetReleases/
+/labs/
+/videos/
+/website/
+/cloud/
+/design/
+/artifacts/
+
+# MSVC linker byproducts; only the DLL is used.
+native/bin/**/*.exp
+native/bin/**/*.lib

@@ -1,0 +1,218 @@
+name: Build and verify release
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish the verified Windows and Linux release
+        type: boolean
+        default: false
+      upload_draft:
+        description: Upload a verified draft to the public assets repository
+        type: boolean
+        default: false
+      verify_windows_run:
+        description: Only recheck the installed Windows upgrade using assets from this workflow run ID
+        type: string
+        default: ''
+      verify_public_feed:
+        description: With verify_windows_run, check the published updater feed instead of installing an upgrade
+        type: boolean
+        default: false
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+concurrency:
+  group: desktop-release
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  desktop:
+    if: inputs.verify_windows_run == ''
+    name: Package and verify (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win32
+            target: win
+          - os: ubuntu-latest
+            platform: linux
+            target: linux
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.0'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.9'
+          cache: pip
+          cache-dependency-path: scripts/requirements-build.txt
+      - name: Install locked dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          python -m pip install -r scripts/requirements-build.txt
+      - name: Prepare Linux display
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: Validate release and source
+        run: |
+          npm run changelog:check
+          npm run check
+          npm test
+          python -m unittest discover -s backend -p 'test_*.py'
+      - name: Build standalone codecs and video encoder
+        run: |
+          npm run build:frame-scan
+          if [ "$RUNNER_OS" = Windows ]; then npm run build:vfw; fi
+          npm run build:sidecar
+          npm run verify:sidecar
+          npm run build:video-encoder
+      - name: Package the release
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: |
+          version=$(node -p 'JSON.parse(require("fs").readFileSync("package.json")).version')
+          echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
+          npm run dist:${{ matrix.target }} -- --x64 --publish never "--config.directories.output=release/$version"
+          npm run release:verify -- "release/$version" --platform=${{ matrix.platform }}
+          if [ "$RUNNER_OS" = Windows ]; then
+            echo "STYK_PACKAGED_RESOURCES=$GITHUB_WORKSPACE/release/$version/win-unpacked/resources" >> "$GITHUB_ENV"
+            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/release/$version/win-unpacked/StykAnimate.exe" >> "$GITHUB_ENV"
+          else
+            echo "STYK_PACKAGED_RESOURCES=$GITHUB_WORKSPACE/release/$version/linux-unpacked/resources" >> "$GITHUB_ENV"
+            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/release/$version/linux-unpacked/stykanimate" >> "$GITHUB_ENV"
+          fi
+      - name: Verify exact packaged files and desktop behavior
+        run: |
+          npm run verify:package
+          if [ "$RUNNER_OS" = Linux ]; then display=(xvfb-run -a); else display=(); fi
+          "${display[@]}" npm run test:boot:packaged
+          "${display[@]}" npm run test:export:packaged
+          "${display[@]}" npm run test:updates:desktop
+          if [ "$RUNNER_OS" = Linux ]; then
+            version=$(node -p 'JSON.parse(require("fs").readFileSync("package.json")).version')
+            STYK_PACKAGED_EXECUTABLE="$GITHUB_WORKSPACE/release/$version/StykAnimate-$version-linux-x86_64.AppImage" xvfb-run -a npm run test:boot:packaged
+            xvfb-run -a npm run test:updates:linux
+          fi
+      - name: Upload release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-${{ matrix.platform }}
+          path: |
+            release/${{ env.RELEASE_VERSION }}/latest*.yml
+            release/${{ env.RELEASE_VERSION }}/*.exe
+            release/${{ env.RELEASE_VERSION }}/*.blockmap
+            release/${{ env.RELEASE_VERSION }}/*.AppImage
+          retention-days: 30
+          if-no-files-found: error
+      - name: Install and upgrade the actual Windows release
+        if: runner.os == 'Windows'
+        run: node scripts/verify-release-install.mjs
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-evidence-${{ matrix.platform }}
+          path: |
+            artifacts/sidecar-smoke.json
+            artifacts/package-manifest.json
+            artifacts/updates/smoke.json
+            artifacts/updates/appimage-smoke.json
+            artifacts/release-install/evidence.json
+          retention-days: 30
+  web:
+    if: inputs.verify_windows_run == ''
+    uses: ./.github/workflows/web-verify.yml
+  windows-upgrade:
+    name: Verify retained Windows installer
+    if: github.event_name == 'workflow_dispatch' && inputs.verify_windows_run != ''
+    runs-on: windows-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    env:
+      STYK_CANDIDATE_RUN: ${{ inputs.verify_windows_run }}
+      VERIFY_PUBLIC_FEED: ${{ inputs.verify_public_feed }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.0'
+          cache: npm
+      - name: Install locked verification dependencies
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          echo "RELEASE_VERSION=$(node -p 'JSON.parse(require("fs").readFileSync("package.json")).version')" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-assets-win32
+          run-id: ${{ inputs.verify_windows_run }}
+          github-token: ${{ github.token }}
+          path: release/${{ env.RELEASE_VERSION }}
+      - name: Verify the retained assets and extract their exact archive
+        run: |
+          directory="release/$RELEASE_VERSION"
+          npm run release:verify -- "$directory" --platform=win32
+          7z x "$directory/StykAnimate-$RELEASE_VERSION-Setup-x64.exe" '-oartifacts/installer-payload' '$PLUGINSDIR/app-64.7z'
+          if [ "$VERIFY_PUBLIC_FEED" = true ]; then
+            7z x 'artifacts/installer-payload/$PLUGINSDIR/app-64.7z' "-o$directory/win-unpacked"
+            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/$directory/win-unpacked/StykAnimate.exe" >> "$GITHUB_ENV"
+          else
+            7z x 'artifacts/installer-payload/$PLUGINSDIR/app-64.7z' "-o$directory/win-unpacked" 'resources/app.asar'
+          fi
+      - name: Install and upgrade the actual Windows release
+        if: inputs.verify_public_feed != true
+        run: node scripts/verify-release-install.mjs
+      - name: Verify the public update feed and installer download
+        if: inputs.verify_public_feed == true
+        run: node scripts/verify-github-update.mjs
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retained-installer-evidence
+          path: |
+            artifacts/release-install/evidence.json
+            artifacts/updates/github-smoke.json
+          retention-days: 30
+  publish:
+    needs: [desktop, web]
+    if: startsWith(github.ref, 'refs/tags/') || inputs.publish || inputs.upload_draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.0'
+          cache: npm
+      - name: Install release verification dependencies
+        run: npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+      - name: Select version
+        run: echo "RELEASE_VERSION=$(node -p 'JSON.parse(require("fs").readFileSync("package.json")).version')" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-assets-*
+          merge-multiple: true
+          path: release/${{ env.RELEASE_VERSION }}
+      - name: Verify and upload both platforms
+        env:
+          GH_TOKEN: ${{ secrets.RELEASES_TOKEN }}
+          PUBLISH_RELEASE: ${{ startsWith(github.ref, 'refs/tags/') || inputs.publish }}
+        run: |
+          test -n "$GH_TOKEN" || { echo 'Add RELEASES_TOKEN with Contents write access to styk-animate-releases.'; exit 1; }
+          npm run release:verify
+          if [ "$PUBLISH_RELEASE" = true ]; then npm run release:publish -- --publish
+          else npm run release:publish; fi

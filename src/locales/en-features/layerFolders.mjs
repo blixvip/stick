@@ -1,0 +1,15 @@
+export default Object.freeze({
+  'errors.layerFolders.invalidFolders': 'Invalid layer folders.',
+  'errors.layerFolders.missingFolder': 'Choose an existing layer folder.',
+  'errors.layerFolders.invalidName': 'Folder names need 1–160 characters.',
+  'errors.layerFolders.chooseLayers': 'Choose existing user layers.',
+  'errors.layerFolders.tooManyFolders': 'A project supports at most 10,000 layer folders.',
+  'layerFolders.newFolder': 'New folder',
+  'layerFolders.group': 'Group selected layers in folder',
+  'layerFolders.move': 'Move to folder',
+  'layerFolders.remove': 'Remove from folder',
+  'layerFolders.rename': 'Rename folder',
+  'layerFolders.ungroup': 'Ungroup folder',
+  'layerFolders.expand': 'Expand {name}',
+  'layerFolders.collapse': 'Collapse {name}',
+});

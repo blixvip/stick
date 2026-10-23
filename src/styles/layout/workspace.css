@@ -1,0 +1,124 @@
+/* The workspace grid: rail │ left dock │ stage │ right dock, and the timeline
+ * row under them (full width by default, or under the stage). The dock host
+ * writes the columns, rows and areas from the layout solver's solution; the
+ * fallbacks are the wide tier's default arrangement for the first paint.
+ * Nothing next to #viewport animates its size, and no ancestor of #viewport
+ * transforms, filters or clips it: the stage island's rounded corners are
+ * painted as caps above it. */
+@layer layout {
+  .shell-work {
+    position: relative; display: grid; min-block-size: 0; min-inline-size: 0;
+    grid-template-columns: var(--shell-columns, var(--rail-w) minmax(0, 1fr) var(--inspector-w));
+    grid-template-rows: var(--shell-rows, minmax(0, 1fr) 264px);
+    grid-template-areas: var(--shell-areas, "rail stage right" "rail bottom bottom");
+    column-gap: var(--shell-gap, var(--gutter)); row-gap: var(--shell-row-gap, var(--gutter));
+    padding: var(--shell-pad-top, var(--space-2)) var(--shell-pad-end, var(--space-2)) var(--shell-pad-bottom, var(--space-2)) var(--shell-pad-start, var(--space-2));
+    background: var(--surface-field);
+  }
+
+  /* The tools: a white bar centered vertically beside the canvas in every
+   * workspace, 12px inside #viewport on the stage's left or right.
+   * It shares the stage's grid cell and sits above the stage's corner caps; the solver keeps the artboard
+   * 8px clear of it at fit. When its tools do not fit the stage's height it scrolls, with a fade. */
+  .shell-rail {
+    --_head: var(--control-2xl);
+    grid-area: stage; position: relative; z-index: var(--z-canvas-hud); inset: auto; transform: none;
+    align-self: center; justify-self: start;
+    display: flex; flex-direction: column; align-items: center; gap: var(--space-1);
+    inline-size: auto; max-block-size: calc(100% - var(--shell-rail-top, calc(var(--_head) + var(--space-3))) - var(--space-3));
+    margin: var(--shell-rail-top, calc(var(--_head) + var(--space-3))) 0 var(--space-3) var(--space-3); padding: 6px;
+    border: 0; border-radius: var(--radius-2xl); background: var(--surface-raised); box-shadow: var(--elevation-2);
+    overflow-x: hidden; overflow-y: auto; scrollbar-width: none;
+  }
+  :where(.workspace[data-rail="right"]) > .shell-rail { justify-self: end; margin-inline: 0 var(--space-3); }
+  /* Under the compact chrome's 40px stage header (layout-solver.mjs chromeFor). */
+  :where(:root[data-chrome="compact"]) .shell-rail { --_head: var(--control-xl); }
+  .shell-rail :where(.tool-dock) { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: 0; border: 0; background: none; box-shadow: none; }
+  /* The + (Add) leads the bar, set apart from the tools by a short hairline. */
+  .shell-rail :where(.rail-add) { margin-block-end: var(--space-1-5); }
+  .shell-rail :where(.rail-add)::after {
+    content: ""; position: absolute; inset: auto 8px calc(-1 * var(--space-1-5) - 2px); block-size: 1px; background: var(--line-1); pointer-events: none;
+  }
+  /* At the low height tier the tools tighten (a 32px pitch); a rail that still
+   * does not fit says so: the "more below" set, a 12px fade (the dock host
+   * writes data-more-below) and a drawn 6px scrollbar. */
+  :where(:root[data-height="low"]) .shell-rail { padding-block-end: 0; }
+  :where(:root[data-height="low"]) .shell-rail :where(.tool-dock, .rail-order) { gap: 2px; }
+  :where(:root[data-height="low"]) .shell-rail :where(.tool, .rail-add) { block-size: 30px; min-block-size: 30px; }
+  .shell-rail[data-more-below] { mask-image: linear-gradient(to bottom, black calc(100% - 12px), transparent); }
+  :where(.shell-rail, .drawing-quickbar .draw-quick-row)::-webkit-scrollbar { width: 6px; height: 6px; }
+  :where(.shell-rail, .drawing-quickbar .draw-quick-row)::-webkit-scrollbar-track { background: var(--surface-sunken); border-radius: 3px; }
+  :where(.shell-rail, .drawing-quickbar .draw-quick-row)::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb-hover); border-radius: 3px; }
+
+  /* Draw's quick bar is the stage header's start (layout/stage.css) until M7b
+   * gives Draw option descriptors. In a narrow header it drops the tool's and
+   * the preset's names, then narrows its sliders (drawing-controller.mjs
+   * writes data-fit), before its row scrolls with the drawn scrollbar above,
+   * so no control is cut off. */
+  .drawing-quickbar :where(.draw-quick-row) { scrollbar-width: auto; }
+  .drawing-quickbar[data-fit] :where(.draw-quick-tool > span, .draw-quick-preset > span) { display: none; }
+  .drawing-quickbar[data-fit="tighter"] :where(.draw-slider.is-compact) { flex: none; min-inline-size: 0; padding-inline: var(--space-1-5); gap: var(--space-1); }
+
+  /* The stage's keyboard focus (F6, Tab): a focus ring inside its edge, never a selection ring. */
+  :where(#viewport):focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: calc(-1 * var(--focus-width)); }
+  /* The timeline's frame grid, where F6 lands in the timeline, shows its focus too. */
+  .shell-bottom :where([role="grid"][aria-label]):focus-visible { outline: var(--focus-width) solid var(--focus-ring); outline-offset: calc(-1 * var(--focus-width)); }
+
+  .shell-left { grid-area: left; }
+  .shell-right { grid-area: right; }
+
+  /* The stage island: the stage header (layout/stage.css), Build's bar, then
+   * #viewport, a plain rectangle. */
+  .shell-stage {
+    grid-area: stage; position: relative; display: flex; flex-direction: column;
+    min-inline-size: 0; min-block-size: 0; overflow: visible;
+    border-radius: var(--radius-xl); background: var(--surface);
+  }
+  .shell-stage::after {
+    --_r: var(--radius-xl); --_c: var(--surface-field);
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: var(--z-canvas-overlay);
+    background:
+      radial-gradient(circle at 100% 100%, transparent calc(var(--_r) - 0.5px), var(--_c) var(--_r)) top left / var(--_r) var(--_r) no-repeat,
+      radial-gradient(circle at 0 100%, transparent calc(var(--_r) - 0.5px), var(--_c) var(--_r)) top right / var(--_r) var(--_r) no-repeat,
+      radial-gradient(circle at 0 0, transparent calc(var(--_r) - 0.5px), var(--_c) var(--_r)) bottom right / var(--_r) var(--_r) no-repeat,
+      radial-gradient(circle at 100% 0, transparent calc(var(--_r) - 0.5px), var(--_c) var(--_r)) bottom left / var(--_r) var(--_r) no-repeat;
+  }
+
+  /* The timeline island: its 40px header, then the body. Folded to a strip it
+   * is the header alone, and its body opens as a sheet above it. */
+  .shell-bottom {
+    grid-area: bottom; min-inline-size: 0; min-block-size: 0; max-block-size: none; block-size: auto;
+    overflow: hidden; border: 0; box-shadow: none;
+  }
+  .shell-bottom > .timeline-toolbar { block-size: var(--control-xl); min-block-size: var(--control-xl); flex: none; }
+  /* The island is named "Timeline"; its header carries no title of its own, so Simple and Advanced keep
+   * the mode switch and Play in the same place, and the frame rate folds at compact width in both. */
+  .shell-bottom > .timeline-toolbar > :where(.timeline-title) { display: none; }
+  /* The header's static slots: start, transport and end (the three clusters) and the ruler's tools.
+   * They take no box of their own until timeline-header.mjs (M5) lays its clusters out, so the
+   * controls keep today's single row. */
+  .timeline-toolbar > :where([data-slot]) { display: contents; }
+  .shell-bottom > .timeline-toolbar { padding-inline: var(--space-2-5); }
+  :where(:root[data-tier="compact"], :root[data-tier="minimal"]) .shell-bottom :where(.fps-control) { display: none; }
+  :where(.shell-bottom[data-state="strip"]) > :not(.timeline-toolbar, .shell-timeline-body) { display: none; }
+  /* The folded body takes no room and no focus until Timeline… opens it. */
+  .shell-timeline-body:where([popover]:not(:popover-open)) { display: none; }
+  .shell-bottom[data-state="strip"] > :where(.timeline-toolbar) { border-block-end: 0; }
+  /* Tall timeline means nothing while the timeline is folded; at the minimal
+   * width First frame, Loop, Audio and Edit selected frames fold into the
+   * Animation menu, so Timeline…, Play and Onion stay on screen (experience
+   * §1.8; Timeline ⋯ takes them in M5). */
+  :where(.shell-bottom[data-state="strip"]) :where(#expand-timeline) { display: none; }
+  :where(:root[data-tier="minimal"]) .timeline-toolbar :where([data-action="first-frame"], #loop-button, #timeline-audio, #range-edit) { display: none; }
+  .shell-timeline-body:popover-open {
+    position: fixed; inset: auto var(--space-2) var(--sheet-bottom, var(--space-2)) var(--space-2);
+    inline-size: auto; block-size: var(--sheet-block, 320px); margin: 0; padding: 0; border: 0;
+    border-radius: var(--radius-xl); background: var(--surface); color: inherit;
+    box-shadow: var(--elevation-3); overflow: hidden;
+  }
+
+  @media (forced-colors: active) {
+    .shell-stage::after { display: none; }
+    .shell-timeline-body:popover-open { border: 1px solid CanvasText; }
+  }
+}

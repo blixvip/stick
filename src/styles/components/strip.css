@@ -1,0 +1,10 @@
+/* Strip (components.md "Strip"): a folded region, a 40px column of icon
+ * buttons, one per panel. A click opens the panel as a sheet over the stage,
+ * so #viewport never resizes; each button is named and shows the panel's
+ * name as its tooltip. */
+@layer components {
+  .ui-strip {
+    display: flex; flex-direction: column; align-items: center; gap: var(--space-0-5);
+    inline-size: 40px; padding: var(--space-1-5) 0;
+  }
+}

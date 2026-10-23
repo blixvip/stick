@@ -1,0 +1,29 @@
+/* Dot (components.md "Dot"): a 7px circle (--_s sets 6 or 8) filled with
+ * --dot, always beside text or a name. [data-tint] for a concept (the
+ * workspace switch's Animate, Draw and Build), [data-tone] for a status (the
+ * document's Saved and Edited), [data-hollow] for a ring. The only way a
+ * concept colour appears at rest.
+ *
+ *   <span class="ui-dot" data-tint="select" aria-hidden="true"></span> */
+@layer components {
+  .ui-dot {
+    --_s: 7px;
+    --dot: var(--neutral-dot);
+    display: inline-block; flex: none;
+    inline-size: var(--_s); block-size: var(--_s); border-radius: 50%;
+    background: var(--dot);
+  }
+  .ui-dot[data-hollow] { background: transparent; box-shadow: inset 0 0 0 1.5px var(--dot); }
+  .ui-dot[data-tint="select"] { --dot: var(--tint-select); }
+  .ui-dot[data-tint="library"] { --dot: var(--tint-library); }
+  .ui-dot[data-tint="draw"] { --dot: var(--tint-draw); }
+  .ui-dot[data-tone="success"] { --dot: var(--success-dot); }
+  .ui-dot[data-tone="warning"] { --dot: var(--warning-dot); }
+  .ui-dot[data-tone="danger"] { --dot: var(--danger-dot); }
+  .ui-dot[data-tone="neutral"] { --dot: var(--neutral-dot); }
+
+  @media (forced-colors: active) {
+    .ui-dot { background: CanvasText; forced-color-adjust: none; }
+    .ui-dot[data-hollow] { background: transparent; box-shadow: inset 0 0 0 1.5px CanvasText; }
+  }
+}

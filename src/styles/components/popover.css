@@ -1,0 +1,51 @@
+/* Popover (src/ui/ui-popover.mjs; components.md "Popover"): anchored,
+ * non-modal panels such as onion settings, Go to frame and the Document
+ * popover. A head (title and close), a body that scrolls, an optional foot. */
+@layer components {
+  .ui-popover {
+    display: flex; flex-direction: column;
+    max-block-size: calc(100dvh - var(--topbar-h) - var(--space-4));
+    min-inline-size: 248px; max-inline-size: min(380px, calc(100vw - var(--space-4)));
+    border: 1px solid transparent; border-radius: var(--radius-xl);
+    background: var(--surface-raised); color: var(--text-1);
+    box-shadow: var(--elevation-3);
+    font: var(--type-ui);
+    -webkit-app-region: no-drag;
+  }
+  .ui-popover:where([popover]:not(:popover-open)) { display: none; }
+  .ui-popover[popover] { position: fixed; margin: 0; padding: 0; inset: auto; }
+  .ui-popover:popover-open { transition: opacity var(--dur-base) var(--ease-out), translate var(--dur-base) var(--ease-out); }
+  @starting-style { .ui-popover:popover-open { opacity: 0; translate: 0 4px; } }
+
+  .ui-popover-head {
+    display: flex; flex: none; align-items: center; gap: var(--space-2);
+    min-block-size: var(--control-2xl); padding: 0 var(--space-1-5) 0 var(--space-4);
+  }
+  .ui-popover-title { flex: 1; min-inline-size: 0; font: var(--type-ui-strong); }
+  .ui-popover-close {
+    display: inline-grid; place-items: center; flex: none;
+    inline-size: var(--control-sm); block-size: var(--control-sm); padding: 0;
+    border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--text-2);
+  }
+  .ui-popover-close:where(:hover) { background: var(--surface-hover); }
+  .ui-popover-close > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  .ui-popover-body {
+    display: grid; gap: var(--space-2); align-content: start;
+    min-block-size: 0; padding: var(--space-0-5) var(--space-4) var(--space-4);
+    overflow-y: auto; overscroll-behavior: contain;
+  }
+  .ui-popover-body:first-child { padding-block-start: var(--space-4); }
+  /* A body that scrolls says so: a 12px fade while more is below and a drawn 6px scrollbar. */
+  .ui-popover-body[data-more-below] { mask-image: linear-gradient(to bottom, black calc(100% - 12px), transparent); }
+  .ui-popover-body::-webkit-scrollbar { width: 6px; }
+  .ui-popover-body::-webkit-scrollbar-thumb { border-radius: 3px; background: var(--scrollbar-thumb-hover); }
+  .ui-popover-foot {
+    display: flex; flex: none; justify-content: flex-end; gap: var(--space-2);
+    padding: var(--space-2-5) var(--space-3) var(--space-3);
+    border-block-start: 1px solid var(--line-1);
+  }
+
+  @media (forced-colors: active) {
+    .ui-popover { border-color: CanvasText; }
+  }
+}

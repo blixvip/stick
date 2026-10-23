@@ -1,0 +1,30 @@
+/* Stepper (components.md "Stepper"): a 32px sunken group of a 24px −, a
+ * typeable tabular value and a 24px +. A row label names it (Inbetweens, IK
+ * chain, onion counts). Buttons carry the command they run, or data-kit-step
+ * for a plain step the inspector kit applies within the input's limits. */
+@layer components {
+  .ui-stepper {
+    display: inline-flex; align-items: center; gap: var(--space-0-5); flex: none;
+    block-size: var(--control-lg); padding: var(--space-0-5);
+    border-radius: var(--radius-md); background: var(--surface-sunken); color: var(--text-1);
+    transition: box-shadow var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  }
+  .ui-stepper:focus-within { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo); }
+  .ui-stepper:has([aria-invalid="true"]) { box-shadow: inset 0 0 0 1.5px var(--danger-text), 0 0 0 3px var(--danger-soft); }
+  .ui-stepper:has(input:disabled) { opacity: 0.5; }
+  .ui-stepper > output,
+  .ui-stepper-input {
+    min-inline-size: 40px; text-align: center; color: var(--text-1);
+    font: var(--type-value); font-variant-numeric: tabular-nums;
+  }
+  .ui-stepper-input {
+    inline-size: 40px; block-size: 100%; margin: 0; padding: 0;
+    border: 0; border-radius: 0; outline: none; background: transparent; appearance: textfield;
+  }
+  .ui-stepper-input::-webkit-inner-spin-button,
+  .ui-stepper-input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+
+  @media (forced-colors: active) {
+    .ui-stepper { border: 1px solid CanvasText; }
+  }
+}

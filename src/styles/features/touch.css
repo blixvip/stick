@@ -1,0 +1,380 @@
+/* The touch interface's components (docs/TOUCH.md): the tab bar and the
+ * wing's controls, the sheets with their grips, menus and popovers as
+ * sheets on an upright phone (anchor-position.mjs writes data-present),
+ * dialogs that fill a phone, and the timeline's header at a finger's size.
+ * layout/touch.css places the regions; every rule starts from the root's
+ * touch state inside :where(), so the desktop interface is untouched. */
+@layer features {
+  /* ---- The tab bar (phone, upright): the three workspaces and Properties, a glyph over its word ---- */
+  .touch-tabbar > .workspace-switch {
+    --_h: auto; flex: 1 1 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-1);
+    padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none;
+  }
+  .touch-tabbar .ui-segmented-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    block-size: auto; min-block-size: 48px; padding: var(--space-1) 0;
+    border-radius: var(--radius-lg); background: transparent; box-shadow: none; color: var(--text-3);
+    font: var(--type-small-strong);
+  }
+  .touch-tabbar .ui-segmented-item > .ui-dot { display: none; }
+  .touch-tabbar .ui-segmented-item > .band-ws-icon { display: inline-grid; place-items: center; }
+  .touch-tabbar .ui-segmented-item > .band-ws-icon > svg { inline-size: 22px; block-size: 22px; }
+  .touch-tabbar .ui-segmented-item[aria-pressed="true"] { background: var(--_mode-soft); color: var(--text-1); box-shadow: none; }
+  .touch-tabbar .ui-segmented-item:where([aria-pressed="true"]) > .band-ws-icon { color: var(--_mode); }
+  .touch-tabbar > .shell-sheet-button {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    flex: none; inline-size: 76px; block-size: auto; min-block-size: 48px; border-radius: var(--radius-lg);
+    color: var(--text-3); font: var(--type-small-strong);
+  }
+  .touch-tabbar > .shell-sheet-button::after { content: attr(aria-label); }
+  .touch-tabbar > .shell-sheet-button > svg { inline-size: 22px; block-size: 22px; }
+  .touch-tabbar > .shell-sheet-button[aria-expanded="true"] { background: var(--accent-soft); color: var(--accent-text-strong); }
+  .touch-tabbar > .shell-sheet-button[hidden] { display: none; }
+
+  /* ---- The band on a phone: the tabs share what is left; Save lives in File (autosave keeps the work) ---- */
+  :where(:root[data-form="phone"]) .shell-top .band-save { display: none; }
+  :where(:root[data-form="phone"]) .shell-top .project-tabs { min-inline-size: 0; }
+  :where(:root[data-form="phone"]) .shell-top .band-export > .band-label { display: none; }
+  /* During a session (Build, a movieclip, the camera) an upright phone's band keeps Done; the quiet Export waits in File,
+   * as the desktop band folds it (export2out). */
+  :where(:root[data-touch-layout="phone-portrait"]) .shell-top:where([data-session]) .band-export { display: none; }
+  :where(:root[data-form="phone"]) .shell-top :where(.band-export, .band-done, .band-testrig, .band-cancel) { --_px: 0px; inline-size: var(--control-md); }
+  :where(:root[data-form="phone"]) .shell-top :where(.band-done, .band-testrig, .band-cancel) > .band-label { display: none; }
+
+  /* ---- A tablet's workspace switch: segments a finger hits (40px inside the pill) ---- */
+  :where(:root[data-form="tablet"]) .shell-top .workspace-switch { --_h: 46px; }
+
+  /* ---- The wing (phone, on its side): the workspaces as three glyphs, stacked; the open projects live in the menu ---- */
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-top :where(.project-tabs, .band-save, #window-controls) { display: none; }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-top .workspace-switch {
+    --_h: auto; flex-direction: column; justify-content: space-between; gap: 0; inline-size: 100%; block-size: 100%; padding: 2px 0; border-radius: var(--radius-lg);
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .workspace-switch .ui-segmented-item {
+    flex: 1 1 0; inline-size: 100%; block-size: auto; padding: 0; justify-content: center; border-radius: var(--radius-md);
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-top :where(.band-export, .band-done, .band-testrig, .band-cancel, [data-action="undo"], [data-action="redo"], .shell-sheet-button) {
+    inline-size: 100%; block-size: 100%; min-inline-size: 0;
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .workspace-switch :where(.ui-dot, .band-label) { display: none; }
+  :where(:root[data-touch-layout="phone-landscape"]) .workspace-switch .band-ws-icon { display: inline-grid; place-items: center; }
+  :where(:root[data-touch-layout="phone-landscape"]) .workspace-switch :where([aria-pressed="true"]) > .band-ws-icon { color: var(--_mode); }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-top .shell-sheet-button[aria-expanded="true"] { background: var(--accent-soft); color: var(--accent-text-strong); }
+
+  /* ---- Sheets: a grip to drag, room for a thumb, inside the safe areas ---- */
+  /* The sheet's own surface (its grip band, its tab row) is the finger's to drag; its panels scroll inside it. */
+  :where(:root[data-input="touch"]) :where(.shell-sheet, .shell-timeline-body):where([popover]) { overscroll-behavior: contain; touch-action: none; }
+  :where(:root[data-input="touch"]) :where(.shell-sheet, .shell-timeline-body):where(:popover-open)::before {
+    content: ""; position: absolute; z-index: 3; inset-block-start: var(--space-1-5); inset-inline-start: calc(50% - 20px);
+    inline-size: 40px; block-size: 5px; border-radius: var(--radius-pill); background: var(--line-2); pointer-events: none;
+  }
+  /* Upright phone: the inspector, and Structure, rise from the bottom edge; half the height, or all of it. */
+  :where(:root[data-touch-layout="phone-portrait"]) .shell-sheet:where([popover]) {
+    inset: auto 0 var(--touch-tabbar-inset, 0px) 0; inline-size: auto; max-inline-size: none;
+    block-size: var(--touch-sheet-h, 58%); max-block-size: calc(100dvh - var(--touch-tabbar-inset, 0px) - var(--safe-top) - var(--space-6));
+    padding-block: var(--sheet-grip) 0;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0; box-shadow: var(--elevation-4);
+  }
+  /* A sheet under a finger follows it; let go and it settles. */
+  :where(:root[data-input="touch"]) :where(.shell-sheet, .shell-timeline-body):where(:popover-open):not([data-dragging]) {
+    transition: block-size var(--dur-slow) var(--ease-out), translate var(--dur-slow) var(--ease-out);
+  }
+  /* On its side: the inspector slides in beside the wing, the stage's whole height. */
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-sheet:where([popover]) {
+    inset: 0 calc(var(--wing-w) + var(--safe-right)) 0 auto; inline-size: min(360px, 58vw); max-inline-size: none;
+    block-size: auto; max-block-size: none; padding-block: var(--space-2) var(--safe-bottom);
+    border-radius: var(--radius-2xl) 0 0 var(--radius-2xl); box-shadow: var(--elevation-4);
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-sheet[data-side="left"]:where([popover]) {
+    inset: 0 auto 0 var(--safe-left); border-radius: 0 var(--radius-2xl) var(--radius-2xl) 0;
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-sheet:where(:popover-open)::before { display: none; }
+  /* Tablet: a tall sheet beside the band's edge, never over the timeline's header. */
+  :where(:root[data-form="tablet"]) .shell-sheet:where([popover]) {
+    inset: calc(var(--topbar-h) + var(--safe-top) + var(--space-2)) calc(var(--space-2) + var(--safe-right)) auto auto;
+    inline-size: min(380px, calc(100vw - 2 * var(--space-4))); max-block-size: calc(100dvh - var(--topbar-h) - var(--safe-top) - 160px);
+  }
+  :where(:root[data-form="tablet"]) .shell-sheet[data-side="left"]:where([popover]) { inset-inline: calc(var(--space-2) + var(--safe-left)) auto; }
+  :where(:root[data-form="tablet"]) .shell-sheet:where(:popover-open)::before { display: none; }
+  /* The timeline's body over the stage (phone on its side): above its header, as wide as the workspace. */
+  :where(:root[data-input="touch"]) .shell-timeline-body:popover-open {
+    inset-inline: calc(var(--safe-left) + var(--space-1)) calc(var(--space-1) + var(--safe-right));
+    padding-block-start: var(--space-4); border-radius: var(--radius-2xl); box-shadow: var(--elevation-4);
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .shell-timeline-body:popover-open { inset-inline-end: calc(var(--wing-w) + var(--safe-right) + var(--space-1)); }
+
+  /* ---- Menus and popovers as sheets (an upright phone): full width, from the bottom edge, over a veil ---- */
+  :is(.ui-menu, .ui-popover, .paint-picker, .styk-easing-popover)[data-present="sheet"] {
+    inset: auto 0 0 0; inline-size: auto; min-inline-size: 0; max-inline-size: none;
+    max-block-size: min(78dvh, calc(100dvh - var(--safe-top) - var(--space-8)));
+    padding-block-end: calc(var(--space-2) + var(--safe-bottom));
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0; box-shadow: var(--elevation-4);
+  }
+  .ui-menu[data-present="sheet"] { padding-block-start: var(--space-6); padding-inline: var(--space-2); }
+  .ui-popover[data-present="sheet"] { padding-block-start: var(--space-3); }
+  :is(.ui-menu, .ui-popover, .paint-picker, .styk-easing-popover)[data-present="sheet"]::before {
+    content: ""; position: absolute; inset-block-start: var(--space-2); inset-inline-start: calc(50% - 20px);
+    inline-size: 40px; block-size: 5px; border-radius: var(--radius-pill); background: var(--line-2);
+  }
+  :is(.ui-menu, .ui-popover, .paint-picker, .styk-easing-popover)[data-present="sheet"]::backdrop { background: var(--surface-backdrop); }
+  .paint-picker[data-present="sheet"] { padding-block-start: var(--space-6); }
+  .ui-menu[data-present="sheet"]:popover-open, .ui-popover[data-present="sheet"]:popover-open { transition: translate var(--dur-slow) var(--ease-out), opacity var(--dur-base) var(--ease-out); }
+  @starting-style { :is(.ui-menu, .ui-popover)[data-present="sheet"]:popover-open { opacity: 1; translate: 0 40%; } }
+  .ui-menu[data-present="sheet"] .ui-menu-item { min-block-size: 48px; }
+  .ui-menu-back {
+    display: flex; align-items: center; gap: var(--space-2); flex: none;
+    min-block-size: 48px; padding: 0 var(--space-2-5); margin-block-end: var(--space-1);
+    border: 0; border-block-end: 1px solid var(--line-1); border-radius: 0; background: transparent;
+    color: var(--accent-text-strong); font: var(--type-ui-strong); text-align: start;
+  }
+  .ui-menu-back > svg { inline-size: var(--icon-md); block-size: var(--icon-md); }
+
+  /* ---- Menus anywhere on touch: rows a finger hits, words a little larger, no hover-only affordances ---- */
+  :where(:root[data-input="touch"]) .ui-menu { min-inline-size: 260px; max-inline-size: min(380px, calc(100vw - var(--space-4))); }
+  :where(:root[data-input="touch"]) :where(.ui-menu-shortcut, kbd.ui-palette-meta) { display: none; }
+  :where(:root[data-input="touch"]) .ui-menu-item { column-gap: var(--space-3); }
+
+  /* ---- Dialogs on a phone fill the window; their actions stay at the bottom, in reach ---- */
+  :where(:root[data-form="phone"]) dialog:is(.ui-dialog, .styk-settings), :where(:root[data-form="phone"]) :where(dialog:is(#dialog, #insert-dialog)) {
+    inline-size: 100vw; max-inline-size: 100vw; block-size: 100dvh; max-block-size: 100dvh;
+    margin: 0; border-radius: 0;
+    padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  }
+  :where(:root[data-form="phone"]) .ui-dialog .ui-dialog-head { padding-inline: var(--space-4) var(--space-2); }
+  :where(:root[data-form="phone"]) .ui-dialog .ui-dialog-body { padding-inline: var(--space-4); }
+  :where(:root[data-form="phone"]) .ui-dialog .ui-dialog-foot { padding-inline: var(--space-4); border-block-start: 1px solid var(--line-1); }
+  :where(:root[data-form="phone"]) .ui-dialog .ui-dialog-foot > :where(.ui-button) { flex: 1 1 0; }
+
+  /* ---- The timeline's header on a phone: Add frame, the steps and Play, the readout, Onion and ⋯ ----
+   * Simple │ Advanced and Onion's settings are rows of Timeline ⋯ (timeline-header.mjs); a press and hold on Onion
+   * opens its settings too. */
+  :where(:root[data-form="phone"]) .tl-head .tl-mode { display: none; }
+  /* The timeline zooms with two fingers; Fit timeline is a row of Timeline ⋯. */
+  :where(:root[data-form="phone"]) .tl-end > .tl-ruler-tools { display: none; }
+  :where(:root[data-form="phone"]) .tl-head .tl-onion > .ui-split-more { display: none; }
+  :where(:root[data-form="phone"]) .tl-head .tl-onion > .ui-icon-button { border-radius: var(--radius-md); }
+  :where(:root[data-form="phone"][data-input="touch"]) .timeline-toolbar.tl-head {
+    grid-template-columns: auto minmax(0, 1fr) auto; column-gap: var(--space-1); padding-inline: var(--space-1-5);
+  }
+  :where(:root[data-form="phone"]) .tl-head > .tl-transport { justify-self: center; }
+  /* Add frame, Next copy and Edit together show their glyphs (a press and hold says their names). */
+  :where(:root[data-form="phone"]) .tl-head :where(.tl-add, .tl-cel-main, .tl-together) > :where(.ui-label, .range-edit-count) {
+    position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  :where(:root[data-form="phone"]) .tl-head :where(.tl-add, .tl-together) { --_px: 0; inline-size: var(--control-md); }
+  :where(:root[data-form="phone"]) .tl-head .tl-cel-main { --_px: var(--space-2-5); }
+  :where(:root[data-form="phone"]) .tl-head .tl-readout { margin-inline-start: 0; padding-inline: var(--space-1); }
+  :where(:root[data-input="touch"]) .timeline-toolbar.tl-head { block-size: var(--control-2xl); min-block-size: var(--control-2xl); }
+  /* A tablet held upright: the frame rate is the Scene's (Scene properties), First frame is Timeline ⋯'s, so the
+   * header keeps Onion, Audio and ⋯ in view. */
+  :where(:root[data-touch-layout="tablet-portrait"]) .tl-head .tl-controls > :where(.tl-fps, .tl-first) { display: none; }
+
+  /* ---- A tool's corner tick (its variants) is a thumb's corner, not a 16px one; a press and hold on the tool opens
+   * the same list ---- */
+  :where(:root[data-input="touch"]) .shell-rail :where(.ui-tool-tick-button, .tweener-arrow) { inline-size: 24px; block-size: 24px; }
+
+  /* ---- An upright phone's tool bar: its tools and Build's quick options in one row (layout/touch.css places it) ---- */
+  :where(.workspace[data-rail-orientation="horizontal"]) > .shell-rail :where(.tool-dock, .rail-quick, .rail-order) { flex-direction: row; }
+  :where(.workspace[data-rail-orientation="horizontal"]) > .shell-rail :where(.rail-add) { margin-block-end: 0; margin-inline-end: var(--space-1-5); }
+  :where(.workspace[data-rail-orientation="horizontal"]) > .shell-rail :where(.rail-add)::after {
+    inset: 8px calc(-1 * var(--space-1-5) - 2px) 8px auto; inline-size: 1px; block-size: auto;
+  }
+  :where(.workspace[data-rail-orientation="horizontal"]) > .shell-rail :where(.rail-quick) {
+    display: flex; margin: 0 0 0 var(--space-2); padding: 0 0 0 var(--space-2);
+  }
+  :where(.workspace[data-rail-orientation="horizontal"]) > .shell-rail :where(.rail-quick[hidden]) { display: none; }
+  :where(.workspace[data-rail-orientation="horizontal"]) > .shell-rail :where(.rail-quick)::before {
+    inset: calc(50% - 10px) auto auto 0; inline-size: 1px; block-size: 20px;
+  }
+  :where(.workspace[data-rail-orientation="horizontal"]) > .shell-rail :where(.rail-order) { display: flex; margin: 0 0 0 var(--space-2); }
+
+  /* ---- The modifier buttons: a column of labelled toggles over one round button that shows what is on ---- */
+  .touch-modifiers-list {
+    display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-1-5);
+    flex: 0 1 auto; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
+    border-radius: var(--radius-2xl); background: var(--surface-raised); box-shadow: var(--elevation-2);
+  }
+  /* On its side a phone has width to spare and little height: one row beside the round button, swiping sideways
+   * when it is longer than the stage is wide. */
+  :where(:root[data-touch-layout="phone-landscape"]) .touch-modifiers { flex-direction: row; align-items: flex-end; max-inline-size: calc(100% - var(--space-6)); }
+  :where(:root[data-touch-layout="phone-landscape"]) .touch-modifiers-list {
+    flex-direction: row; flex: 0 1 auto; min-inline-size: 0; overflow: auto hidden; touch-action: pan-x;
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .touch-modifier { flex: none; min-inline-size: 0; }
+  .touch-modifier {
+    display: flex; align-items: center; gap: var(--space-2); min-block-size: 44px; min-inline-size: 112px; padding: 0 var(--space-3) 0 var(--space-2-5);
+    border: 0; border-radius: var(--radius-lg); background: transparent; color: var(--text-2);
+    font: var(--type-ui-strong); touch-action: none;
+  }
+  .touch-modifier > svg { flex: none; inline-size: var(--icon-md); block-size: var(--icon-md); }
+  .touch-modifier[aria-pressed="true"] { background: var(--accent-strong); color: var(--text-on-strong); }
+  .touch-modifiers-toggle {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1-5);
+    min-inline-size: 48px; block-size: 48px; padding: 0 var(--space-3);
+    border: 0; border-radius: var(--radius-pill); background: var(--surface-raised); color: var(--text-2); box-shadow: var(--elevation-2);
+    font: var(--type-ui-strong);
+  }
+  .touch-modifiers-toggle > svg { inline-size: var(--icon-lg); block-size: var(--icon-lg); }
+  .touch-modifiers-toggle[data-active] { background: var(--accent-strong); color: var(--text-on-strong); }
+  .touch-modifiers-toggle[aria-expanded="true"]:not([data-active]) { color: var(--accent-text-strong); }
+  .touch-modifiers-state:empty { display: none; }
+
+  /* ---- The touch timeline (touch/timeline-scrubber.mjs): the header's action bar, finger-tall rows, a bold
+   * centred playhead ---- */
+  .tl-head > .tl-actions { display: flex; min-inline-size: 0; }
+  .tl-head > .tl-actions[hidden] { display: none; }
+  .tl-touch-actions {
+    display: flex; align-items: stretch; gap: var(--space-0-5); flex: 1 1 auto; min-inline-size: 0;
+    overflow: auto hidden; scrollbar-width: none; overscroll-behavior: contain; touch-action: pan-x;
+  }
+  .tl-touch-actions:where([data-more-after]) { mask-image: linear-gradient(to right, black calc(100% - 24px), transparent); }
+  .tl-touch-actions:where([data-more-before]) { mask-image: linear-gradient(to left, black calc(100% - 24px), transparent); }
+  .tl-touch-actions:where([data-more-before][data-more-after]) {
+    mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+  }
+  .tl-touch-action {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; flex: 1 0 auto;
+    min-inline-size: 52px; block-size: 48px; padding: 0 var(--space-1);
+    border: 0; border-radius: var(--radius-lg); background: transparent; color: var(--text-2);
+    font: var(--weight-semibold) 11px/1 var(--font-ui); white-space: nowrap;
+  }
+  .tl-touch-action > svg { inline-size: 20px; block-size: 20px; }
+  .tl-touch-action[hidden] { display: none; }
+  .tl-touch-action:disabled { opacity: 0.35; }
+  .tl-touch-action:where(:active:not(:disabled)) { background: var(--surface-hover); }
+  .tl-touch-action:where([data-on="true"]) { color: var(--accent-text-strong); }
+  .tl-touch-action:where([data-touch-action="done"]) { color: var(--accent-text-strong); }
+  :where(.tl-touch-actions[data-range="true"]) .tl-touch-action:where([data-touch-action="done"]) { background: var(--accent-soft); }
+
+  /* A phone held upright: the header in two rows, the transport over the action bar. */
+  :where(:root[data-touch-layout="phone-portrait"]) .timeline-toolbar.tl-head:where([data-actions]) {
+    grid-template-rows: var(--control-2xl) auto; block-size: auto; row-gap: 0; padding-block-end: var(--space-1);
+  }
+  :where(:root[data-touch-layout="phone-portrait"]) .tl-head:where([data-actions]) > .tl-actions {
+    grid-row: 2; grid-column: 1 / -1; border-block-start: 1px solid var(--line-1); padding-block-start: var(--space-1);
+  }
+  /* A phone on its side: one row, the actions between the transport and Onion. */
+  :where(:root[data-touch-layout="phone-landscape"]) .timeline-toolbar.tl-head:where([data-actions]) {
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+  }
+  :where(:root[data-touch-layout="phone-landscape"]) .tl-head:where([data-actions]) > .tl-transport { grid-column: 2; }
+  :where(:root[data-touch-layout="phone-landscape"]) .tl-head:where([data-actions]) > .tl-actions { grid-column: 3; grid-row: 1; }
+  :where(:root[data-touch-layout="phone-landscape"]) .tl-head:where([data-actions]) > .tl-end { grid-column: 4; }
+  :where(:root[data-touch-layout="phone-landscape"]) .tl-touch-action { min-inline-size: 48px; flex-grow: 0; }
+  :where(:root[data-touch-layout="phone-portrait"]) .tl-touch-action { min-inline-size: 44px; padding-inline: 0; }
+  /* A tablet: the bar under the header's clusters, as upright on a phone. */
+  :where(:root[data-form="tablet"]) .timeline-toolbar.tl-head:where([data-actions]) {
+    grid-template-rows: var(--control-2xl) auto; block-size: auto; row-gap: 0; padding-block-end: var(--space-1);
+  }
+  :where(:root[data-form="tablet"]) .tl-head:where([data-actions]) > .tl-actions { grid-row: 2; grid-column: 1 / -1; border-block-start: 1px solid var(--line-1); padding-block-start: var(--space-1); }
+  :where(:root[data-form="tablet"]) .tl-touch-action { flex-grow: 0; min-inline-size: 64px; }
+  /* On a phone First frame, Loop, Playback range and Audio are rows of Timeline ⋯ (timeline-header.mjs), as at the minimal width. */
+  :where(:root[data-form="phone"]) .tl-head .tl-controls > :where(.tl-first, .tl-loop, .tl-playback-range, .tl-fps) { display: none; }
+  :where(:root[data-form="phone"]) .tl-head .tl-end > :where(.tl-audio, .shell-timeline-sheet) { display: none; }
+  /* Auto key is a row of Timeline ⋯ on touch, leaving the header to the touch action bar. */
+  :where(:root[data-input="touch"]) .tl-head .tl-end > .tl-autokey { display: none; }
+
+  /* The rows: names a finger reads and hits; the playhead a bold line with its frame on a tab. */
+  .layer-timeline:where([data-touch]) { min-block-size: 0; }
+  .layer-timeline:where([data-touch]) .sheet-layer { padding-inline: var(--space-2) var(--space-1); }
+  .layer-timeline:where([data-touch]) .sheet-layer .sheet-layer-name { align-self: stretch; block-size: auto; gap: var(--space-2); font: var(--type-ui-strong); }
+  .layer-timeline:where([data-touch]) .sheet-layer .sheet-layer-state { inline-size: 44px; block-size: 44px; max-block-size: 100%; opacity: 1; }
+  .layer-timeline:where([data-touch]) .sheet-playhead { inline-size: 3px; margin-inline-start: -1.5px; border-radius: 2px; }
+  .layer-timeline:where([data-touch]) .sheet-playhead > span { min-inline-size: 30px; block-size: 22px; font: var(--weight-bold) 12px/22px var(--font-ui); }
+  /* A phone keeps the eye on the row; the lock is in the layer's menu (a press and hold). */
+  :where(:root[data-form="phone"]) .layer-timeline .sheet-layer .sheet-layer-state:where([aria-label^="Lock"], [aria-label^="Unlock"]):where(:not([data-on="true"])) { display: none; }
+
+  /* ---- The Advanced timeline on a phone: a narrower names column (its splitter still widens it) ---- */
+  :where(:root[data-form="phone"]) .layer-timeline { --sheet-label: 148px; }
+  :where(:root[data-form="phone"]) .sheet-label-head > .sheet-label-title { display: none; }
+  :where(:root[data-form="phone"]) .layer-timeline .sheet-label-head { justify-content: flex-end; padding-inline-start: var(--space-1); }
+  /* A short window's smaller buttons stay finger-sized: on touch the ruler row that holds them is 44px (timeline-rows.mjs). */
+  :where(:root[data-input="touch"]) .sheet-label-head :is(.ui-icon-button, .sheet-new-layer > .ui-split-more) { --_s: var(--control-sm); block-size: var(--control-sm); }
+  /* The names column scrolls the rows under a vertical swipe (touch/timeline-touch.mjs), never the page. */
+  :where(:root[data-input="touch"]) .layer-timeline .sheet-labels { touch-action: none; }
+
+  /* ---- The Simple timeline on touch (sheet-filmstrip.mjs): its frame bar is the header's action row, and the
+   * cards are compact, the frame's number on its thumbnail and a slim hold bar under it ---- */
+  .tl-actions > .sheet-framebar {
+    display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: var(--space-2);
+    flex: 1 1 auto; inline-size: auto; min-inline-size: 0; padding: 0 var(--space-1);
+    overflow: auto hidden; scrollbar-width: none; overscroll-behavior: contain; touch-action: pan-x;
+    border: 0; background: transparent;
+  }
+  .tl-actions > .sheet-framebar > * { flex: none; }
+  .tl-actions > .sheet-framebar > .sheet-framebar-title { display: flex; align-items: baseline; gap: var(--space-1-5); }
+  .tl-actions :where(.sheet-framebar-title) > .sheet-framebar-total { display: none; }
+  .tl-actions > .sheet-framebar > .sheet-framebar-grid { display: flex; align-items: center; gap: var(--space-2); }
+  .tl-actions > .sheet-framebar .sheet-framebar-grid > * { flex: none; }
+  .tl-actions :where(.sheet-framebar-grid) > .ui-field { inline-size: auto; min-inline-size: 150px; }
+  .tl-actions > .sheet-framebar > .sheet-framebar-layer { margin-inline-start: 0; }
+  :where(:root[data-touch-layout="phone-landscape"]) .tl-actions > .sheet-framebar > .sheet-framebar-title { display: none; }
+  :where(:root[data-touch-layout="phone-landscape"]) .tl-actions :where(.sheet-framebar-row) > .ui-row-label { display: none; }
+
+  .sheet-filmstrip:where([data-touch]) { min-block-size: 0; }
+  /* Upright on a phone: a strip as tall as its cards (TOUCH_CARD_CHROME over a 5:3 thumbnail inside the 12px gutter),
+   * then the frame bar, its title row over the controls, with the rest of the panel's height. */
+  :where(:root[data-touch-layout="phone-portrait"]) .sheet-filmstrip { flex-direction: column; }
+  :where(:root[data-touch-layout="phone-portrait"]) .sheet-filmstrip > .sheet-filmstrip-scroll {
+    flex: none; block-size: calc((var(--filmstrip-card, 112px) - 12px) * 3 / 5 + 26px + var(--space-2));
+  }
+  :where(:root[data-touch-layout="phone-portrait"]) .sheet-filmstrip > .sheet-framebar {
+    display: flex; flex-flow: row wrap; align-content: flex-start; align-items: center; gap: var(--space-2) var(--space-3);
+    inline-size: auto; flex: 1 1 auto; min-block-size: 0; overflow: hidden auto; overscroll-behavior: contain;
+    padding: var(--space-2) var(--space-3) var(--space-3); border: 0; border-block-start: 1px solid var(--line-1);
+  }
+  :where(:root[data-touch-layout="phone-portrait"]) .sheet-framebar > .sheet-framebar-title { display: flex; flex: 1 1 auto; min-inline-size: 0; }
+  :where(:root[data-touch-layout="phone-portrait"]) .sheet-framebar > .sheet-framebar-layer { margin-inline-start: 0; }
+  :where(:root[data-touch-layout="phone-portrait"]) .sheet-framebar-layer > .ui-label { display: none; }
+  :where(:root[data-touch-layout="phone-portrait"]) .sheet-framebar > .sheet-framebar-grid {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); flex: 1 0 100%; order: 2;
+  }
+  :where(:root[data-touch-layout="phone-portrait"]) .sheet-framebar-grid > .ui-field { inline-size: auto; min-inline-size: 150px; }
+  /* A short phone: the controls are one row that swipes sideways, so none sits out of sight below. */
+  :where(:root[data-touch-layout="phone-portrait"]:is([data-height="short"], [data-height="low"])) .sheet-framebar > .sheet-framebar-grid {
+    flex-wrap: nowrap; margin-inline: calc(-1 * var(--space-3)); padding-inline: var(--space-3);
+    overflow: auto hidden; scrollbar-width: none; overscroll-behavior: contain; touch-action: pan-x;
+  }
+  :where(:root[data-touch-layout="phone-portrait"]:is([data-height="short"], [data-height="low"])) .sheet-framebar-grid > * { flex: none; }
+  .sheet-filmstrip:where([data-touch]) .ui-frame-card { position: absolute; grid-template-rows: auto auto; row-gap: 0; padding: var(--space-1-5) var(--space-1) 0; }
+  .sheet-filmstrip:where([data-touch]) .ui-frame-num {
+    position: absolute; inset-block-start: calc(var(--space-1-5) + 4px); inset-inline-start: calc(var(--space-1) + 4px); z-index: 1;
+    padding: 1px var(--space-1-5); border-radius: var(--radius-pill); background: var(--surface-raised); box-shadow: var(--elevation-1);
+    font: var(--weight-bold) 12px/16px var(--font-ui); pointer-events: none;
+  }
+  .sheet-filmstrip:where([data-touch]) .ui-frame-card:where([data-current="true"]) .ui-frame-num { background: var(--accent-strong); color: var(--text-on-strong); }
+  .sheet-filmstrip:where([data-touch]) .ui-frame-count { display: none; }
+  .sheet-filmstrip:where([data-touch]) .ui-frame-hold { block-size: 18px; margin-block-start: 0; }
+  .sheet-filmstrip:where([data-touch]) .ui-frame-hold::before { inset-block-start: 7px; block-size: 4px; border-radius: 2px; }
+  .sheet-filmstrip:where([data-touch]) .ui-frame-hold::after { inset-block-start: 4px; block-size: 10px; }
+
+  /* ---- Draw's brush bar on a phone: the preset, the colours, Size and Mirror; Opacity, Flow and Smooth are the
+   * Brush section's in Properties (their twins), where a finger has the room ---- */
+  :where(:root[data-form="phone"]) .drawing-quickbar .draw-slider ~ .draw-slider { display: none; }
+  :where(:root[data-form="phone"]) .drawing-quickbar .draw-quick-swatches { display: none; }
+  :where(:root[data-form="phone"]) .drawing-quickbar .draw-quick-row { gap: var(--space-1); }
+  :where(:root[data-form="phone"]) .drawing-quickbar .draw-slider.is-compact { flex: 1 1 auto; min-inline-size: 76px; }
+  /* The two colours side by side, each a fingertip's target (the mouse's overlapping pair leaves the second a sliver),
+   * and a full-sized Swap. */
+  :where(:root[data-input="touch"]) .draw-color-pair { display: flex; align-items: center; gap: var(--space-1); inline-size: auto; block-size: var(--control-md); }
+  :where(:root[data-input="touch"]) .draw-color-pair > input { position: static; flex: none; }
+  :where(:root[data-input="touch"]) .draw-color-pair > .draw-color-primary { inline-size: 40px; block-size: 40px; }
+  :where(:root[data-input="touch"]) .draw-color-pair > .draw-color-secondary { inline-size: 32px; block-size: 32px; border: 1px solid var(--line-3); }
+  :where(:root[data-input="touch"]) .draw-colors .draw-color-swap { inline-size: var(--control-sm); block-size: var(--control-sm); }
+  /* Upright, the brush bar takes a full-width row of its own under the view and zoom (a phone has height to spare). */
+  :where(:root[data-touch-layout="phone-portrait"]) .stage-head:where([data-workspace="draw"]) {
+    grid-template-rows: var(--_h) var(--_h); block-size: auto; row-gap: 0;
+  }
+  :where(:root[data-touch-layout="phone-portrait"]) .stage-head:where([data-workspace="draw"]) > .stage-head-start { grid-row: 2; grid-column: 1 / -1; }
+  :where(:root[data-touch-layout="phone-portrait"]) .stage-head:where([data-workspace="draw"]) > .stage-head-end { grid-row: 1; grid-column: 2; }
+
+  /* ---- A held control says its name; keyboard shortcuts mean nothing to a finger ---- */
+  :where(:root[data-input="touch"]) .ui-tooltip :where(.ui-tooltip-sep, .ui-tooltip-key) { display: none; }
+
+  /* ---- Toasts clear the tab bar and the safe areas ---- */
+  :where(:root[data-input="touch"]) :where(#toast):where([data-place="bottom"]) { margin-block-end: var(--safe-bottom); }
+
+  /* A phone's tabs and switches (the Properties, VFX and Library islands, a dialog's pages, Export's Format) are a
+   * fingertip tall inside their track. */
+  :where(:root[data-form="phone"]) :is(.ui-tabs, .ui-segmented) { block-size: calc(var(--control-md) + var(--space-0-5) * 2); }
+  :where(:root[data-input="touch"]) .styk-settings-tabs > button { min-block-size: var(--touch-target); }
+}

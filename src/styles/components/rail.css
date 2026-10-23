@@ -1,0 +1,24 @@
+/* Rail (components.md "Tool button and Rail"): the current workspace's tools
+ * only, a vertical stack in the floating tool bar beside the canvas
+ * (layout/workspace.css .shell-rail), anchored to the top with 4px gaps,
+ * .ui-rail-sep between groups and .ui-rail-end pinned to the bottom for one
+ * extra control. Where one column of tools would be taller than the bar's
+ * room (Draw's tools in a short window), the bar folds them into two columns
+ * (dock-host.mjs writes data-columns on the bar), Add spanning both. It is a
+ * nav named "Editor tools". The class sits beside the .studio-rail and
+ * .tool-dock hooks, which stay unstyled. */
+@layer components {
+  .ui-rail {
+    display: flex; flex-direction: column; align-items: center; gap: var(--space-1);
+    inline-size: 100%; min-block-size: 0; padding: var(--space-0-5) 0 var(--space-1);
+  }
+  :where(:root[data-tier="minimal"], :root[data-height="low"]) .ui-rail { gap: var(--space-0-5); padding-block-end: 0; }
+  :where(.shell-rail[data-columns]) > .ui-rail { display: grid; grid-template-columns: repeat(2, auto); justify-content: center; justify-items: center; }
+  :where(.shell-rail[data-columns]) > .ui-rail > :where(.rail-add) { grid-column: 1 / -1; }
+  .ui-rail-sep { flex: none; inline-size: 20px; block-size: 1px; margin: var(--space-1) 0; background: var(--line-2); }
+  .ui-rail-end { display: flex; flex-direction: column; align-items: center; gap: var(--space-0-5); margin-block-start: auto; }
+
+  @media (forced-colors: active) {
+    .ui-rail-sep { background: CanvasText; }
+  }
+}

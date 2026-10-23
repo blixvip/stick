@@ -1,0 +1,57 @@
+/* List row (components.md "List row"): 32px, radius 6, --level indents 14px.
+ * A lead glyph, the label, a meta and the row's actions in their own column:
+ * eye and lock (and a list's swatch or delete) sit on every row at rest as
+ * quiet glyphs, at full contrast when not at their default ([data-on="true"]:
+ * a hidden layer's eye-off, a locked layer's lock), so they never cover a
+ * name. Only secondary actions marked data-reveal wait for hover or focus,
+ * and they are always visible without hover. Drop indicators: a 2px accent
+ * line or a soft ring. .ui-group-label titles a group of rows. */
+@layer components {
+  .ui-list-row {
+    --_h: 32px;
+    --level: 0;
+    position: relative;
+    display: flex; align-items: center; gap: var(--space-2);
+    block-size: var(--_h); min-inline-size: 0;
+    padding: 0 var(--space-1) 0 calc(var(--space-2-5) + var(--level) * var(--space-3-5));
+    border-radius: var(--radius-sm); color: var(--text-1); font: var(--type-ui);
+    user-select: none;
+  }
+  .ui-list-row:hover { background: var(--surface-hover); }
+  .ui-list-row:is([aria-selected="true"], [aria-current="true"]) { background: var(--surface-selected); }
+  .ui-list-row:where([aria-selected="true"], [aria-current="true"]) .ui-list-row-label { font-weight: var(--weight-semibold); }
+  .ui-list-row:where([aria-selected="true"], [aria-current="true"]) .ui-list-row-lead { color: var(--accent-text); }
+  .ui-list-row:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: var(--focus-offset-inset); }
+  .ui-list-row-lead { flex: none; display: inline-grid; place-items: center; color: var(--text-3); }
+  .ui-list-row-lead > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); stroke-width: 2; }
+  .ui-list-row-label { flex: 0 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-list-row-meta { flex: none; font: var(--type-small); color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .ui-list-row:where([data-hidden="true"]) .ui-list-row-label { color: var(--text-3); }
+
+  .ui-list-row-actions { flex: none; display: flex; align-items: center; gap: 0; margin-inline-start: auto; }
+  .ui-list-row-actions > .ui-icon-button { color: var(--text-3); }
+  .ui-list-row-actions > .ui-icon-button:where(:hover) { color: var(--text-1); }
+  .ui-list-row-actions > [data-on="true"] { color: var(--text-1); }
+  .ui-list-row-actions > .ui-swatch { --_s: 16px; margin-inline: var(--space-1); }
+  .ui-list-row-actions > [data-reveal] { opacity: 0; transition: opacity var(--dur-fast); }
+  .ui-list-row:where(:hover, :focus-within) .ui-list-row-actions > :where([data-reveal]) { opacity: 1; }
+  @media (hover: none) { .ui-list-row-actions > [data-reveal] { opacity: 1; } }
+
+  .ui-list-row[data-drop="before"]::after,
+  .ui-list-row[data-drop="after"]::after {
+    content: ""; position: absolute; inset-inline: 6px; block-size: 2px; border-radius: 1px; background: var(--accent-line);
+  }
+  .ui-list-row[data-drop="before"]::after { inset-block-start: -1px; }
+  .ui-list-row[data-drop="after"]::after { inset-block-end: -1px; }
+  .ui-list-row[data-drop="inside"] { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent-line); }
+
+  .ui-group-label {
+    display: flex; align-items: center; min-block-size: 28px;
+    padding: var(--space-1-5) var(--space-2-5) var(--space-0-5);
+    font: var(--type-small-strong); color: var(--text-3);
+  }
+
+  @media (forced-colors: active) {
+    .ui-list-row[aria-selected="true"] { outline: 2px solid Highlight; outline-offset: var(--focus-offset-inset); }
+  }
+}

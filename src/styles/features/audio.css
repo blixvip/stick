@@ -1,0 +1,82 @@
+/* Audio (audio-timeline.mjs) on the kit (experience.md revision 5). Its
+ * markup, labels and the legacy container folds (legacy/41-audio.css, which
+ * hide the buttons' words in narrow timelines) stay; this sheet gives it the
+ * kit's look:
+ *
+ *   the audio bar    "Audio" in the section type, then pill buttons with a
+ *                    glyph and words like the timeline header's (Import audio
+ *                    on the audio mint)
+ *   Clip             the clip popover as a kit popover: the clip's name and
+ *                    times, Volume as a slider row, then soft pill buttons
+ *   Details          the clip's properties as a kit popover: labelled wells
+ *   Options          switch rows */
+@layer features {
+  /* ---- The audio bar ---- */
+  .audio-toolbar { gap: var(--space-1); padding-inline: var(--space-2-5); font: var(--type-small); color: var(--text-2); }
+  .audio-toolbar > strong { margin-inline-end: var(--space-1-5); font: var(--type-section); color: var(--text-1); }
+  .audio-toolbar > .audio-heading-icon > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); color: var(--audio-ink); }
+  :where(.audio-toolbar, .audio-clip-controls, .audio-properties-actions, .audio-properties-title) > .audio-button {
+    gap: var(--space-1-5); block-size: var(--control-sm); min-inline-size: var(--control-sm); padding: 0 var(--space-2-5);
+    border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--text-2); font: var(--type-button);
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  :where(.audio-toolbar, .audio-clip-controls, .audio-properties-actions, .audio-properties-title) > .audio-button > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+  :where(.audio-toolbar, .audio-clip-controls, .audio-properties-actions, .audio-properties-title) > .audio-button:where(:hover:not(:disabled)) { background: var(--surface-hover); color: var(--text-1); }
+  :where(.audio-toolbar, .audio-clip-controls, .audio-properties-actions, .audio-properties-title) > .audio-button:where([aria-pressed="true"], [aria-expanded="true"]) { background: var(--surface-pressed); color: var(--text-1); }
+  :where(.audio-toolbar, .audio-clip-controls, .audio-properties-actions, .audio-properties-title) > .audio-button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  /* Icon-only buttons (Close, Delete) are round targets. */
+  :where(.audio-toolbar, .audio-clip-controls, .audio-properties-actions, .audio-properties-title) > .audio-button:where(:not(:has(> span))) { padding: 0; inline-size: var(--control-sm); }
+  .audio-toolbar > .audio-button:where([aria-label="Import audio"]) { background: var(--audio-fill); color: var(--audio-ink); }
+  .audio-toolbar > .audio-button:where([aria-label="Import audio"]):where(:hover:not(:disabled)) { background: color-mix(in srgb, var(--audio-fill) 80%, var(--audio-ink)); color: var(--audio-ink); }
+  .audio-toolbar > .audio-hint { font: var(--type-small); color: var(--text-3); }
+
+  /* ---- The empty state's buttons: the kit's primary and soft pills ---- */
+  .audio-empty-actions > .button {
+    display: inline-flex; align-items: center; block-size: var(--control-sm); padding: 0 var(--space-3); border: 0; border-radius: var(--radius-pill);
+    background: var(--surface-well); color: var(--text-1); font: var(--type-button); box-shadow: none;
+  }
+  .audio-empty-actions > .button:where(.primary) { background: var(--primary); color: var(--on-primary); box-shadow: var(--primary-shadow); }
+  .audio-empty-actions > .button:where(:hover) { background: var(--surface-pressed); }
+  .audio-empty-actions > .button:where(.primary):where(:hover) { background: var(--primary-hover); }
+  .audio-empty strong { font: var(--type-section); color: var(--text-1); }
+  .audio-empty p { font: var(--type-small); color: var(--text-2); }
+
+  /* ---- Clip: the selected clip's popover ---- */
+  .audio-clip-popover {
+    inline-size: 288px; gap: var(--space-3); padding: var(--space-4); border: 0; border-radius: var(--radius-xl);
+    background: var(--surface-raised); color: var(--text-1); box-shadow: var(--elevation-3); font: var(--type-ui);
+  }
+  .audio-clip-popover .audio-selection-info > strong { margin-block-end: var(--space-0-5); font: var(--type-ui-strong); color: var(--text-1); }
+  .audio-clip-popover .audio-selection-info > span { font: var(--type-small); color: var(--text-3); }
+  .audio-clip-popover .audio-clip-controls { gap: var(--space-1); }
+  .audio-clip-popover .audio-clip-controls > .audio-button { background: var(--surface-sunken); color: var(--text-1); }
+  .audio-clip-popover .audio-clip-controls > .audio-button:where(:hover:not(:disabled)) { background: var(--surface-hover); }
+  .audio-clip-popover .audio-clip-controls > .audio-button:where([aria-label="Delete audio clip"]):where(:hover:not(:disabled)) { background: var(--danger-soft); color: var(--danger-text); }
+  .audio-clip-popover .audio-volume { gap: var(--space-2-5); min-block-size: var(--control-md); margin: 0; font: var(--type-small); color: var(--text-2); }
+  .audio-clip-popover .audio-volume > input { block-size: var(--control-sm); accent-color: var(--slider-fill); }
+  .audio-clip-popover .audio-volume > output { min-inline-size: 40px; text-align: end; font: var(--type-value); color: var(--text-1); }
+
+  /* ---- Details: the clip's properties ---- */
+  .audio-properties {
+    padding: var(--space-5); border: 0; border-radius: var(--radius-xl); background: var(--surface-raised); color: var(--text-1);
+    box-shadow: var(--elevation-3); font: var(--type-ui);
+  }
+  .audio-properties .audio-properties-title { gap: var(--space-2); margin-block-end: var(--space-4); }
+  .audio-properties .audio-properties-title > strong { font: var(--type-heading); letter-spacing: var(--tracking-heading); color: var(--text-1); }
+  .audio-properties .audio-properties-fields { gap: var(--space-3) var(--space-2-5); }
+  .audio-properties .audio-properties-fields > label { gap: var(--space-1-5); font: var(--type-small-strong); color: var(--text-2); }
+  .audio-properties .audio-properties-fields :is(input, select) {
+    block-size: var(--control-md); padding: 0 var(--space-2-5); border: 0; border-radius: var(--radius-md);
+    background-color: var(--surface-sunken); color: var(--text-1); font: var(--type-value); font-variant-numeric: tabular-nums;
+  }
+  .audio-properties .audio-properties-fields :is(input, select):focus-visible { outline: none; background-color: var(--surface); box-shadow: inset 0 0 0 1.5px var(--accent-line), 0 0 0 3px var(--focus-halo); }
+  .audio-properties .audio-properties-actions { gap: var(--space-1); margin-block-start: var(--space-4); }
+  .audio-properties .audio-properties-actions > .audio-button:where([aria-label="Delete audio clip"]):where(:hover:not(:disabled)) { background: var(--danger-soft); color: var(--danger-text); }
+  .audio-properties > p { margin-block-start: var(--space-3); font: var(--type-small); color: var(--text-3); }
+
+  /* ---- Options ---- */
+  .audio-options {
+    padding: var(--space-2) var(--space-4); border: 0; border-radius: var(--radius-xl); background: var(--surface-raised);
+    box-shadow: var(--elevation-3); font: var(--type-ui); color: var(--text-1);
+  }
+}

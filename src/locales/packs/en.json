@@ -1,0 +1,12 @@
+{
+  "locale": {
+    "id": "en",
+    "name": "English",
+    "nativeName": "English",
+    "direction": "ltr",
+    "coverage": "common-controls",
+    "source": "English.ini",
+    "mappedKeys": 0
+  },
+  "messages": {}
+}
