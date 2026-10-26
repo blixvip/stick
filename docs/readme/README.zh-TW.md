@@ -1,6 +1,6 @@
 <!-- Stick：免費的火柴人動畫製作軟體 -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><img src="../media/stick-banner.png" alt="Stick：免費的火柴人動畫製作軟體" width="100%"></a>
+  <a href="https://blixvip.github.io/stick/#tour"><img src="../media/stick-banner.png" alt="Stick：免費的火柴人動畫製作軟體" width="100%"></a>
 </p>
 
 <h1 align="center">Stick：免費的火柴人動畫製作軟體</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ 觀看 2 分鐘導覽</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ 觀看 2 分鐘導覽</b></a> ·
   <a href="#取得-stick">取得 Stick</a> ·
   <a href="#功能">功能</a> ·
   <a href="#截圖">截圖</a> ·
@@ -153,7 +153,7 @@
 
 - **自行建置**：只要幾個指令，請見[從原始碼建置](#從原始碼建置)。可作為桌面應用程式執行，也能在瀏覽器中執行。
 - **安裝檔**：Windows（安裝版與可攜版）和 Linux（AppImage）版本發布在 [Releases 頁面](https://github.com/blixvip/stick/releases)。點選 **Watch → Custom → Releases** 取得更新通知。
-- **先看示範**：[2 分鐘影片導覽](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4)。
+- **先看示範**：[2 分鐘影片導覽](https://blixvip.github.io/stick/#tour)。
 
 ⭐ **為本儲存庫按下 Star**，追蹤新版本，也讓更多動畫創作者發現 Stick。
 

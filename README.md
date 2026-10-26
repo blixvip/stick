@@ -1,6 +1,6 @@
 <!-- Stick: free, open-source stick figure animation software (Windows, Linux, web). -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4">
+  <a href="https://blixvip.github.io/stick/#tour">
     <img src="docs/media/stick-banner.png" alt="Stick, free stick figure animation software: a glowing stick figure running between code brackets next to the Stick editor" width="100%">
   </a>
 </p>
@@ -21,7 +21,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ Watch the 2-minute tour</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ Watch the 2-minute tour</b></a> ·
+  <a href="https://blixvip.github.io/stick/">Website</a> ·
   <a href="#get-stick">Get Stick</a> ·
   <a href="#features">Features</a> ·
   <a href="#gallery">Gallery</a> ·
@@ -167,7 +168,7 @@ One-click presets for **YouTube**, **YouTube Shorts**, **TikTok**, **Instagram R
 
 - **Build it yourself** in a few commands; see [Build from source](#build-from-source). It runs as a desktop app or in your browser.
 - **Installers:** Windows (Setup and Portable) and Linux (AppImage) builds go on the [Releases page](https://github.com/blixvip/stick/releases). Click **Watch → Custom → Releases** to get notified. Installed copies update themselves.
-- **Watch it first:** the [2-minute video tour](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4).
+- **Watch it first:** the [2-minute video tour](https://blixvip.github.io/stick/#tour).
 
 ⭐ **Star this repository** to follow new releases and help other animators find Stick.
 

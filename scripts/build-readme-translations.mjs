@@ -4,13 +4,53 @@
 //   node scripts/build-readme-translations.mjs
 import {mkdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 const root = path.resolve(import.meta.dirname, '..'), out = path.join(root, 'docs/readme');
-const REPO = 'https://github.com/blixvip/stick', VIDEO = `${REPO}/releases/download/showcase/stick-editor-preview.mp4`;
-const LANGS = [['en', 'English', '../../README.md'], ['zh-CN', '简体中文'], ['zh-TW', '繁體中文'], ['ja', '日本語'], ['ko', '한국어'],
+const REPO = 'https://github.com/blixvip/stick', VIDEO = 'https://blixvip.github.io/stick/#tour';
+export {REPO, VIDEO};
+export const LANGS = [['en', 'English', '../../README.md'], ['zh-CN', '简体中文'], ['zh-TW', '繁體中文'], ['ja', '日本語'], ['ko', '한국어'],
   ['es', 'Español'], ['pt-BR', 'Português'], ['fr', 'Français'], ['de', 'Deutsch'], ['ru', 'Русский']];
 
-const T = {
+export const T = {
+  en: {
+    title: 'Stick: free stick figure animation software',
+    lead: '<b>Pose it. Keyframe it. Draw on it. Export it.</b><br>Stick is a free, open-source stick figure animator for Windows, Linux and the browser.<br>Make stickman fights, walk cycles, memes and short films, then export MP4, GIF or PNG.',
+    nav: ['▶ Watch the 2-minute tour', 'Get Stick', 'Features', 'Gallery', 'FAQ', 'Build from source'],
+    whatH: 'What is Stick?',
+    what: '**Stick** is a desktop and web app for **stick figure animation**. You drag a figure’s joints to pose it, add a frame, pose it again, and Stick fills the motion in between. It has a real timeline with layers, onion skin, camera moves, visual effects, brushes for hand-drawn frames, and a rig builder for custom characters.\n\nIt opens **Pivot Animator** (`.piv`, `.stk`) and **Stick Nodes** projects, so you can bring your old animations with you. Everything runs on your own computer: no account, no watermark, no uploads.',
+    featH: 'Features',
+    feats: [
+      ['Pose any joint', 'Drag hands and feet; inverse kinematics bends elbows and knees for you. Lock angles, stretch nodes and pose 3D parts in depth.'],
+      ['Keyframe and play', 'Add a frame, change the pose, hit play. Tweens, easing curves and real-time WebGPU playback keep long animations smooth.'],
+      ['A real animation timeline', 'Simple frame strip or Advanced timeline with layers, folders, keys, easing, playback ranges, onion skin and audio tracks.'],
+      ['Built-in effects', 'Glow, aura, shadow, blur, particles, energy beams, explosions, smoke and power-ups, keyframeable per frame.'],
+      ['Draw on any frame', 'Ink, brush pen, pencil, liner, marker, charcoal, airbrush, chalk, oil and more. Mix hand-drawn art with your rigs.'],
+      ['Build your own rigs', 'Make characters from lines, circles, polygons, text and images. Start from examples like gears, fans, crates and 3D shapes.'],
+      ['Every command, one search away', 'Press <kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>P</kbd> to find any command. Every shortcut can be remapped.'],
+      ['Light or dark, in 27 languages', 'A dark theme by default, a light theme when you want it, adjustable UI scale and a touch layout for tablets.'],
+    ],
+    exportH: 'Export anywhere',
+    export: 'One-click presets for **YouTube**, **YouTube Shorts**, **TikTok**, **Instagram Reels**, **X**, chat **GIFs**, transparent PNG frames and 4K. Export **MP4**, **WebM** (with transparency), **GIF**, **APNG**, **PNG / JPEG / SVG** sequences, or editable `.piv` and `.stk` files.',
+    galleryH: 'Gallery',
+    getH: 'Get Stick',
+    get: [`**Build it yourself** in a few commands; see [Build from source](#build-from-source). It runs as a desktop app or in your browser.`, `**Installers:** Windows (Setup and Portable) and Linux (AppImage) builds go on the [Releases page](${REPO}/releases). Click **Watch → Custom → Releases** to get notified.`, `**Watch it first:** the [2-minute video tour](${VIDEO}).`],
+    star: '⭐ **Star the repository** to follow new releases and help other animators find Stick.',
+    faqH: 'FAQ',
+    faq: [
+      ['Is Stick free?', 'Yes. Stick is free and open source under the GPL-3.0 license. There is no account, no watermark and no paid tier.'],
+      ['Is Stick a Pivot Animator alternative?', 'Yes. Stick opens Pivot Animator projects (<code>.piv</code>) and figures (<code>.stk</code>), and can export them back. It adds a layered timeline, tweening, effects, drawing and a modern WebGPU renderer.'],
+      ['Can I open Stick Nodes projects on PC?', 'Yes. Stick imports Stick Nodes figures, movieclips and projects, so you can keep working on a Windows or Linux computer.'],
+      ['How do I make a stick figure animation?', 'Pose the figure by dragging its joints, press <b>Add frame</b> (<kbd>A</kbd>), change the pose, and press <kbd>Space</kbd> to play. Stick tweens the motion between frames. Then click <b>Export</b> and choose MP4, GIF or a preset like TikTok.'],
+      ['Does it work offline? Does it upload my animations?', 'It works fully offline. Your projects stay on your computer; nothing is uploaded.'],
+    ],
+    buildH: 'Build from source',
+    buildReq: 'Requirements: Node.js 22+ and Python 3.11+.',
+    buildCmt: ['desktop app (Electron)', 'or the editor in your browser'],
+    licenseH: 'License',
+    license: 'Stick is free software under the [GNU General Public License v3.0](../../LICENSE) or later. It is a modified version of the GPL-licensed StykAnimate project; this notice is kept as the license requires. Stick is an independent project and is not affiliated with or endorsed by Pivot Animator or Stick Nodes; those names describe file compatibility only.',
+    footer: 'free stick figure animation software · stickman animator for Windows, Linux and the web',
+  },
   'zh-CN': {
     title: 'Stick：免费的火柴人动画制作软件',
     lead: '<b>摆姿势、打关键帧、手绘、导出。</b><br>Stick 是一款免费开源的火柴人动画软件，支持 Windows、Linux 和浏览器。<br>制作火柴人打斗、走路循环、表情包和动画短片，并导出 MP4、GIF 或 PNG。',
@@ -355,7 +395,7 @@ const T = {
   },
 };
 
-const GIFS = ['pose', 'play', 'timeline', 'effects', 'draw', 'build', 'command-search', 'settings'];
+export const GIFS = ['pose', 'play', 'timeline', 'effects', 'draw', 'build', 'command-search', 'settings'];
 const SHOTS = [['screenshot-animate', 'screenshot-effects'], ['screenshot-draw', 'screenshot-build'], ['screenshot-export', 'screenshot-settings-light']];
 const anchor = s => s.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, '').trim().replace(/\s+/g, '-');
 
@@ -454,8 +494,11 @@ ${t.license}
 `;
 }
 
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
 await mkdir(out, {recursive: true});
 for (const [code, t] of Object.entries(T)) {
+  if (code === 'en') continue; // README.md is written by hand
   await writeFile(path.join(out, `README.${code}.md`), page(code, t));
   console.log(`docs/readme/README.${code}.md`);
+}
 }

@@ -1,6 +1,6 @@
 <!-- Stick: 무료 졸라맨 애니메이션 제작 프로그램 -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><img src="../media/stick-banner.png" alt="Stick: 무료 졸라맨 애니메이션 제작 프로그램" width="100%"></a>
+  <a href="https://blixvip.github.io/stick/#tour"><img src="../media/stick-banner.png" alt="Stick: 무료 졸라맨 애니메이션 제작 프로그램" width="100%"></a>
 </p>
 
 <h1 align="center">Stick: 무료 졸라맨 애니메이션 제작 프로그램</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ 2분 소개 영상</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ 2분 소개 영상</b></a> ·
   <a href="#stick-받기">Stick 받기</a> ·
   <a href="#기능">기능</a> ·
   <a href="#갤러리">갤러리</a> ·
@@ -153,7 +153,7 @@
 
 - **직접 빌드**: 명령 몇 줄이면 됩니다. [소스에서 빌드](#소스에서-빌드)를 참고하세요. 데스크톱 앱이나 브라우저에서 실행됩니다.
 - **설치 파일**: Windows(설치판, 포터블)와 Linux(AppImage) 빌드는 [Releases 페이지](https://github.com/blixvip/stick/releases)에 올라갑니다. **Watch → Custom → Releases**로 알림을 받으세요.
-- **먼저 영상으로**: [2분 소개 영상](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4).
+- **먼저 영상으로**: [2분 소개 영상](https://blixvip.github.io/stick/#tour).
 
 ⭐ **이 저장소에 Star를 눌러** 새 릴리스를 받아 보고, 더 많은 애니메이터가 Stick을 찾을 수 있게 도와주세요.
 

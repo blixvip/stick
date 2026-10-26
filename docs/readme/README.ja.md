@@ -1,6 +1,6 @@
 <!-- Stick：無料の棒人間アニメーション作成ソフト -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><img src="../media/stick-banner.png" alt="Stick：無料の棒人間アニメーション作成ソフト" width="100%"></a>
+  <a href="https://blixvip.github.io/stick/#tour"><img src="../media/stick-banner.png" alt="Stick：無料の棒人間アニメーション作成ソフト" width="100%"></a>
 </p>
 
 <h1 align="center">Stick：無料の棒人間アニメーション作成ソフト</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ 2 分の紹介動画</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ 2 分の紹介動画</b></a> ·
   <a href="#stick-を入手">Stick を入手</a> ·
   <a href="#機能">機能</a> ·
   <a href="#ギャラリー">ギャラリー</a> ·
@@ -153,7 +153,7 @@
 
 - **自分でビルド**：数コマンドで完了します。[ソースからビルド](#ソースからビルド)を参照。デスクトップアプリとしても、ブラウザでも動きます。
 - **インストーラー**：Windows（セットアップ版・ポータブル版）と Linux（AppImage）版は [Releases ページ](https://github.com/blixvip/stick/releases)で公開します。**Watch → Custom → Releases** で更新通知を受け取れます。
-- **まずは動画で**：[2 分の紹介動画](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4)。
+- **まずは動画で**：[2 分の紹介動画](https://blixvip.github.io/stick/#tour)。
 
 ⭐ **このリポジトリにスターを付けて**、新しいリリースをフォローし、より多くのアニメーターに Stick を届けてください。
 

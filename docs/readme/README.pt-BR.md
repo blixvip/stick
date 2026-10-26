@@ -1,6 +1,6 @@
 <!-- Stick: programa grátis de animação de bonecos palito -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><img src="../media/stick-banner.png" alt="Stick: programa grátis de animação de bonecos palito" width="100%"></a>
+  <a href="https://blixvip.github.io/stick/#tour"><img src="../media/stick-banner.png" alt="Stick: programa grátis de animação de bonecos palito" width="100%"></a>
 </p>
 
 <h1 align="center">Stick: programa grátis de animação de bonecos palito</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ Assista ao tour de 2 minutos</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ Assista ao tour de 2 minutos</b></a> ·
   <a href="#baixe-o-stick">Baixe o Stick</a> ·
   <a href="#recursos">Recursos</a> ·
   <a href="#galeria">Galeria</a> ·
@@ -153,7 +153,7 @@ Predefinições de um clique para **YouTube**, **YouTube Shorts**, **TikTok**, *
 
 - **Compile você mesmo** com poucos comandos; veja [Compilar a partir do código](#compilar-a-partir-do-código). Roda como app desktop ou no navegador.
 - **Instaladores:** versões para Windows (instalador e portátil) e Linux (AppImage) são publicadas na [página de Releases](https://github.com/blixvip/stick/releases). Clique em **Watch → Custom → Releases** para ser avisado.
-- **Assista antes:** o [vídeo de 2 minutos](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4).
+- **Assista antes:** o [vídeo de 2 minutos](https://blixvip.github.io/stick/#tour).
 
 ⭐ **Dê uma estrela neste repositório** para acompanhar as novidades e ajudar outros animadores a encontrar o Stick.
 

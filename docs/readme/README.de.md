@@ -1,6 +1,6 @@
 <!-- Stick: kostenlose Software für Strichmännchen-Animation -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><img src="../media/stick-banner.png" alt="Stick: kostenlose Software für Strichmännchen-Animation" width="100%"></a>
+  <a href="https://blixvip.github.io/stick/#tour"><img src="../media/stick-banner.png" alt="Stick: kostenlose Software für Strichmännchen-Animation" width="100%"></a>
 </p>
 
 <h1 align="center">Stick: kostenlose Software für Strichmännchen-Animation</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ 2-Minuten-Tour ansehen</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ 2-Minuten-Tour ansehen</b></a> ·
   <a href="#stick-holen">Stick holen</a> ·
   <a href="#funktionen">Funktionen</a> ·
   <a href="#galerie">Galerie</a> ·
@@ -153,7 +153,7 @@ Ein-Klick-Vorlagen für **YouTube**, **YouTube Shorts**, **TikTok**, **Instagram
 
 - **Selbst bauen** mit wenigen Befehlen; siehe [Aus dem Quellcode bauen](#aus-dem-quellcode-bauen). Läuft als Desktop-App oder im Browser.
 - **Installer:** Versionen für Windows (Setup und portabel) und Linux (AppImage) erscheinen auf der [Releases-Seite](https://github.com/blixvip/stick/releases). Klicke auf **Watch → Custom → Releases**, um benachrichtigt zu werden.
-- **Erst ansehen:** die [2-Minuten-Video-Tour](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4).
+- **Erst ansehen:** die [2-Minuten-Video-Tour](https://blixvip.github.io/stick/#tour).
 
 ⭐ **Gib diesem Repository einen Stern**, um neue Versionen zu verfolgen und anderen Animatoren zu helfen, Stick zu finden.
 

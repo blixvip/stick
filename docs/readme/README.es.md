@@ -1,6 +1,6 @@
 <!-- Stick: programa gratis para animar monigotes (stick figures) -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><img src="../media/stick-banner.png" alt="Stick: programa gratis para animar monigotes (stick figures)" width="100%"></a>
+  <a href="https://blixvip.github.io/stick/#tour"><img src="../media/stick-banner.png" alt="Stick: programa gratis para animar monigotes (stick figures)" width="100%"></a>
 </p>
 
 <h1 align="center">Stick: programa gratis para animar monigotes (stick figures)</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ Ver el tour de 2 minutos</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ Ver el tour de 2 minutos</b></a> ·
   <a href="#consigue-stick">Consigue Stick</a> ·
   <a href="#funciones">Funciones</a> ·
   <a href="#galería">Galería</a> ·
@@ -153,7 +153,7 @@ Ajustes de un clic para **YouTube**, **YouTube Shorts**, **TikTok**, **Instagram
 
 - **Compílalo tú mismo** con unos pocos comandos; mira [Compilar desde el código](#compilar-desde-el-código). Funciona como app de escritorio o en el navegador.
 - **Instaladores:** las versiones para Windows (instalador y portable) y Linux (AppImage) se publican en la [página de Releases](https://github.com/blixvip/stick/releases). Pulsa **Watch → Custom → Releases** para recibir avisos.
-- **Míralo primero:** el [vídeo de 2 minutos](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4).
+- **Míralo primero:** el [vídeo de 2 minutos](https://blixvip.github.io/stick/#tour).
 
 ⭐ **Dale una estrella a este repositorio** para seguir las novedades y ayudar a otros animadores a encontrar Stick.
 

@@ -1,6 +1,6 @@
 <!-- Stick: бесплатная программа для анимации человечков -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><img src="../media/stick-banner.png" alt="Stick: бесплатная программа для анимации человечков" width="100%"></a>
+  <a href="https://blixvip.github.io/stick/#tour"><img src="../media/stick-banner.png" alt="Stick: бесплатная программа для анимации человечков" width="100%"></a>
 </p>
 
 <h1 align="center">Stick: бесплатная программа для анимации человечков</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ Смотреть 2-минутный обзор</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ Смотреть 2-минутный обзор</b></a> ·
   <a href="#скачать-stick">Скачать Stick</a> ·
   <a href="#возможности">Возможности</a> ·
   <a href="#галерея">Галерея</a> ·
@@ -153,7 +153,7 @@ Stick открывает проекты **Pivot Animator** (`.piv`, `.stk`) и *
 
 - **Соберите сами** за несколько команд — см. [Сборка из исходников](#сборка-из-исходников). Работает как настольное приложение или в браузере.
 - **Установщики:** версии для Windows (установщик и портативная) и Linux (AppImage) публикуются на [странице Releases](https://github.com/blixvip/stick/releases). Нажмите **Watch → Custom → Releases**, чтобы получать уведомления.
-- **Сначала посмотрите:** [2-минутный видеообзор](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4).
+- **Сначала посмотрите:** [2-минутный видеообзор](https://blixvip.github.io/stick/#tour).
 
 ⭐ **Поставьте звезду репозиторию**, чтобы следить за новыми версиями и помочь другим аниматорам найти Stick.
 

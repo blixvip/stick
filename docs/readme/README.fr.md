@@ -1,6 +1,6 @@
 <!-- Stick : logiciel gratuit d’animation de bonhommes allumettes -->
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><img src="../media/stick-banner.png" alt="Stick : logiciel gratuit d’animation de bonhommes allumettes" width="100%"></a>
+  <a href="https://blixvip.github.io/stick/#tour"><img src="../media/stick-banner.png" alt="Stick : logiciel gratuit d’animation de bonhommes allumettes" width="100%"></a>
 </p>
 
 <h1 align="center">Stick : logiciel gratuit d’animation de bonhommes allumettes</h1>
@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4"><b>▶ Voir la visite de 2 minutes</b></a> ·
+  <a href="https://blixvip.github.io/stick/#tour"><b>▶ Voir la visite de 2 minutes</b></a> ·
   <a href="#obtenir-stick">Obtenir Stick</a> ·
   <a href="#fonctionnalités">Fonctionnalités</a> ·
   <a href="#galerie">Galerie</a> ·
@@ -153,7 +153,7 @@ Préréglages en un clic pour **YouTube**, **YouTube Shorts**, **TikTok**, **Ins
 
 - **Compilez-le vous-même** en quelques commandes ; voir [Compiler depuis les sources](#compiler-depuis-les-sources). Il fonctionne en application de bureau ou dans le navigateur.
 - **Installateurs :** les versions Windows (installateur et portable) et Linux (AppImage) sont publiées sur la [page des Releases](https://github.com/blixvip/stick/releases). Cliquez sur **Watch → Custom → Releases** pour être prévenu.
-- **Regardez d’abord :** la [vidéo de 2 minutes](https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4).
+- **Regardez d’abord :** la [vidéo de 2 minutes](https://blixvip.github.io/stick/#tour).
 
 ⭐ **Ajoutez une étoile à ce dépôt** pour suivre les nouvelles versions et aider d’autres animateurs à découvrir Stick.
 
