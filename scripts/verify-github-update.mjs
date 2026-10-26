@@ -32,7 +32,7 @@ try {
     if (downloaded.status !== 'ready') throw new Error(downloaded.message || `Unexpected update state: ${downloaded.status}`);
     autoUpdater.currentVersion = realVersion;
     const current = await autoUpdater.checkForUpdates();
-    return { publicRepository: 'filippocalippo/styk-animate-releases', downloadedVersion: downloaded.version,
+    return { publicRepository: 'blixvip/stick', downloadedVersion: downloaded.version,
       downloadVerifiedByElectronUpdater: true, observedProgress: states.some(state => state.status === 'downloading' && state.transferred > 0),
       installedVersion: realVersion.version, currentVersionCheck: current?.updateInfo?.version,
       installerLaunched: false };

@@ -71,7 +71,7 @@ const quantiles = values => {
 const sourceHashBefore = hash(await readFile(config.source));
 // Enumerate on both sides of the run so additions/deletions, locale modules,
 // preload code and imported decoder dependencies cannot escape the freeze check.
-const codeRoots = ['src', 'vendor', 'backend', 'desktop', 'native', '../tools', '../StykAnimate/tools'];
+const codeRoots = ['src', 'vendor', 'backend', 'desktop', 'native', '../tools', '../legacy-native/tools'];
 const codeExtensions = new Set(['.mjs', '.cjs', '.js', '.py', '.json', '.css', '.html', '.wgsl', '.cpp', '.h', '.hpp', '.dll', '.so', '.dylib', '.exe']);
 async function runtimeFiles(directory) {
   const entries = await readdir(path.join(appRoot, directory), {withFileTypes: true});

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { verifyReleaseAssets, fileHash } from './release-assets.mjs';
 import { checkReleaseNotes } from './changelog.mjs';
 await checkReleaseNotes();
-const repo = 'filippocalippo/styk-animate-releases';
+const repo = 'blixvip/stick';
 const { version } = JSON.parse(await readFile('package.json', 'utf8'));
 const directory = process.argv.find(arg => arg.startsWith('--directory='))?.slice(12) || `release/${version}`;
 const assets = await verifyReleaseAssets(directory, version);

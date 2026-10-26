@@ -60,8 +60,8 @@ const processIds = async () => {
 };
 let app, installed = false;
 try {
-  const repository = 'https://github.com/filippocalippo/styk-animate-releases';
-  const response = await fetch('https://api.github.com/repos/filippocalippo/styk-animate-releases/releases/latest', {headers: {'User-Agent': 'Stick-release-verification'}, signal: AbortSignal.timeout(30000)});
+  const repository = 'https://github.com/blixvip/stick';
+  const response = await fetch('https://api.github.com/repos/blixvip/stick/releases/latest', {headers: {'User-Agent': 'Stick-release-verification'}, signal: AbortSignal.timeout(30000)});
   assert.ok(response.ok, 'Previous public release metadata is reachable');
   const previous = await response.json(), match = /^v(\d+\.\d+\.\d+)$/.exec(previous.tag_name);
   assert.ok(match && previous.draft === false && previous.prerelease === false);
