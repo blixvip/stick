@@ -10,7 +10,7 @@ and contributors. Licensed under the Mozilla Public License 2.0; see [LICENSE](L
   `FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==`
 
 The original generated ESM binding, WebAssembly binary and type declarations
-are unchanged. StykAnimate uses this offline dependency only inside the export
+are unchanged. Stick uses this offline dependency only inside the export
 worker for aliased, portable outline rendering. It loads no system fonts and
 needs no external network or host-native binary at runtime. App integration is
 in `src/export-crisp.mjs`. The original npm package metadata is retained here.

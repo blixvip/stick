@@ -55,7 +55,7 @@ export async function decompress(data, rawLength) {
   const dst = Module._malloc(rawLength);
   try {
     const size = Module._ZSTD_decompress(dst, rawLength, src, data.byteLength);
-    if (Module._ZSTD_isError(size)) throw new Error('The StykAnimate file is damaged (zstd decode failed).');
+    if (Module._ZSTD_isError(size)) throw new Error('The Stick file is damaged (zstd decode failed).');
     return copyOut(Module, dst, size);
   } finally { Module._free(src); Module._free(dst); }
 }
