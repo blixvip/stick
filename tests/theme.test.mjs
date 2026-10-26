@@ -17,12 +17,14 @@ function boot(values = {}, desktop, dark = false) {
   return {dataset,meta,window};
 }
 
-test('Legacy, malformed and missing theme settings default to system', () => {
-  for (const theme of [undefined,null,'system','DARK',1,{},true])
+test('Missing theme settings default to dark; legacy and malformed ones to system', () => {
+  assert.equal(normalizeEditorSettings({}).theme,'dark');
+  assert.equal(normalizeEditorSettings({theme:undefined}).theme,'dark');
+  for (const theme of [null,'system','DARK',1,{},true])
     assert.equal(normalizeEditorSettings({theme}).theme,'system');
   assert.equal(normalizeEditorSettings({theme:'dark'}).theme,'dark');
   assert.equal(normalizeEditorSettings({theme:'light'}).theme,'light');
-  assert.equal(normalizeEditorSettings(null).theme,'system');
+  assert.equal(normalizeEditorSettings(null).theme,'dark');
 });
 
 test('System appearance is resolved during browser and native bootstrap', async () => {

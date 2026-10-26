@@ -112,7 +112,7 @@ export function normalizeTutorialsDone(value) {
 export function normalizeEditorSettings(value = {}) {
   const result = { ...DEFAULT_EDITOR_SETTINGS };
   result.locale = normalizeLocale(value?.locale);
-  result.theme = normalizeTheme(value?.theme);
+  result.theme = value?.theme === undefined ? DEFAULT_EDITOR_SETTINGS.theme : normalizeTheme(value.theme);
   result.uiScale = normalizeUIScale(value?.uiScale);
   result.uiScaleMode = normalizeUIScaleMode(value?.uiScaleMode, value?.uiScale);
   result.touchInterface = normalizeTouchSetting(value?.touchInterface);
