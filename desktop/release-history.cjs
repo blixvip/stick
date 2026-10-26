@@ -2,7 +2,7 @@
 const { messageError } = require('./localization.cjs');
 
 
-const ENDPOINT = 'https://stykanimate.com/api/v1/releases';
+const ENDPOINT = 'https://api.github.com/repos/blixvip/stick/releases?per_page=20';
 const LIMIT = 512 * 1024;
 
 // Fixed public endpoint, bounded response and one shared request per process.
@@ -26,7 +26,9 @@ function createReleaseHistory({fetcher = fetch, now = Date.now} = {}) {
         }
         text += decoder.decode();
       } finally { await reader.cancel().catch(() => {}); }
-      const value = JSON.parse(text);
+      let value = JSON.parse(text);
+      // GitHub's releases API: one object per published release, notes in the body.
+      if (Array.isArray(value)) value = {releases: value.filter(r => !r.draft).map(r => ({version: String(r.tag_name || '').replace(/^v/, ''), channel: r.prerelease ? 'beta' : 'stable', notes: r.body || ''}))};
       if (!Array.isArray(value.releases)) throw messageError(new Error(''), 'desktop.releaseHistory.errors.invalidReleaseHistory', {});
       const seen = new Set();
       const releases = value.releases.slice(0, 20).filter(item => {

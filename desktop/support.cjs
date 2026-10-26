@@ -6,6 +6,7 @@ const { WorkspacePreferences } = require('./preferences.cjs');
 const config = require('./service-config.json');
 const MAX_FILE = 8 * 1024 * 1024;
 function siteOrigin(value, development) {
+  if (!value) return '';
   const url = new URL(value);
   if (url.username || url.password || url.pathname !== '/' || url.search || url.hash || !(url.protocol === 'https:' || development && url.protocol === 'http:' && ['127.0.0.1','localhost'].includes(url.hostname))) throw messageError(new Error(''), 'desktop.support.errors.invalidSupportServiceOrigin', {});
   return url.origin;

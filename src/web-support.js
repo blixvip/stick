@@ -25,7 +25,7 @@
     const why = document.createElement('p');
     why.textContent = `This browser is missing ${missing.join(', ')}.`;
     const what = document.createElement('p');
-    what.textContent = 'Open this page in a current Chrome, Edge, Firefox or Safari (16.4 or later), or download the desktop app from stykanimate.com.';
+    what.textContent = 'Open this page in a current Chrome, Edge, Firefox or Safari (16.4 or later), or get the desktop app from github.com/blixvip/stick.';
     box.append(title, why, what);
     document.body.replaceChildren(box);
     document.title = 'Stick — browser not supported';

@@ -324,7 +324,7 @@ function registerIpc() {
   handle('styk:telemetry-delete', withTelemetry(() => telemetry.deleteData()));
   handle('styk:telemetry-feedback', withTelemetry(value => telemetry.feedback(value)));
   handle('styk:telemetry-export', withTelemetry(async () => {
-    const result = await dialog.showSaveDialog(window, { title: t('desktop.main.saveOptionalTelemetryReport'), defaultPath: 'StykAnimate-telemetry.json', filters: [{ name: t('desktop.main.jsonReport'), extensions: ['json'] }] });
+    const result = await dialog.showSaveDialog(window, { title: t('desktop.main.saveOptionalTelemetryReport'), defaultPath: 'Stick-telemetry.json', filters: [{ name: t('desktop.main.jsonReport'), extensions: ['json'] }] });
     if (result.canceled || !result.filePath) return { saved: false };
     await fs.writeFile(result.filePath, JSON.stringify(telemetry.preview(), null, 2), 'utf8'); return { saved: true };
   }));
@@ -343,7 +343,7 @@ function registerIpc() {
       await contentTracing.startRecording({ included_categories: ['v8.execute', 'disabled-by-default-v8.cpu_profiler', 'devtools.timeline'], recording_mode: 'record-until-full', trace_buffer_size_in_kb: 16384 });
       await new Promise(resolve => setTimeout(resolve, !app.isPackaged && process.env.STYK_TRACE_TEST === '1' ? 2000 : 30000));
       temporary = await contentTracing.stopRecording();
-      const result = await dialog.showSaveDialog(window, { title: t('desktop.main.saveLocalPerformanceTraceReviewBeforeSharing'), defaultPath: 'StykAnimate-performance-trace.json', filters: [{ name: t('desktop.main.chromePerfettoTrace'), extensions: ['json'] }] });
+      const result = await dialog.showSaveDialog(window, { title: t('desktop.main.saveLocalPerformanceTraceReviewBeforeSharing'), defaultPath: 'Stick-performance-trace.json', filters: [{ name: t('desktop.main.chromePerfettoTrace'), extensions: ['json'] }] });
       if (result.canceled || !result.filePath) return { saved: false };
       await fs.copyFile(temporary, result.filePath); return { saved: true };
     } finally { traceRunning = false; if (temporary) await fs.unlink(temporary).catch(() => {}); }

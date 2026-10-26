@@ -666,7 +666,7 @@ export class SupportCenter {
     try {
       let after = 0, data, messages = [];
       do { data = await this.api(`/threads/${this.thread.id}?after=${after}`); messages.push(...data.messages); after = data.nextAfter; } while (after);
-      saveBlob(new Blob([JSON.stringify({ thread: data.thread, messages, files: data.files }, null, 2)], { type: 'application/json' }), `StykAnimate-report-${this.thread.id.slice(0,8)}.json`); this.notice({messageKey:"supportCenter.conversationExportedAttachmentsCanBeDownloadedSeparately",messageParams:{}});
+      saveBlob(new Blob([JSON.stringify({ thread: data.thread, messages, files: data.files }, null, 2)], { type: 'application/json' }), `Stick-report-${this.thread.id.slice(0,8)}.json`); this.notice({messageKey:"supportCenter.conversationExportedAttachmentsCanBeDownloadedSeparately",messageParams:{}});
     } catch (error) { this.notice(supportErrorMessage(error), true); } finally { this.setBusy(false); }
   }
   async accessPanel() {

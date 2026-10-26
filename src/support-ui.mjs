@@ -2,7 +2,7 @@ import {replaceLocalized, localizedMarkup, messageHTML, localizedText, appendLoc
 import {t as interfaceText} from './localization.mjs';
 
 import {parseReleaseNotes} from './release-notes.mjs';
-export const DONATE_URL = 'https://ko-fi.com/Q5Q41WY7QC';
+export const DONATE_URL = 'https://github.com/blixvip/stick';
 
 export class ReleaseSplash {
   constructor(desktop) { this.desktop = desktop; }

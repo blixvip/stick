@@ -6,7 +6,7 @@ export default Object.freeze({
   "supportUi.releaseVersion": "Release version",
   "supportUi.recentReleases": "Recent releases",
   "supportUi.releaseNotes": "Release notes",
-  "supportUi.supportOnKoFi": "Support on Ko-fi",
+  "supportUi.supportOnKoFi": "Star Stick on GitHub",
   "supportUi.startAnimating": "Start animating",
   "supportUi.versionInstalled": "Version {version} installed",
   "supportUi.installed": "Installed",
@@ -14,6 +14,6 @@ export default Object.freeze({
   "supportUi.refresh": "Refresh",
   "supportUi.installed2": " · Installed",
   "supportUi.couldnTLoadReleasesTryAgain": "Couldn’t load releases. Try again.",
-  "supportUi.couldnTOpenKoFiTryAgain": "Couldn’t open Ko-fi. Try again.",
+  "supportUi.couldnTOpenKoFiTryAgain": "Couldn’t open GitHub. Try again.",
   "supportUi.stykanimateVersion": "Stick {version}"
 });

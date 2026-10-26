@@ -6,7 +6,7 @@ import {parseReleaseNotes} from '../src/release-notes.mjs';
 test('release history is bounded, fixed-origin, deduplicated and cached',async()=>{
   let calls=0,time=0;
   const get=createReleaseHistory({now:()=>time,fetcher:async(url,options)=>{
-    calls++;assert.equal(url,'https://stykanimate.com/api/v1/releases');assert.equal(options.redirect,'error');
+    calls++;assert.equal(url,'https://api.github.com/repos/blixvip/stick/releases?per_page=20');assert.equal(options.redirect,'error');
     return Response.json({releases:[{version:'1.0.0',channel:'stable',notes:'Old'},{version:'1.0.1',channel:'stable',notes:'New'},{version:'1.0.1',channel:'stable',notes:'Duplicate'},{version:'2.0.0',channel:'beta',notes:'Beta'},{version:'invalid',channel:'stable',notes:'Bad'}]});
   }});
   const [a,b]=await Promise.all([get(),get()]);assert.deepEqual(a,b);assert.deepEqual(a.map(x=>x.version),['1.0.1','1.0.0']);assert.equal(calls,1);

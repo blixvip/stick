@@ -2,15 +2,15 @@
   "name": "stykanimate-webapp",
   "productName": "StykAnimate",
   "version": "1.2.5",
-  "description": "A WebGPU desktop workspace for Pivot animation and stick figures.",
+  "description": "Stick: free, open-source stick figure animation software. Pose, keyframe, draw and export stick animations on Windows, Linux and the web.",
   "license": "GPL-3.0-or-later",
-  "homepage": "https://stykanimate.com",
+  "homepage": "https://github.com/blixvip/stick",
   "repository": {
     "type": "git",
-    "url": "https://github.com/filippocalippo/StykAnimate-App.git"
+    "url": "https://github.com/blixvip/stick.git"
   },
   "bugs": {
-    "url": "https://github.com/filippocalippo/StykAnimate-App/issues"
+    "url": "https://github.com/blixvip/stick/issues"
   },
   "private": true,
   "type": "module",
@@ -277,8 +277,8 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "filippocalippo",
-        "repo": "styk-animate-releases",
+        "owner": "blixvip",
+        "repo": "stick",
         "private": false,
         "releaseType": "draft"
       }
@@ -286,5 +286,18 @@
     "releaseInfo": {
       "releaseNotesFile": "release-notes.md"
     }
-  }
+  },
+  "keywords": [
+    "stick figure",
+    "stick figure animation",
+    "stickman",
+    "animation software",
+    "2d animation",
+    "pivot animator",
+    "stick nodes",
+    "animator",
+    "keyframe animation",
+    "webgpu",
+    "electron"
+  ]
 }

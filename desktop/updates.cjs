@@ -12,7 +12,7 @@ function updateAvailabilityDetails({ packaged, platform, portable, installed, ap
     catch { return {message: 'Move the AppImage to a writable folder, such as Applications in your home folder, and reopen it to enable automatic updates.', messageKey: 'desktop.updates.writableAppImageRequired'}; }
   }
   if (platform !== 'win32') return {message: 'Automatic updates require the Windows installer or Linux AppImage.', messageKey: 'desktop.updates.supportedInstallerRequired'};
-  if (portable || !installed) return {message: 'Install StykAnimate using the Windows Setup installer to enable automatic updates.', messageKey: 'desktop.updates.windowsSetupRequired'};
+  if (portable || !installed) return {message: 'Install Stick using the Windows Setup installer to enable automatic updates.', messageKey: 'desktop.updates.windowsSetupRequired'};
   return {message: ''};
 }
 function updateAvailability(options) { return updateAvailabilityDetails(options).message; }
