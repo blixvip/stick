@@ -17,7 +17,7 @@ class AudioService {
     this.starting = true; let job;
     try {
       await fs.mkdir(this.tempRoot, {recursive: true});
-      const directory = await fs.mkdtemp(path.join(this.tempRoot, 'stykanimate-audio-'));
+      const directory = await fs.mkdtemp(path.join(this.tempRoot, 'stick-audio-'));
       job = {token: randomUUID(), directory, input: path.join(directory, 'input.media'), output: path.join(directory, 'decoded.wav'), size, written: 0, phase: 'writing'};
       job.handle = await fs.open(job.input, 'wx'); this.jobs.set(job.token, job); this.touch(job);
       return {token: job.token, maxChunkBytes: MAX_CHUNK};

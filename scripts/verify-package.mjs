@@ -7,7 +7,7 @@ import { createRequire } from 'node:module';
 const appRoot = process.env.STYK_PACKAGE_SOURCE_ROOT || path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const manifestDirectory = process.env.STYK_PACKAGE_MANIFEST_DIR || path.join(appRoot, 'artifacts');
 const platformResources = process.platform === 'win32' ? ['win-unpacked', 'resources']
-  : process.platform === 'darwin' ? [process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'StykAnimate.app', 'Contents', 'Resources']
+  : process.platform === 'darwin' ? [process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'Stick.app', 'Contents', 'Resources']
   : [process.arch === 'arm64' ? 'linux-arm64-unpacked' : 'linux-unpacked', 'resources'];
 const resources = process.env.STYK_PACKAGED_RESOURCES || path.join(appRoot, 'release', ...platformResources);
 const webRoot = path.join(resources, 'web');

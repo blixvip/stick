@@ -1,5 +1,5 @@
 // A real NSIS download/install/relaunch probe with a unique application identity.
-// It never installs over the user's StykAnimate application.
+// It never installs over the user's Stick application.
 import { createServer } from 'node:http';
 import { createReadStream } from 'node:fs';
 import { mkdir, readFile, writeFile, copyFile, stat } from 'node:fs/promises';
@@ -58,7 +58,7 @@ function run(file, args, options = {}) {
     child.on('error', reject); child.on('exit', code => code === 0 ? resolve(output) : reject(new Error(`${file} exited ${code}: ${output.slice(-5000)}`)));
   });
 }
-const metadata = { name: `styk-update-probe-${id}`, version: '0.0.1', main: 'main.cjs', description: 'Isolated updater verification', author: 'StykAnimate', dependencies: { 'electron-updater': '6.6.2' } };
+const metadata = { name: `styk-update-probe-${id}`, version: '0.0.1', main: 'main.cjs', description: 'Isolated updater verification', author: 'Stick', dependencies: { 'electron-updater': '6.6.2' } };
 let installed = false;
 try {
   await writeFile(path.join(fixture, 'package.json'), JSON.stringify(metadata));
@@ -68,7 +68,7 @@ try {
     metadata.version = version;
     await writeFile(path.join(fixture, 'package.json'), JSON.stringify(metadata));
     await build({ projectDir: fixture, targets: Platform.WINDOWS.createTarget(['nsis'], Arch.x64), publish: 'never',
-      config: { appId: `app.stykanimate.updater-test.${id}`, productName: 'StykAnimate Update Test',
+      config: { appId: `app.stick.updater-test.${id}`, productName: 'Stick Update Test',
         electronVersion: '39.8.10', electronDist: path.join(root, 'node_modules', 'electron', 'dist'),
         directories: { app: fixture, output: version === '0.0.1' ? path.join(probe, 'baseline') : target },
         files: ['main.cjs', 'updates.cjs', 'probe.json', 'package.json'],
@@ -80,7 +80,7 @@ try {
   }
   await run(path.join(probe, 'baseline', 'update-test-0.0.1.exe'), ['/S', `/D=${install}`]);
   installed = true;
-  const original = run(path.join(install, 'StykAnimate Update Test.exe'), []);
+  const original = run(path.join(install, 'Stick Update Test.exe'), []);
   const deadline = Date.now() + 120000;
   let updated;
   while (Date.now() < deadline) {
@@ -89,7 +89,7 @@ try {
   }
   await original;
   assert.equal(updated?.version, '0.0.2', 'The new version did not relaunch.');
-  assert.equal(path.resolve(updated.exe), path.join(install, 'StykAnimate Update Test.exe'));
+  assert.equal(path.resolve(updated.exe), path.join(install, 'Stick Update Test.exe'));
   const states = (await readFile(path.join(probe, 'states.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
   assert.ok(states.some(state => state.status === 'downloading' && state.transferred > 0));
   assert.ok(states.some(state => state.status === 'ready'));
@@ -100,5 +100,5 @@ try {
   console.log(JSON.stringify(evidence, null, 2));
 } finally {
   server.close();
-  if (installed) await run(path.join(install, 'Uninstall StykAnimate Update Test.exe'), ['/S']).catch(error => console.warn('Probe uninstall:', error.message));
+  if (installed) await run(path.join(install, 'Uninstall Stick Update Test.exe'), ['/S']).catch(error => console.warn('Probe uninstall:', error.message));
 }

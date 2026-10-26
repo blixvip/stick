@@ -749,7 +749,7 @@ try {
     const row = page.locator('#menu [data-action=command-palette]');
     assert.deepEqual(await row.evaluate(item => [item.querySelector(':scope > span').textContent, item.querySelector('kbd').textContent,
       item.getAttribute('aria-keyshortcuts'), item === item.parentElement.querySelector('[data-action]')]),
-    ['Search commands…', 'Ctrl+P', 'Control+P Control+Shift+P F1', true], 'the first row of the StykAnimate menu');
+    ['Search commands…', 'Ctrl+P', 'Control+P Control+Shift+P F1', true], 'the first row of the Stick menu');
     await row.click();
     assert.deepEqual(await page.evaluate(() => [styk.ui.palette.isOpen, document.getElementById('menu').hidden]), [true, true]);
     await page.keyboard.press('Escape');

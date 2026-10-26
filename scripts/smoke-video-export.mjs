@@ -20,9 +20,9 @@ import { _electron as electron } from '../tests/support/playwright.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const packaged = process.argv.includes('--packaged');
-const unpacked = process.platform === 'win32' ? ['win-unpacked', 'StykAnimate.exe']
-  : process.platform === 'darwin' ? [process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'StykAnimate.app', 'Contents', 'MacOS', 'StykAnimate']
-  : [process.arch === 'arm64' ? 'linux-arm64-unpacked' : 'linux-unpacked', 'stykanimate'];
+const unpacked = process.platform === 'win32' ? ['win-unpacked', 'Stick.exe']
+  : process.platform === 'darwin' ? [process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'Stick.app', 'Contents', 'MacOS', 'Stick']
+  : [process.arch === 'arm64' ? 'linux-arm64-unpacked' : 'linux-unpacked', 'stick'];
 const executablePath = packaged ? process.env.STYK_PACKAGED_EXECUTABLE || path.join(appRoot, 'release', ...unpacked) : undefined;
 const resources = packaged ? path.join(path.dirname(executablePath), 'resources') : path.join(appRoot, 'build');
 const ffmpeg = path.join(resources, 'video-encoder', process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg');

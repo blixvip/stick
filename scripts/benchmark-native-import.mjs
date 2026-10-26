@@ -12,7 +12,7 @@ if (!/^[a-z0-9-]+$/i.test(label)) throw new Error('Benchmark labels use letters,
 const output = path.join(appRoot, 'artifacts');
 await mkdir(output, { recursive: true });
 const app = await electron.launch({
-  executablePath: baseline ? path.join(appRoot, 'release', 'baseline-0.1.0', 'StykAnimate.exe') : undefined,
+  executablePath: baseline ? path.join(appRoot, 'release', 'baseline-0.1.0', 'Stick.exe') : undefined,
   args: baseline ? [] : [appRoot], cwd: appRoot, timeout: 45000,
   env: { ...process.env, STYK_USER_DATA_DIR: path.join(output, `native-import-${label}-profile`) },
 });

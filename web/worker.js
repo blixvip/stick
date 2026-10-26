@@ -17,7 +17,7 @@ const LIMITS = {content: 256 * 1024, index: 4 * MB, poster: 512 * 1024, file: 16
 const ID = /^[a-z0-9]{10}$/;
 const INDEX_KEY = /^index\/[0-9]{1,16}\.json$/;
 const OBJECT_KEY = /^i\/[a-z0-9]{10}\/[\w.-]{1,120}$/;
-const DEFAULTS = {SITE_URL: 'https://stykanimate.com', FILES_URL: 'https://files.stykanimate.com'};
+const DEFAULTS = {SITE_URL: 'https://community.invalid', FILES_URL: 'https://files.community.invalid'}; // placeholders; set real origins in wrangler.jsonc
 const IMMUTABLE = 'public, max-age=31536000, immutable';
 
 const config = env => ({site: (env?.SITE_URL ?? DEFAULTS.SITE_URL).replace(/\/+$/, ''), files: (env?.FILES_URL ?? DEFAULTS.FILES_URL).replace(/\/+$/, '')});

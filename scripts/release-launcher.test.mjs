@@ -11,11 +11,11 @@ async function fixture(run) {
   await mkdir(path.join(root,'artifacts'),{recursive:true});
   const directory=await mkdtemp(path.join(root,'artifacts','launcher-test-'));
   try {
-    const script=path.join(directory,'Start-StykAnimate-webapp.ps1');
-    await writeFile(script,await readFile(path.join(root,'..','Start-StykAnimate-webapp.ps1')));
-    await mkdir(path.join(directory,'StykAnimate-webapp','release'),{recursive:true});
+    const script=path.join(directory,'Start-Stick-webapp.ps1');
+    await writeFile(script,await readFile(path.join(root,'..','Start-Stick-webapp.ps1')));
+    await mkdir(path.join(directory,'Stick-webapp','release'),{recursive:true});
     const create=async(version,{marker=true,complete=true}={})=>{
-      const release=path.join(directory,'StykAnimate-webapp','release',version),exe=path.join(release,'win-unpacked','StykAnimate.exe');
+      const release=path.join(directory,'Stick-webapp','release',version),exe=path.join(release,'win-unpacked','Stick.exe');
       await mkdir(path.dirname(exe),{recursive:true});await writeFile(exe,'fixture');
       if(marker)await writeFile(path.join(release,'verified-release.json'),JSON.stringify({version,packagedSmokePassed:true}));
       for(const file of required.slice(0,complete?required.length:required.length-1)) {
@@ -42,6 +42,6 @@ test('Windows launcher selects newest complete verified numeric release and reta
   const result=await launch();assert.equal(result.path,expected);assert.equal(result.hidden,true);assert.deepEqual(result.arguments,['"scene with spaces.piv"']);
 }));
 test('Windows launcher falls back to preserved older executable when no new release is verified',{skip:process.platform!=='win32'},async()=>fixture(async({create,launch,directory})=>{
-  await create('0.3.0',{marker:false});const expected=path.join(directory,'StykAnimate-webapp','release','win-unpacked','StykAnimate.exe');
+  await create('0.3.0',{marker:false});const expected=path.join(directory,'Stick-webapp','release','win-unpacked','Stick.exe');
   await mkdir(path.dirname(expected),{recursive:true});await writeFile(expected,'fixture');assert.equal((await launch()).path,expected);
 }));

@@ -9,7 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const artifacts = path.join(root, 'artifacts');
 const html = `<!doctype html><html><head><meta charset="utf-8"><title>Insert Inbetween verification</title><style>
 body{margin:0;padding:24px;background:#f5f5f5;font:12px 'Segoe UI',sans-serif;color:#333}h1{font-size:16px;font-weight:500;margin:0 0 18px}.workspace{background:#fff;border:1px solid #dedede;border-radius:6px;padding:20px}h2{font-size:12px;font-weight:500}#simple{height:142px;border:1px solid #dedede;border-radius:5px}#advanced{height:230px;margin-top:20px;border:1px solid #dedede;border-radius:5px}.controls{display:flex;gap:8px;margin-bottom:12px}.controls button{padding:8px 12px;background:white;border:1px solid #ddd;border-radius:5px}
-</style></head><body><h1>StykAnimate · Insert Inbetween</h1><div class="workspace"><div class="controls"><button id="open">Preview selected frames</button><button id="reset">Reset fixture</button></div><div id="simple"></div><div id="advanced"></div></div><script type="module">
+</style></head><body><h1>Stick · Insert Inbetween</h1><div class="workspace"><div class="controls"><button id="open">Preview selected frames</button><button id="reset">Reset fixture</button></div><div id="simple"></div><div id="advanced"></div></div><script type="module">
 import {Editor} from '/src/editor.mjs';import {createFrame,createObject,emptyDocument} from '/src/demo.mjs';
 import {InsertInbetweenDialog} from '/src/insert-inbetween-dialog.mjs';import {SimpleTimeline} from '/src/simple-timeline.mjs';import {Timeline} from '/src/timeline.mjs';
 window.errors=[];window.applied=[];window.opened=[];window.editor=new Editor({demo:false});

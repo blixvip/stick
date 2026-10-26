@@ -204,7 +204,7 @@ npm run serve        # oder der Editor im Browser: http://127.0.0.1:47831
 
 ## Lizenz
 
-Stick ist freie Software unter der [GNU General Public License v3.0](../../LICENSE) oder neuer. Es ist eine veränderte Version des GPL-lizenzierten Projekts StykAnimate; dieser Hinweis bleibt erhalten, wie es die Lizenz verlangt. Stick ist ein unabhängiges Projekt und steht in keiner Verbindung zu Pivot Animator oder Stick Nodes; diese Namen beschreiben nur die Dateikompatibilität.
+Stick ist freie Software unter der [GNU General Public License v3.0](../../LICENSE) oder neuer. Es ist eine veränderte Version früherer GPL-lizenzierter Software (geändert im Oktober 2026); der vollständige Änderungsverlauf steht in diesem Repository. Stick ist ein unabhängiges Projekt und steht in keiner Verbindung zu Pivot Animator oder Stick Nodes; diese Namen beschreiben nur die Dateikompatibilität.
 
 <p align="center">
   <img src="../../assets/brand/svg/stick-app-icon-dark.svg" alt="Stick" width="72"><br>

@@ -32,7 +32,7 @@ class LinuxAppImageUpdater extends AppImageUpdater {
     if (!this.installerPath || !this.downloadedUpdateHelper?.downloadedFileInfo) throw messageError(new Error(''), 'desktop.appimageUpdater.errors.noVerifiedAppImageUpdateIsAvailable', {});
     const destination = writableAppImage(this.appImage);
     const original = fs.statSync(destination);
-    const directory = await fs.promises.mkdtemp(path.join(path.dirname(destination), '.stykanimate-update-'));
+    const directory = await fs.promises.mkdtemp(path.join(path.dirname(destination), '.stick-update-'));
     this.stagedInstall = { directory, file: path.join(directory, 'update.AppImage'), destination, original };
     try {
       await fs.promises.copyFile(this.installerPath, this.stagedInstall.file, fs.constants.COPYFILE_EXCL);

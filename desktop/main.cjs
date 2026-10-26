@@ -66,14 +66,14 @@ let updates;
 let startupShown = false;
 let traceRunning = false;
 let pageLoaded = false;
-let pendingProtocol = process.argv.find(value => /^stykanimate:\/\//i.test(value));
-// A public library link (stykanimate://library/<id>) waits here until the
+let pendingProtocol = process.argv.find(value => /^stick:\/\//i.test(value));
+// A public library link (stick://library/<id>) waits here until the
 // workspace takes it, so a link that starts the app is not lost during startup.
 let publicLibraryLink = null;
 function handleProtocol(value) {
   try {
     const url = new URL(value);
-    if (url.protocol !== 'stykanimate:' || url.username || url.password || url.search || url.hash || url.port) return false;
+    if (url.protocol !== 'stick:' || url.username || url.password || url.search || url.hash || url.port) return false;
     const root = ['', '/'].includes(url.pathname), asset = /^\/([^/]+)\/?$/.exec(url.pathname)?.[1];
     if (!(root && ['open', 'privacy', 'library'].includes(url.hostname)) && !(url.hostname === 'library' && isPublicId(asset))) return false;
     if (!window || !pageLoaded) { pendingProtocol = value; return true; }
@@ -94,7 +94,7 @@ let pendingFiles = process.argv.slice(app.isPackaged ? 1 : 2).filter((arg) => /\
 // Vulkan WebGPU opt-in to reach the GPU; see gpu-switches.cjs.
 applyGpuSwitches(app.commandLine);
 
-app.setName('StykAnimate');
+app.setName('Stick');
 const profileDirectory = process.env.STYK_USER_DATA_DIR || (!app.isPackaged ? path.join(APP_ROOT, '.desktop-data') : null);
 if (profileDirectory) {
   mkdirSync(profileDirectory, { recursive: true });
@@ -114,7 +114,7 @@ else {
   app.on('second-instance', (_event, argv) => {
     // Each ordinary launch owns its project. Protocol links still target the
     // primary workspace without opening an extra editor.
-    for (const value of argv.filter(arg => /^stykanimate:\/\//i.test(arg))) handleProtocol(value);
+    for (const value of argv.filter(arg => /^stick:\/\//i.test(arg))) handleProtocol(value);
   });
   app.on('open-url', (event, url) => { event.preventDefault(); handleProtocol(url); });
   app.on('open-file', (event, file) => { event.preventDefault(); queueOpenFile(file); });
@@ -758,7 +758,7 @@ async function createWindow() {
     width: 1560, height: 1000, minWidth: 1000, minHeight: 680,
     backgroundColor: '#0a0b0f', show: false,
     title: 'Stick',
-    icon: path.join(__dirname, 'assets', 'stykanimate.png'),
+    icon: path.join(__dirname, 'assets', 'stick.png'),
     frame: process.platform === 'darwin',
     ...(process.platform === 'darwin' ? { titleBarStyle: 'hidden', trafficLightPosition: { x: 14, y: 16 } } : {}),
     autoHideMenuBar: process.platform !== 'darwin',
@@ -851,7 +851,7 @@ async function start() {
   localization.setLocale(normalizeLocale(saved.locale));
   const availability = updateAvailabilityDetails({ packaged: app.isPackaged, platform: process.platform,
     appImage: process.env.APPIMAGE,
-    portable: Boolean(process.env.PORTABLE_EXECUTABLE_DIR), installed: existsSync(path.join(path.dirname(process.execPath), 'Uninstall StykAnimate.exe')) });
+    portable: Boolean(process.env.PORTABLE_EXECUTABLE_DIR), installed: existsSync(path.join(path.dirname(process.execPath), 'Uninstall Stick.exe')) });
   const unavailable = availability.message;
   const updater = unavailable ? null : process.platform === 'linux'
     ? new (require('./appimage-updater.cjs').LinuxAppImageUpdater)()
@@ -861,7 +861,7 @@ async function start() {
     currentVersion: app.getVersion(), unavailable, unavailableMessageKey: availability.messageKey,
     onState: value => { if (value.status === 'error') quitting = false; if (window && !window.isDestroyed()) window.webContents.send('styk:update-state-changed', value); },
   });
-  if (app.isPackaged) app.setAsDefaultProtocolClient('stykanimate');
+  if (app.isPackaged) app.setAsDefaultProtocolClient('stick');
   telemetryReady = new TelemetryService({ directory: app.getPath('userData'), schemaPath: path.join(app.isPackaged ? path.join(process.resourcesPath, 'web') : APP_ROOT, 'src', 'telemetry-schema.mjs'), version: app.getVersion(), development: !app.isPackaged,
     build: telemetryBuild.build, internal: telemetryBuild.internal === true,
     onState: value => { if (window && !window.isDestroyed()) window.webContents.send('styk:telemetry-state-changed', value); },
@@ -878,7 +878,7 @@ async function start() {
       telemetry.record({ epoch: telemetry.epoch, data: { gauges: { process_cpu_percent: metrics.reduce((sum, item) => sum + (item.cpu?.percentCPUUsage || 0), 0) } } });
     }
   }, 60000); memoryTimer.unref();
-  library = new LibraryStore(process.env.STYK_LIBRARY_DIR || path.join(app.getPath('documents'), 'StykAnimate', 'library'));
+  library = new LibraryStore(process.env.STYK_LIBRARY_DIR || path.join(app.getPath('documents'), 'Stick', 'library'));
   // A temporarily unavailable Documents volume should not prevent animation work.
   void library.init().catch(error => console.warn('Library initialization:', error.message));
   backend = await startDesktopHost({

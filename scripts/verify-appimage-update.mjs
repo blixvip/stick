@@ -16,7 +16,7 @@ const root = process.cwd(), id = Date.now().toString(36);
 const output = path.join(root, 'artifacts', 'updates');
 const probe = path.join(output, `appimage-probe-${id}`);
 const fixture = path.join(probe, 'app'), target = path.join(probe, 'target');
-const installed = path.join(probe, 'Installed app', 'StykAnimate-0.0.1.AppImage');
+const installed = path.join(probe, 'Installed app', 'Stick-0.0.1.AppImage');
 await mkdir(fixture, { recursive: true });
 await mkdir(path.dirname(installed));
 const metadata = JSON.parse(await readFile('package.json', 'utf8'));
@@ -109,13 +109,13 @@ app.whenReady().then(async () => {
   }), true);
 }).catch(error => { fs.writeFileSync(path.join(config.root, 'error.txt'), error.stack); app.exit(1); });
 `);
-  const fixtureMetadata = { name: `styk-appimage-probe-${id}`, productName: 'StykAnimate Update Probe', version: '0.0.1',
-    main: 'main.cjs', description: 'Isolated Linux updater verification', author: 'StykAnimate', dependencies: metadata.dependencies };
+  const fixtureMetadata = { name: `styk-appimage-probe-${id}`, productName: 'Stick Update Probe', version: '0.0.1',
+    main: 'main.cjs', description: 'Isolated Linux updater verification', author: 'Stick', dependencies: metadata.dependencies };
   for (const version of ['0.0.1', '0.0.2']) {
     fixtureMetadata.version = version;
     await writeFile(path.join(fixture, 'package.json'), JSON.stringify(fixtureMetadata));
     await build({ projectDir: fixture, targets: Platform.LINUX.createTarget(['AppImage'], Arch.x64), publish: 'never', config: {
-      appId: `app.stykanimate.update-probe.${id}`, productName: fixtureMetadata.productName,
+      appId: `app.stick.update-probe.${id}`, productName: fixtureMetadata.productName,
       electronVersion: metadata.devDependencies.electron, electronDist: path.join(root, 'node_modules', 'electron', 'dist'),
       toolsets: metadata.build.toolsets,
       directories: { app: fixture, output: version === '0.0.1' ? path.join(probe, 'baseline') : target },

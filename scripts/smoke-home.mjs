@@ -65,7 +65,7 @@ try {
   app = await launch('home');
   let page = await ready();
   await page.waitForFunction(() => window.styk.home.shown && document.querySelector('.home-projects .ui-empty-title'));
-  assert.equal(await page.locator('.home-title').textContent(), 'Welcome to StykAnimate');
+  assert.equal(await page.locator('.home-title').textContent(), 'Welcome to Stick');
   assert.equal(await page.locator('.home-lesson-start').count(), 1);
   assert.equal(await page.locator('.home-lesson-row').count(), 4);
   // Home owns the keyboard: the Hand tool's key does nothing, Escape goes back to the animation.

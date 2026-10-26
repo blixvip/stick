@@ -63,8 +63,8 @@ user namespaces (Ubuntu 24.04+ AppArmor) without a profile for the app, the
 launcher falls back to `--no-sandbox` rather than failing to start.
 
 The desktop entry registers the document types (`.styk`, `.stkz`, `.stykmov`,
-`.piv`, `.stk`, `.nodes`, `.nodemc`, `.stknds`) and the `stykanimate://` scheme,
-and `StartupWMClass=stykanimate` groups the window under its launcher.
+`.piv`, `.stk`, `.nodes`, `.nodemc`, `.stknds`) and the `stick://` scheme,
+and `StartupWMClass=stick` groups the window under its launcher.
 Passing a document path on the command line opens it.
 
 The coordinated release workflow publishes the AppImage and `latest-linux.yml`

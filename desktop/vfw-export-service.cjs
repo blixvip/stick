@@ -34,7 +34,7 @@ function rationalFPS(fps) {
 const clean = value => String(value ?? '').replace(/[\u0000-\u001f\u007f]/g, '').slice(0, 512);
 
 class VfwExportService {
-  constructor({helperPaths = {}, tempRoot = path.join(os.tmpdir(), 'stykanimate-vfw'), platform = process.platform} = {}) {
+  constructor({helperPaths = {}, tempRoot = path.join(os.tmpdir(), 'stick-vfw'), platform = process.platform} = {}) {
     this.helperPaths = {...helperPaths}; this.tempRoot = path.resolve(tempRoot); this.platform = platform;
     this.jobs = new Map(); this.configurations = new Map(); this.cache = new Map(); this.commands = new Set(); this.disposed = false;
   }

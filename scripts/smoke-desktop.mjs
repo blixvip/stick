@@ -9,9 +9,9 @@ const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const output = path.join(appRoot, 'artifacts');
 await mkdir(output, { recursive: true });
 const packaged = process.argv.includes('--packaged');
-const defaultPackagedPath = process.platform === 'win32' ? ['win-unpacked', 'StykAnimate.exe']
-  : process.platform === 'darwin' ? [process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'StykAnimate.app', 'Contents', 'MacOS', 'StykAnimate']
-  : [process.arch === 'arm64' ? 'linux-arm64-unpacked' : 'linux-unpacked', 'stykanimate'];
+const defaultPackagedPath = process.platform === 'win32' ? ['win-unpacked', 'Stick.exe']
+  : process.platform === 'darwin' ? [process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'Stick.app', 'Contents', 'MacOS', 'Stick']
+  : [process.arch === 'arm64' ? 'linux-arm64-unpacked' : 'linux-unpacked', 'stick'];
 const executablePath = packaged ? process.env.STYK_PACKAGED_EXECUTABLE || path.join(appRoot, 'release', ...defaultPackagedPath) : undefined;
 const profilePath = path.join(output, `${packaged ? 'packaged' : 'desktop'}-profile-${Date.now()}`);
 await mkdir(profilePath, {recursive:true});
@@ -104,8 +104,8 @@ try {
   actual.nativePivDisplayed = await page.evaluate(() => ({ keyframes: window.styk.editor.report.keyframes.length, figures: window.styk.editor.frame.objects.length, name: window.styk.editor.name }));
   const savePath = path.join(output, `${stem}-save.txt`);
   await app.evaluate(({ dialog }, destination) => { dialog.showSaveDialog = async () => ({ canceled: false, filePath: destination }); }, savePath);
-  await page.evaluate(() => window.stykDesktop.saveFile({ data: 'StykAnimate native save smoke', encoding: 'utf8', defaultPath: 'smoke.txt', filters: [{ name: 'Text', extensions: ['txt'] }] }));
-  if (await readFile(savePath, 'utf8') !== 'StykAnimate native save smoke') throw new Error('Native file save content did not match.');
+  await page.evaluate(() => window.stykDesktop.saveFile({ data: 'Stick native save smoke', encoding: 'utf8', defaultPath: 'smoke.txt', filters: [{ name: 'Text', extensions: ['txt'] }] }));
+  if (await readFile(savePath, 'utf8') !== 'Stick native save smoke') throw new Error('Native file save content did not match.');
   actual.nativeImport = imported;
   actual.nativePivImport = nativePivImport;
   actual.nativeSave = true;

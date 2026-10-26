@@ -26,7 +26,7 @@ Release artifacts are kept in separate numeric version directories. For a Window
 ```powershell
 npm run dist:win -- --publish never --config.directories.output=release/0.3.0
 $env:STYK_PACKAGED_RESOURCES = Join-Path $PWD 'release/0.3.0/win-unpacked/resources'
-$env:STYK_PACKAGED_EXECUTABLE = Join-Path $PWD 'release/0.3.0/win-unpacked/StykAnimate.exe'
+$env:STYK_PACKAGED_EXECUTABLE = Join-Path $PWD 'release/0.3.0/win-unpacked/Stick.exe'
 npm run verify:package
 npm run test:desktop:packaged
 npm run verify:package

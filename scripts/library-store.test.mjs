@@ -6,7 +6,7 @@ import os from 'node:os';
 import {createRequire} from 'node:module';
 const {LibraryStore} = createRequire(import.meta.url)('../desktop/library-store.cjs');
 const thumbnail = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aEl0AAAAASUVORK5CYII=';
-async function store(t) { const root = await mkdtemp(path.join(os.tmpdir(),'styk-library-')); const value = new LibraryStore(path.join(root,'StykAnimate','library')); await value.init(); t.after(() => value.dispose()); return value; }
+async function store(t) { const root = await mkdtemp(path.join(os.tmpdir(),'styk-library-')); const value = new LibraryStore(path.join(root,'Stick','library')); await value.init(); t.after(() => value.dispose()); return value; }
 async function save(s, name = 'Actor', folder = '') { const job = await s.beginSave({folder, name, extension:'.stkz', size:3, thumbnail}); await s.write(job.token,new Uint8Array([1,2,3])); return s.finish(job.token); }
 test('creates Documents layout and retains assets, thumbnails, folders across service restarts', async t => {
   const s = await store(t); await s.createFolder({name:'Characters'}); const saved = await save(s,'Hero','Characters');

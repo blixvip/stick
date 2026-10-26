@@ -27,7 +27,7 @@ try {
   // ---- Home first ----------------------------------------------------------------------------------------------------
   let {page, errors} = await open();
   assert.equal(await shown(page), true);
-  assert.equal(await page.locator('.home-title').textContent(), 'Welcome to StykAnimate');
+  assert.equal(await page.locator('.home-title').textContent(), 'Welcome to Stick');
   assert.equal(await page.locator('.home-projects .ui-empty-title').textContent(), 'Your projects stay in your files', 'the browser keeps no project list and says so');
   assert.equal(await page.locator('[data-action="home"][aria-pressed="true"]').count(), 1);
   assert.equal(await page.locator('.workspace-switch [aria-pressed="true"]').count(), 0, 'no workspace is pressed on Home');

@@ -27,7 +27,7 @@ def main():
     callback_type = C.WINFUNCTYPE(W.BOOL, W.HWND, W.LPARAM)
     user.EnumWindows.argtypes = [callback_type, W.LPARAM]; user.EnumChildWindows.argtypes = [W.HWND, callback_type, W.LPARAM]
     user.PeekMessageW.argtypes = [C.POINTER(W.MSG), W.HWND, W.UINT, W.UINT, W.UINT]
-    owner = user.CreateWindowExW(0, "STATIC", "StykAnimate owned VFW test owner", 0x00CF0000, 0, 0, 240, 120, None, None, None, None)
+    owner = user.CreateWindowExW(0, "STATIC", "Stick owned VFW test owner", 0x00CF0000, 0, 0, 240, 120, None, None, None, None)
     if not owner: raise C.WinError(C.get_last_error())
     report = {"status": "running", "dialogs": [], "policy": "Only PID-owned codec dialogs receive Cancel; no global keyboard/mouse input."}
 

@@ -68,7 +68,7 @@ function relaunchOnX11(app, { platform = process.platform, env = process.env, ar
   const launchArgs = argv.slice(1, argumentEnd < 0 ? undefined : argumentEnd);
   if (launchArgs.some(arg => arg === '--ozone-platform' || arg.startsWith('--ozone-platform=')) || env.STYK_DISPLAY_RELAUNCHED === '1') return false;
   if (!gpuSwitches({ platform, env }).ozone) return false;
-  console.log('[stykanimate] Wayland cannot show WebGPU content; restarting under XWayland (STYK_WAYLAND=1 keeps Wayland).');
+  console.log('[stick] Wayland cannot show WebGPU content; restarting under XWayland (STYK_WAYLAND=1 keeps Wayland).');
   const child = spawn(execPath, ['--ozone-platform=x11', ...argv.slice(1)], { stdio: 'inherit', env: { ...env, STYK_DISPLAY_RELAUNCHED: '1' } });
   for (const signal of ['SIGINT', 'SIGTERM', 'SIGHUP']) proc.on(signal, () => child.kill(signal));
   child.on('error', () => exit(1));

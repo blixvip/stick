@@ -50,7 +50,7 @@ npm run build:video-encoder
 $releaseVersion = (Get-Content package.json | ConvertFrom-Json).version
 npm run dist:win -- --x64 --publish never "--config.directories.output=release/$releaseVersion"
 $env:STYK_PACKAGED_RESOURCES = Join-Path $PWD "release/$releaseVersion/win-unpacked/resources"
-$env:STYK_PACKAGED_EXECUTABLE = Join-Path $PWD "release/$releaseVersion/win-unpacked/StykAnimate.exe"
+$env:STYK_PACKAGED_EXECUTABLE = Join-Path $PWD "release/$releaseVersion/win-unpacked/Stick.exe"
 npm run verify:package
 npm run test:desktop:packaged
 npm run mark:release

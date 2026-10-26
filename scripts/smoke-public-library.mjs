@@ -3,7 +3,7 @@
 // the counting download route and the public files). Browses the Community
 // library, inserts a figure and a movieclip with one undo step each, saves into
 // My library (the WebP poster becomes a PNG preview), opens a
-// stykanimate://library link, drags a card onto the canvas, and checks that each
+// stick://library link, drags a card onto the canvas, and checks that each
 // item is counted as one download however often it is used, including after a
 // restart. Nothing leaves the machine.
 import {_electron as electron} from '../tests/support/playwright.mjs';
@@ -130,10 +130,10 @@ try {
   check('the saved assets appear in My library, the movieclip as a movieclip', await page.locator('[data-library-path="Box.stkz"] img').count() === 1 && await page.locator('.library-card.movieclip[data-library-path="Walk cycle.stykmov"]').count() === 1);
 
   await page.evaluate(() => { document.querySelector('.library-content').scrollTop = 0; });
-  await app.evaluate(({app}) => app.emit('second-instance', {}, ['StykAnimate.exe', 'stykanimate://library/cubecube12']));
+  await app.evaluate(({app}) => app.emit('second-instance', {}, ['Stick.exe', 'stick://library/cubecube12']));
   await page.waitForFunction(() => window.styk.library.source === 'public' && document.activeElement?.dataset.publicId === 'cubecube12');
-  check('a stykanimate://library link opens the asset selected in the community library', await page.locator('[data-public-id="cubecube12"][aria-selected="true"]').isVisible());
-  await app.evaluate(({app}) => app.emit('second-instance', {}, ['StykAnimate.exe', 'stykanimate://library/..%2Fsecret']));
+  check('a stick://library link opens the asset selected in the community library', await page.locator('[data-public-id="cubecube12"][aria-selected="true"]').isVisible());
+  await app.evaluate(({app}) => app.emit('second-instance', {}, ['Stick.exe', 'stick://library/..%2Fsecret']));
   await page.waitForTimeout(300);
   check('malformed library links are ignored', await page.evaluate(() => window.styk.library.publicSelected) === 'cubecube12');
 

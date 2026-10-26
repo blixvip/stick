@@ -119,7 +119,7 @@ try {
   await page.evaluate(() => navigator.serviceWorker.getRegistration().then((registration) => registration.update()));
   await until('the new version to install', () => page.evaluate(() => navigator.serviceWorker.getRegistration().then((registration) => registration.waiting?.state === 'installed')));
   check('The new version downloads only the file that changed', JSON.stringify(workerRequests.filter((name) => name !== '/sw.js')) === JSON.stringify(['/src/theme-bootstrap.js']));
-  check('The open app is told a new version is ready', await until('the notice', () => page.evaluate(() => document.body.textContent.includes('A new version of StykAnimate is ready')), 10000));
+  check('The open app is told a new version is ready', await until('the notice', () => page.evaluate(() => document.body.textContent.includes('A new version of Stick is ready')), 10000));
   check('The open window keeps running the version it started with', (await workerStatus(page)).version === info.offline);
   check('Both versions are stored until the old one is closed', (await page.evaluate(() => caches.keys())).length === 2);
 

@@ -22,7 +22,9 @@ const label = item => interfaceText(KIND_KEYS[item.kind] ?? "userLibrary.figure"
 const parentOf = path => path.split('/').slice(0, -1).join('/');
 // Electron prefixes what the main process throws; the person only needs the sentence.
 const plain = error => String(error?.message ?? error).replace(/^Error invoking remote method '[^']*': (?:Error: )?/, '');
-const PUBLIC_PAGE = 'https://stykanimate.com/library/';
+// Stick has no community library service yet, so the panel shows My library only.
+export const COMMUNITY_LIBRARY = false;
+const PUBLIC_PAGE = '';
 const SKELETONS = 6;
 
 export class UserLibrary {
@@ -52,7 +54,7 @@ export class UserLibrary {
     // you are, the cards as one listbox, then a pinned foot with the status line and Add selection.
     this.container.dataset.source = 'mine'; this.container.dataset.background = 'auto';
     localizedMarkup(this.container, `<div class="library-head">
-      <div class="library-source ui-segmented" data-size="sm" data-fill role="group" aria-label="Library source" data-i18n-aria-label="userLibrary.librarySource"><button type="button" class="ui-segmented-item" data-library-source="mine" aria-pressed="true" data-i18n="userLibrary.myLibrary">${messageHTML("userLibrary.myLibrary", {})}</button><button type="button" class="ui-segmented-item" data-library-source="public" aria-pressed="false">${icon('globe')}${messageHTML("userLibrary.communityLibrary", {})}</button></div>
+      <div ${COMMUNITY_LIBRARY ? '' : 'hidden '}class="library-source ui-segmented" data-size="sm" data-fill role="group" aria-label="Library source" data-i18n-aria-label="userLibrary.librarySource"><button type="button" class="ui-segmented-item" data-library-source="mine" aria-pressed="true" data-i18n="userLibrary.myLibrary">${messageHTML("userLibrary.myLibrary", {})}</button><button type="button" class="ui-segmented-item" data-library-source="public" aria-pressed="false">${icon('globe')}${messageHTML("userLibrary.communityLibrary", {})}</button></div>
       <div class="library-tools"><label class="library-search ui-field" data-size="sm">${icon('search')}<input class="ui-field-input" type="search" aria-label="Search library" placeholder="Search" spellcheck="false" autocomplete="off" data-i18n-aria-label="userLibrary.searchLibrary" data-i18n-placeholder="common.search"></label><span class="ui-select library-kind-filter" data-size="sm"><select aria-label="Show" data-i18n-aria-label="userLibrary.show"><option value="all" data-i18n="userLibrary.all">${messageHTML("userLibrary.all", {})}</option><option value="figure" data-i18n="userLibrary.figures">${messageHTML("userLibrary.figures", {})}</option><option value="movieclip" data-i18n="userLibrary.movieclips">${messageHTML("userLibrary.movieclips", {})}</option></select>${icon('chevron-down')}</span><button type="button" class="ui-icon-button" data-size="sm" data-library-menu aria-haspopup="menu" aria-label="Library options" title="Library options" data-i18n-aria-label="userLibrary.libraryOptions" data-i18n-title="userLibrary.libraryOptions">${icon('more')}</button></div>
       <div class="library-location"><nav class="library-breadcrumbs ui-crumb" aria-label="Library folders" data-i18n-aria-label="userLibrary.libraryFolders"></nav><span class="library-origin">${icon('globe')}<span data-i18n="userLibrary.stykanimateCom">stykanimate.com</span></span><span class="library-count"></span><button type="button" class="ui-icon-button library-new-folder" data-size="sm" data-library-action="folder" aria-label="New library folder" title="New folder" data-i18n-aria-label="userLibrary.newLibraryFolder" data-i18n-title="userLibrary.newFolder">${icon('folder-plus')}</button></div>
     </div>
@@ -181,7 +183,7 @@ export class UserLibrary {
     if (visible) this.run(() => this.source === 'public' ? this.loadPublic() : this.refresh());
   }
   async setSource(source) {
-    source = source === 'public' ? 'public' : 'mine';
+    source = COMMUNITY_LIBRARY && source === 'public' ? 'public' : 'mine';
     if (this.source !== source) {
       this.source = source; this.container.dataset.source = source; this.input.value = ''; this.say('');
       for (const button of this.container.querySelectorAll('[data-library-source]')) button.setAttribute('aria-pressed', String(button.dataset.librarySource === source));
@@ -207,7 +209,7 @@ export class UserLibrary {
     // The kit's empty state: a title, one quiet line where it helps, then the next step.
     const card = (title, text, actions = '', _messages = {}) => `<h3 class="ui-empty-title" ${_messages.title ? messageAttributes(_messages.title.key, _messages.title.params) : ''}>${title}</h3>${text ? `<p class="ui-empty-text" ${_messages.text ? messageAttributes(_messages.text.key, _messages.text.params) : ''}>${text}</p>` : ''}${actions ? `<div class="ui-empty-actions">${actions}</div>` : ''}`;
     const examples = `<button type="button" class="ui-button" data-variant="outline" data-size="sm" data-action="rig-examples" data-i18n="userLibrary.rigExamples">${messageHTML("userLibrary.rigExamples", {})}</button>`;
-    const browse = `<button type="button" class="ui-button" data-variant="outline" data-size="sm" data-library-source-link="public" data-i18n="userLibrary.browseTheCommunityLibrary">${messageHTML("userLibrary.browseTheCommunityLibrary", {})}</button>`;
+    const browse = !COMMUNITY_LIBRARY ? '' : `<button type="button" class="ui-button" data-variant="outline" data-size="sm" data-library-source-link="public" data-i18n="userLibrary.browseTheCommunityLibrary">${messageHTML("userLibrary.browseTheCommunityLibrary", {})}</button>`;
     if (filtered) localizedMarkup(this.empty, card(interfaceText("userLibrary.noMatches"), '', `<button type="button" class="ui-button" data-size="sm" data-library-clear data-i18n="userLibrary.clearSearch">${messageHTML("userLibrary.clearSearch", {})}</button>`, {title: {key: "userLibrary.noMatches", params: {}}}));
     else if (pub && !this.desktop?.listPublicLibrary) localizedMarkup(this.empty, card(interfaceText("userLibrary.communityLibrary"), interfaceText("userLibrary.freeFiguresAndMovieclipsSharedByTheCommunity"), `<a class="ui-button" data-variant="outline" data-size="sm" href="${PUBLIC_PAGE}" target="_blank" rel="noopener noreferrer">${messageHTML("userLibrary.openStykanimateComLibrary", {})}</a>`, {title: {key: "userLibrary.communityLibrary", params: {}}, text: {key: "userLibrary.freeFiguresAndMovieclipsSharedByTheCommunity", params: {}}}));
     else if (pub && this.publicState === 'error') localizedMarkup(this.empty, card(interfaceText("userLibrary.communityLibraryIsUnavailable"), esc(this.publicError), `<button type="button" class="ui-button" data-size="sm" data-library-retry data-i18n="userLibrary.tryAgain">${messageHTML("userLibrary.tryAgain", {})}</button>`, {title: {key: "userLibrary.communityLibraryIsUnavailable", params: {}}}));

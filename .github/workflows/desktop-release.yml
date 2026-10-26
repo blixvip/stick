@@ -88,10 +88,10 @@ jobs:
           npm run release:verify -- "release/$version" --platform=${{ matrix.platform }}
           if [ "$RUNNER_OS" = Windows ]; then
             echo "STYK_PACKAGED_RESOURCES=$GITHUB_WORKSPACE/release/$version/win-unpacked/resources" >> "$GITHUB_ENV"
-            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/release/$version/win-unpacked/StykAnimate.exe" >> "$GITHUB_ENV"
+            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/release/$version/win-unpacked/Stick.exe" >> "$GITHUB_ENV"
           else
             echo "STYK_PACKAGED_RESOURCES=$GITHUB_WORKSPACE/release/$version/linux-unpacked/resources" >> "$GITHUB_ENV"
-            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/release/$version/linux-unpacked/stykanimate" >> "$GITHUB_ENV"
+            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/release/$version/linux-unpacked/stick" >> "$GITHUB_ENV"
           fi
       - name: Verify exact packaged files and desktop behavior
         run: |
@@ -102,7 +102,7 @@ jobs:
           "${display[@]}" npm run test:updates:desktop
           if [ "$RUNNER_OS" = Linux ]; then
             version=$(node -p 'JSON.parse(require("fs").readFileSync("package.json")).version')
-            STYK_PACKAGED_EXECUTABLE="$GITHUB_WORKSPACE/release/$version/StykAnimate-$version-linux-x86_64.AppImage" xvfb-run -a npm run test:boot:packaged
+            STYK_PACKAGED_EXECUTABLE="$GITHUB_WORKSPACE/release/$version/Stick-$version-linux-x86_64.AppImage" xvfb-run -a npm run test:boot:packaged
             xvfb-run -a npm run test:updates:linux
           fi
       - name: Upload release assets
@@ -165,10 +165,10 @@ jobs:
         run: |
           directory="release/$RELEASE_VERSION"
           npm run release:verify -- "$directory" --platform=win32
-          7z x "$directory/StykAnimate-$RELEASE_VERSION-Setup-x64.exe" '-oartifacts/installer-payload' '$PLUGINSDIR/app-64.7z'
+          7z x "$directory/Stick-$RELEASE_VERSION-Setup-x64.exe" '-oartifacts/installer-payload' '$PLUGINSDIR/app-64.7z'
           if [ "$VERIFY_PUBLIC_FEED" = true ]; then
             7z x 'artifacts/installer-payload/$PLUGINSDIR/app-64.7z' "-o$directory/win-unpacked"
-            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/$directory/win-unpacked/StykAnimate.exe" >> "$GITHUB_ENV"
+            echo "STYK_PACKAGED_EXECUTABLE=$GITHUB_WORKSPACE/$directory/win-unpacked/Stick.exe" >> "$GITHUB_ENV"
           else
             7z x 'artifacts/installer-payload/$PLUGINSDIR/app-64.7z' "-o$directory/win-unpacked" 'resources/app.asar'
           fi

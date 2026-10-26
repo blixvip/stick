@@ -16,7 +16,7 @@ import {
 } from '../src/shell/layout-schema.mjs';
 import {PANEL_CATALOG, normalizePanelDescriptor} from '../src/shell/panel-registry.mjs';
 
-// StykAnimate 1.1's studio layout reader and writer (src/studio-layout.mjs at
+// Stick 1.1's studio layout reader and writer (src/studio-layout.mjs at
 // 1.1), frozen here so the downgrade contract outlives that module.
 function constrainStudioLayout(preferences = {}, width = 1280, height = 640) {
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));

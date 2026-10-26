@@ -25,7 +25,7 @@ try {
     window.splash=new ReleaseSplash({
       getReleaseInfo:async()=>({version:'1.0.1',title:'A cleaner workspace',groups:[{name:'Changed',notes:['Compact figure colors and a simpler welcome screen.']},{name:'Fixed',notes:['Show parallax only for selected layers.']}]}),
       openDonate:async()=>{window.donations++;},
-      getReleaseHistory:async()=>{if(++window.historyAttempts===1)throw new Error('Offline');return [{version:'1.0.0',markdown:'# StykAnimate 1.0.0\n\nAnimation tools\n\n### Added\n'+Array.from({length:65},(_,i)=>'- Feature '+(i+1)+' with editable animation and reliable saving.').join('\n')+'\n\n### Fixed\n- <img src=x onerror=alert(1)>'}];}
+      getReleaseHistory:async()=>{if(++window.historyAttempts===1)throw new Error('Offline');return [{version:'1.0.0',markdown:'# Stick 1.0.0\n\nAnimation tools\n\n### Added\n'+Array.from({length:65},(_,i)=>'- Feature '+(i+1)+' with editable animation and reliable saving.').join('\n')+'\n\n### Fixed\n- <img src=x onerror=alert(1)>'}];}
     });await splash.open();
   });
   const modal=page.locator('.release-splash');await modal.waitFor();

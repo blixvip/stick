@@ -7,7 +7,7 @@ import path from 'node:path';
 
 import {corpusPath} from '../tests/support/corpus.mjs';
 const source = process.argv[2] || corpusPath('Downloads/16 Akane vs Akato Segundo round (2).piv');
-const clip = process.argv[3] || corpusPath('Documents/StykAnimate/library/Flash aura.stykmov');
+const clip = process.argv[3] || corpusPath('Documents/Stick/library/Flash aura.stykmov');
 const output = path.resolve(process.env.STYK_PROBE_OUTPUT || 'artifacts/akane-flash-aura');
 await mkdir(output, {recursive: true});
 const digest = async file => createHash('sha256').update(await readFile(file)).digest('hex');

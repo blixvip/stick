@@ -1,14 +1,13 @@
 {
-  // The StykAnimate editor: `npm run web:build`, then `npm run web:deploy`. It is a separate Worker from the
-  // public site (the "stykanimate" Worker behind stykanimate.com), so the two deploy and roll back independently.
+  // The Stick editor: `npm run web:build`, then `npm run web:deploy`. Add a "routes" entry with
+  // "custom_domain": true to serve it on your own domain; workers.dev works without one.
   // Cloudflare serves the built files and applies _headers; the Worker script (worker.js) answers only
   // /community/*, the editor's same-origin window onto the community library (docs/WEB.md).
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "stykanimate-app",
+  "name": "stick-app",
   "main": "worker.js",
   "compatibility_date": "2026-09-10",
   "workers_dev": true,
-  "routes": [{ "pattern": "app.stykanimate.com", "custom_domain": true }],
   "assets": {
     "directory": "../build/web",
     "binding": "ASSETS",
@@ -16,10 +15,10 @@
     // Everything else is served straight from the CDN without running the Worker.
     "run_worker_first": ["/community/*"]
   },
-  // Where the community library is read from (the public site and its file host).
+  // Where the community library is read from; placeholders until Stick has one.
   "vars": {
-    "SITE_URL": "https://stykanimate.com",
-    "FILES_URL": "https://files.stykanimate.com"
+    "SITE_URL": "https://community.invalid",
+    "FILES_URL": "https://files.community.invalid"
   },
   "observability": { "enabled": false }
 }

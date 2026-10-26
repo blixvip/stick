@@ -18,7 +18,7 @@ test('oversized and failed responses can be retried without poisoning history',a
   await assert.rejects(get(),/too large/);assert.equal((await get())[0].version,'1.0.0');
 });
 test('categorized and legacy release notes omit promotional prose and retain inert text',()=>{
-  const modern=parseReleaseNotes('# StykAnimate 1.0.1\n\nA small update\n\n### Changed\n- Better **controls**.\n\n### Fixed\n- <img src=x onerror=alert(1)>\n\nDonate today.');
+  const modern=parseReleaseNotes('# Stick 1.0.1\n\nA small update\n\n### Changed\n- Better **controls**.\n\n### Fixed\n- <img src=x onerror=alert(1)>\n\nDonate today.');
   assert.equal(modern.title,'A small update');assert.deepEqual(modern.groups.map(x=>x.name),['Changed','Fixed']);assert.equal(modern.groups[1].notes[0],'<img src=x onerror=alert(1)>');
   assert.deepEqual(parseReleaseNotes('# Old\n\nEarlier update\n- One fix.\n\nDonate today.').groups,[{name:'Changes',notes:['One fix.']}]);
 });

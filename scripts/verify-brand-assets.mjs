@@ -20,21 +20,21 @@ function verifyPNG(bytes, width) {
   assert.ok(pixels.some((value, index) => index % 4 === 3 && value > 0 && value < 255));
   rendered.free(); renderer.free();
 }
-for (const [file, width] of [['stykanimate.png', 512], ['stykanimate-1024.png', 1024]]) {verifyPNG(await readFile(path.join(assets, file)), width); result.assets.push({file, width, alpha: true});}
-const ico = Data.IconFile.from(await readFile(path.join(assets, 'stykanimate.ico')));
+for (const [file, width] of [['stick.png', 512], ['stick-1024.png', 1024]]) {verifyPNG(await readFile(path.join(assets, file)), width); result.assets.push({file, width, alpha: true});}
+const ico = Data.IconFile.from(await readFile(path.join(assets, 'stick.ico')));
 const iconHash = item => hash(item.isRaw() ? item.bin : item.generate());
 const expectedHashes = ico.icons.map(({data}) => iconHash(data));
 for (const {data} of ico.icons) {
   const width = data.width || data.bitmapInfo.width;
   if (data.isRaw()) verifyPNG(Buffer.from(data.bin), width);
   else {const pixels = Buffer.from(data.pixels); assert.equal(pixels[3], 0); assert.ok(pixels.some((value, index) => index % 4 === 3 && value > 0 && value < 255));}
-  result.assets.push({file: 'stykanimate.ico', width, alpha: true});
+  result.assets.push({file: 'stick.ico', width, alpha: true});
 }
-const icns = await readFile(path.join(assets, 'stykanimate.icns'));
+const icns = await readFile(path.join(assets, 'stick.icns'));
 assert.equal(icns.toString('ascii', 0, 4), 'icns'); assert.equal(icns.readUInt32BE(4), icns.length);
 for (let offset = 8; offset < icns.length;) {
   const type = icns.toString('ascii', offset, offset + 4), length = icns.readUInt32BE(offset + 4), png = icns.subarray(offset + 8, offset + length), width = png.readUInt32BE(16);
-  verifyPNG(png, width); result.assets.push({file: 'stykanimate.icns', type, width, alpha: true}); offset += length;
+  verifyPNG(png, width); result.assets.push({file: 'stick.icns', type, width, alpha: true}); offset += length;
 }
 const metadata = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 assert.equal(metadata.build.win.signExecutable, false); assert.notEqual(metadata.build.win.signAndEditExecutable, false);
@@ -43,9 +43,9 @@ assert.equal(await readFile(path.join(root, 'symbol.svg'), 'utf8'), await readFi
 if (!process.argv.includes('--assets-only')) {
   const output = path.resolve(process.env.STYK_BRAND_BUILD || path.join(root, 'artifacts/rebrand-release'));
   const asar = createRequire(import.meta.url)('@electron/asar');
-  for (const file of ['stykanimate.png', 'stykanimate.ico', 'stykanimate.icns']) assert.equal(hash(asar.extractFile(path.join(output, 'win-unpacked/resources/app.asar'), path.join('desktop', 'assets', file))), hash(await readFile(path.join(assets, file))));
+  for (const file of ['stick.png', 'stick.ico', 'stick.icns']) assert.equal(hash(asar.extractFile(path.join(output, 'win-unpacked/resources/app.asar'), path.join('desktop', 'assets', file))), hash(await readFile(path.join(assets, file))));
   for (const file of ['mark.svg', 'symbol.svg']) assert.equal(hash(await readFile(path.join(output, 'win-unpacked/resources/web', file))), hash(await readFile(path.join(root, file))));
-  const files = [path.join(output, 'win-unpacked/StykAnimate.exe'), path.join(output, `StykAnimate-${metadata.version}-Setup-x64.exe`), path.join(output, `StykAnimate-${metadata.version}-Portable-x64.exe`), path.join(evidence, 'StykAnimate-uninstaller.exe')];
+  const files = [path.join(output, 'win-unpacked/Stick.exe'), path.join(output, `Stick-${metadata.version}-Setup-x64.exe`), path.join(output, `Stick-${metadata.version}-Portable-x64.exe`), path.join(evidence, 'Stick-uninstaller.exe')];
   for (const file of files) {
     const buffer = await readFile(file), executable = NtExecutable.from(buffer), entries = NtExecutableResource.from(executable).entries;
     const groups = Resource.IconGroupEntry.fromEntries(entries);

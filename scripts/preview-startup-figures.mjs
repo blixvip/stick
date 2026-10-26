@@ -3,7 +3,7 @@ import {mkdir, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 
-// Candidate artwork is authored with native StykAnimate segments, then saved
+// Candidate artwork is authored with native Stick segments, then saved
 // and rendered by the running app. Selection of the shipped default is pending.
 const out = path.resolve('artifacts/startup-styles');
 await mkdir(out, {recursive:true});

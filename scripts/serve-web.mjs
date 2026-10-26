@@ -87,5 +87,5 @@ export async function startWebServer({ root = path.join(appRoot, 'build', 'web')
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const option = (name, fallback) => { const index = process.argv.indexOf(name); return index >= 0 ? process.argv[index + 1] : fallback; };
   const { origin } = await startWebServer({ root: path.resolve(option('--dir', path.join(appRoot, 'build', 'web'))), port: Number(option('--port', 47850)) });
-  console.log(`StykAnimate web build is served at ${origin}`);
+  console.log(`Stick web build is served at ${origin}`);
 }

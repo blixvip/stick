@@ -48,7 +48,7 @@ export const T = {
     buildReq: 'Requirements: Node.js 22+ and Python 3.11+.',
     buildCmt: ['desktop app (Electron)', 'or the editor in your browser'],
     licenseH: 'License',
-    license: 'Stick is free software under the [GNU General Public License v3.0](../../LICENSE) or later. It is a modified version of the GPL-licensed StykAnimate project; this notice is kept as the license requires. Stick is an independent project and is not affiliated with or endorsed by Pivot Animator or Stick Nodes; those names describe file compatibility only.',
+    license: 'Stick is free software under the [GNU General Public License v3.0](../../LICENSE) or later. It is a modified version of earlier GPL-licensed software, changed in October 2026; the full change history is in this repository. Stick is an independent project and is not affiliated with or endorsed by Pivot Animator or Stick Nodes; those names describe file compatibility only.',
     footer: 'free stick figure animation software · stickman animator for Windows, Linux and the web',
   },
   'zh-CN': {
@@ -86,7 +86,7 @@ export const T = {
     buildReq: '环境要求：Node.js 22+ 和 Python 3.11+。',
     buildCmt: ['桌面应用（Electron）', '或在浏览器中打开编辑器'],
     licenseH: '许可证',
-    license: 'Stick 是基于 [GNU 通用公共许可证 v3.0](../../LICENSE)（或更高版本）发布的自由软件。它是 GPL 许可的 StykAnimate 项目的修改版本，按许可证要求保留此声明。Stick 是独立项目，与 Pivot Animator 和 Stick Nodes 无关联，提及这些名称仅为说明文件兼容性。',
+    license: 'Stick 是基于 [GNU 通用公共许可证 v3.0](../../LICENSE)（或更高版本）发布的自由软件。它是在早期 GPL 软件基础上修改而成（2026 年 10 月修改），完整修改记录见本仓库。Stick 是独立项目，与 Pivot Animator 和 Stick Nodes 无关联，提及这些名称仅为说明文件兼容性。',
     footer: '免费火柴人动画软件 · 支持 Windows、Linux 和网页的火柴人动画制作工具',
   },
   'zh-TW': {
@@ -124,7 +124,7 @@ export const T = {
     buildReq: '需求：Node.js 22+ 與 Python 3.11+。',
     buildCmt: ['桌面應用程式（Electron）', '或在瀏覽器中開啟編輯器'],
     licenseH: '授權',
-    license: 'Stick 是依 [GNU 通用公共授權條款 v3.0](../../LICENSE)（或更新版本）發布的自由軟體。它是採 GPL 授權的 StykAnimate 專案之修改版本，依授權要求保留此聲明。Stick 為獨立專案，與 Pivot Animator 和 Stick Nodes 無關，提及這些名稱僅為說明檔案相容性。',
+    license: 'Stick 是依 [GNU 通用公共授權條款 v3.0](../../LICENSE)（或更新版本）發布的自由軟體。它是以早期 GPL 軟體為基礎修改而成（2026 年 10 月修改），完整修改紀錄請見本儲存庫。Stick 為獨立專案，與 Pivot Animator 和 Stick Nodes 無關，提及這些名稱僅為說明檔案相容性。',
     footer: '免費火柴人動畫軟體 · 支援 Windows、Linux 與網頁的火柴人動畫工具',
   },
   ja: {
@@ -162,7 +162,7 @@ export const T = {
     buildReq: '必要環境：Node.js 22 以上、Python 3.11 以上。',
     buildCmt: ['デスクトップアプリ（Electron）', 'またはブラウザでエディターを開く'],
     licenseH: 'ライセンス',
-    license: 'Stick は [GNU 一般公衆利用許諾書 v3.0](../../LICENSE)（またはそれ以降）のもとで公開されている自由ソフトウェアです。GPL ライセンスの StykAnimate プロジェクトを改変したもので、ライセンスの定めによりこの表記を残しています。Stick は独立したプロジェクトであり、Pivot Animator や Stick Nodes とは提携していません。これらの名称はファイル互換性の説明のためにのみ使用しています。',
+    license: 'Stick は [GNU 一般公衆利用許諾書 v3.0](../../LICENSE)（またはそれ以降）のもとで公開されている自由ソフトウェアです。GPL ライセンスの既存ソフトウェアを改変したもの（2026 年 10 月に改変）で、変更履歴はこのリポジトリで確認できます。Stick は独立したプロジェクトであり、Pivot Animator や Stick Nodes とは提携していません。これらの名称はファイル互換性の説明のためにのみ使用しています。',
     footer: '無料の棒人間アニメーションソフト · Windows・Linux・Web 対応のスティックマンアニメーター',
   },
   ko: {
@@ -200,7 +200,7 @@ export const T = {
     buildReq: '필요 환경: Node.js 22 이상, Python 3.11 이상.',
     buildCmt: ['데스크톱 앱(Electron)', '또는 브라우저에서 편집기 열기'],
     licenseH: '라이선스',
-    license: 'Stick은 [GNU 일반 공중 사용 허가서 v3.0](../../LICENSE)(또는 이후 버전)에 따른 자유 소프트웨어입니다. GPL 라이선스인 StykAnimate 프로젝트를 수정한 버전이며, 라이선스에 따라 이 고지를 유지합니다. Stick은 독립 프로젝트이며 Pivot Animator나 Stick Nodes와 제휴하지 않았습니다. 해당 이름은 파일 호환성을 설명하기 위해서만 사용합니다.',
+    license: 'Stick은 [GNU 일반 공중 사용 허가서 v3.0](../../LICENSE)(또는 이후 버전)에 따른 자유 소프트웨어입니다. GPL 라이선스의 기존 소프트웨어를 수정한 버전(2026년 10월 수정)이며, 전체 변경 내역은 이 저장소에서 볼 수 있습니다. Stick은 독립 프로젝트이며 Pivot Animator나 Stick Nodes와 제휴하지 않았습니다. 해당 이름은 파일 호환성을 설명하기 위해서만 사용합니다.',
     footer: '무료 졸라맨 애니메이션 프로그램 · Windows, Linux, 웹용 스틱맨 애니메이터',
   },
   es: {
@@ -238,7 +238,7 @@ export const T = {
     buildReq: 'Requisitos: Node.js 22+ y Python 3.11+.',
     buildCmt: ['app de escritorio (Electron)', 'o el editor en tu navegador'],
     licenseH: 'Licencia',
-    license: 'Stick es software libre bajo la [Licencia Pública General de GNU v3.0](../../LICENSE) o posterior. Es una versión modificada del proyecto StykAnimate, con licencia GPL; este aviso se mantiene como exige la licencia. Stick es un proyecto independiente y no está afiliado a Pivot Animator ni a Stick Nodes; esos nombres solo describen la compatibilidad de archivos.',
+    license: 'Stick es software libre bajo la [Licencia Pública General de GNU v3.0](../../LICENSE) o posterior. Es una versión modificada de software anterior con licencia GPL (modificado en octubre de 2026); el historial completo de cambios está en este repositorio. Stick es un proyecto independiente y no está afiliado a Pivot Animator ni a Stick Nodes; esos nombres solo describen la compatibilidad de archivos.',
     footer: 'Programa gratis de animación de monigotes · animador de stickman para Windows, Linux y la web',
   },
   'pt-BR': {
@@ -276,7 +276,7 @@ export const T = {
     buildReq: 'Requisitos: Node.js 22+ e Python 3.11+.',
     buildCmt: ['app desktop (Electron)', 'ou o editor no navegador'],
     licenseH: 'Licença',
-    license: 'Stick é software livre sob a [Licença Pública Geral GNU v3.0](../../LICENSE) ou posterior. É uma versão modificada do projeto StykAnimate, licenciado sob a GPL; este aviso é mantido como a licença exige. O Stick é um projeto independente e não é afiliado ao Pivot Animator nem ao Stick Nodes; esses nomes descrevem apenas a compatibilidade de arquivos.',
+    license: 'Stick é software livre sob a [Licença Pública Geral GNU v3.0](../../LICENSE) ou posterior. É uma versão modificada de um software anterior licenciado sob a GPL (modificado em outubro de 2026); o histórico completo de mudanças está neste repositório. O Stick é um projeto independente e não é afiliado ao Pivot Animator nem ao Stick Nodes; esses nomes descrevem apenas a compatibilidade de arquivos.',
     footer: 'Programa grátis de animação de boneco palito · animador de stickman para Windows, Linux e web',
   },
   fr: {
@@ -314,7 +314,7 @@ export const T = {
     buildReq: 'Prérequis : Node.js 22+ et Python 3.11+.',
     buildCmt: ['application de bureau (Electron)', 'ou l’éditeur dans votre navigateur'],
     licenseH: 'Licence',
-    license: 'Stick est un logiciel libre sous [Licence publique générale GNU v3.0](../../LICENSE) ou ultérieure. C’est une version modifiée du projet StykAnimate, sous licence GPL ; cette mention est conservée comme l’exige la licence. Stick est un projet indépendant, sans lien avec Pivot Animator ni Stick Nodes ; ces noms décrivent uniquement la compatibilité des fichiers.',
+    license: 'Stick est un logiciel libre sous [Licence publique générale GNU v3.0](../../LICENSE) ou ultérieure. C’est une version modifiée d’un logiciel antérieur sous licence GPL (modifié en octobre 2026) ; l’historique complet des modifications est dans ce dépôt. Stick est un projet indépendant, sans lien avec Pivot Animator ni Stick Nodes ; ces noms décrivent uniquement la compatibilité des fichiers.',
     footer: 'Logiciel gratuit d’animation de bonhommes allumettes · animateur de stickman pour Windows, Linux et le web',
   },
   de: {
@@ -352,7 +352,7 @@ export const T = {
     buildReq: 'Voraussetzungen: Node.js 22+ und Python 3.11+.',
     buildCmt: ['Desktop-App (Electron)', 'oder der Editor im Browser'],
     licenseH: 'Lizenz',
-    license: 'Stick ist freie Software unter der [GNU General Public License v3.0](../../LICENSE) oder neuer. Es ist eine veränderte Version des GPL-lizenzierten Projekts StykAnimate; dieser Hinweis bleibt erhalten, wie es die Lizenz verlangt. Stick ist ein unabhängiges Projekt und steht in keiner Verbindung zu Pivot Animator oder Stick Nodes; diese Namen beschreiben nur die Dateikompatibilität.',
+    license: 'Stick ist freie Software unter der [GNU General Public License v3.0](../../LICENSE) oder neuer. Es ist eine veränderte Version früherer GPL-lizenzierter Software (geändert im Oktober 2026); der vollständige Änderungsverlauf steht in diesem Repository. Stick ist ein unabhängiges Projekt und steht in keiner Verbindung zu Pivot Animator oder Stick Nodes; diese Namen beschreiben nur die Dateikompatibilität.',
     footer: 'Kostenlose Strichmännchen-Animationssoftware · Stickman-Animator für Windows, Linux und das Web',
   },
   ru: {
@@ -390,7 +390,7 @@ export const T = {
     buildReq: 'Требования: Node.js 22+ и Python 3.11+.',
     buildCmt: ['настольное приложение (Electron)', 'или редактор в браузере'],
     licenseH: 'Лицензия',
-    license: 'Stick — свободное ПО по [Стандартной общественной лицензии GNU v3.0](../../LICENSE) или более поздней версии. Это изменённая версия проекта StykAnimate под лицензией GPL; это уведомление сохраняется, как требует лицензия. Stick — независимый проект, не связанный с Pivot Animator или Stick Nodes; эти названия используются только для описания совместимости файлов.',
+    license: 'Stick — свободное ПО по [Стандартной общественной лицензии GNU v3.0](../../LICENSE) или более поздней версии. Это изменённая версия более раннего ПО под лицензией GPL (изменено в октябре 2026 года); полная история изменений — в этом репозитории. Stick — независимый проект, не связанный с Pivot Animator или Stick Nodes; эти названия используются только для описания совместимости файлов.',
     footer: 'Бесплатная программа для анимации человечков · аниматор стикменов для Windows, Linux и веба',
   },
 };

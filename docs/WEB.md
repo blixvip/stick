@@ -13,12 +13,11 @@ npm run test:web        # end to end in a real browser, under the production hea
 
 ## Deploying
 
-The editor is its own Cloudflare Worker, `stykanimate-app` (`web/wrangler.jsonc`), separate
-from the public site's Worker (`stykanimate`), so the two deploy and roll back independently.
+The editor is its own Cloudflare Worker, `stick-app` (`web/wrangler.jsonc`).
 Cloudflare serves the built files; the Worker script (`web/worker.js`) runs only for
 `/community/*` (see [The community library window](#the-community-library-window)).
 It can be served on your own custom domain (the `routes` entry in `web/wrangler.jsonc`) and at
-`stykanimate-app.<account>.workers.dev`.
+`stick-app.<account>.workers.dev`.
 
 ```bash
 npm ci --prefix web                   # once: installs the pinned wrangler

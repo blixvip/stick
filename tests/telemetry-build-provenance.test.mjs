@@ -11,7 +11,7 @@ async function fixture() {
     'src/app.mjs': 'export const feature = "animation";\n',
     'src/nested/render.mjs': 'export const frames = 24;\n',
     'desktop/main.cjs': 'module.exports = { desktop: true };\n',
-    'backend/app.py': 'APP = "StykAnimate"\n',
+    'backend/app.py': 'APP = "Stick"\n',
     'codecs/decoder.py': 'FORMAT_VERSION = 1\n',
     'package.json': JSON.stringify({ name: 'stykanimate-test', version: '0.5.6' }) + '\n',
   };

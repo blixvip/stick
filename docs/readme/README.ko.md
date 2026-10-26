@@ -204,7 +204,7 @@ npm run serve        # 또는 브라우저에서 편집기 열기: http://127.0.
 
 ## 라이선스
 
-Stick은 [GNU 일반 공중 사용 허가서 v3.0](../../LICENSE)(또는 이후 버전)에 따른 자유 소프트웨어입니다. GPL 라이선스인 StykAnimate 프로젝트를 수정한 버전이며, 라이선스에 따라 이 고지를 유지합니다. Stick은 독립 프로젝트이며 Pivot Animator나 Stick Nodes와 제휴하지 않았습니다. 해당 이름은 파일 호환성을 설명하기 위해서만 사용합니다.
+Stick은 [GNU 일반 공중 사용 허가서 v3.0](../../LICENSE)(또는 이후 버전)에 따른 자유 소프트웨어입니다. GPL 라이선스의 기존 소프트웨어를 수정한 버전(2026년 10월 수정)이며, 전체 변경 내역은 이 저장소에서 볼 수 있습니다. Stick은 독립 프로젝트이며 Pivot Animator나 Stick Nodes와 제휴하지 않았습니다. 해당 이름은 파일 호환성을 설명하기 위해서만 사용합니다.
 
 <p align="center">
   <img src="../../assets/brand/svg/stick-app-icon-dark.svg" alt="Stick" width="72"><br>

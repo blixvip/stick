@@ -587,7 +587,7 @@ class VideoExportService {
       }
       await fs.mkdir(this.tempRoot, { recursive: true });
       directory = await fs.mkdtemp(
-        path.join(this.tempRoot, "stykanimate-video-"),
+        path.join(this.tempRoot, "stick-video-"),
       );
       const output = path.join(
         directory,

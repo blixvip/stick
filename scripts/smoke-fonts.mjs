@@ -145,7 +145,7 @@ try {
       document.querySelector("#create-text")?.disabled === false,
     native[0].family,
   );
-  await page.locator("#text-content").fill("StykAnimate");
+  await page.locator("#text-content").fill("Stick");
   await page.waitForFunction(
     () => document.querySelector("#create-text")?.disabled === false,
   );
@@ -165,7 +165,7 @@ try {
         return (
           styk.editor.report.figure_types.length === before + 1 &&
           figure?._styk?.textAuthoring?.fontFamily === family &&
-          figure.text_assets[0].text === "StykAnimate"
+          figure.text_assets[0].text === "Stick"
         );
       },
       { before, family: native[0].family },

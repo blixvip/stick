@@ -7,8 +7,8 @@ import { verifyReleaseAssets, fileHash } from '../scripts/release-assets.mjs';
 test('release verification rejects wrong versions, corrupt installers and incomplete uploads', async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'styk-release-'));
   try {
-    const name = 'StykAnimate-0.5.0-Setup-x64.exe';
-    for (const file of [name, `${name}.blockmap`, 'StykAnimate-0.5.0-Portable-x64.exe']) await writeFile(path.join(directory, file), 'fixture');
+    const name = 'Stick-0.5.0-Setup-x64.exe';
+    for (const file of [name, `${name}.blockmap`, 'Stick-0.5.0-Portable-x64.exe']) await writeFile(path.join(directory, file), 'fixture');
     const sha512 = await fileHash(path.join(directory, name));
     await writeFile(path.join(directory, 'latest.yml'), JSON.stringify({ version: '0.5.0', path: name, sha512, files: [{ url: name, size: 7, sha512 }] }));
     assert.equal((await verifyReleaseAssets(directory, '0.5.0', 'win32')).length, 4);
@@ -33,14 +33,14 @@ test('public update feed contains no private repository or credentials', async (
 
 test('a coordinated release requires verified Windows and Linux assets and excludes unrelated files', async () => {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'styk-platform-release-'));
-  const version = '1.2.0', setup = `StykAnimate-${version}-Setup-x64.exe`, appimage = `StykAnimate-${version}-linux-x86_64.AppImage`;
+  const version = '1.2.0', setup = `Stick-${version}-Setup-x64.exe`, appimage = `Stick-${version}-linux-x86_64.AppImage`;
   try {
     for (const [feed, name] of [['latest.yml', setup], ['latest-linux.yml', appimage]]) {
       await writeFile(path.join(directory, name), 'fixture');
       const sha512 = await fileHash(path.join(directory, name));
       await writeFile(path.join(directory, feed), JSON.stringify({version, path: name, sha512, files: [{url: name, size: 7, sha512}]}));
     }
-    for (const name of [`${setup}.blockmap`, `StykAnimate-${version}-Portable-x64.exe`, 'private.log']) await writeFile(path.join(directory, name), 'fixture');
+    for (const name of [`${setup}.blockmap`, `Stick-${version}-Portable-x64.exe`, 'private.log']) await writeFile(path.join(directory, name), 'fixture');
     const assets = await verifyReleaseAssets(directory, version);
     assert.equal(assets.length, 6);
     assert.ok(assets.includes(path.join(directory, appimage)));

@@ -7,12 +7,14 @@ const {createHash} = require('node:crypto');
 // The community library is a service of the website (worker/library.js in the
 // site's repository). /api/v1/content says which index is current and where the
 // public files live, the index lists every approved item, and the index, the
-// posters and the files are immutable objects. Only stykanimate.com (and the
+// posters and the files are immutable objects. Only the configured site (and the
 // file host the site names, when that is a subdomain of it) is contacted,
 // every response is size-bounded, and a file reaches the app only after its
 // size and SHA-256 match the index. Nothing about the user or their projects
 // is sent.
-const SITE = 'https://stykanimate.com';
+// Placeholder: Stick has no community library service yet (the panel is off, see
+// COMMUNITY_LIBRARY in src/user-library.mjs). .invalid never resolves.
+const SITE = 'https://community.invalid';
 const MB = 1024 * 1024;
 const LIMITS = Object.freeze({content: 256 * 1024, index: 4 * MB, poster: 512 * 1024});
 // Figures and movieclips are what the app can insert. Full projects stay on the website.

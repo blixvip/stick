@@ -224,12 +224,12 @@ Implementation does not publish a website or desktop release. Before an authoriz
 deployment:
 
 1. Inspect the existing Free account's available D1, request and R2 allowances.
-2. Create dedicated **private Standard** R2 bucket `stykanimate-support`. Keep `r2.dev`,
+2. Create dedicated **private Standard** R2 bucket `stick-support`. Keep `r2.dev`,
    custom public domains and public CORS disabled. Do not enable paid Workers or
    Infrequent Access. If R2 enrollment requires billing approval, obtain that explicitly.
    A 31-day R2 lifecycle expiry for `support/` is recommended as a second cleanup layer;
    it does not replace D1 accounting and cannot make a held reservation refundable.
-3. Apply migrations through `0004_support_live.sql` to `stykanimate-analytics`, including
+3. Apply migrations through `0004_support_live.sql` to `stick-analytics`, including
    prior migrations. Existing feedback and analytics rows are preserved.
 4. Generate and validate the public assets. Deploy the Worker **and** assets, R2 binding,
    support limiter, `SUPPORT_LIVE` binding, SQLite Durable Object migration and variables together. Existing administrator secrets are retained.

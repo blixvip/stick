@@ -26,7 +26,7 @@ try {
   const lacks = await probe.evaluate(() => window.stykUnsupported ?? null);
   console.log(`[${BROWSER}] on this browser the editor ${lacks ? `is refused: ${lacks.join('; ')}` : 'starts'}`);
   if (!lacks) check('A capable browser starts the editor with no warning', await probe.evaluate(() => typeof window.styk === 'object') && !(await probe.getByText('needs a newer browser').count()));
-  else check('A browser that lacks a feature says so in plain words', await probe.getByText('StykAnimate needs a newer browser').isVisible());
+  else check('A browser that lacks a feature says so in plain words', await probe.getByText('Stick needs a newer browser').isVisible());
   await probe.context().close();
 
   for (const [feature, removal] of [['OffscreenCanvas', () => { delete window.OffscreenCanvas; }], ['IndexedDB', () => { Object.defineProperty(window, 'indexedDB', { configurable: true, get: () => undefined }); }]]) {
@@ -35,7 +35,7 @@ try {
     page.on('pageerror', (error) => errors.push(error.message));
     await page.addInitScript(removal);
     await page.goto(site.origin, { waitUntil: 'load' });
-    await page.getByText('StykAnimate needs a newer browser').waitFor({ timeout: 15000 });
+    await page.getByText('Stick needs a newer browser').waitFor({ timeout: 15000 });
     const text = await page.locator('main[role="alert"]').innerText();
     check(`Without ${feature} the person is told, not shown a blank page`, /missing/.test(text) && text.includes(feature) && /Chrome, Edge, Firefox or Safari/.test(text));
     check('and the message points to the desktop app', /desktop app/.test(text));

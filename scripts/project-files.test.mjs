@@ -5,7 +5,7 @@ import os from 'node:os';
 import { createRequire } from 'node:module';
 
 const { ProjectFiles } = createRequire(import.meta.url)('../desktop/project-files.cjs');
-const nativePath = name => path.join(os.tmpdir(), 'StykAnimate project files', name);
+const nativePath = name => path.join(os.tmpdir(), 'Stick project files', name);
 const describeCurrent = (files, token) => files.describe(files.requireCurrent(token));
 
 test('a fresh session has no document or save target until a document is activated', () => {

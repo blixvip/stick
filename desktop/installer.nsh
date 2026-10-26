@@ -2,7 +2,7 @@
 ; Library contents belong to the user and are deliberately retained on uninstall.
 !macro customInstall
   SetShellVarContext current
-  CreateDirectory "$DOCUMENTS\StykAnimate\library"
+  CreateDirectory "$DOCUMENTS\Stick\library"
   ${If} $installMode == "all"
     SetShellVarContext all
   ${EndIf}

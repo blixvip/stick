@@ -23,7 +23,7 @@ await mkdir(evidenceDirectory, {recursive: true});
 // Windows TEMP can contain an 8.3 alias. WMI reports the executable's long
 // path, so use the same canonical directory for installation and observation.
 const work = await realpath(await mkdtemp(path.join(os.tmpdir(), 'styk-release-install-')));
-const install = path.join(work, 'installed'), executable = path.join(install, 'StykAnimate.exe'), profile = path.join(work, 'profile');
+const install = path.join(work, 'installed'), executable = path.join(install, 'Stick.exe'), profile = path.join(work, 'profile');
 await mkdir(profile);
 await writeFile(path.join(profile, 'telemetry-state.json'), JSON.stringify({decided: true, consent: {analytics: false, diagnostics: false, policyVersion: '2026-09-10', updatedAt: Date.now()}}));
 const env = {...electronEnvironment(), STYK_USER_DATA_DIR: profile, STYK_LIBRARY_DIR: path.join(work, 'library'), STYK_INSTALL_TEST_EXE: executable};
@@ -54,21 +54,21 @@ const until = async (name, condition) => {
   throw new Error(`Timed out waiting for ${name}.`);
 };
 const processIds = async () => {
-  const {stdout} = await powershell("ConvertTo-Json -Compress -InputObject @(Get-CimInstance Win32_Process -Filter \"Name = 'StykAnimate.exe'\" | Select-Object ProcessId, ExecutablePath)");
+  const {stdout} = await powershell("ConvertTo-Json -Compress -InputObject @(Get-CimInstance Win32_Process -Filter \"Name = 'Stick.exe'\" | Select-Object ProcessId, ExecutablePath)");
   evidence.observedProcesses = JSON.parse(stdout);
   return evidence.observedProcesses.filter(item => item.ExecutablePath?.toLowerCase() === executable.toLowerCase()).map(item => item.ProcessId);
 };
 let app, installed = false;
 try {
   const repository = 'https://github.com/filippocalippo/styk-animate-releases';
-  const response = await fetch('https://api.github.com/repos/filippocalippo/styk-animate-releases/releases/latest', {headers: {'User-Agent': 'StykAnimate-release-verification'}, signal: AbortSignal.timeout(30000)});
+  const response = await fetch('https://api.github.com/repos/filippocalippo/styk-animate-releases/releases/latest', {headers: {'User-Agent': 'Stick-release-verification'}, signal: AbortSignal.timeout(30000)});
   assert.ok(response.ok, 'Previous public release metadata is reachable');
   const previous = await response.json(), match = /^v(\d+\.\d+\.\d+)$/.exec(previous.tag_name);
   assert.ok(match && previous.draft === false && previous.prerelease === false);
   const semver = createRequire(import.meta.url)('semver');
   assert.ok(semver.lt(match[1], version), 'The candidate must be newer than the installed baseline');
   evidence.baseline = match[1];
-  const name = `StykAnimate-${match[1]}-Setup-x64.exe`, asset = previous.assets.find(item => item.name === name);
+  const name = `Stick-${match[1]}-Setup-x64.exe`, asset = previous.assets.find(item => item.name === name);
   assert.ok(asset?.size > 0 && /^sha256:[a-f0-9]{64}$/.test(asset.digest), 'The public baseline has a verified SHA-256');
   const baseline = path.join(work, name), download = await fetch(`${repository}/releases/download/${previous.tag_name}/${name}`, {signal: AbortSignal.timeout(120000)});
   assert.ok(download.ok && download.body);
@@ -77,7 +77,7 @@ try {
   assert.equal(`sha256:${await fileHash(baseline, 'sha256', 'hex')}`, asset.digest);
   evidence.baselineSHA256 = asset.digest.slice(7);
   evidence.candidateArchiveSHA256 = await fileHash(path.join(directory, 'win-unpacked', 'resources', 'app.asar'), 'sha256', 'hex');
-  evidence.candidateSHA256 = await fileHash(path.join(directory, `StykAnimate-${version}-Setup-x64.exe`), 'sha256', 'hex');
+  evidence.candidateSHA256 = await fileHash(path.join(directory, `Stick-${version}-Setup-x64.exe`), 'sha256', 'hex');
   await run(baseline, ['/S', '/currentuser', `/D=${install}`]);
   installed = true;
   assert.ok(existsSync(executable));
@@ -108,7 +108,7 @@ try {
   }, feed);
   assert.equal(downloaded.status, 'ready');
   assert.equal(downloaded.version, version);
-  assert.ok(requests.includes(`StykAnimate-${version}-Setup-x64.exe`));
+  assert.ok(requests.includes(`Stick-${version}-Setup-x64.exe`));
   check('Installed app downloads and verifies the exact candidate through electron-updater');
   await page.evaluate(() => window.styk.editor.setCanvasSize(961, 540));
   await app.evaluate(({dialog}) => { dialog.showMessageBox = async () => ({response: 1}); });
@@ -160,7 +160,7 @@ try {
   await writeFile(path.join(evidenceDirectory, 'evidence.json'), JSON.stringify({...evidence, requests}, null, 2) + '\n');
   if (app) await app.evaluate(({app}) => app.exit(0)).catch(() => {});
   await powershell('Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -eq $env:STYK_INSTALL_TEST_EXE } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }').catch(() => {});
-  if (installed) await run(path.join(install, 'Uninstall StykAnimate.exe'), ['/S']).catch(error => console.warn('Test uninstall:', error.message));
+  if (installed) await run(path.join(install, 'Uninstall Stick.exe'), ['/S']).catch(error => console.warn('Test uninstall:', error.message));
   server.closeAllConnections();
   await new Promise(resolve => server.close(resolve));
 }

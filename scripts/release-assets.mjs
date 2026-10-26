@@ -27,12 +27,12 @@ export async function verifyReleaseAssets(directory, version, platform = 'all') 
   assert.ok(['all', 'win32', 'linux'].includes(platform), 'Choose all, win32 or linux release assets.');
   const names = [];
   if (platform !== 'linux') {
-    const setup = `StykAnimate-${version}-Setup-x64.exe`;
+    const setup = `Stick-${version}-Setup-x64.exe`;
     await verifyFeed(directory, version, 'latest.yml', setup);
-    names.push(setup, `${setup}.blockmap`, `StykAnimate-${version}-Portable-x64.exe`, 'latest.yml');
+    names.push(setup, `${setup}.blockmap`, `Stick-${version}-Portable-x64.exe`, 'latest.yml');
   }
   if (platform !== 'win32') {
-    const appimage = `StykAnimate-${version}-linux-x86_64.AppImage`;
+    const appimage = `Stick-${version}-linux-x86_64.AppImage`;
     await verifyFeed(directory, version, 'latest-linux.yml', appimage);
     names.push(appimage, 'latest-linux.yml');
   }

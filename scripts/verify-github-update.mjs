@@ -9,7 +9,7 @@ const { version } = JSON.parse(await readFile(path.join(root, 'package.json'), '
 const output = path.join(root, 'artifacts', 'updates');
 await mkdir(output, { recursive: true });
 const application = await electron.launch({
-  executablePath: process.env.STYK_PACKAGED_EXECUTABLE || path.join(root, 'release', version, 'win-unpacked', 'StykAnimate.exe'),
+  executablePath: process.env.STYK_PACKAGED_EXECUTABLE || path.join(root, 'release', version, 'win-unpacked', 'Stick.exe'),
   args: [], cwd: root, timeout: 45000,
   env: { ...process.env, STYK_USER_DATA_DIR: path.join(output, `github-profile-${Date.now()}`) },
 });

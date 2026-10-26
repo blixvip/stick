@@ -17,7 +17,7 @@ Include the version and platform, what an attacker could do, and the steps or a 
 In scope:
 
 - **Opening files:** any way a crafted `.styk`, `.piv`, `.stk`, Stick Nodes file or image can run code, read or write files it shouldn't, or crash the app repeatedly.
-- **The Electron app:** escaping context isolation or the preload API, and `stykanimate://` link handling.
+- **The Electron app:** escaping context isolation or the preload API, and `stick://` link handling.
 - **Updates:** the update path and installers.
 - **The browser build:** its service worker.
 

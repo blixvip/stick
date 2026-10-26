@@ -1,6 +1,6 @@
 {
-  "name": "stykanimate-webapp",
-  "productName": "StykAnimate",
+  "name": "stick",
+  "productName": "Stick",
   "version": "1.2.5",
   "description": "Stick: free, open-source stick figure animation software. Pose, keyframe, draw and export stick animations on Windows, Linux and the web.",
   "license": "GPL-3.0-or-later",
@@ -15,7 +15,7 @@
   "private": true,
   "type": "module",
   "main": "desktop/main.cjs",
-  "desktopName": "stykanimate.desktop",
+  "desktopName": "stick.desktop",
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
@@ -105,17 +105,17 @@
   },
   "build": {
     "beforePack": "scripts/before-pack.cjs",
-    "appId": "app.stykanimate.desktop",
+    "appId": "app.stick.desktop",
     "protocols": [
       {
-        "name": "StykAnimate",
+        "name": "Stick",
         "schemes": [
-          "stykanimate"
+          "stick"
         ]
       }
     ],
-    "productName": "StykAnimate",
-    "artifactName": "StykAnimate-${version}-${os}-${arch}.${ext}",
+    "productName": "Stick",
+    "artifactName": "Stick-${version}-${os}-${arch}.${ext}",
     "toolsets": {
       "appimage": "1.0.3"
     },
@@ -206,20 +206,20 @@
       },
       {
         "ext": "stykmov",
-        "mimeType": "application/vnd.stykanimate.movieclip",
-        "name": "StykAnimate movieclip",
+        "mimeType": "application/vnd.stick.movieclip",
+        "name": "Stick movieclip",
         "role": "Editor"
       },
       {
         "ext": "stkz",
-        "mimeType": "application/vnd.stykanimate.figure",
-        "name": "StykAnimate figure",
+        "mimeType": "application/vnd.stick.figure",
+        "name": "Stick figure",
         "role": "Editor"
       },
       {
         "ext": "styk",
-        "mimeType": "application/vnd.stykanimate.project",
-        "name": "StykAnimate project",
+        "mimeType": "application/vnd.stick.project",
+        "name": "Stick project",
         "role": "Editor"
       }
     ],
@@ -228,7 +228,7 @@
         "nsis",
         "portable"
       ],
-      "icon": "desktop/assets/stykanimate.ico",
+      "icon": "desktop/assets/stick.ico",
       "signExecutable": false,
       "extraResources": [
         {
@@ -243,20 +243,20 @@
       ]
     },
     "nsis": {
-      "installerIcon": "desktop/assets/stykanimate.ico",
-      "uninstallerIcon": "desktop/assets/stykanimate.ico",
-      "installerHeaderIcon": "desktop/assets/stykanimate.ico",
+      "installerIcon": "desktop/assets/stick.ico",
+      "uninstallerIcon": "desktop/assets/stick.ico",
+      "installerHeaderIcon": "desktop/assets/stick.ico",
       "include": "desktop/installer.nsh",
-      "artifactName": "StykAnimate-${version}-Setup-${arch}.${ext}",
+      "artifactName": "Stick-${version}-Setup-${arch}.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true
     },
     "portable": {
-      "artifactName": "StykAnimate-${version}-Portable-${arch}.${ext}"
+      "artifactName": "Stick-${version}-Portable-${arch}.${ext}"
     },
     "mac": {
-      "icon": "desktop/assets/stykanimate.icns",
+      "icon": "desktop/assets/stick.icns",
       "target": [
         "dmg",
         "zip"
@@ -265,12 +265,12 @@
       "hardenedRuntime": true
     },
     "linux": {
-      "icon": "desktop/assets/stykanimate.png",
+      "icon": "desktop/assets/stick.png",
       "target": [
         "AppImage"
       ],
       "category": "Graphics",
-      "executableName": "stykanimate",
+      "executableName": "stick",
       "syncDesktopName": true,
       "synopsis": "Stick figure animation"
     },

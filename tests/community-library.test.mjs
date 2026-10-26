@@ -63,17 +63,17 @@ function site({version = 1, index = INDEX, files = {}, counted = []} = {}) {
     const target = new URL(url);
     calls.push(`${target.host}${target.pathname}${target.search}`);
     if (init.signal?.aborted) throw new DOMException('aborted', 'AbortError');
-    if (target.host === 'stykanimate.com' && target.pathname === '/api/v1/content') return Response.json({library: {v: version, count: 3, base: 'https://files.stykanimate.com'}});
-    if (target.host === 'files.stykanimate.com' && target.pathname === `/index/${version}.json`) return new Response(JSON.stringify(index), {headers: {'content-type': 'application/json'}});
-    if (target.host === 'files.stykanimate.com' && bytes[target.pathname.slice(1)]) {
+    if (target.host === 'community.invalid' && target.pathname === '/api/v1/content') return Response.json({library: {v: version, count: 3, base: 'https://files.community.invalid'}});
+    if (target.host === 'files.community.invalid' && target.pathname === `/index/${version}.json`) return new Response(JSON.stringify(index), {headers: {'content-type': 'application/json'}});
+    if (target.host === 'files.community.invalid' && bytes[target.pathname.slice(1)]) {
       const key = target.pathname.slice(1);
       return new Response(bytes[key], {headers: {'content-type': key.endsWith('.webp') ? 'image/webp' : 'application/octet-stream'}});
     }
     const counting = /^\/api\/v1\/library\/get\/([a-z0-9]{10})$/.exec(target.pathname);
-    if (target.host === 'stykanimate.com' && counting) {
+    if (target.host === 'community.invalid' && counting) {
       counted.push(counting[1]);
       const key = target.searchParams.get('k');
-      return bytes[key] ? new Response(null, {status: 302, headers: {location: `https://files.stykanimate.com/${key}`}}) : new Response('gone', {status: 404});
+      return bytes[key] ? new Response(null, {status: 302, headers: {location: `https://files.community.invalid/${key}`}}) : new Response('gone', {status: 404});
     }
     return new Response('missing', {status: 404});
   };
@@ -94,7 +94,7 @@ test('the catalogue is read through the proxy and reused until the site publishe
   assert.equal(origin.calls.filter(call => call.includes('/api/v1/content')).length, 1, 'ten minutes of reuse');
   await library.catalog({refresh: true});
   assert.equal(origin.calls.filter(call => call.includes('/index/')).length, 1, 'an unchanged version is not downloaded again');
-  assert.ok(origin.calls.every(call => /^(stykanimate\.com\/api\/v1\/content|files\.stykanimate\.com\/index\/1\.json)$/.test(call)), 'only the two upstream addresses were used');
+  assert.ok(origin.calls.every(call => /^(community.invalid\/api\/v1\/content|files\.community.invalid\/index\/1\.json)$/.test(call)), 'only the two upstream addresses were used');
   const empty = client({version: 0}); assert.deepEqual((await empty.library.catalog()).items, []);
 });
 
@@ -192,7 +192,7 @@ test('a hostile or broken upstream cannot make the proxy serve anything unexpect
   const page = await handle(new Request(new URL('/community/files/i/aaaaaaaaaa/poster.webp', ORIGIN)), {}, {fetcher: html, cache: undefined});
   assert.equal(page.headers.get('content-type'), 'application/octet-stream');
   // The counting route may only lead to the site's own hosts.
-  for (const location of ['https://evil.example/x.stkz', 'http://files.stykanimate.com/x.stkz', 'https://user:pw@files.stykanimate.com/x.stkz', 'https://stykanimate.com.evil.example/x']) {
+  for (const location of ['https://evil.example/x.stkz', 'http://files.community.invalid/x.stkz', 'https://user:pw@files.community.invalid/x.stkz', 'https://community.invalid.evil.example/x']) {
     const redirect = async () => new Response(null, {status: 302, headers: {location}});
     assert.equal((await handle(new Request(new URL('/community/get/aaaaaaaaaa?k=i/aaaaaaaaaa/item.stkz', ORIGIN)), {}, {fetcher: redirect, cache: undefined})).status, 502, location);
   }

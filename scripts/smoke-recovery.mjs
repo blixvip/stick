@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(appRoot, 'artifacts');
 const packaged = process.argv.includes('--packaged');
-const executablePath = packaged ? process.env.STYK_PACKAGED_EXECUTABLE || path.join(appRoot, 'release', 'win-unpacked', 'StykAnimate.exe') : undefined;
+const executablePath = packaged ? process.env.STYK_PACKAGED_EXECUTABLE || path.join(appRoot, 'release', 'win-unpacked', 'Stick.exe') : undefined;
 const profile = path.join(output, packaged ? 'recovery-packaged-profile' : 'recovery-desktop-profile');
 await mkdir(profile, { recursive: true });
 for (const filename of ['recovery.styk', 'recovery.json']) {

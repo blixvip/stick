@@ -51,10 +51,10 @@ export async function buildBrandAssets() {
     icnsParts.push(header, png);
   }
   const icnsHeader = Buffer.alloc(8); icnsHeader.write('icns'); icnsHeader.writeUInt32BE(8 + icnsParts.reduce((n, b) => n + b.length, 0), 4);
-  await writeFile(path.join(output, 'stykanimate.ico'), Buffer.concat([directory, ...chunks]));
-  await writeFile(path.join(output, 'stykanimate.icns'), Buffer.concat([icnsHeader, ...icnsParts]));
-  await writeFile(path.join(output, 'stykanimate.png'), rendered.get(512).png);
-  await writeFile(path.join(output, 'stykanimate-1024.png'), rendered.get(1024).png);
+  await writeFile(path.join(output, 'stick.ico'), Buffer.concat([directory, ...chunks]));
+  await writeFile(path.join(output, 'stick.icns'), Buffer.concat([icnsHeader, ...icnsParts]));
+  await writeFile(path.join(output, 'stick.png'), rendered.get(512).png);
+  await writeFile(path.join(output, 'stick-1024.png'), rendered.get(1024).png);
   await copyFile(source, path.join(root, 'mark.svg'));
   await copyFile(path.join(root, 'assets/brand/svg/stick-app-icon-dark.svg'), path.join(root, 'symbol.svg'));
   await writeFile(path.join(output, 'brand-manifest.json'), JSON.stringify({source: 'assets/brand/svg/stick-app-icon-dark.svg', sourceSHA256: createHash('sha256').update(svg).digest('hex'), color: '#050507', transparentCorners: true, icoSizes, icnsSizes: [16, 32, 64, 128, 256, 512, 1024]}, null, 2) + '\n');

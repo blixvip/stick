@@ -13,8 +13,8 @@ const linux = { skip: process.platform !== 'linux' };
 async function fixture(t) {
   const directory = await mkdtemp(path.join(os.tmpdir(), 'styk-appimage-test-'));
   t.after(() => rm(directory, { recursive: true, force: true }));
-  const original = path.join(directory, 'My StykAnimate-1.2.0.AppImage');
-  const download = path.join(directory, 'StykAnimate-1.3.0.AppImage');
+  const original = path.join(directory, 'My Stick-1.2.0.AppImage');
+  const download = path.join(directory, 'Stick-1.3.0.AppImage');
   await writeFile(original, 'old app', { mode: 0o755 });
   await writeFile(download, 'verified new app', { mode: 0o600 });
   const relaunches = [];
@@ -71,7 +71,7 @@ test('a versioned AppImage and symlink launcher keep their path after installati
   assert.deepEqual(f.relaunches[0].args, process.argv.slice(1));
   assert.equal(f.relaunches[0].cwd, f.directory);
   assert.equal(f.relaunches[0].detached, true);
-  assert.equal((await readdir(f.directory)).some(name => name.startsWith('.stykanimate-update-')), false);
+  assert.equal((await readdir(f.directory)).some(name => name.startsWith('.stick-update-')), false);
   assert.equal(await readFile(f.download, 'utf8'), 'verified new app', 'The download cache remains available for retry.');
 });
 

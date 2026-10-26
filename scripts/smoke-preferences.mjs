@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(appRoot, 'artifacts');
 const packaged = process.argv.includes('--packaged');
-const executablePath = packaged ? process.env.STYK_PACKAGED_EXECUTABLE || path.join(appRoot, 'release', 'win-unpacked', 'StykAnimate.exe') : undefined;
+const executablePath = packaged ? process.env.STYK_PACKAGED_EXECUTABLE || path.join(appRoot, 'release', 'win-unpacked', 'Stick.exe') : undefined;
 const profile = path.join(output, `${packaged ? 'preferences-packaged' : 'preferences-desktop'}-profile-${Date.now()}`);
 await mkdir(output, { recursive: true });
 const launch = () => electron.launch({ executablePath, args: packaged ? [] : [appRoot], cwd: appRoot, timeout: 45000, env: { ...process.env, STYK_USER_DATA_DIR: profile } });

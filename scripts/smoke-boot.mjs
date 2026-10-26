@@ -18,9 +18,9 @@ import { _electron as electron } from '../tests/support/playwright.mjs';
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const packaged = process.argv.includes('--packaged');
-const unpacked = process.platform === 'win32' ? ['win-unpacked', 'StykAnimate.exe']
-  : process.platform === 'darwin' ? [process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'StykAnimate.app', 'Contents', 'MacOS', 'StykAnimate']
-  : [process.arch === 'arm64' ? 'linux-arm64-unpacked' : 'linux-unpacked', 'stykanimate'];
+const unpacked = process.platform === 'win32' ? ['win-unpacked', 'Stick.exe']
+  : process.platform === 'darwin' ? [process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'Stick.app', 'Contents', 'MacOS', 'Stick']
+  : [process.arch === 'arm64' ? 'linux-arm64-unpacked' : 'linux-unpacked', 'stick'];
 const executablePath = packaged ? process.env.STYK_PACKAGED_EXECUTABLE || path.join(appRoot, 'release', ...unpacked) : undefined;
 
 const profile = await mkdtemp(path.join(os.tmpdir(), 'styk-boot-'));
@@ -46,7 +46,7 @@ try {
     updates: (await window.stykDesktop.getUpdateState()).status,
     title: document.title,
   }));
-  expect('The window opens on the editor', /StykAnimate/.test(facts.title), facts.title);
+  expect('The window opens on the editor', /Stick/.test(facts.title), facts.title);
   expect('The desktop bridge is present and Node is not exposed to the page', facts.desktop && !facts.nodeExposed);
   expect('The bridge reports this platform', facts.platform === process.platform, facts.platform);
   expect('The renderer started', ['WebGPU', 'Canvas 2D fallback'].includes(facts.renderer), facts.renderer);

@@ -15,7 +15,7 @@ const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR
 const WEBP = Buffer.concat([Buffer.from('RIFF'), Buffer.alloc(4), Buffer.from('WEBPVP8 '), Buffer.alloc(16)]);
 const FILE = Buffer.from('native figure bytes');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const SITE = 'https://stykanimate.com', FILES = 'https://files.stykanimate.com', VERSION = 1790667011941, ID = 'fanfan1234';
+const SITE = 'https://community.invalid', FILES = 'https://files.community.invalid', VERSION = 1790667011941, ID = 'fanfan1234';
 const entry = (id, extra = {}) => ({id, k: 'figure', c: 'props', t: 'Folding fan', d: 'A paper fan.', g: ['fan'], a: 'Kim', s: FILE.length, sha256: sha(FILE),
   f: `i/${id}/folding-fan.stkz`, p: null, i: `i/${id}/poster.webp`, w: 500, h: 500, m: '#478480', dl: 0, lk: 0, ft: 0, at: 1, ...extra});
 const index = (items = [entry(ID)]) => ({version: VERSION, downloads: 0, items});
@@ -67,7 +67,7 @@ test('reads the announced index and keeps the items the app can insert', async (
 });
 
 test('reads through the site when it has no file host, and ignores a host that is not its own', async () => {
-  for (const base of [null, 'https://files.example.com', 'http://files.stykanimate.com', 'https://user@files.stykanimate.com']) {
+  for (const base of [null, 'https://files.example.com', 'http://files.community.invalid', 'https://user@files.community.invalid']) {
     const {fetcher, requests} = site({
       [`${SITE}/api/v1/content`]: announce({v: VERSION, base}),
       [`${SITE}/api/v1/library/index/${VERSION}`]: index(),
@@ -76,9 +76,9 @@ test('reads through the site when it has no file host, and ignores a host that i
     const library = new PublicLibrary({fetcher});
     assert.equal((await library.catalog()).items.length, 1, String(base));
     assert.match(await library.preview(ID), /^data:image\/webp;base64,/);
-    assert.deepEqual(requests.map(request => new URL(request.url).host), Array(3).fill('stykanimate.com'), `only the site is contacted (${base})`);
+    assert.deepEqual(requests.map(request => new URL(request.url).host), Array(3).fill('community.invalid'), `only the site is contacted (${base})`);
   }
-  const {fetcher, requests} = site({[`${SITE}/api/v1/content`]: announce({v: VERSION, base: 'https://files.stykanimate.com/'}), [`${FILES}/index/${VERSION}.json`]: index()});
+  const {fetcher, requests} = site({[`${SITE}/api/v1/content`]: announce({v: VERSION, base: 'https://files.community.invalid/'}), [`${FILES}/index/${VERSION}.json`]: index()});
   await new PublicLibrary({fetcher}).catalog();
   assert.equal(requests[1].url, `${FILES}/index/${VERSION}.json`, 'a trailing slash on the file host is harmless');
 });
@@ -203,7 +203,7 @@ test('the download ledger keeps public ids on this device and stays bounded', as
 test('refuses redirects off the site, tampered, oversized and missing files', async () => {
   const route = extra => new PublicLibrary({fetcher: site(healthy(extra)).fetcher});
   await assert.rejects(route({[`${SITE}/api/v1/library/get/${ID}`]: redirectTo('https://evil.example.com/i/x.stkz')}).asset(ID), /unavailable/);
-  await assert.rejects(route({[`${SITE}/api/v1/library/get/${ID}`]: redirectTo(`http://files.stykanimate.com/i/${ID}/folding-fan.stkz`)}).asset(ID), /unavailable/);
+  await assert.rejects(route({[`${SITE}/api/v1/library/get/${ID}`]: redirectTo(`http://files.community.invalid/i/${ID}/folding-fan.stkz`)}).asset(ID), /unavailable/);
   await assert.rejects(route({[`${SITE}/api/v1/library/get/${ID}`]: new Response(FILE)}).asset(ID), /unavailable/, 'an answer that is not a redirect');
   await assert.rejects(route({[`${SITE}/api/v1/library/get/${ID}`]: new Response('{}', {status: 404})}).asset(ID), /no longer/);
   await assert.rejects(route({[`${FILES}/i/${ID}/folding-fan.stkz`]: Buffer.from('native figure bytez')}).asset(ID), /did not match/);

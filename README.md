@@ -270,7 +270,7 @@ Bug reports, ideas, translations and pull requests are welcome. Read [CONTRIBUTI
 
 ## License
 
-Stick is free software under the [GNU General Public License v3.0](LICENSE) or later. It is a modified version of the GPL-licensed StykAnimate project; this notice is kept as the license requires. Bundled third-party components keep their own licenses, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Stick is free software under the [GNU General Public License v3.0](LICENSE) or later. It is a modified version of earlier GPL-licensed software, changed in October 2026; the full change history is in this repository. Bundled third-party components keep their own licenses, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 Stick is an independent project and is not affiliated with or endorsed by Pivot Animator or Stick Nodes; those names describe file compatibility only.
 

@@ -204,7 +204,7 @@ npm run serve        # 或在浏览器中打开编辑器: http://127.0.0.1:47831
 
 ## 许可证
 
-Stick 是基于 [GNU 通用公共许可证 v3.0](../../LICENSE)（或更高版本）发布的自由软件。它是 GPL 许可的 StykAnimate 项目的修改版本，按许可证要求保留此声明。Stick 是独立项目，与 Pivot Animator 和 Stick Nodes 无关联，提及这些名称仅为说明文件兼容性。
+Stick 是基于 [GNU 通用公共许可证 v3.0](../../LICENSE)（或更高版本）发布的自由软件。它是在早期 GPL 软件基础上修改而成（2026 年 10 月修改），完整修改记录见本仓库。Stick 是独立项目，与 Pivot Animator 和 Stick Nodes 无关联，提及这些名称仅为说明文件兼容性。
 
 <p align="center">
   <img src="../../assets/brand/svg/stick-app-icon-dark.svg" alt="Stick" width="72"><br>

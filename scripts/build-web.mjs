@@ -57,7 +57,7 @@ const INSTALL_TAGS = [
   '<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />',
   '<meta name="mobile-web-app-capable" content="yes" />',
   '<meta name="apple-mobile-web-app-capable" content="yes" />',
-  '<meta name="apple-mobile-web-app-title" content="StykAnimate" />',
+  '<meta name="apple-mobile-web-app-title" content="Stick" />',
   // The installed app draws under the status bar; the touch layouts keep their controls inside the safe areas.
   '<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />',
   '<script type="module" src="./src/web-offline.mjs"></script>',
@@ -152,12 +152,12 @@ export async function buildWeb({ root = appRoot, output = path.join(root, 'build
   let bytes = 0, count = 0;
   for await (const file of walk(output)) { bytes += (await stat(file)).size; count++; }
   // No timestamp: the same inputs produce the same site.
-  await writeFile(path.join(output, 'build-info.json'), JSON.stringify({ app: 'StykAnimate', version, pyodide: pyodideVersion, codecFiles: Object.keys(bundle.files).length, offline: precache.version, files: count + 1 }, null, 2) + '\n');
+  await writeFile(path.join(output, 'build-info.json'), JSON.stringify({ app: 'Stick', version, pyodide: pyodideVersion, codecFiles: Object.keys(bundle.files).length, offline: precache.version, files: count + 1 }, null, 2) + '\n');
   return { output, files: count + 1, bytes, version, pyodideVersion };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const result = await buildWeb();
-  console.log(`Built ${result.files} files (${(result.bytes / 1048576).toFixed(1)} MiB) for StykAnimate ${result.version} with Pyodide ${result.pyodideVersion} in ${path.relative(process.cwd(), result.output)}`);
+  console.log(`Built ${result.files} files (${(result.bytes / 1048576).toFixed(1)} MiB) for Stick ${result.version} with Pyodide ${result.pyodideVersion} in ${path.relative(process.cwd(), result.output)}`);
 }
 
