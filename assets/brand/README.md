@@ -1,24 +1,26 @@
-# StykAnimate logos
+# Stick logos
 
-These SVGs are the source of the app's icons. The mark is drawn as smooth vector paths,
-and the wordmark uses outlined Inter lettering (its OFL notice is in `Inter-LICENSE.txt`).
+These SVGs are the source of the app's icons. The mark (code brackets around a running
+stick figure with motion ghosts) is drawn as vector strokes, and the wordmark uses outlined
+Inter Tight Black Italic lettering (its OFL notice is in `Inter-LICENSE.txt`).
 They contain no embedded images, fonts, scripts or network dependencies.
 
-- `symbol-blue`, `symbol-black`, `symbol-white`: the standalone mark on a transparent background.
-- `horizontal-primary`, `horizontal-black`, `horizontal-white`: wide lockups.
-- `stacked-primary`, `stacked-black`, `stacked-white`: the mark centred above the wordmark.
-- `app-icon-blue`, `app-icon-black`, `app-icon-light`: rounded-square app icons.
+- `stick-symbol-white` (with glow), `stick-symbol-black`: the standalone mark on a transparent background.
+- `stick-horizontal-white`, `stick-horizontal-black`: wide lockups.
+- `stick-stacked-white`, `stick-stacked-black`: the mark centred above the wordmark;
+  `stick-stacked-primary` is the white glow lockup on its black square.
+- `stick-app-icon-dark`, `stick-app-icon-light`: rounded-square app icons.
 
-White variants are meant for dark surfaces. Primary colour: #0D99FF. Primary wordmark: #111418.
-The light app icon uses #F5F7FA. Use the symbol alone at small sizes; the wordmark is not
-meant to be read at favicon scale. `preview.svg` is a specimen sheet of every variant.
+Brand colours: black #050507 with glowing white #FFFFFF (glow #C9D6FF); ink #0C0D12 on light
+surfaces; the light app icon uses #F5F7FA. White variants are meant for dark surfaces. Use the
+symbol alone at small sizes; the wordmark is not meant to be read at favicon scale.
 
-`npm run build:brand` rasterizes `svg/stykanimate-app-icon-blue.svg` into the native
-PNG/ICO/ICNS files in `desktop/assets`, copies that tile to the favicon `mark.svg`, and copies
-`svg/stykanimate-symbol-blue.svg` to `symbol.svg`. Packaging runs it automatically, and native
-icons keep their alpha outside the rounded corners.
+`npm run build:brand` rasterizes `svg/stick-app-icon-dark.svg` into the native
+PNG/ICO/ICNS files in `desktop/assets` and copies that tile to the favicon `mark.svg` and the
+in-app `symbol.svg`. Packaging runs it automatically, and native icons keep their alpha outside
+the rounded corners. `node scripts/build-web-icons.mjs` renders the web install icons from `mark.svg`.
 
 `node scripts/verify-brand-assets.mjs --assets-only` checks transparency and size variants.
 Without the flag it also compares a packaged Windows build's icon resources with the generated ICO.
 
-The StykAnimate name and logo identify the official project; see "Trademarks" in the root README.
+The Stick name and logo identify the official project; see "Trademarks" in the root README.

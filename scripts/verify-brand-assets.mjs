@@ -38,8 +38,8 @@ for (let offset = 8; offset < icns.length;) {
 }
 const metadata = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 assert.equal(metadata.build.win.signExecutable, false); assert.notEqual(metadata.build.win.signAndEditExecutable, false);
-assert.equal(await readFile(path.join(root, 'mark.svg'), 'utf8'), await readFile(path.join(root, 'assets/brand/svg/stykanimate-app-icon-blue.svg'), 'utf8'));
-assert.equal(await readFile(path.join(root, 'symbol.svg'), 'utf8'), await readFile(path.join(root, 'assets/brand/svg/stykanimate-symbol-blue.svg'), 'utf8'));
+assert.equal(await readFile(path.join(root, 'mark.svg'), 'utf8'), await readFile(path.join(root, 'assets/brand/svg/stick-app-icon-dark.svg'), 'utf8'));
+assert.equal(await readFile(path.join(root, 'symbol.svg'), 'utf8'), await readFile(path.join(root, 'assets/brand/svg/stick-app-icon-dark.svg'), 'utf8'));
 if (!process.argv.includes('--assets-only')) {
   const output = path.resolve(process.env.STYK_BRAND_BUILD || path.join(root, 'artifacts/rebrand-release'));
   const asar = createRequire(import.meta.url)('@electron/asar');

@@ -1,6 +1,6 @@
 /** Common editor vocabulary. Product copy remains owned by each UI module. */
 export default Object.freeze({
-  'app.name': 'StykAnimate',
+  'app.name': 'Stick',
   'app.untitled': 'Untitled',
   'common.apply': 'Apply',
   'common.cancel': 'Cancel',

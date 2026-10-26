@@ -3,7 +3,7 @@
 .update-copy { display: grid; gap: 7px; }
 .update-copy strong { font-size: 13px; line-height: 1.4; }
 .update-copy span { font-size: 12px; line-height: 1.5; color: var(--theme-secondary, #626c77); }
-.update-notice progress { display: block; width: 100%; height: 6px; margin: 14px 0 0; accent-color: #0d99ff; border: 0; border-radius: 4px; overflow: hidden; }
+.update-notice progress { display: block; width: 100%; height: 6px; margin: 14px 0 0; accent-color:var(--accent-strong); border: 0; border-radius: 4px; overflow: hidden; }
 .update-notice progress::-webkit-progress-bar { background: var(--theme-field, #e9edf2); }
 .update-notice progress::-webkit-progress-value { background: var(--theme-action, #0d99ff); }
 .update-actions { display: flex; gap: 8px; margin-top: 14px; align-items: center; }

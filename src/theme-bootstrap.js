@@ -3,12 +3,12 @@
 (() => {
   const resolveTheme = value => value === 'light' || value === 'dark'
     ? value : (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  let theme = resolveTheme('system'), stored = null;
+  let theme = resolveTheme('dark'), stored = null;
   try {
     stored = JSON.parse(localStorage.getItem('stykanimate.editor.settings.v1') || 'null');
     const saved = localStorage.getItem('stykanimate.theme.v1');
     const value = saved ?? stored?.theme;
-    theme = resolveTheme(value);
+    theme = resolveTheme(value ?? 'dark');
   } catch { /* Follow the system when stored preferences cannot be read. */ }
   document.documentElement.dataset.theme = theme;
   // The touch interface's attributes (src/touch/touch-mode.mjs decides the same way and keeps them current),
@@ -32,7 +32,7 @@
     window.stykInitialEditorSettings = Promise.resolve()
       .then(() => window.stykDesktop.getEditorSettings())
       .then(settings => {
-        const nativeTheme = resolveTheme(settings?.theme);
+        const nativeTheme = resolveTheme(settings?.theme ?? 'dark');
         document.documentElement.dataset.theme = nativeTheme;
         document.querySelector('meta[name="theme-color"]')?.setAttribute('content', nativeTheme === 'dark' ? '#0a0b0f' : '#eceff4');
         return settings;

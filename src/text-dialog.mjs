@@ -51,7 +51,7 @@ dialog.text-authoring-dialog{width:min(880px,calc(100vw - 32px));max-width:880px
 .text-authoring-fields input:disabled{opacity:.55}
 .text-authoring-fields textarea{resize:vertical;min-height:92px;max-height:240px;line-height:1.5}
 .text-authoring-fields input[type=color]{height:30px;padding:3px;cursor:pointer}
-.text-authoring-fields input[type=checkbox]{width:14px;height:14px;margin:0;accent-color:#0d99ff}
+.text-authoring-fields input[type=checkbox]{width:14px;height:14px;margin:0;accent-color:var(--accent-strong)}
 .text-authoring-fields .text-control-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
 .text-authoring-fields .text-control-row.three{grid-template-columns:1fr 1fr 1fr}
 .text-authoring-fields .text-check{display:flex;gap:7px;align-items:center;min-height:30px}

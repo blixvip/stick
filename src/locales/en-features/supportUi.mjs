@@ -1,8 +1,8 @@
 export default Object.freeze({
-  "supportUi.stykanimate": "StykAnimate",
+  "supportUi.stykanimate": "Stick",
   "supportUi.closeWelcomeScreen": "Close welcome screen",
   "supportUi.whatSNewIn": "What’s new in",
-  "supportUi.stykanimate2": "StykAnimate.",
+  "supportUi.stykanimate2": "Stick.",
   "supportUi.releaseVersion": "Release version",
   "supportUi.recentReleases": "Recent releases",
   "supportUi.releaseNotes": "Release notes",
@@ -15,5 +15,5 @@ export default Object.freeze({
   "supportUi.installed2": " · Installed",
   "supportUi.couldnTLoadReleasesTryAgain": "Couldn’t load releases. Try again.",
   "supportUi.couldnTOpenKoFiTryAgain": "Couldn’t open Ko-fi. Try again.",
-  "supportUi.stykanimateVersion": "StykAnimate {version}"
+  "supportUi.stykanimateVersion": "Stick {version}"
 });

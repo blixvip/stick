@@ -70,7 +70,15 @@
     --ink-900: #0c0d12;       /* site --ink, 19.41:1 [paper] */
     --ink-950: #0a0b0f;
 
-    /* Blue - Styk Blue, the one interaction colour */
+    /* Glow - Stick's brand: the logo's glowing white on black. Light theme
+       accents use --ink-900, dark theme accents use --glow-500. */
+    --glow-50: #eef0f4;       /* light selected / soft tint */
+    --glow-100: #e1e4ea;      /* light selected hover */
+    --glow-500: #eef2ff;      /* the glow: accents on dark, 16.6:1 [ink-800] */
+    --glow-850: #2c2f39;      /* dark soft hover */
+    --glow-900: #22242c;      /* dark selected / soft tint */
+
+    /* Blue - functional only: canvas selection marks and the blue layer tag */
     --blue-50: #eaf5ff;       /* site --blue-soft */
     --blue-100: #dcefff;      /* site blue-soft hover */
     --blue-400: #45b0ff;      /* text on dark, 7.66:1 [ink-800] */
@@ -341,8 +349,8 @@
     --surface-well: var(--mist-200);          /* segmented track, soft button */
     --surface-hover: var(--mist-150);
     --surface-pressed: var(--mist-300);
-    --surface-selected: var(--blue-50);
-    --surface-selected-hover: var(--blue-100); /* only --text-1, --text-2, --accent-text-strong on it */
+    --surface-selected: var(--glow-50);
+    --surface-selected-hover: var(--glow-100);
     --surface-inverse: var(--ink-900);        /* toasts, tooltips, range chip */
     --surface-stage: var(--mist-100);         /* the dotted desk around the artboard (the site's canvas) */
     --surface-construction: var(--mist-100);  /* Build: dotted construction desk */
@@ -358,9 +366,9 @@
     --text-placeholder: var(--slate-600);
     --text-inverse: var(--paper);             /* on --surface-inverse, 19.41 */
     --text-inverse-2: rgba(255, 255, 255, 0.68);
-    --text-on-accent: var(--ink-900);         /* on --accent #0d99ff, 6.49 */
-    --text-on-strong: var(--paper);           /* on --accent-strong (#0a8ae6): 3.63, glyphs and bold words only */
-    --text-link: var(--blue-600);
+    --text-on-accent: var(--paper);
+    --text-on-strong: var(--paper);
+    --text-link: var(--ink-900);
 
     /* Lines. line-1..3 are decorative; line-control meets 3:1 for control boundaries */
     --line-1: var(--mist-200);                /* inner hairlines */
@@ -369,23 +377,23 @@
     --line-control: var(--slate-500);         /* checkbox, radio, switch-off: 3.59 [surface] 3.09 [well] */
 
     /* Accent: one blue, four jobs */
-    --accent: var(--blue-500);                /* fills and graphics: playhead, keys, selection marks */
-    --accent-strong: var(--blue-550);         /* vivid fills behind white glyphs: the active tool, switch on, checkbox */
-    --accent-line: var(--blue-550);           /* 1-2px rings: selection outline, focus, drop zones */
-    --accent-text: var(--blue-600);           /* small blue text: 5.11 [surface] 4.63 [selected] */
-    --accent-text-strong: var(--blue-700);    /* blue text on well, pressed and hover tints: 6.00 [well] 5.91 [accent-soft-hover] */
-    --accent-soft: var(--blue-50);
-    --accent-soft-hover: var(--blue-100);
+    --accent: var(--ink-900);
+    --accent-strong: var(--ink-900);
+    --accent-line: var(--ink-900);
+    --accent-text: var(--ink-900);
+    --accent-text-strong: var(--ink-950);
+    --accent-soft: var(--glow-50);
+    --accent-soft-hover: var(--glow-100);
 
     /* Selection */
-    --selection-fill: var(--blue-50);
-    --selection-line: var(--blue-550);
-    --selection-text: var(--blue-600);
+    --selection-fill: var(--glow-50);
+    --selection-line: var(--ink-900);
+    --selection-text: var(--ink-900);
     --text-selection: rgba(13, 153, 255, 0.22); /* ::selection */
 
     /* Focus */
-    --focus-ring: var(--blue-550);            /* outset rings: 3.63 [surface] 3.36 [sunken, field] 3.12 [well] */
-    --inverse-focus: var(--blue-400);         /* ring on --surface-inverse (toasts, range chip): 8.23 */
+    --focus-ring: var(--ink-900);
+    --inverse-focus: var(--glow-500);
     --export-focus: var(--ink-900);           /* ring on the lime export pane: 15.04 */
     --focus-halo: rgba(13, 153, 255, 0.18);   /* field double ring */
 
@@ -406,14 +414,14 @@
     --switch-knob-off: var(--slate-600);
     --switch-knob-on: var(--paper);
     --slider-track: var(--mist-300);
-    --slider-fill: var(--blue-500);
+    --slider-fill: var(--ink-900);
     --slider-thumb: var(--paper);
     --kbd-bg: var(--paper);
     --kbd-line: var(--mist-400);
     --inverse-hover: rgba(255, 255, 255, 0.12);
     --inverse-line: rgba(255, 255, 255, 0.16);
     --inverse-track: rgba(255, 255, 255, 0.16);  /* progress track inside toasts */
-    --inverse-accent: var(--blue-400);         /* 8.23 [inverse] */
+    --inverse-accent: var(--glow-500);
     --inverse-time: var(--violet-300);         /* 7.95 [inverse] */
     --inverse-success: var(--mint-300);        /* 11.03 [inverse] */
     --inverse-danger: var(--red-300);          /* 8.50 [inverse] */
@@ -440,9 +448,9 @@
     /* Concept tints. -fill: dots, chips, bars, key glyphs (graphics).
        -soft: row and chip backgrounds. -ink: small text and icons (>= 4.5:1
        on surface, sunken and its own soft). */
-    --tint-select: var(--blue-500);
-    --tint-select-soft: var(--blue-50);
-    --tint-select-ink: var(--blue-600);       /* 4.63 [soft] */
+    --tint-select: var(--ink-900);
+    --tint-select-soft: var(--glow-50);
+    --tint-select-ink: var(--ink-900);
     --tint-time: var(--violet-500);
     --tint-time-soft: var(--violet-50);
     --tint-time-ink: var(--violet-600);       /* 4.73 [soft] */
@@ -474,7 +482,7 @@
     --hold-line: var(--mint-700);             /* 1px hold-bar edge: 5.08 [surface] */
     --easing-ink: var(--tint-time-ink);
     --easing-soft: var(--tint-time-soft);
-    --badge-accent: var(--blue-600);          /* white text 5.11 */
+    --badge-accent: var(--ink-900);
     --badge-time: var(--violet-600);          /* white text 5.48 */
     --badge-library: var(--mint-700);         /* white text 5.08 */
     --badge-new: var(--orange-700);           /* white text 5.55 */
@@ -507,8 +515,8 @@
     --surface-well: var(--ink-650);
     --surface-hover: var(--ink-600);
     --surface-pressed: var(--ink-550);
-    --surface-selected: var(--blue-900);
-    --surface-selected-hover: var(--blue-850);
+    --surface-selected: var(--glow-900);
+    --surface-selected-hover: var(--glow-850);
     --surface-inverse: var(--mist-100);
     --surface-stage: var(--ink-850);
     --surface-construction: var(--ink-850);
@@ -525,28 +533,28 @@
     --text-inverse-2: rgba(12, 13, 18, 0.64);
     --text-on-accent: var(--ink-900);         /* 6.49 on #0d99ff */
     --text-on-strong: var(--ink-900);         /* dark --accent-strong is #0d99ff: ink, never white */
-    --text-link: var(--blue-400);
+    --text-link: var(--glow-500);
 
     --line-1: var(--ink-650);
     --line-2: var(--ink-550);
     --line-3: var(--ink-500);
     --line-control: var(--slate-550);         /* 4.20 [surface] 3.41 [hover] */
 
-    --accent: var(--blue-500);                /* true brand blue in dark: 6.03 [surface] */
-    --accent-strong: var(--blue-500);
-    --accent-line: var(--blue-500);           /* 4.91 [selected] */
-    --accent-text: var(--blue-400);           /* 7.66 [surface] 6.24 [selected] */
-    --accent-text-strong: var(--blue-400);   /* 5.45 [accent-soft-hover] */
-    --accent-soft: var(--blue-900);
-    --accent-soft-hover: var(--blue-850);
+    --accent: var(--glow-500);
+    --accent-strong: var(--glow-500);
+    --accent-line: var(--glow-500);
+    --accent-text: var(--glow-500);
+    --accent-text-strong: var(--glow-500);
+    --accent-soft: var(--glow-900);
+    --accent-soft-hover: var(--glow-850);
 
-    --selection-fill: var(--blue-900);
-    --selection-line: var(--blue-500);
-    --selection-text: var(--blue-400);
+    --selection-fill: var(--glow-900);
+    --selection-line: var(--glow-500);
+    --selection-text: var(--glow-500);
     --text-selection: rgba(13, 153, 255, 0.34);
 
-    --focus-ring: var(--blue-500);            /* 6.03 [surface] */
-    --inverse-focus: var(--blue-600);         /* ring on the light inverse surface: 4.73 */
+    --focus-ring: var(--glow-500);
+    --inverse-focus: var(--ink-900);
     --export-focus: var(--ink-900);
     --focus-halo: rgba(13, 153, 255, 0.28);
 
@@ -565,14 +573,14 @@
     --switch-knob-off: var(--slate-450);
     --switch-knob-on: var(--ink-900);
     --slider-track: var(--ink-550);
-    --slider-fill: var(--blue-500);
+    --slider-fill: var(--glow-500);
     --slider-thumb: var(--mist-200);
     --kbd-bg: var(--ink-650);
     --kbd-line: var(--ink-500);
     --inverse-hover: rgba(12, 13, 18, 0.08);
     --inverse-line: rgba(12, 13, 18, 0.14);
     --inverse-track: var(--ink-900);           /* lime fill stays visible on the light toast */
-    --inverse-accent: var(--blue-600);         /* 4.73 [mist-100] */
+    --inverse-accent: var(--ink-900);
     --inverse-time: var(--violet-600);         /* 5.07 [mist-100] */
     --inverse-success: var(--mint-700);        /* 4.70 [mist-100] */
     --inverse-danger: var(--red-700);          /* 6.05 [mist-100] */
@@ -595,9 +603,9 @@
     --success-dot: var(--mint-500);
     --neutral-dot: var(--slate-450);
 
-    --tint-select: var(--blue-500);
-    --tint-select-soft: var(--blue-900);
-    --tint-select-ink: var(--blue-400);       /* 6.24 [soft] */
+    --tint-select: var(--glow-500);
+    --tint-select-soft: var(--glow-900);
+    --tint-select-ink: var(--glow-500);
     --tint-time: var(--violet-500);
     --tint-time-soft: var(--violet-900);
     --tint-time-ink: var(--violet-300);       /* 6.44 [soft]. Never #7c5cff/#6a47f5 as text on dark */
@@ -620,7 +628,7 @@
 
     --hold: var(--slate-550);                 /* 4.20 [surface] */
     --hold-line: var(--mint-500);
-    --badge-accent: var(--blue-600);
+    --badge-accent: var(--ink-500);
     --badge-time: var(--violet-600);
     --badge-library: var(--mint-700);
     --badge-new: var(--orange-700);
@@ -664,7 +672,7 @@
     --preview-dark-surface: var(--ink-750);
     --preview-dark-stage: var(--ink-850);
     --preview-dark-line: var(--ink-500);
-    --preview-accent: var(--blue-500);
+    --preview-accent: var(--glow-500);
   }
 
   /* ------------------------------------------------------------------------
@@ -689,10 +697,10 @@
     --sheet-line: var(--mist-200);
     --sheet-ink: var(--ink-900);              /* key fill without a layer colour */
     --sheet-muted: var(--slate-600);          /* ruler numerals: 5.25 */
-    --sheet-accent: var(--blue-550);          /* keys, tween lines, range outline: 3.63 on white */
-    --sheet-selected: var(--blue-50);
+    --sheet-accent: var(--ink-900);
+    --sheet-selected: var(--glow-50);
     --sheet-span: var(--mist-400);            /* a hold's thin line */
-    --sheet-tween: var(--blue-100);           /* tween span */
+    --sheet-tween: var(--glow-100);
     --sheet-camera-accent: var(--gold-500);   /* the camera's colour everywhere (its section badge, the stage frame) */
     --sheet-camera-tint: var(--gold-50);
     --sheet-layer: var(--blue-500);           /* keys of a layer without a colour of its own */
@@ -702,7 +710,7 @@
     --sheet-scene-tint: var(--violet-50);
     /* Camera motions by type (the Motion row's pills, the collapsed Camera ribbon, the Motion tab's icons); gold stays
      * the camera's own colour. The pills tint the surface with 20% of these, so they serve light and dark alike. */
-    --sheet-motion-follow: var(--blue-500);
+    --sheet-motion-follow: var(--ink-900);
     --sheet-motion-shake: var(--orange-500);
     --sheet-motion-impact: var(--rose-500);
     --sheet-motion-handheld: var(--teal-500);
@@ -714,11 +722,11 @@
     --sheet-cell-tween: rgba(124, 92, 255, 0.3);  /* a tween's bar: time's violet */
     --sheet-cell-divider: var(--paper);       /* the 1px seams that count frames inside a bar */
     --sheet-cell-blank: var(--slate-400);     /* a blank span's dashed outline */
-    --sheet-cell-selected: rgba(13, 153, 255, 0.32);  /* the selected frames' wash, over the bars */
+    --sheet-cell-selected: rgba(12, 13, 18, 0.18);  /* the selected frames' wash, over the bars */
     --sheet-hatch: rgba(12, 13, 18, 0.05);
     --sheet-end: var(--slate-500);            /* the end line: 3.59 [paper] */
-    --sheet-playhead: var(--blue-550);        /* 1.5px line needs 3:1: 3.63 on white */
-    --sheet-playhead-tab: var(--blue-600);    /* the playhead tab fill */
+    --sheet-playhead: var(--ink-900);
+    --sheet-playhead-tab: var(--ink-900);
     --sheet-playhead-ink: var(--paper);       /* white numerals on the tab: 5.11 */
     --sheet-cel: var(--mist-100);             /* drawing cels and effect clips: neutral blocks, the keys carry the colour */
     --sheet-cel-line: var(--mist-400);
@@ -764,10 +772,10 @@
     --sheet-line: var(--ink-650);
     --sheet-ink: var(--mist-200);
     --sheet-muted: var(--slate-450);          /* 6.02 */
-    --sheet-accent: var(--blue-500);
-    --sheet-selected: var(--blue-900);
+    --sheet-accent: var(--glow-500);
+    --sheet-selected: var(--glow-900);
     --sheet-span: var(--ink-500);
-    --sheet-tween: var(--blue-850);
+    --sheet-tween: var(--glow-850);
     --sheet-camera-accent: var(--gold-500);
     --sheet-camera-tint: var(--gold-900);
     --sheet-layer: var(--blue-500);
@@ -780,12 +788,12 @@
     --sheet-cell-tween: rgba(124, 92, 255, 0.5);
     --sheet-cell-divider: var(--ink-700);
     --sheet-cell-blank: var(--ink-400);
-    --sheet-cell-selected: rgba(13, 153, 255, 0.42);
+    --sheet-cell-selected: rgba(238, 242, 255, 0.26);
     --sheet-hatch: rgba(255, 255, 255, 0.04);
     --sheet-end: var(--slate-450);
-    --sheet-playhead: var(--blue-500);
-    --sheet-playhead-tab: var(--blue-600);
-    --sheet-playhead-ink: var(--paper);       /* 5.11 */
+    --sheet-playhead: var(--glow-500);
+    --sheet-playhead-tab: var(--glow-500);
+    --sheet-playhead-ink: var(--ink-900);
     --sheet-cel: var(--ink-700);
     --sheet-cel-line: var(--ink-500);
     --sheet-easing: var(--violet-300);

@@ -1,13 +1,13 @@
 /** Import notices are UI copy; persisted recovery records retain their original diagnostics. */
 export default Object.freeze({
   "importNotes.sourceTiming": "Stored poses are imported with source FPS, delays and available tween settings; exact Stick Nodes solvers/effects are not reproduced.",
-  "importNotes.constraints": "Constrained source poses are preserved as editable StykAnimate joints; native constraint dynamics are not simulated.",
+  "importNotes.constraints": "Constrained source poses are preserved as editable Stick joints; native constraint dynamics are not simulated.",
   "importNotes.legacyBackgroundFit": "The embedded legacy background is retained as a native image background; its original fit settings may differ.",
   "importNotes.textGlyphs": "Unavailable font glyphs use question-mark placeholders; the original text is preserved in asset metadata.",
   "importNotes.textFont": "Text remains editable with bundled Noto Sans outlines; the original Stick Nodes font metrics may differ.",
   "importNotes.spriteDistortion": "Sprite corner distortion is retained in import metadata; the imported sprite uses its affine transform.",
   "importNotes.effects": "Some Stick Nodes GPU effects differ; source effect settings remain recorded in import metadata.",
-  "importNotes.joinOffsets": "Offset attachments keep their stored poses. Reattach them with StykAnimate joints to author new attachment motion.",
+  "importNotes.joinOffsets": "Offset attachments keep their stored poses. Reattach them with Stick joints to author new attachment motion.",
   "importNotes.cameraDynamics": "Camera position, zoom and rotation are imported; procedural wobble and tracking bindings are retained as metadata.",
   "importNotes.repeats": "Source repeat-loop settings are retained; native repeat-loop control flow is not expanded during import.",
   "importNotes.externalAudio": {

@@ -4004,7 +4004,7 @@ async function performNativeSave({saveAs}) {
               documentToken,
               saveAs,
               defaultPath: `${name || "Untitled"}.styk`,
-              filters: [{ name: "StykAnimate project", extensions: ["styk"] }],
+              filters: [{ name: "Stick project", extensions: ["styk"] }],
             });
         if (desktop) return exportFlow.saveBlob(blob, `${name || "Untitled"}.styk`, signal);
         if (sink.streamed) {
@@ -6217,7 +6217,7 @@ async function changeFigureLayer(label, operation, {labelKey} = {}) {
     dialogShown = true;
     showDialog(
       label,
-      `<p id="layer-progress-label" data-i18n="app.preservingAnimation">${messageHTML("app.preservingAnimation", {})}</p><progress id="layer-progress" style="width:100%;accent-color:#0d99ff"></progress><div class="dialog-actions"><button class="button" id="cancel-layer-change" data-i18n="common.cancel">${messageHTML("app.cancel", {})}</button></div>`,
+      `<p id="layer-progress-label" data-i18n="app.preservingAnimation">${messageHTML("app.preservingAnimation", {})}</p><progress id="layer-progress" style="width:100%;accent-color:var(--accent-strong)"></progress><div class="dialog-actions"><button class="button" id="cancel-layer-change" data-i18n="common.cancel">${messageHTML("app.cancel", {})}</button></div>`,
       {titleKey: labelKey},
     );
     progressElement = $("layer-progress");
@@ -6296,7 +6296,7 @@ async function performClipboardOperation(kind, execute) {
     }
     showDialog(
       labels[kind] || interfaceText("app.updatingFrames"),
-      `<progress id="clipboard-progress" style="width:100%;accent-color:#0d99ff"></progress><div class="dialog-actions"><button class="button" id="cancel-clipboard" data-i18n="common.cancel">${messageHTML("app.cancel", {})}</button></div>`,
+      `<progress id="clipboard-progress" style="width:100%;accent-color:var(--accent-strong)"></progress><div class="dialog-actions"><button class="button" id="cancel-clipboard" data-i18n="common.cancel">${messageHTML("app.cancel", {})}</button></div>`,
       {titleKey: ({copy: "app.copyingFrames", cut: "app.cuttingFrames", paste: "app.pastingFrames"})[kind] ?? "app.updatingFrames"},
     );
     progressElement = $("clipboard-progress");

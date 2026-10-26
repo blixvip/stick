@@ -1,7 +1,7 @@
 export default Object.freeze({
   "home.home": "Home",
   "home.untitled": "Untitled animation",
-  "home.welcome": "Welcome to StykAnimate",
+  "home.welcome": "Welcome to Stick",
   "home.welcomeBack": "Welcome back",
   "home.ledeFirst": "Start a new animation, or take the two-minute tour first.",
   "home.lede": "Pick up a project, start something new or learn a new trick.",

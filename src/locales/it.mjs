@@ -1,6 +1,6 @@
 /** Independently written Italian common controls; not a complete app translation. */
 export default Object.freeze({
-  'app.name': 'StykAnimate',
+  'app.name': 'Stick',
   'app.untitled': 'Senza titolo',
   'common.apply': 'Applica',
   'common.cancel': 'Annulla',

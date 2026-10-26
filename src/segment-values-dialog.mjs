@@ -32,7 +32,7 @@ dialog.segment-values-dialog{width:min(380px,calc(100vw - 32px));max-width:380px
 .segment-values-fields input{background:transparent;flex:1;width:0;font:12px inherit;border:0;outline:none;padding:8px 0;appearance:textfield;text-align:right}
 .segment-values-fields small{font-size:10px;color:var(--theme-muted, #999);min-width:17px;text-align:right}
 .segment-values-relative{display:flex;gap:7px;align-items:center;font-size:11px;margin:15px 0 8px}
-.segment-values-relative input{accent-color:#0d99ff;margin:0}
+.segment-values-relative input{accent-color:var(--accent-strong);margin:0}
 .segment-values-help{font-size:10px!important;line-height:1.5;margin:0 0 15px}
 .segment-values-clipboard-tools{display:flex;gap:7px}.segment-values-clipboard-tools .button{flex:1;font-size:11px;justify-content:center}
 .segment-values-dialog .form-error{font-size:11px;margin:10px 0 0;line-height:1.4}

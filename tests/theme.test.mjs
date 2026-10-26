@@ -44,7 +44,7 @@ test('Browser bootstrap restores the saved appearance without waiting for module
     assert.equal(meta.content,'#0a0b0f');
   }
   for (const values of [{},new Error('Storage denied'),{'stykanimate.editor.settings.v1':'invalid'}])
-    assert.equal(boot(values).dataset.theme,'light');
+    assert.equal(boot(values).dataset.theme,'dark');
 });
 
 test('Native preferences win on a new backend origin before revealing the workspace', async () => {
@@ -66,7 +66,7 @@ test('Native preferences win on a new backend origin before revealing the worksp
 test('A native preference read failure cannot leave the workspace hidden', async () => {
   const result=boot({}, () => {throw new Error('IPC unavailable');});
   assert.equal(await result.window.stykInitialEditorSettings,undefined);
-  assert.equal(result.dataset.theme,'light');
+  assert.equal(result.dataset.theme,'dark');
   assert.ok(!('themePending' in result.dataset));
 });
 
@@ -96,7 +96,7 @@ test('Colours painted before the stylesheets load match the brand window colour'
   assert.equal(resolve(new Map(), '--surface-prepaint'), darkField, 'the desktop editor is hidden on the dark window colour');
   for (const file of ['src/theme-bootstrap.js', 'src/theme.mjs'])
     assert.ok(source(file).includes(`'${darkField}' : '${lightField}'`), `${file} uses the brand theme colours`);
-  assert.ok(source('index.html').includes(`<meta name="theme-color" content="${lightField}"`), 'index.html starts light');
+  assert.ok(source('index.html').includes(`<meta name="theme-color" content="${darkField}"`), 'index.html starts dark, the brand default');
   assert.ok(source('desktop/main.cjs').includes(`backgroundColor: '${darkField}'`), 'the desktop window stays dark until settings load');
 });
 

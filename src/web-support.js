@@ -21,14 +21,14 @@
     box.style.cssText = 'font:16px/1.5 system-ui,sans-serif;max-width:34rem;margin:12vh auto;padding:0 1.5rem;color:#1b2230';
     const title = document.createElement('h1');
     title.style.cssText = 'font-size:1.4rem;margin:0 0 .75rem';
-    title.textContent = 'StykAnimate needs a newer browser';
+    title.textContent = 'Stick needs a newer browser';
     const why = document.createElement('p');
     why.textContent = `This browser is missing ${missing.join(', ')}.`;
     const what = document.createElement('p');
     what.textContent = 'Open this page in a current Chrome, Edge, Firefox or Safari (16.4 or later), or download the desktop app from stykanimate.com.';
     box.append(title, why, what);
     document.body.replaceChildren(box);
-    document.title = 'StykAnimate — browser not supported';
+    document.title = 'Stick — browser not supported';
   };
   if (document.body) show(); else document.addEventListener('DOMContentLoaded', show);
   // Let a test or the console see why.

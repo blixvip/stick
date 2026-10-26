@@ -20,7 +20,7 @@ import { normalizeFingerDraw, normalizeTouchSetting } from './touch/touch-mode.m
 export const EDITOR_SETTINGS_KEY = "stykanimate.editor.settings.v1";
 export const DEFAULT_EDITOR_SETTINGS = Object.freeze({
   locale: "en",
-  theme: "system",
+  theme: "dark",
   uiScale: 100,
   // Automatic follows the screen (ui-scale.mjs autoUIScale); moving the slider makes it Custom.
   uiScaleMode: "auto",

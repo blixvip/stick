@@ -83,7 +83,7 @@ const TEXT = Object.freeze({
   'settings.shortcutsLede': 'Click a shortcut to record a new one. A command can have up to four.',
   'settings.feedbackLede': 'Found a bug or have an idea? Reports go privately to the developer, and replies show up right here in the app.',
   'settings.panelLayoutsNote': 'Put every panel back where it started.',
-  'settings.donateNote': 'StykAnimate is free. Help keep it that way.',
+  'settings.donateNote': 'Stick is free. Help keep it that way.',
   'settings.constructionColorShort': 'Background color',
   'settings.autosaveNote': 'How often unsaved work is kept, so it can be recovered after a crash.',
   'settings.gesture.barrel': 'Barrel button',
@@ -117,12 +117,12 @@ const TEXT = Object.freeze({
   'shortcuts.edit': 'Edit shortcuts…',
   'shortcuts.empty': 'No shortcuts match “{query}”.',
   'shortcuts.or': 'or',
-  'about.title': 'About StykAnimate',
+  'about.title': 'About Stick',
   'about.version': 'Version {version}',
   'about.web': 'Web version',
   'about.tagline': 'Stick figure animation, made simple.',
   'about.whatsNew': 'What’s new',
-  'about.website': 'StykAnimate website',
+  'about.website': 'Stick website',
   'about.support': 'Support development',
 });
 

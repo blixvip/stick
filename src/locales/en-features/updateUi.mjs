@@ -6,7 +6,7 @@ export default Object.freeze({
   "updateUi.theUpdateCouldNotBeCompletedPleaseTry": "The update could not be completed. Please try again.",
   "updateUi.checkingForUpdates": "Checking for updates…",
   "updateUi.restartToInstallTheUpdateYouCanSave": "Restart to install the update. You can save your work first.",
-  "updateUi.restartingStykanimate": "Restarting StykAnimate…",
+  "updateUi.restartingStykanimate": "Restarting Stick…",
   "updateUi.installingTheDownloadedUpdate": "Installing the downloaded update.",
   "updateUi.youReUpToDate": "You’re up to date",
   "updateUi.automaticUpdates": "Automatic updates",

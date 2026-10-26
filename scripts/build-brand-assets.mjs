@@ -9,7 +9,7 @@ const root = path.resolve(import.meta.dirname, '..');
 let initialized;
 export async function buildBrandAssets() {
   await (initialized ||= initWasm(await readFile(path.join(root, 'vendor/resvg/index_bg.wasm'))));
-  const source = path.join(root, 'assets/brand/svg/stykanimate-app-icon-blue.svg');
+  const source = path.join(root, 'assets/brand/svg/stick-app-icon-dark.svg');
   const svg = await readFile(source, 'utf8');
   const output = path.join(root, 'desktop/assets');
   await mkdir(output, {recursive: true});
@@ -56,8 +56,8 @@ export async function buildBrandAssets() {
   await writeFile(path.join(output, 'stykanimate.png'), rendered.get(512).png);
   await writeFile(path.join(output, 'stykanimate-1024.png'), rendered.get(1024).png);
   await copyFile(source, path.join(root, 'mark.svg'));
-  await copyFile(path.join(root, 'assets/brand/svg/stykanimate-symbol-blue.svg'), path.join(root, 'symbol.svg'));
-  await writeFile(path.join(output, 'brand-manifest.json'), JSON.stringify({source: 'assets/brand/svg/stykanimate-app-icon-blue.svg', sourceSHA256: createHash('sha256').update(svg).digest('hex'), color: '#0D99FF', transparentCorners: true, icoSizes, icnsSizes: [16, 32, 64, 128, 256, 512, 1024]}, null, 2) + '\n');
-  console.log(`Generated Gesture PNG, ICO (${icoSizes.join(', ')}px), and ICNS; transparent alpha verified.`);
+  await copyFile(path.join(root, 'assets/brand/svg/stick-app-icon-dark.svg'), path.join(root, 'symbol.svg'));
+  await writeFile(path.join(output, 'brand-manifest.json'), JSON.stringify({source: 'assets/brand/svg/stick-app-icon-dark.svg', sourceSHA256: createHash('sha256').update(svg).digest('hex'), color: '#050507', transparentCorners: true, icoSizes, icnsSizes: [16, 32, 64, 128, 256, 512, 1024]}, null, 2) + '\n');
+  console.log(`Generated Stick PNG, ICO (${icoSizes.join(', ')}px), and ICNS; transparent alpha verified.`);
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) await buildBrandAssets();

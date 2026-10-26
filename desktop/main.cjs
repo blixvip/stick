@@ -736,7 +736,7 @@ function registerIpc() {
     documentState = { name, dirty, revision: String(state?.revision || '').slice(0, 160), unsaved,
       unsavedName: String(state?.unsavedName || name).slice(0, 180) };
     // The title names the project in front; its dot is that project's own.
-    window.setTitle(`${(state?.activeDirty ?? dirty) ? '• ' : ''}${name} — StykAnimate`);
+    window.setTitle(`${(state?.activeDirty ?? dirty) ? '• ' : ''}${name} — Stick`);
     window.setDocumentEdited(dirty);
   });
 }
@@ -757,7 +757,7 @@ async function createWindow() {
   window = new BrowserWindow({
     width: 1560, height: 1000, minWidth: 1000, minHeight: 680,
     backgroundColor: '#0a0b0f', show: false,
-    title: 'StykAnimate',
+    title: 'Stick',
     icon: path.join(__dirname, 'assets', 'stykanimate.png'),
     frame: process.platform === 'darwin',
     ...(process.platform === 'darwin' ? { titleBarStyle: 'hidden', trafficLightPosition: { x: 14, y: 16 } } : {}),
