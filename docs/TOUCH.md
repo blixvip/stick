@@ -1,6 +1,6 @@
 # The touch interface (phones and tablets)
 
-StykAnimate has a second interface for fingers and pens. It is the same editor with the
+Stick has a second interface for fingers and pens. It is the same editor with the
 same document, commands, panels, undo history, renderer, workers and file formats, laid
 out and operated differently. Nothing about a project depends on which interface edited it.
 
@@ -47,7 +47,7 @@ needs.
 └──────────────────────────────────────────────────────────┘
 ```
 
-- The top band becomes a two-column wing on the right: the StykAnimate menu over the three
+- The top band becomes a two-column wing on the right: the Stick menu over the three
   workspaces, Export over Undo, Redo and Properties; a session's Done, Test rig or Cancel take
   whole rows under them. The document's name and Save are in the menu (File).
 - The tools float on the stage's left, in two columns where one does not fit.
@@ -229,7 +229,7 @@ before pinching; a pen that is down or used in the last 700 ms rejects touches f
 - On a phone every dialog fills the window, Settings included, with its actions at the bottom.
 - On touch a dialog that is not about typing opens with focus on itself, so the keyboard does
   not cover half of it until a field is tapped; prompts (Rename, Save as) still take the caret.
-- The StykAnimate menu lists File, Edit, View, the workspace's menu and Help as submenus and
+- The Stick menu lists File, Edit, View, the workspace's menu and Help as submenus and
   starts with *Search commands…*, which reaches every command a key reaches.
 - The stage header folds its view toggles into one View menu on a phone.
 

@@ -17,7 +17,7 @@ The editor is its own Cloudflare Worker, `stykanimate-app` (`web/wrangler.jsonc`
 from the public site's Worker (`stykanimate`), so the two deploy and roll back independently.
 Cloudflare serves the built files; the Worker script (`web/worker.js`) runs only for
 `/community/*` (see [The community library window](#the-community-library-window)).
-It is served at `https://app.stykanimate.com` (a custom domain on the site's zone) and at
+It can be served on your own custom domain (the `routes` entry in `web/wrangler.jsonc`) and at
 `stykanimate-app.<account>.workers.dev`.
 
 ```bash
@@ -157,7 +157,7 @@ indexes and requires the same answers.
 
 ## The community library window
 
-The site's API sends no CORS headers, so a browser on `app.stykanimate.com` cannot read it.
+The site's API sends no CORS headers, so a browser on the editor's domain cannot read it.
 Rather than loosen the production site, the editor asks its own origin and `web/worker.js` passes
 on exactly three shapes of request, GET only, and refuses everything else:
 

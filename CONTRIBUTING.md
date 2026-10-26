@@ -1,12 +1,12 @@
-# Contributing to StykAnimate
+# Contributing to Stick
 
-Thanks for helping make StykAnimate better. This guide covers how to report problems, suggest ideas and send changes.
+Thanks for helping make Stick better. This guide covers how to report problems, suggest ideas and send changes.
 
 ## Ask, report or suggest
 
-- **Questions and showing your work:** the [StykAnimate Discord](https://discord.gg/WTssQKBaJp).
-- **Bugs:** open a [bug report](https://github.com/filippocalippo/StykAnimate-App/issues/new?template=bug_report.yml). Include your StykAnimate version, operating system (or browser), the steps to reproduce, and what you expected. A small `.styk` or `.piv` file that shows the problem helps a lot; only share files you are allowed to share.
-- **Ideas:** open a [feature request](https://github.com/filippocalippo/StykAnimate-App/issues/new?template=feature_request.yml) describing the problem you want solved, not only the solution.
+- **Questions and showing your work:** [GitHub Discussions](https://github.com/blixvip/stick/discussions).
+- **Bugs:** open a [bug report](https://github.com/blixvip/stick/issues/new?template=bug_report.yml). Include your Stick version, operating system (or browser), the steps to reproduce, and what you expected. A small `.styk` or `.piv` file that shows the problem helps a lot; only share files you are allowed to share.
+- **Ideas:** open a [feature request](https://github.com/blixvip/stick/issues/new?template=feature_request.yml) describing the problem you want solved, not only the solution.
 - **Security problems:** never in a public issue; see [SECURITY.md](SECURITY.md).
 
 ## Development setup
@@ -48,4 +48,4 @@ Interface strings live in `src/locales/`. See [docs/TRANSLATING.md](docs/TRANSLA
 
 ## License of contributions
 
-StykAnimate is licensed under the [GNU GPL, version 3 or later](LICENSE). By submitting a contribution, you agree that it is licensed under the same terms, and you confirm you have the right to submit it. Don't include code, artwork, figures, fonts or sounds you don't have the rights to share under the GPL.
+Stick is licensed under the [GNU GPL, version 3 or later](LICENSE). By submitting a contribution, you agree that it is licensed under the same terms, and you confirm you have the right to submit it. Don't include code, artwork, figures, fonts or sounds you don't have the rights to share under the GPL.

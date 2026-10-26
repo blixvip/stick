@@ -6,7 +6,7 @@ Integration correction: retain A and Shift+A as the existing Add Frame and Exten
 
 ## 1. Goal and scope
 
-Add responsive raster drawing and frame-by-frame animation to StykAnimate's existing document, exposure sheet, history, renderer, saving, and export paths. Drawings and stick figures must coexist with independent timing. Users should recognize the distinction between extending a drawing, copying it into a new key, and starting a blank drawing.
+Add responsive raster drawing and frame-by-frame animation to Stick's existing document, exposure sheet, history, renderer, saving, and export paths. Drawings and stick figures must coexist with independent timing. Users should recognize the distinction between extending a drawing, copying it into a new key, and starting a blank drawing.
 
 The target is excellent painting with familiar animation timing. This is not a promise of Adobe Animate vector-editing parity: raster strokes do not retain selectable vector paths, arbitrary-resolution scaling, or shape tweening.
 

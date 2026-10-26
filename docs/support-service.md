@@ -193,7 +193,7 @@ backlogged. Never enable public access or another writer on the dedicated R2 buc
 ## Source and API
 
 The service itself (the Worker that owns authorization, admission, validation and
-workflows, its D1 migrations and the admin UI) lives in the StykAnimate website
+workflows, its D1 migrations and the admin UI) lives in the Stick website
 repository. `src/support-contract.mjs`, `src/support-center.mjs` and
 `src/support-center.css` in this repository are canonical; the website copies them into
 its public assets. Do not edit those copies by hand.

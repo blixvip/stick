@@ -1,4 +1,4 @@
-# StykAnimate profiling and analytics
+# Stick profiling and analytics
 
 The desktop collector, Cloudflare service and private dashboard use one versioned allowlist: `src/telemetry-schema.mjs`. There are no third-party analytics SDKs, session replay, advertising identifiers or paid analytics subscriptions.
 
@@ -102,7 +102,7 @@ Cumulative uploads cannot undo the reset. Schema 3 clients receive the current g
 
 First run shows a compact Accept/Reject prompt. Accept explicitly enables both optional categories; Reject leaves both off. Expanded details offer independent choices and the full notice. Closing the prompt leaves collection off. Controls are available in Preferences → Privacy & diagnostics and Help → Privacy & diagnostics.
 
-Reports exclude animation contents, document and asset names, paths, text, clipboard contents, keys, pointer coordinates, screenshots, recordings and raw exception messages. The publisher name is StykAnimate; contact is ale.ripreso@gmail.com, as requested. Linked reports are retained30days, feedback90days, and thresholded identifier-free daily statistics up to365days. The local private deletion token authenticates requests and is excluded from JSON previews/exports. Withdrawal stops future collection; deletion also erases retained linked data and rotates the identity. The notice distinguishes hosting-provider network processing from application analytics storage.
+Reports exclude animation contents, document and asset names, paths, text, clipboard contents, keys, pointer coordinates, screenshots, recordings and raw exception messages. The publisher name is Stick; the contact is the issue tracker at https://github.com/blixvip/stick/issues. Collection is off in this repository until a service origin is set in `desktop/service-config.json`. Linked reports are retained30days, feedback90days, and thresholded identifier-free daily statistics up to365days. The local private deletion token authenticates requests and is excluded from JSON previews/exports. Withdrawal stops future collection; deletion also erases retained linked data and rotates the identity. The notice distinguishes hosting-provider network processing from application analytics storage.
 
 This implements technical consent and data controls. Whether a trade name alone sufficiently identifies the controller, age-related requirements, and the publisher’s specific legal obligations depend on how the beta is offered; code cannot certify legal compliance. Relevant references: [EDPB consent guidance](https://www.edpb.europa.eu/documents/guideline/guidelines-052020-on-consent-under-regulation-2016679_en), [Cloudflare DPA](https://www.cloudflare.com/cloudflare-customer-dpa/), [Cloudflare privacy policy](https://www.cloudflare.com/privacypolicy/).
 
@@ -116,7 +116,7 @@ Preferences → Privacy & diagnostics → details → performance trace records3
 
 The download page reads the validated release manifest. Publish a current, tested installer/portable artifact on a suitable download host and supply HTTPS URL, version, size and SHA-256 in `LATEST_RELEASE_JSON`. Then regenerate and deploy the public API assets together with the Worker. Until a release is configured, the download page honestly shows that the beta is not yet published. Existing Windows installers are larger than Cloudflare’s25MiB static-asset limit; they must use a separate release/download host.
 
-The production origin is https://stykanimate.com, with www.stykanimate.com bound to the same Worker. The private dashboard is /admin/. Its login key is never bundled into the app or public assets.
+The service origin is `siteUrl` in `desktop/service-config.json`; it is empty by default, which keeps telemetry local. The private dashboard is /admin/. Its login key is never bundled into the app or public assets.
 
 ## Verification
 

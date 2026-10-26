@@ -1,6 +1,6 @@
 # Installed Windows AVI codecs
 
-StykAnimate's Windows AVI bridge uses genuine installed Video for Windows compressors. This is a separate provider from the bundled FFmpeg AVI presets. Pivot's equivalent is **Windows AVI → Compress**, which opens codec-specific settings for codecs installed under Windows. [Pivot 5.2 Video manual](https://pivotanimator.net/help5-2/video.htm).
+Stick's Windows AVI bridge uses genuine installed Video for Windows compressors. This is a separate provider from the bundled FFmpeg AVI presets. Pivot's equivalent is **Windows AVI → Compress**, which opens codec-specific settings for codecs installed under Windows. [Pivot 5.2 Video manual](https://pivotanimator.net/help5-2/video.htm).
 
 ## Platform and codec selection
 

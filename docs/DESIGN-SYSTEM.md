@@ -1,7 +1,7 @@
 # Design system
 
 `src/styles/tokens.css` defines the editor chrome's visual language once: the
-StykAnimate brand colours for the light and dark themes, type, spacing, radius,
+Stick brand colours for the light and dark themes, type, spacing, radius,
 control sizes, elevation and motion. `src/styles/legacy-bridge.css` points the
 older token names at it, so every surface uses the brand palette before it is
 rebuilt. The shared legacy components (buttons, segmented controls, switches,

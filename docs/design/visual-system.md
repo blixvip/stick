@@ -1,6 +1,6 @@
-# StykAnimate visual system (revision 4.3, "Simple at a glance, powerful underneath")
+# Stick visual system (revision 4.3, "Simple at a glance, powerful underneath")
 
-The visual system for the StykAnimate redesign. Revision 4 keeps the Islands backbone and the brand (the StykAnimate site: white and mist, Inter Tight and Inter, an ink pill primary, one Styk blue, concept colours used sparingly) and encodes both of the owner's standards: **clean, easy to use and beautiful to look at in every way, never overwhelming, at home at first glance**, and **"simple to use but super powerful … all the functionality we have now and room for even more"**. Revision 3 reached calm by hiding; revision 4 reaches it through **structure**, so that everything used often can stay visible without the window feeling crowded.
+The visual system for the Stick redesign. Revision 4 keeps the Islands backbone and the brand (the Stick site: white and mist, Inter Tight and Inter, an ink pill primary, one Styk blue, concept colours used sparingly) and encodes both of the owner's standards: **clean, easy to use and beautiful to look at in every way, never overwhelming, at home at first glance**, and **"simple to use but super powerful … all the functionality we have now and room for even more"**. Revision 3 reached calm by hiding; revision 4 reaches it through **structure**, so that everything used often can stay visible without the window feeling crowded.
 
 | File | What it is |
 |---|---|

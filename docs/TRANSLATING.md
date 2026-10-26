@@ -1,4 +1,4 @@
-# Translating StykAnimate
+# Translating Stick
 
 Each language owns one `src/locales/packs/<BCP-47 ID>.json` file. Its `locale`
 metadata contains `id`, English `name`, `nativeName`, `direction` (`ltr` or `rtl`),

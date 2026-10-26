@@ -1,4 +1,4 @@
-# StykAnimate components (revision 4.3, "Simple at a glance, powerful underneath")
+# Stick components (revision 4.3, "Simple at a glance, powerful underneath")
 
 The complete component vocabulary. Every component below is implemented in `design/app-ui/components.css` (the app splits it into `src/styles/components/`) and rendered in the component gallery (`gallery.html`, internal design material, not in the repository); the reference editor (`design/app-ui/reference/`) composes them. Tokens and rules come from `visual-system.md`; the calm rules (one shadow at rest, no keycaps at rest, dots-only accents, one ink primary, quiet sections, quiet view toggles) are enforced by the components themselves, so a feature cannot break them without writing new CSS.
 
@@ -213,7 +213,7 @@ A 28px white pill (`--surface-raised`, `--lift`), pill radius, 13/500 `--text-2`
 
 ### Menubar `.ui-menubar`
 
-`<nav class="ui-menubar" role="menubar"><button class="ui-menubar-item" role="menuitem" data-app-menu="file" aria-haspopup="menu"><u>F</u>ile</button>…</nav>`: File, Edit, View, Animation (Figure in Build), Help as quiet 28px text items (13/500 `--text-2`, hover `--surface-hover`), **docked at every width down to the minimal tier** (revision 4.1), as today. Access keys are underlined only while Alt is down (`:root[data-alt]`). At the minimal tier it folds into the mark (the StykAnimate menu gains the five as submenus) and Alt shows it in place of the document name, as an overlay. Every item keeps `data-app-menu`.
+`<nav class="ui-menubar" role="menubar"><button class="ui-menubar-item" role="menuitem" data-app-menu="file" aria-haspopup="menu"><u>F</u>ile</button>…</nav>`: File, Edit, View, Animation (Figure in Build), Help as quiet 28px text items (13/500 `--text-2`, hover `--surface-hover`), **docked at every width down to the minimal tier** (revision 4.1), as today. Access keys are underlined only while Alt is down (`:root[data-alt]`). At the minimal tier it folds into the mark (the Stick menu gains the five as submenus) and Alt shows it in place of the document name, as an overlay. Every item keeps `data-app-menu`.
 
 ### Tool options bar `.ui-optbar`
 

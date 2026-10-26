@@ -1,6 +1,6 @@
-# StykAnimate animation tools research
+# Stick animation tools research
 
-StykAnimate’s strongest next direction is faster character posing and motion refinement. The current source already has many of the foundational features that a generic animation roadmap would recommend. The opportunity is to connect those foundations into tools that reduce repeated pose editing while keeping the animator in control.
+Stick’s strongest next direction is faster character posing and motion refinement. The current source already has many of the foundational features that a generic animation roadmap would recommend. The opportunity is to connect those foundations into tools that reduce repeated pose editing while keeping the animator in control.
 
 The recommended first package is **pose assets, selected-limb pose blending, and named character controls**. Follow it with **contact editing and motion adjustments across a range**. Reusable actions and secondary motion become more valuable after those foundations are established.
 
@@ -27,19 +27,19 @@ Absence claims below mean that a dedicated feature was not identified in the ins
 
 **Lessons from comparable applications**
 
-Pivot’s inbetweening workflow already separates compact authored frames from generated output frames, with an explicit operation to materialize the generated frames. StykAnimate already has substantial corresponding functionality. The next gain should come from controlling selected parts of the pose and revising motion without unnecessary materialization. [Pivot: adding inbetween frames](https://w.pivotanimator.net/help5-2/adding_inbetween_frames_to_the_timeline.htm).
+Pivot’s inbetweening workflow already separates compact authored frames from generated output frames, with an explicit operation to materialize the generated frames. Stick already has substantial corresponding functionality. The next gain should come from controlling selected parts of the pose and revising motion without unnecessary materialization. [Pivot: adding inbetween frames](https://w.pivotanimator.net/help5-2/adding_inbetween_frames_to_the_timeline.htm).
 
 Blender documents a family of pose tools—pose library, breakdown, blend to neighbor, push/relax, copying, and propagation. Spine similarly provides a Favor slider for intermediate poses. The useful lesson is that interpolation is also an interactive authoring operation, rather than solely an automatic transition between keys. [Blender: editing bone poses](https://docs.blender.org/manual/en/4.5/animation/armatures/posing/editing/index.html), [Spine: Graph](https://esotericsoftware.com/spine-graph).
 
-Spine’s dopesheet supports scaling selected key timing and adjusting multiple selected key values relatively. This is particularly relevant when an animator likes an action but wants its timing or amplitude changed. StykAnimate has range operations already; a refinement tool should add joint-level control and temporal weighting. [Spine: Dopesheet](https://esotericsoftware.com/spine-dopesheet).
+Spine’s dopesheet supports scaling selected key timing and adjusting multiple selected key values relatively. This is particularly relevant when an animator likes an action but wants its timing or amplitude changed. Stick has range operations already; a refinement tool should add joint-level control and temporal weighting. [Spine: Dopesheet](https://esotericsoftware.com/spine-dopesheet).
 
-Spine describes IK targets for hands and feet, and transform constraints for cases such as equipping or throwing objects. Those are task-oriented precedents for a contact workflow on top of StykAnimate’s existing pins and joins. [Spine: IK constraints](https://us.esotericsoftware.com/spine-ik-constraints), [Spine: Transform constraints](https://esotericsoftware.com/spine-transform-constraints).
+Spine describes IK targets for hands and feet, and transform constraints for cases such as equipping or throwing objects. Those are task-oriented precedents for a contact workflow on top of Stick’s existing pins and joins. [Spine: IK constraints](https://us.esotericsoftware.com/spine-ik-constraints), [Spine: Transform constraints](https://esotericsoftware.com/spine-transform-constraints).
 
 Moho documents relative animation transfer between similar skeletons and Smart Bones that drive authored changes. Its export documentation also describes reusable walk, run, idle, and jump actions. These provide useful precedents for motion reuse and user-authored controls, while leaving rig compatibility as an explicit requirement. [Moho: Features](https://moho.lostmarble.com/pages/features), [Moho: actions in the 14.4 exporter](https://moho.lostmarble.com/blogs/news/free-update-export-to-video-game-engines-with-the-moho-14-4-side-quest).
 
 Harmony’s Shift and Trace temporarily repositions reference drawings without modifying the animation. Spine’s ghost offset can help reveal sliding feet in cycles. Better comparison tools can improve posing without introducing a new animation evaluator. [Harmony 25: Shift and Trace](https://docs.toonboom.com/help/harmony-25/advanced/paperless-animation/about-shift-trace.html), [Spine: Ghosting](https://esotericsoftware.com/spine-ghosting).
 
-The current Stick Nodes developer page emphasizes quick controls, selection fixes, sample projects, and onboarding alongside features such as sprite distortion. This supports including tool accessibility in competitive analysis, but does not establish that any particular feature is demanded by StykAnimate users. [Stick Nodes: current developer updates](https://sticknodes.com/).
+The current Stick Nodes developer page emphasizes quick controls, selection fixes, sample projects, and onboarding alongside features such as sprite distortion. This supports including tool accessibility in competitive analysis, but does not establish that any particular feature is demanded by Stick users. [Stick Nodes: current developer updates](https://sticknodes.com/).
 
 **Priorities**
 
@@ -68,13 +68,13 @@ The first version should support the same rig definition and selected branches. 
 
 This differs from inserting a saved figure or movieclip, which the app can already do. A saved guard pose should update the fighter already in the scene. Cross-character transfer comes later, after explicit semantic mapping exists.
 
-Acceptance example: save a right-arm guard, apply it to the same rig on another frame, and verify the legs, root, colors, joins, and figure identity remain unchanged. Undo and save/reopen must preserve the result. The pose library concept is established in Blender’s posing toolset; the proposed StykAnimate behavior is a product design recommendation. [Blender: editing bone poses](https://docs.blender.org/manual/en/4.5/animation/armatures/posing/editing/index.html).
+Acceptance example: save a right-arm guard, apply it to the same rig on another frame, and verify the legs, root, colors, joins, and figure identity remain unchanged. Undo and save/reopen must preserve the result. The pose library concept is established in Blender’s posing toolset; the proposed Stick behavior is a product design recommendation. [Blender: editing bone poses](https://docs.blender.org/manual/en/4.5/animation/armatures/posing/editing/index.html).
 
 **2. Live selected-limb blending, push and relax**
 
 At an existing frame, select an arm and drag toward the preceding or following pose. A second mode exaggerates or relaxes the current deviation from the interpolated pose. For a punch, the torso could be most of the way into its turn while the arm still trails behind. This creates overlapping action without manually reconstructing every joint.
 
-StykAnimate’s current Insert Inbetween dialog already offers a 0–100% ratio. The new capability is selection scope, immediate canvas feedback, editing the pose at the current time, and optional extrapolation. It should reuse the established pose interpolation and IK semantics rather than interpolate raw arrays independently.
+Stick’s current Insert Inbetween dialog already offers a 0–100% ratio. The new capability is selection scope, immediate canvas feedback, editing the pose at the current time, and optional extrapolation. It should reuse the established pose interpolation and IK semantics rather than interpolate raw arrays independently.
 
 The initial version writes an ordinary layer pose key containing the selectively changed values. It does not require a new property timeline. Preserve angular wrapping, bend behavior, unselected figures, and pin targets. Clearly distinguish changing a held key from inserting a new key inside its exposure. [Spine: Favor and blend controls](https://esotericsoftware.com/spine-graph), [Blender: In-Betweens](https://docs.blender.org/manual/en/latest/animation/in_betweens.html).
 
@@ -84,7 +84,7 @@ Allow an animator to identify hips, chest, head, hands and feet, then save usefu
 
 A small character control view can expose configured IK targets, bend-side shortcuts, and select-body-part actions. This makes existing functionality faster to reach and creates a reusable foundation for pose mirroring and later action transfer. Do not require anatomical labels for non-humanoid figures.
 
-Add “mirror pose to opposite limb” only after left/right mappings are known. Existing whole-figure and branch flips are different operations. Named controls are a proposed StykAnimate design, not evidence of a missing solver.
+Add “mirror pose to opposite limb” only after left/right mappings are known. Existing whole-figure and branch flips are different operations. Named controls are a proposed Stick design, not evidence of a missing solver.
 
 **4. Contact ranges and pin/release tools**
 
@@ -130,7 +130,7 @@ Cycle editing can later include matching first/last poses, phase-shifting an arm
 
 Delay a head turn by two frames relative to the torso, or let an arm overshoot and settle. Start with a bounded authoring command that samples a selected branch at an offset time and writes editable keys. This is easier to reason about than continuous physics.
 
-A later spring tool could assist hair, tails, scarves or accessories. It must produce the same result when playing, scrubbing backward, reopening, and exporting. Spine’s documentation explicitly describes the computational cost of deterministic physics replay. StykAnimate should use bounded worker preparation and explicit baking or checkpoints rather than unbounded replay during every seek. [Spine: Physics constraints](https://esotericsoftware.com/spine-physics-constraints).
+A later spring tool could assist hair, tails, scarves or accessories. It must produce the same result when playing, scrubbing backward, reopening, and exporting. Spine’s documentation explicitly describes the computational cost of deterministic physics replay. Stick should use bounded worker preparation and explicit baking or checkpoints rather than unbounded replay during every seek. [Spine: Physics constraints](https://esotericsoftware.com/spine-physics-constraints).
 
 **10. Matched attach/release transitions**
 
@@ -150,11 +150,11 @@ Treat moving-target IK and attachment changes as related but distinct capabiliti
 | Editable walk-cycle starter | Generate a small set of contact/down/passing/up poses from mapped limbs | After mappings and contacts; preserve manual editing |
 | Smear and impact helpers | Create editable transient shapes or poses over a short selected range | Later action package, using the existing VFX/movieclip infrastructure where appropriate |
 
-Moho’s Smart Bones provide a precedent for user-authored controls. Harmony offers a thumbnail-based drawing substitution view. The proposed StykAnimate versions should remain narrow and preserve the project’s editable figure semantics. [Moho: Features](https://moho.lostmarble.com/pages/features), [Harmony 25: Drawing substitutions](https://docs.toonboom.com/help/harmony-25/essentials/cut-out-animation/swap-drawing-picker-view.html).
+Moho’s Smart Bones provide a precedent for user-authored controls. Harmony offers a thumbnail-based drawing substitution view. The proposed Stick versions should remain narrow and preserve the project’s editable figure semantics. [Moho: Features](https://moho.lostmarble.com/pages/features), [Harmony 25: Drawing substitutions](https://docs.toonboom.com/help/harmony-25/essentials/cut-out-animation/swap-drawing-picker-view.html).
 
 **Work to defer**
 
-A full character graph editor deserves a separate decision. StykAnimate already exposes easing and stores animation infrastructure, but a graph that edits independent limb values may conflict with the present whole-layer key model. Read-only value/speed plots or better easing controls are smaller steps. A graph is most compelling if experienced animators repeatedly need precise numerical curve edits that canvas tools cannot provide.
+A full character graph editor deserves a separate decision. Stick already exposes easing and stores animation infrastructure, but a graph that edits independent limb values may conflict with the present whole-layer key model. Read-only value/speed plots or better easing controls are smaller steps. A graph is most compelling if experienced animators repeatedly need precise numerical curve edits that canvas tools cannot provide.
 
 Full-body physics, automatic motion capture, general image-to-animation generation, and unconstrained retargeting should follow clearer evidence of demand. These introduce larger correctness and editing burdens. Generative output is particularly less useful when it cannot preserve the selected rig’s topology, contacts, timing and editable motion. No remote processing should be assumed for this local application.
 

@@ -1,7 +1,7 @@
-# StykAnimate native files
+# Stick native files
 
 Save and Save As write `.styk` projects. File → Save figure, or Export →
-Project → StykAnimate figure, writes a `.stkz` of the selected figure at
+Project → Stick figure, writes a `.stkz` of the selected figure at
 the current tick. Opening a `.stkz` adds it to the current animation and keeps
 the project's save destination. Pivot `.piv` and `.stk` import/export remains
 available.

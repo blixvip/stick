@@ -37,7 +37,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at ale.ripreso@gmail.com, or privately to a moderator on the [StykAnimate Discord](https://discord.gg/WTssQKBaJp). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement through GitHub's [private reporting](https://github.com/blixvip/stick/security/advisories/new) or by opening an issue at https://github.com/blixvip/stick/issues. All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident.
 

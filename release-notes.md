@@ -1,4 +1,4 @@
-# StykAnimate 1.2.5
+# Stick 1.2.5
 
 Layer folders, camera follow and smoother editing
 
@@ -60,8 +60,6 @@ Layer folders, camera follow and smoother editing
 - Quicker preparation for playback and exports.
 - APNG and PNG sequence exports use less memory.
 
-Free to create. Powered by your support.
-
-StykAnimate is completely free. If it helps bring your ideas to life, a donation helps keep development moving. [Support development on Ko-fi](https://ko-fi.com/Q5Q41WY7QC).
+Stick is completely free. If it helps you, [star Stick on GitHub](https://github.com/blixvip/stick) so more animators find it.
 
 Install the **Setup** version for automatic updates. Portable copies require manual updates.

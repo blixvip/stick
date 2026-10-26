@@ -618,6 +618,6 @@ comparisons. Measurements above record the earlier connector work.
 Stick Nodes' [connector update](https://sticknodes.com/new-version-4-2-0-the-connector-joint-update/)
 establishes two-anchor connectors and their middle attachment joint. Its
 [Smart Stretch update](https://sticknodes.com/new-version-2-4-8-the-one-stretchy-boi-update/comment-page-5/)
-describes deformation of attached parts. StykAnimate uses its own native dependency
+describes deformation of attached parts. Stick uses its own native dependency
 model and one-action setup, with explicit rigid exceptions and Ctrl-to-stretch
 posing as requested.

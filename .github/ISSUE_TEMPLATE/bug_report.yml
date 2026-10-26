@@ -21,7 +21,7 @@ body:
         - Windows (Setup)
         - Windows (Portable)
         - Linux (AppImage)
-        - Browser (app.stykanimate.com)
+        - Browser (web build)
         - Built from source
     validations:
       required: true

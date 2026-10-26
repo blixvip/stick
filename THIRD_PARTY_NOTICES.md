@@ -1,6 +1,6 @@
 # Third-party notices
 
-StykAnimate is licensed under the GNU GPL, version 3 or later (see [LICENSE](LICENSE)). It includes or distributes the following third-party components under their own licenses. Each license text is kept next to the component.
+Stick is licensed under the GNU GPL, version 3 or later (see [LICENSE](LICENSE)). It includes or distributes the following third-party components under their own licenses. Each license text is kept next to the component.
 
 ## Included in this repository
 
@@ -27,4 +27,4 @@ npm dependencies are listed with their licenses in [package-lock.json](package-l
 
 ## Compatibility
 
-Pivot Animator and Stick Nodes are the property of their respective owners. StykAnimate reads and writes their file formats for interoperability and is not affiliated with or endorsed by them.
+Pivot Animator and Stick Nodes are the property of their respective owners. Stick reads and writes their file formats for interoperability and is not affiliated with or endorsed by them.

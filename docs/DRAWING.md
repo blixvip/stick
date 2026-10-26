@@ -1,4 +1,4 @@
-# Drawing in StykAnimate
+# Drawing in Stick
 
 Draw is a workspace preset in the existing editor. It uses the studio tool rail,
 Properties inspector, theme, exposure sheet, clipboard, history and exporters.
@@ -175,7 +175,7 @@ includes the source tiles and selection's full pixel-to-world affine pose, so
 pastes preserve position, rotation and mirroring across different cel poses
 without rasterizing the copy and filtering it again on paste. Older dense PNG
 packets, including ones with only a world origin, remain readable. New sparse
-packets require a current StykAnimate version at the destination. Aligned copies and
+packets require a current Stick version at the destination. Aligned copies and
 right-angle rotations/reflections preserve exact nonzero-alpha RGBA. Scaling
 and transformed selections use a shared worker rasterizer. Paste compositing, fill and tile history run in the
 drawing worker.

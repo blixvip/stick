@@ -57,6 +57,6 @@ Measure completion time, corrections, undo count and pointer travel for three re
 
 ## Design precedents
 
-Krita exposes snapping to nodes, orthogonal alignments, extensions and intersections. These are useful precedents for construction targets; the proposed StykAnimate ranking, hysteresis and equal-length snapping are our design extensions. [Krita snapping documentation](https://docs.krita.org/en/user_manual/snapping.html).
+Krita exposes snapping to nodes, orthogonal alignments, extensions and intersections. These are useful precedents for construction targets; the proposed Stick ranking, hysteresis and equal-length snapping are our design extensions. [Krita snapping documentation](https://docs.krita.org/en/user_manual/snapping.html).
 
-Blender’s armature Symmetrize mirrors selected bones using naming conventions. The proposal here goes further with persistent explicit pair metadata and a live preview; it is not a claim that StykAnimate already has that feature. [Blender Symmetrize documentation](https://docs.blender.org/manual/en/4.4/animation/armatures/bones/editing/symmetrize.html).
+Blender’s armature Symmetrize mirrors selected bones using naming conventions. The proposal here goes further with persistent explicit pair metadata and a live preview; it is not a claim that Stick already has that feature. [Blender Symmetrize documentation](https://docs.blender.org/manual/en/4.4/animation/armatures/bones/editing/symmetrize.html).

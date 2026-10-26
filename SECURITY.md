@@ -2,14 +2,13 @@
 
 ## Supported versions
 
-Security fixes go into the latest release. The desktop app updates itself, and the browser version at [app.stykanimate.com](https://app.stykanimate.com) always runs the latest build.
+Security fixes go into the latest release. The desktop app updates itself.
 
 ## Reporting a vulnerability
 
-Please report security problems privately, never in a public issue or on Discord.
+Please report security problems privately, never in a public issue.
 
-- **Preferred:** use GitHub's [private vulnerability reporting](https://github.com/filippocalippo/StykAnimate-App/security/advisories/new).
-- **Or email** ale.ripreso@gmail.com with "StykAnimate security" in the subject.
+- **Preferred:** use GitHub's [private vulnerability reporting](https://github.com/blixvip/stick/security/advisories/new).
 
 Include the version and platform, what an attacker could do, and the steps or a file that reproduces it. You can expect an acknowledgement within a week. Please give us a reasonable chance to fix the problem before you disclose it publicly. We will credit you in the release notes if you'd like.
 
@@ -22,4 +21,3 @@ In scope:
 - **Updates:** the update path and installers.
 - **The browser build:** its service worker.
 
-The website and community library service at stykanimate.com are maintained separately; report problems with them to the same address.

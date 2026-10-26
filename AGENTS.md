@@ -1,6 +1,6 @@
-# StykAnimate agent guide
+# Stick agent guide
 
-StykAnimate is a local stick animation program built on sound architecture and good performance. Preserve editable animation semantics, reliable saving, responsive interaction, and bounded memory as the software grows.
+Stick is a local stick animation program built on sound architecture and good performance. Preserve editable animation semantics, reliable saving, responsive interaction, and bounded memory as the software grows.
 
 ## Working agreement
 

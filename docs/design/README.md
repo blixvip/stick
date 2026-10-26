@@ -1,6 +1,6 @@
-# StykAnimate redesign spec (revision 4.3, "Simple at a glance, powerful underneath")
+# Stick redesign spec (revision 4.3, "Simple at a glance, powerful underneath")
 
-The redesign of the StykAnimate editor: the Islands backbone and the brand (white and mist, Inter Tight and Inter, an ink pill primary, one Styk blue, concept colours used sparingly), with **every function of today's app kept at most as many clicks away (3 low-frequency trades documented) and no high- or medium-frequency function less visible than today, counted per function and clip-aware, at 1440×900, at the window sizes people use and from inside the sessions, frequent commands visible where you work, and calm through structure rather than absence**. Core systems (document model, editor commands, renderer, IK default, file formats, IPC) are untouched.
+The redesign of the Stick editor: the Islands backbone and the brand (white and mist, Inter Tight and Inter, an ink pill primary, one Styk blue, concept colours used sparingly), with **every function of today's app kept at most as many clicks away (3 low-frequency trades documented) and no high- or medium-frequency function less visible than today, counted per function and clip-aware, at 1440×900, at the window sizes people use and from inside the sessions, frequent commands visible where you work, and calm through structure rather than absence**. Core systems (document model, editor commands, renderer, IK default, file formats, IPC) are untouched.
 
 ## In this repository
 

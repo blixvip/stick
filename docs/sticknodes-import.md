@@ -1,7 +1,7 @@
-# Stick Nodes import in StykAnimate
+# Stick Nodes import in Stick
 
 Implemented and verified on 10 September 2026. The importer converts supported
-Stick Nodes assets into editable native StykAnimate documents and movie clips.
+Stick Nodes assets into editable native Stick documents and movie clips.
 It does not promise identical output from every Stick Nodes version or reproduce
 all of the original application's procedural behavior.
 
@@ -17,7 +17,7 @@ Use Open, drag a file onto the workspace, or use the desktop Open dialog.
 | `.zip` | Lists supported assets in the archive; selecting an entry imports it using the same path. |
 
 Select a clip and use **Edit movieclip** to edit its contents. **Done** returns to
-the parent scene. Clip instances use the existing StykAnimate playback engine,
+the parent scene. Clip instances use the existing Stick playback engine,
 including independent source FPS, saved frame offsets, single-frame, hold and
 loop playback. Editing a definition updates its instances; the importer does not
 expand every instance into a separate copy of its animation.

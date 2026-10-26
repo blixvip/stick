@@ -1,6 +1,6 @@
 # Stick Nodes rigging study
 
-Studied 2026-09-13 to improve StykAnimate's native rigging. This is a behavioral
+Studied 2026-09-13 to improve Stick's native rigging. This is a behavioral
 study and an independent implementation, not a claim of full Stick Nodes compatibility.
 
 ## Evidence inspected
@@ -56,10 +56,10 @@ the perpendicular component. Reconstruct its length and angle. For example,
 times its neutral size. An exponential influence gives different results.
 
 The APK contains small nonzero numerical clamps and mutable pose traversal.
-StykAnimate instead evaluates a bounded, deterministic pose from native channels
+Stick instead evaluates a bounded, deterministic pose from native channels
 for every frame. Zero and negative deformation do not depend on the previous frame.
 
-## StykAnimate changes
+## Stick changes
 
 - Enabling Smart Stretch sets up the current branch in one history command and
   includes parts drawn later. It does not require users to set two extra flags

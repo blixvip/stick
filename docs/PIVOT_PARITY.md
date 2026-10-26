@@ -45,7 +45,7 @@ verified on 2026-09-08:
 `2c7911d3303cc28de2ac016c3f7575082aa47680e63a0fe8930ce8799de3df98`.
 The [official Pivot 5.2 manual](https://pivotanimator.net/help5-2/index.htm)
 and the feature pages linked below were inspected on the same date. The earlier
-StykAnimate contract supplied additional
+Stick contract supplied additional
 edge cases; its Windows-native architecture is not the architecture requested here.
 
 ## Preserve the animation philosophy
@@ -108,7 +108,7 @@ silently simplifying imported animation is not.
   **Progress:** edited PIVs, including source-bearing projects with newly authored
   text, reopen in the supplied decoder. Original Pivot reopen and the complete
   user-facing migration workflow are not signed off.
-- [ ] F06 Save/reopen native StykAnimate projects with timing, assets, editing
+- [ ] F06 Save/reopen native Stick projects with timing, assets, editing
   metadata, organization, and constraints when present; do not depend on cache URLs.
   **Progress:** The [22 Advanced app checks](../artifacts/advanced-track-app.json) retain
   sparse layer/Camera/Scene channels, independent poses and blank keys through

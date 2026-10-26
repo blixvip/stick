@@ -22,7 +22,7 @@ a user usability study.
   the existing time axis. One scroll area, ruler, zoom and playhead keep the
   relationship between sound and poses visible.
 
-Those sources motivate the direction; the following details are StykAnimate
+Those sources motivate the direction; the following details are Stick
 design decisions rather than claims established by the sources:
 
 - Simple swaps its filmstrip area for an Audio tab, retaining the transport and

@@ -4746,7 +4746,7 @@
     "locations": [
       "index.html:211"
     ],
-    "context": "<div id=\"canvas-empty\" hidden data-i18n=\"chrome.dropAStykAnimatePivotOrStickNodesFileHere\">Drop a StykAnimate, Pivot or Stick Nodes file here</div>"
+    "context": "<div id=\"canvas-empty\" hidden data-i18n=\"chrome.dropAStykAnimatePivotOrStickNodesFileHere\">Drop a Stick, Pivot or Stick Nodes file here</div>"
   },
   "chrome.duplicateBranch": {
     "locations": [
@@ -8252,7 +8252,7 @@
   "desktop.main.errors.invalidAttachment": {
     "locations": [
       "desktop/main.cjs:310",
-      "desktop/support.cjs:23"
+      "desktop/support.cjs:24"
     ],
     "context": "if (!/^[a-f0-9]{32}$/.test(value?.threadId || '') || !/^[a-f0-9]{32}$/.test(value?.fileId || '')) throw messageError(new Error(''), 'desktop.main.errors.invalid"
   },
@@ -8843,13 +8843,13 @@
   },
   "desktop.releaseHistory.errors.invalidReleaseHistory": {
     "locations": [
-      "desktop/release-history.cjs:30"
+      "desktop/release-history.cjs:32"
     ],
     "context": "if (!Array.isArray(value.releases)) throw messageError(new Error(''), 'desktop.releaseHistory.errors.invalidReleaseHistory', {});"
   },
   "desktop.releaseHistory.errors.noReleaseHistoryAvailable": {
     "locations": [
-      "desktop/release-history.cjs:37"
+      "desktop/release-history.cjs:39"
     ],
     "context": "if (!releases.length) throw messageError(new Error(''), 'desktop.releaseHistory.errors.noReleaseHistoryAvailable', {});"
   },
@@ -8922,105 +8922,105 @@
   },
   "desktop.support.errors.draftsAreTooLarge": {
     "locations": [
-      "desktop/support.cjs:68"
+      "desktop/support.cjs:69"
     ],
     "context": "if (Buffer.byteLength(JSON.stringify(saved)) > 384 * 1024) throw messageError(new Error(''), 'desktop.support.errors.draftsAreTooLarge', {});"
   },
   "desktop.support.errors.invalidConversation": {
     "locations": [
-      "desktop/support.cjs:55"
+      "desktop/support.cjs:56"
     ],
     "context": "if (value.lastThread && !/^[a-f0-9]{32}$/.test(value.lastThread)) throw messageError(new Error(''), 'desktop.support.errors.invalidConversation', {});"
   },
   "desktop.support.errors.invalidConversation2": {
     "locations": [
-      "desktop/support.cjs:82"
+      "desktop/support.cjs:83"
     ],
     "context": "if (!/^[a-f0-9]{32}$/.test(id || '')) throw messageError(new Error(''), 'desktop.support.errors.invalidConversation2', {});"
   },
   "desktop.support.errors.invalidDraft": {
     "locations": [
-      "desktop/support.cjs:60"
+      "desktop/support.cjs:61"
     ],
     "context": "if (id !== 'create' && !/^[a-f0-9]{32}$/.test(id) || !draft || typeof draft !== 'object' || Array.isArray(draft)) throw messageError(new Error(''), 'desktop.sup"
   },
   "desktop.support.errors.invalidDraftField": {
     "locations": [
-      "desktop/support.cjs:63"
+      "desktop/support.cjs:64"
     ],
     "context": "if (!Object.hasOwn(fields, key) || typeof text !== 'string' || text.length > fields[key]) throw messageError(new Error(''), 'desktop.support.errors.invalidDraft"
   },
   "desktop.support.errors.invalidLiveEndpoint": {
     "locations": [
-      "desktop/support.cjs:89"
+      "desktop/support.cjs:90"
     ],
     "context": "if (url.origin !== this.siteUrl || url.pathname !== '/api/v1/support/live') throw messageError(new Error(''), 'desktop.support.errors.invalidLiveEndpoint', {});"
   },
   "desktop.support.errors.invalidSupportOperation": {
     "locations": [
-      "desktop/support.cjs:20"
+      "desktop/support.cjs:21"
     ],
     "context": "if (!valid) throw messageError(new Error(''), 'desktop.support.errors.invalidSupportOperation', {});"
   },
   "desktop.support.errors.invalidSupportQuery": {
     "locations": [
-      "desktop/support.cjs:21"
+      "desktop/support.cjs:22"
     ],
     "context": "for (const [key, item] of url.searchParams) if (!['after','before','cursor','message','upload'].includes(key) || !/^[a-z0-9.-]{0,90}$/.test(item)) throw message"
   },
   "desktop.support.errors.invalidSupportRequest": {
     "locations": [
-      "desktop/support.cjs:14",
-      "desktop/support.cjs:16"
+      "desktop/support.cjs:15",
+      "desktop/support.cjs:17"
     ],
     "context": "if (!value || typeof value !== 'object') throw messageError(new Error(''), 'desktop.support.errors.invalidSupportRequest', {});"
   },
   "desktop.support.errors.invalidSupportRoute": {
     "locations": [
-      "desktop/support.cjs:18"
+      "desktop/support.cjs:19"
     ],
     "context": "if (url.origin !== 'https://support.invalid' || url.hash || !/^\\/(?:config|threads(?:\\/[a-f0-9]{32}(?:\\/(?:messages|seen|files|live)(?:\\/[a-f0-9]{32})?)?)?)$/.t"
   },
   "desktop.support.errors.invalidSupportServiceOrigin": {
     "locations": [
-      "desktop/support.cjs:10"
+      "desktop/support.cjs:11"
     ],
     "context": "if (url.username || url.password || url.pathname !== '/' || url.search || url.hash || !(url.protocol === 'https:' || development && url.protocol === 'http:' && "
   },
   "desktop.support.errors.invalidSupportState": {
     "locations": [
-      "desktop/support.cjs:54"
+      "desktop/support.cjs:55"
     ],
     "context": "if (!value || value.inboxId !== this.inboxId() || !value.drafts || typeof value.drafts !== 'object' || Array.isArray(value.drafts)) throw messageError(new Error"
   },
   "desktop.support.errors.pleaseWaitForTheCurrentSupportRequest": {
     "locations": [
-      "desktop/support.cjs:100"
+      "desktop/support.cjs:101"
     ],
     "context": "if (this.inflight >= 2 || upload && this.uploading) throw messageError(new Error(''), 'desktop.support.errors.pleaseWaitForTheCurrentSupportRequest', {});"
   },
   "desktop.support.errors.supportMessageIsTooLarge": {
     "locations": [
-      "desktop/support.cjs:24"
+      "desktop/support.cjs:25"
     ],
     "context": "else if (value.body != null && Buffer.byteLength(JSON.stringify(value.body)) > 40000) throw messageError(new Error(''), 'desktop.support.errors.supportMessageIs"
   },
   "desktop.support.errors.supportResponseIsTooLarge": {
     "locations": [
-      "desktop/support.cjs:28",
-      "desktop/support.cjs:31"
+      "desktop/support.cjs:29",
+      "desktop/support.cjs:32"
     ],
     "context": "if (Number(response.headers.get('content-length') || 0) > max) throw messageError(new Error(''), 'desktop.support.errors.supportResponseIsTooLarge', {});"
   },
   "desktop.support.errors.thePrivateInboxCannotBeChangedRightNow": {
     "locations": [
-      "desktop/support.cjs:77"
+      "desktop/support.cjs:78"
     ],
     "context": "if (!/^[a-f0-9]{64}$/.test(key || '') || this.inflight) throw messageError(new Error(''), 'desktop.support.errors.thePrivateInboxCannotBeChangedRightNow', {});"
   },
   "desktop.support.errors.tooManyDrafts": {
     "locations": [
-      "desktop/support.cjs:58"
+      "desktop/support.cjs:59"
     ],
     "context": "if (entries.length > 12) throw messageError(new Error(''), 'desktop.support.errors.tooManyDrafts', {});"
   },
@@ -37584,7 +37584,7 @@
     "locations": [
       "src/update-ui.mjs:62"
     ],
-    "context": "ready: messageTuple([`StykAnimate ${version} is ready`, interfaceText(\"updateUi.restartToInstallTheUpdateYouCanSave\")], {0:{key:\"updateUi.versionReady\",params:{"
+    "context": "ready: messageTuple([`Stick ${version} is ready`, interfaceText(\"updateUi.restartToInstallTheUpdateYouCanSave\")], {0:{key:\"updateUi.versionReady\",params:{versio"
   },
   "updateUi.restartToUpdate": {
     "locations": [
@@ -37620,13 +37620,13 @@
     "locations": [
       "src/update-ui.mjs:62"
     ],
-    "context": "ready: messageTuple([`StykAnimate ${version} is ready`, interfaceText(\"updateUi.restartToInstallTheUpdateYouCanSave\")], {0:{key:\"updateUi.versionReady\",params:{"
+    "context": "ready: messageTuple([`Stick ${version} is ready`, interfaceText(\"updateUi.restartToInstallTheUpdateYouCanSave\")], {0:{key:\"updateUi.versionReady\",params:{versio"
   },
   "updateUi.youReUpToDate": {
     "locations": [
       "src/update-ui.mjs:64"
     ],
-    "context": "current: messageTuple([interfaceText(\"updateUi.youReUpToDate\"), `StykAnimate ${currentVersion}`], {0: {key: \"updateUi.youReUpToDate\", params: {}}}),"
+    "context": "current: messageTuple([interfaceText(\"updateUi.youReUpToDate\"), `Stick ${currentVersion}`], {0: {key: \"updateUi.youReUpToDate\", params: {}}}),"
   },
   "userLibrary.actionsFor": {
     "locations": [

@@ -1,6 +1,6 @@
 # GitHub updates and releases
 
-The private `filippocalippo/StykAnimate-App` repository builds the application. Public installers and update metadata go to `filippocalippo/styk-animate-releases`. Customers need no GitHub credentials. `RELEASES_TOKEN` is an Actions secret restricted to Contents write access on the releases repository; it is used only by the upload step and is never bundled in the app.
+This repository, `blixvip/stick`, builds the application, and its GitHub Releases host the public installers and update metadata (`build.publish` in `package.json`). Customers need no GitHub credentials. `RELEASES_TOKEN` is an Actions secret restricted to Contents write access on this repository; it is used only by the upload step and is never bundled in the app.
 
 ## Runtime
 
@@ -68,7 +68,7 @@ local execution because this test uses the real application identity.
 
 `npm run test:updates` covers controller transitions and release artifact validation. `npm run test:updates:desktop` exercises the actual preload/main-process bridge, native save/cancel decisions, splash lifecycle, donation URLs, and rendered progress, with installer invocation substituted in that test process. Screenshots and results are written under `artifacts/updates`. A UI/controller test alone does not establish that a public installer upgrade succeeded; that requires the real installation test above.
 
-For repeatable installation verification, run `node scripts/verify-update-install.mjs` on Windows. It builds two tiny NSIS fixtures with a unique application identity, installs the first into `artifacts/updates`, downloads the second through the production UpdateService, runs the real installer, verifies automatic relaunch at the new version, and uninstalls the fixture. It does not replace an existing StykAnimate installation. Evidence is `artifacts/updates/installer-smoke.json`.
+For repeatable installation verification, run `node scripts/verify-update-install.mjs` on Windows. It builds two tiny NSIS fixtures with a unique application identity, installs the first into `artifacts/updates`, downloads the second through the production UpdateService, runs the real installer, verifies automatic relaunch at the new version, and uninstalls the fixture. It does not replace an existing Stick installation. Evidence is `artifacts/updates/installer-smoke.json`.
 
 On Linux, `npm run test:updates:linux` builds two isolated AppImages using the locked updater and shipping AppImage toolset. It rejects a bad checksum, retries the download, verifies Cancel and ordinary quit preserve the old bytes, then replaces and automatically relaunches the new version at the original filename. It checks exact installed hashes, the single-instance lock and profile preservation; evidence is `artifacts/updates/appimage-smoke.json`. Run under `xvfb-run -a` without a desktop display. The release workflow runs this probe as well as the full application's packaged startup and save/cancel UI tests. The fixture probe establishes the updater mechanism; it does not certify a future public release's exact AppImage, which must also be checked when that version ships.
 

@@ -1,6 +1,6 @@
-# StykAnimate changelog
+# Stick changelog
 
-What's new in each version of StykAnimate.
+What's new in each version of Stick.
 
 <!-- Maintainers: follow the writing guide in docs/RELEASING.md before adding entries. -->
 
@@ -8,7 +8,7 @@ What's new in each version of StykAnimate.
 
 ### Added
 
-- StykAnimate is now open source: its code is on GitHub under the GPL-3.0 license.
+- Stick is now open source: its code is on GitHub under the GPL-3.0 license.
 - Everyday Props · Pivot 3D: 30 editable everyday objects with working hinges and wheels for your animations.
 - Vehicles · Pivot 3D asset pack with twelve editable vehicles, spinning wheels, steering and opening parts.
 - Named poses for articulated figures, with detailed controls that can be shown when needed.
@@ -21,7 +21,7 @@ What's new in each version of StykAnimate.
 ### Changed
 
 - Ctrl-dragging a node that uses IK stretches it like any other node.
-- A calmer top bar: the menus are in the StykAnimate menu, and your open projects take their place.
+- A calmer top bar: the menus are in the Stick menu, and your open projects take their place.
 
 ### Fixed
 
@@ -95,7 +95,7 @@ A new workspace, particle effects, Linux and the browser
 
 ### Added
 
-- StykAnimate for Linux, with an AppImage you can download and run.
+- Stick for Linux, with an AppImage you can download and run.
 - Animate in your browser, with project saving, recovery, your own library and offline use after the first visit.
 - Community library: browse free figures and movieclips shared by other animators and insert them straight into your scene.
 - Particle effects: add explosions, auras, beams, smoke and steam, design your own particles, and save reusable presets.
@@ -114,7 +114,7 @@ A new workspace, particle effects, Linux and the browser
 
 ### Changed
 
-- A fresh look, with the StykAnimate typeface, brighter colors and matching panels, menus and dialogs.
+- A fresh look, with the Stick typeface, brighter colors and matching panels, menus and dialogs.
 - More room for your animation, with floating canvas tools and panels that adapt to smaller windows.
 - The top bar keeps workspaces, Undo, Redo, Save and Export together and shows whether your project is saved.
 - Redesigned timelines, with stretchable frame cards in Simple mode and clearer pose bars in Advanced mode.
@@ -146,7 +146,7 @@ A new workspace, particle effects, Linux and the browser
 - Fixed typing in a menu switching tools, and the Properties ⋯ menu not opening.
 - Fixed What's new and the privacy prompt overlapping at startup.
 - Fixed Enter not confirming a new project name.
-- Fixed StykAnimate staying open in the background after an unexpected close.
+- Fixed Stick staying open in the background after an unexpected close.
 - Fixed adding figures being refused in some Pivot animations.
 
 ### Performance
@@ -284,7 +284,7 @@ New animation tools, refined editing and smoother playback
 - Fixed Simple timeline thumbnails.
 - Fixed Add Frame in the Advanced timeline adding the key on the wrong frame.
 - Figures keep their colors when copied between projects or Pivot versions.
-- Double-clicking a StykAnimate, Pivot or Stick Nodes file now opens it in the app.
+- Double-clicking a Stick, Pivot or Stick Nodes file now opens it in the app.
 - The app now recovers when the graphics driver resets, and exports keep going.
 
 ### Performance
@@ -328,7 +328,7 @@ Effects, dark mode and smoother animation
 
 ## [0.5.5]
 
-Welcome to the first beta of StykAnimate!
+Welcome to the first beta of Stick!
 
 ### Added
 
