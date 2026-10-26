@@ -1,5 +1,5 @@
 name: Bug report
-description: Something in StykAnimate doesn't work as expected.
+description: Something in Stick doesn't work as expected.
 labels: [bug]
 body:
   - type: markdown
@@ -8,7 +8,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: StykAnimate version
+      label: Stick version
       description: Shown in the About dialog.
       placeholder: "1.2.5"
     validations:
@@ -16,7 +16,7 @@ body:
   - type: dropdown
     id: platform
     attributes:
-      label: Where do you use StykAnimate?
+      label: Where do you use Stick?
       options:
         - Windows (Setup)
         - Windows (Portable)

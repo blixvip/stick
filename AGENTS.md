@@ -24,7 +24,7 @@ Stick is a local stick animation program built on sound architecture and good pe
 | Tests and measurements | `tests/`, `scripts/smoke-*.mjs`, `scripts/benchmark-*.mjs`; generated output goes to the ignored `artifacts/` |
 | Release history and shipping | `CHANGELOG.md`, `docs/RELEASING.md`, `docs/UPDATES.md`, `.github/workflows/desktop-release.yml` |
 | Licensing and community | `LICENSE`, `THIRD_PARTY_NOTICES.md`, `CONTRIBUTING.md`, `SECURITY.md` |
-| Public site, catalogue and services | The separate StykAnimate-Site repository; `docs/WEB.md` covers the browser editor |
+| Public site, catalogue and services | `docs/WEB.md` covers the browser editor and its hosting |
 
 Read the relevant contract before changing behavior. Current code and workflow configuration establish executable commands; older release reports certify only their original artifacts. Update documentation when its contract changes.
 

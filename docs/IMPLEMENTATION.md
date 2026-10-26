@@ -1,6 +1,6 @@
 # Implementation and acceptance status
 
-This document describes the current StykAnimate-webapp source. The supplied Pivot executable and real PIV/STK files define compatibility expectations. The separate [Pivot acceptance checklist](PIVOT_PARITY.md) records which expectations have sufficient evidence. A runnable package or successful screenshot alone does not establish complete parity.
+This document describes the current Stick source. The supplied Pivot executable and real PIV/STK files define compatibility expectations. The separate [Pivot acceptance checklist](PIVOT_PARITY.md) records which expectations have sufficient evidence. A runnable package or successful screenshot alone does not establish complete parity.
 
 ## Implemented paths and verification
 

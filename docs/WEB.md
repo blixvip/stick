@@ -33,7 +33,7 @@ npx --prefix web wrangler rollback --config web/wrangler.jsonc   # go back to th
 the working tree: build from a clean checkout of the commit you mean to publish. Cloudflare
 applies `web/_headers` to every static response.
 
-The active marketing site lives in the separate `StykAnimate-Site` repository. Its launch links point to the browser editor. Static app
+The Stick website (the `gh-pages` branch, built by `scripts/build-site.mjs`) links to the editor. Static app
 pages allow indexing; `/community/*` API responses remain `noindex` and excluded
 in `robots.txt`. Deploy the verified editor before deploying the site's launch links.
 

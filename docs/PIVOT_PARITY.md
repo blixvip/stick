@@ -1,10 +1,10 @@
-# StykAnimate-webapp: Pivot compatibility contract
+# Stick: Pivot compatibility contract
 
 This is the acceptance contract for the requested first slice, not a claim that
 all these features exist in the new application. An unchecked item is **not
 signed off in this document**; it does not by itself prove the feature is absent.
 Check an item only with a named implementation, reproducible test, and result
-artifact from StykAnimate-webapp. Reusing a decoder does not transfer the older
+artifact from Stick. Reusing a decoder does not transfer the older
 editor's rendering, interaction, or performance results to WebGPU.
 
 **Verification updated 2026-09-09.** The application now has a working WebGPU
@@ -687,4 +687,4 @@ Pivot 5 already advertises GPU rendering in its supplied release notes.
 The older browser review records comparison of
 2,396 outputs across 37 source projects and explicitly limits those findings to
 its tested implementation. The tests and reference artifacts are reusable
-oracles; those pass claims must not be relabeled as StykAnimate-webapp results.
+oracles; those pass claims must not be relabeled as Stick results.

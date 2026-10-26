@@ -8,7 +8,7 @@ encoder. The service binds only to loopback,
 serves the application, and keeps all file decoding outside the render process.
 
 The existing verified parsers in `tools/` and the native app's
-`StykAnimate/tools/codec_bridge.py` remain authoritative. This service specializes
+`legacy-native/tools/codec_bridge.py` remain authoritative. This service specializes
 the modern reader in its own process to bulk-read contiguous pose arrays and
 avoid allocating the obsolete scalar-editor JSON-pointer inventory. No existing
 tool is modified. It does not approximate unsupported files.

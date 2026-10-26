@@ -17,7 +17,7 @@ Both paths loaded the complete projects: 40 keyframes / 105 first-frame figures 
 
 ## Existing C++ code
 
-`StykAnimate/src/platform/Codec.cpp` is a Windows launcher for `StykAnimate/tools/codec_bridge.py`. Its `Codec::load()` and `save()` exchange JSON files with Python; it contains no PIV/STK parser that can be reused to accelerate decoding. The native project's CMake configuration also rejects non-Windows builds.
+`legacy-native/src/platform/Codec.cpp` is a Windows launcher for `legacy-native/tools/codec_bridge.py`. Its `Codec::load()` and `save()` exchange JSON files with Python; it contains no PIV/STK parser that can be reused to accelerate decoding. The native project's CMake configuration also rejects non-Windows builds.
 
 The authoritative grammar lives in `tools/piv_codec.py`, `piv_legacy*.py`, `piv_side_tables.py`, `piv_full_writer.py`, and the bridge's STK path. The new backend already uses bulk `struct.unpack_from`; zlib and numeric unpacking execute native library code.
 
@@ -25,4 +25,4 @@ A compiled sidecar, Node addon, or WebAssembly decoder would therefore require a
 
 The smaller next transport step is a versioned metadata envelope with transferable numeric and asset buffers while retaining the tested decoder and export fallback. Reconstructing every record as ordinary objects on the UI thread would retain allocation costs, so the editor must progressively consume those buffers for the change to be useful.
 
-`StykAnimate/src/model/Scene.cpp` contains an independently reusable evaluation engine (`evaluate`, `evaluateKeyframe`, `replaceObject(s)`, and `translateObjects`), although extracting it would require a standalone build target and typed pose interface. Import work and playback work remain separate: Python is absent from dragging and playback, so playback improvements need evaluation/render profiling rather than a faster file decoder.
+`legacy-native/src/model/Scene.cpp` contains an independently reusable evaluation engine (`evaluate`, `evaluateKeyframe`, `replaceObject(s)`, and `translateObjects`), although extracting it would require a standalone build target and typed pose interface. Import work and playback work remain separate: Python is absent from dragging and playback, so playback improvements need evaluation/render profiling rather than a faster file decoder.

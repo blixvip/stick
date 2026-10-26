@@ -87,7 +87,7 @@ These rules are the system. Every token and component exists to make them easy t
 
 ### 3.1 Primitives (tier 1)
 
-Raw hex lives only here. Brand values come from `StykAnimate-Site/src/css/base.css`.
+Raw hex lives only here. Brand values follow the Stick logo: black with glowing white (see `assets/brand/README.md`).
 
 | Ramp | Stops |
 |---|---|
