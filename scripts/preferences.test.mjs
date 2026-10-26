@@ -6,7 +6,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 
 const { WorkspacePreferences } = createRequire(import.meta.url)('../desktop/preferences.cjs');
-const directory = () => mkdtemp(path.join(os.tmpdir(), 'stykanimate-preferences-test-'));
+const directory = () => mkdtemp(path.join(os.tmpdir(), 'stick-preferences-test-'));
 const preferencePath = root => path.join(root, 'workspace-preferences.json');
 const rejection = action => assert.rejects(async () => { await action(); });
 

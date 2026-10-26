@@ -114,7 +114,7 @@ class CodecTests(unittest.TestCase):
 
     def test_native_preserves_project_name_and_unknown_metadata(self):
         imported = self.store.import_bytes(self.modern.read_bytes(), self.modern.name)
-        imported["document"]["_styk"] = {"format": "StykAnimate", "format_version": 1,
+        imported["document"]["_styk"] = {"format": "Stick", "format_version": 1,
             "name": "My authored title", "future": {"keep": [1, "01", .25]}}
         native, _ = self.store.export({**imported, "format": "styk"})
         restored = server.ProjectStore(server.WORKSPACE).import_bytes(native, "different-filename.styk")
@@ -236,7 +236,7 @@ class CodecTests(unittest.TestCase):
 
     def test_early_native_wrapper_and_json_alias_import(self):
         imported = self.store.import_bytes(self.modern.read_bytes(), self.modern.name)
-        wrapped = server.encoded_json({"format": "stykanimate", "version": 1,
+        wrapped = server.encoded_json({"format": "stick", "version": 1,
             "name": "My early project", "document": imported["document"]})
         for filename in ("early.styk", "early.json"):
             reopened = self.store.import_bytes(wrapped, filename)

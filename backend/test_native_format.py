@@ -33,7 +33,7 @@ class NativeFormatTests(unittest.TestCase):
             self.assertLess(len(encoded), len(self.payload) / 20)
 
     def test_old_json_and_wrapper_remain_readable(self):
-        for data in (self.payload, b'\xef\xbb\xbf \n' + self.payload, b'{"format":"stykanimate","version":1,"document":{}}'):
+        for data in (self.payload, b'\xef\xbb\xbf \n' + self.payload, b'{"format":"stick","version":1,"document":{}}'):
             self.assertEqual(native.decode(data), data)
             with self.assertRaises(ValueError):
                 native.decode(data, 'stkz')

@@ -93,7 +93,7 @@ export class MemoryBackend {
 const settle = request => new Promise((resolve, reject) => { request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error); });
 
 export class IndexedDbBackend {
-  constructor({factory = globalThis.indexedDB, name = 'stykanimate-library'} = {}) { this.factory = factory; this.name = name; this.opening = null; }
+  constructor({factory = globalThis.indexedDB, name = 'stick-library'} = {}) { this.factory = factory; this.name = name; this.opening = null; }
   open() {
     this.opening ??= new Promise((resolve, reject) => {
       if (!this.factory) { reject(messageError(new Error(''), "errors.webLibrary.thisBrowserDoesNotAllowTheLibraryTo", {})); return; }
@@ -112,7 +112,7 @@ export class IndexedDbBackend {
         resolve(db);
       };
       request.onerror = () => { this.opening = null; reject(request.error ?? messageError(new Error(''), "errors.webLibrary.theLibraryCouldNotBeOpened", {})); };
-      request.onblocked = () => reject(messageError(new Error(''), "errors.webLibrary.closeTheOtherStykanimateTabsToOpenThe", {}));
+      request.onblocked = () => reject(messageError(new Error(''), "errors.webLibrary.closeTheOtherStickTabsToOpenThe", {}));
     });
     return this.opening;
   }
@@ -155,7 +155,7 @@ export class LocalLibrary {
   /** One step of storage. Writes take a lock shared by every tab, so two tabs cannot save the same name at once. */
   async run(work, {write = false} = {}) {
     const step = () => this.backend.transaction(work, {write}).catch(error => { throw friendly(error); });
-    return write && this.locks?.request ? this.locks.request('stykanimate-library', step) : step();
+    return write && this.locks?.request ? this.locks.request('stick-library', step) : step();
   }
   async folderExists(tx, folder) {
     if (folder === '') return;

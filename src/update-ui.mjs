@@ -60,7 +60,7 @@ export class UpdateUI {
         },
       }),
       ready: messageTuple([`Stick ${version} is ready`, interfaceText("updateUi.restartToInstallTheUpdateYouCanSave")], {0:{key:"updateUi.versionReady",params:{version}},1: {key: "updateUi.restartToInstallTheUpdateYouCanSave", params: {}}}),
-      restarting: messageTuple([interfaceText("updateUi.restartingStykanimate"), interfaceText("updateUi.installingTheDownloadedUpdate")],{0:{key:"updateUi.restartingStykanimate"},1:{key:"updateUi.installingTheDownloadedUpdate"}}),
+      restarting: messageTuple([interfaceText("updateUi.restartingStick"), interfaceText("updateUi.installingTheDownloadedUpdate")],{0:{key:"updateUi.restartingStick"},1:{key:"updateUi.installingTheDownloadedUpdate"}}),
       current: messageTuple([interfaceText("updateUi.youReUpToDate"), `Stick ${currentVersion}`], {0: {key: "updateUi.youReUpToDate", params: {}}}),
       unavailable: messageTuple([interfaceText("updateUi.automaticUpdates"), message], {0: {key: "updateUi.automaticUpdates", params: {}}}),
       error: messageTuple([interfaceText("updateUi.updateInterrupted"), message], {0: {key: "updateUi.updateInterrupted", params: {}}}),

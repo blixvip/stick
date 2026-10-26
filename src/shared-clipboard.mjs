@@ -22,11 +22,11 @@ export function clipboardSnapshot(editor, kind) {
   else if (kind === 'camera-motion') data = editor._cameraMotionClipboard;
   else if (kind === 'frames') data = editor.frameClipboardDocumentView?.() ?? editor.frameClipboardDocument();
   else throw messageError(new Error(''), "errors.sharedClipboard.unsupportedClipboardType", {});
-  return data ? {format: 'StykAnimate clipboard', version: 1, kind, data} : null;
+  return data ? {format: 'Stick clipboard', version: 1, kind, data} : null;
 }
 
 export async function restoreClipboard(editor, packet, checkCurrent = () => {}) {
-  if (packet?.format !== 'StykAnimate clipboard' || packet.version !== 1 || !packet.data) throw messageError(new Error(''), "errors.sharedClipboard.unsupportedStykanimateClipboard", {});
+  if (packet?.format !== 'Stick clipboard' || packet.version !== 1 || !packet.data) throw messageError(new Error(''), "errors.sharedClipboard.unsupportedStickClipboard", {});
   const {kind, data} = packet;
   checkCurrent();
   if (kind === 'figures') {
@@ -106,7 +106,7 @@ export class SharedClipboard {
     return this.run(async checkDocument => {
       const check=()=>{checkDocument();if(signal?.aborted)throw abort();checkCurrent();};
       check();const current = await this.read(check);check();
-      if (this.desktop?.beginSharedClipboardRead && !current) throw messageError(new Error(''), "errors.sharedClipboard.copyFiguresOrFramesInStykanimateFirst", {});
+      if (this.desktop?.beginSharedClipboardRead && !current) throw messageError(new Error(''), "errors.sharedClipboard.copyFiguresOrFramesInStickFirst", {});
       if (kind && current && current !== kind) throw messageError(new Error(''), current === 'figures' ? 'errors.layerTimeline.pasteTheCopiedFiguresOnTheCanvas' : current === 'drawing-pixels' ? 'errors.sharedClipboard.pastePixelsInDraw' : 'errors.sharedClipboard.pasteFramesInTimeline');
       return operation(current);
     });

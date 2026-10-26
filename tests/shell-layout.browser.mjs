@@ -46,7 +46,7 @@ async function open(width, height) {
   await page?.context().close();
   const context = await browser.newContext({viewport: {width, height}, deviceScaleFactor: 1});
   await context.addInitScript(() => {
-    localStorage.setItem('stykanimate.editor.settings.v1', JSON.stringify({rendererMode: 'canvas', locale: 'en'}));
+    localStorage.setItem('stick.editor.settings.v1', JSON.stringify({rendererMode: 'canvas', locale: 'en'}));
   });
   page = await context.newPage();
   page.setDefaultTimeout(10000);
@@ -1058,7 +1058,7 @@ try {
     await right.focus();
     await page.keyboard.press('ArrowLeft');
     await page.evaluate(() => styk.workspace.flushPreferences());
-    const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('stykanimate.workspace-layout.v2')));
+    const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('stick.workspace-layout.v2')));
     assert.equal(stored.shared.sizes.right, 332);
     assert.equal(stored.right, 332, 'the v1 mirror a 1.1 app reads');
     assert.equal(stored.studioVersion, 1);
@@ -1068,7 +1068,7 @@ try {
     assert.equal(await page.evaluate(() => styk.workspace.sizes.right), 332);
     await resize(800, 600);
     await resize(1440, 900);
-    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('stykanimate.workspace-layout.v2')).shared.sizes.right), 332);
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('stick.workspace-layout.v2')).shared.sizes.right), 332);
     assert.equal(await page.evaluate(() => styk.workspace.sizes.right), 332);
     await page.evaluate(async () => { styk.workspace.reset(); await styk.workspace.flushPreferences(); });
   });

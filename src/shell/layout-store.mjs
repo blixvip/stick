@@ -30,9 +30,9 @@ import {messageError} from '../localized-error.mjs';
 import {PANEL_CATALOG} from './panel-registry.mjs';
 import {MAX_SAVED_LAYOUTS, MODES, cloneJSON, fitBudget, migrateLayout, normalizeLayout, serializeLayout, trimLayout} from './layout-schema.mjs';
 
-export const BROWSER_LAYOUT_KEY = 'stykanimate.workspace-layout.v2';
+export const BROWSER_LAYOUT_KEY = 'stick.workspace-layout.v2';
 /** Older browser keys, read once when the v2 key is absent: 1.1's studio layout and the earlier splitter layout. */
-export const LEGACY_LAYOUT_KEYS = Object.freeze(['stykanimate.studio-layout.v1', 'stykanimate.workspace.v1']);
+export const LEGACY_LAYOUT_KEYS = Object.freeze(['stick.studio-layout.v1', 'stick.workspace.v1']);
 
 const KNOWN_TOP = new Set(['layoutVersion', 'shared', 'modes', 'saved', 'tombstones']);
 const isObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);

@@ -44,7 +44,7 @@ async function buildNativeContainer() {
     validateNativeFigure(portable, config.format);
   }
   const output = packPoseSequences(portable);
-  output._styk = {...output._styk, format: 'StykAnimate', format_version: 1};
+  output._styk = {...output._styk, format: 'Stick', format_version: 1};
   let preBlobs = [], sourceMeta = null;
   if (config.format === 'styk' && config.sourceId) {
     const source = await fetchOriginalSource();
@@ -77,7 +77,7 @@ self.addEventListener('message', async event => {
     } else if (message.operation === 'export') {
       if (!document || !config) throw messageError(new Error(''), "errors.documentExportWorker.theDocumentSnapshotWasNotInitialized", {});
       const started = performance.now();
-      document._styk = {...document._styk, format: 'StykAnimate', format_version: 1,
+      document._styk = {...document._styk, format: 'Stick', format_version: 1,
         ...(config.name ? {name: config.name} : {})};
       for (const frame of document.keyframes || []) for (const object of frame.objects || []) delete object.runtime_segments;
       stage = 'validate';

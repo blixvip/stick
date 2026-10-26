@@ -6,7 +6,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 
 const { RecentFiles, MAX_RECENT_BYTES, canonicalPathKey } = createRequire(import.meta.url)('../desktop/recent-files.cjs');
-const root = () => fs.mkdtemp(path.join(os.tmpdir(), 'stykanimate-recent-test-'));
+const root = () => fs.mkdtemp(path.join(os.tmpdir(), 'stick-recent-test-'));
 async function fixture(names, options = {}) {
   const directory = await root(), files = [];
   for (const name of names) {

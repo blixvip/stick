@@ -169,8 +169,8 @@ async function capture(planned) {
   for (const {theme, timeline, state, size, name} of planned) {
     const context = await browser.newContext({viewport: size, deviceScaleFactor: 1, locale: 'en-US', timezoneId: 'UTC', colorScheme: theme});
     await context.addInitScript(settings => {
-      localStorage.setItem('stykanimate.editor.settings.v1', JSON.stringify(settings));
-      localStorage.setItem('stykanimate.theme.v1', settings.theme);
+      localStorage.setItem('stick.editor.settings.v1', JSON.stringify(settings));
+      localStorage.setItem('stick.theme.v1', settings.theme);
     }, {theme, timelineMode: timeline, rendererMode: 'canvas', locale: 'en', uiScale: 100});
     const page = await context.newPage();
     page.on('pageerror', error => report.errors.push(`${name}: ${error.message}`));

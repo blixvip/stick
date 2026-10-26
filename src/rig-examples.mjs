@@ -51,5 +51,5 @@ export function rigExampleDocument(id) {
     polyfills:built?.polyfills??[],image_assets:[],text_assets:[],_styk:{colorMode:'segments',rigExample:{id,description:example.description,control:example.control,...(built?.projection?{projection:built.projection}:{}),...(built?.sliders?{sliders:built.sliders}:{})}}};
   const object=createObject(figure,1,320,230);
   return {version:5,canvas_width:640,canvas_height:460,fps:24,auto_easing:false,auto_easing_disabled_raw:1,
-    figure_types:[figure],backgrounds:[],keyframes:[createFrame([object],1)],_styk:{format:'StykAnimate',format_version:1,name:example.name}};
+    figure_types:[figure],backgrounds:[],keyframes:[createFrame([object],1)],_styk:{format:'Stick',format_version:1,name:example.name}};
 }

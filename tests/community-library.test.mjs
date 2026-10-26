@@ -150,11 +150,11 @@ test('the downloads a person has counted are remembered on this device, most rec
   const storage = localStorageLedgerStorage({getItem: key => saved.get(key) ?? null, setItem: (key, value) => saved.set(key, value)});
   const ledger = new DownloadLedger(storage);
   await ledger.add('aaaaaaaaaa'); await ledger.add('bbbbbbbbbb'); await ledger.add('aaaaaaaaaa');
-  assert.deepEqual(JSON.parse(saved.get('stykanimate-community-downloads')), {version: 1, ids: ['aaaaaaaaaa', 'bbbbbbbbbb']});
+  assert.deepEqual(JSON.parse(saved.get('stick-community-downloads')), {version: 1, ids: ['aaaaaaaaaa', 'bbbbbbbbbb']});
   assert.equal(await new DownloadLedger(storage).has('bbbbbbbbbb'), true, 'a later session knows');
-  saved.set('stykanimate-community-downloads', '{"version":1,"ids":["aaaaaaaaaa","not valid",5]}');
+  saved.set('stick-community-downloads', '{"version":1,"ids":["aaaaaaaaaa","not valid",5]}');
   assert.deepEqual([...(await new DownloadLedger(storage).load())], ['aaaaaaaaaa']);
-  saved.set('stykanimate-community-downloads', 'garbage');
+  saved.set('stick-community-downloads', 'garbage');
   assert.equal(await new DownloadLedger(storage).has('aaaaaaaaaa'), false);
   const full = new DownloadLedger();
   for (let i = 0; i < 5003; i++) await full.add(`x${String(i).padStart(9, '0')}`);

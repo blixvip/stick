@@ -10,7 +10,7 @@ const check=(name,value)=>{assert.ok(value,name);console.log('PASS',name);};
 const ready=async()=>{await page.waitForFunction(()=>styk.ready);await page.evaluate(async()=>{const {emptyDocument,createObject,createFrame}=await import('/src/demo.mjs'),r=emptyDocument(),f=r.figure_types[0];r.keyframes=[createFrame([createObject(f,1,200,200),createObject(f,2,500,200)],24)];styk.editor.load(r);styk.editor.select(1);});await page.getByRole('tab',{name:'VFX',exact:true}).click();};
 try{
   await page.goto(process.env.STYK_URL||'http://127.0.0.1:47831');
-  await page.evaluate(()=>localStorage.removeItem('stykanimate.vfx-presets.v1'));await page.reload();await ready();
+  await page.evaluate(()=>localStorage.removeItem('stick.vfx-presets.v1'));await page.reload();await ready();
   await page.getByRole('button',{name:'Add Glow',exact:true}).click();
   await page.locator('.vfx-detail').getByRole('button',{name:'Combine with another effect',exact:true}).click();await page.locator('.vfx-catalog [data-choice="blur"]').click();
   const save=page.locator('.vfx-detail').getByRole('button',{name:'Save as preset',exact:true});
@@ -22,7 +22,7 @@ try{
   await dialog.getByLabel('Name').fill('Hero glow');await dialog.getByRole('button',{name:'Save',exact:true}).click();
   await page.locator('.vfx-save-preset[data-saved]').waitFor();
   check('saving says so in place',(await page.locator('.vfx-save-preset').textContent()).includes('Saved to My presets'));
-  check('the preset is written',await page.evaluate(()=>JSON.parse(localStorage.getItem('stykanimate.vfx-presets.v1')).presets[0].name==='Hero glow'));
+  check('the preset is written',await page.evaluate(()=>JSON.parse(localStorage.getItem('stick.vfx-presets.v1')).presets[0].name==='Hero glow'));
   const undo=await page.evaluate(()=>styk.editor._undo.length);
   // Another figure: the preset is one of the suggestions and first in the Presets catalogue.
   await page.evaluate(()=>styk.editor.select(2));
@@ -38,14 +38,14 @@ try{
   await page.locator('.vfx-my-preset').hover();await page.getByRole('button',{name:'Hero glow preset actions',exact:true}).click();
   await page.getByRole('menuitem',{name:'Rename…',exact:true}).click();
   const rename=page.getByRole('dialog',{name:'Rename preset'});await rename.getByLabel('Name').fill('Hero aura');await rename.getByRole('button',{name:'Rename',exact:true}).click();
-  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('stykanimate.vfx-presets.v1')).presets[0]?.name==='Hero aura');
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('stick.vfx-presets.v1')).presets[0]?.name==='Hero aura');
   check('rename keeps the preset and writes the new name',true);
   await page.reload();await ready();
   await page.getByRole('button',{name:'Add effect',exact:true}).click();await page.locator('.vfx-catalog [data-catalog-mode="presets"]').click();
   check('presets survive a reload',(await page.locator('.vfx-my-presets-section').textContent()).includes('Hero aura'));
   await page.locator('.vfx-my-preset').click({button:'right'});await page.getByRole('menuitem',{name:'Delete…',exact:true}).click();
   await page.getByRole('dialog',{name:'Delete “Hero aura”?'}).getByRole('button',{name:'Delete',exact:true}).click();
-  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('stykanimate.vfx-presets.v1')).presets.length===0);
+  await page.waitForFunction(()=>JSON.parse(localStorage.getItem('stick.vfx-presets.v1')).presets.length===0);
   await page.getByRole('button',{name:'Add effect',exact:true}).click();await page.locator('.vfx-catalog [data-catalog-mode="presets"]').click();
   check('with no presets, My presets explains how to make one',await page.locator('.vfx-my-presets-empty').isVisible());
   await page.screenshot({path:`${out}/empty.png`});

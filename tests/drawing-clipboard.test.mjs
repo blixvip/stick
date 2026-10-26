@@ -38,8 +38,8 @@ test('legacy PNG clipboard packets retain their dimensions, exact colors and ori
 test('clipboard metadata rejects invalid indices and poses without replacing a previous copy',async()=>{
   const tiles=await encodeClipboardTiles([{tx:0,ty:0,pixels:pixels().buffer}]),data=clip(tiles,{x:0,y:0,width:64,height:64}),editor={_drawingPixelClipboard:'before',_emit:()=>{}};
   const cases=[{version:3},{tiles:[...tiles,...tiles]},{tiles:[{...tiles[0],tx:.5}]},{tiles:[{...tiles[0],tx:0x80000000}]},{bounds:null},{bounds:{x:1000,y:0,width:2,height:2}},{matrix:[0,0,0,0,0,0]},{world:{x:NaN,y:0}},{tiles:[{...tiles[0],png:'data:text/plain,hi'}]}];
-  for(const change of cases){await assert.rejects(restoreClipboard(editor,{format:'StykAnimate clipboard',version:1,kind:'drawing-pixels',data:{...data,...change}}));assert.equal(editor._drawingPixelClipboard,'before');}
-  await restoreClipboard(editor,{format:'StykAnimate clipboard',version:1,kind:'drawing-pixels',data});assert.deepEqual(editor._drawingPixelClipboard,data);
+  for(const change of cases){await assert.rejects(restoreClipboard(editor,{format:'Stick clipboard',version:1,kind:'drawing-pixels',data:{...data,...change}}));assert.equal(editor._drawingPixelClipboard,'before');}
+  await restoreClipboard(editor,{format:'Stick clipboard',version:1,kind:'drawing-pixels',data});assert.deepEqual(editor._drawingPixelClipboard,data);
 });
 
 test('malformed tile dimensions fail before allocating or decompressing the declared image',async()=>{

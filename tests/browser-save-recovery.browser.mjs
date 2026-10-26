@@ -155,7 +155,7 @@ try{
   const legacyContext=await browser.newContext(),legacy=await legacyContext.newPage();
   legacy.on('pageerror',error=>errors.push(error.message));await legacy.goto(site.origin+'/mark.svg');
   await legacy.evaluate(()=>new Promise((resolve,reject)=>{
-    const request=indexedDB.open('stykanimate-recovery',1);
+    const request=indexedDB.open('stick-recovery',1);
     request.onupgradeneeded=()=>request.result.createObjectStore('documents');
     request.onerror=()=>reject(request.error);
     request.onsuccess=()=>{const db=request.result,tx=db.transaction('documents','readwrite');

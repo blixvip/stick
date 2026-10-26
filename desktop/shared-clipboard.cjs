@@ -3,7 +3,7 @@ const { messageError } = require('./localization.cjs');
 
 
 const {randomUUID} = require('node:crypto');
-const FORMAT = 'application/x-stykanimate-clipboard-v1';
+const FORMAT = 'application/x-stick-clipboard-v1';
 const MAX_BYTES = 256 * 1024 * 1024, CHUNK_BYTES = 256 * 1024;
 
 // Only complete, bounded transfers are published to the OS clipboard. Readers
@@ -37,7 +37,7 @@ class SharedClipboard {
     const bytes = this.clipboard.readBuffer(FORMAT);
     // Chromium's availableFormats() omits raw custom formats on Windows.
     if (!bytes?.length) return null;
-    if (bytes.length < 41 || bytes.length > MAX_BYTES + 36) throw messageError(new Error(''), 'desktop.sharedClipboard.errors.invalidStykAnimateClipboardData', {});
+    if (bytes.length < 41 || bytes.length > MAX_BYTES + 36) throw messageError(new Error(''), 'desktop.sharedClipboard.errors.invalidStickClipboardData', {});
     const id = bytes.toString('ascii', 0, 36);
     if (!/^[0-9a-f-]{36}$/.test(id)) throw messageError(new Error(''), 'desktop.sharedClipboard.errors.invalidClipboardIdentity', {});
     if (id === knownId) return {id, unchanged: true};

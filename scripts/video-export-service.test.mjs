@@ -74,9 +74,9 @@ function png(width, height, color) {
   ]);
 }
 async function fixture(t, options = {}) {
-  const root = await mkdtemp(path.join(os.tmpdir(), "stykanimate-video-test-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "stick-video-test-"));
   assert.equal(path.dirname(root), os.tmpdir());
-  assert.ok(path.basename(root).startsWith("stykanimate-video-test-"));
+  assert.ok(path.basename(root).startsWith("stick-video-test-"));
   const service = new VideoExportService({
     encoderPath,
     tempRoot: path.join(root, "jobs"),

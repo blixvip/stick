@@ -121,7 +121,7 @@ app.whenReady().then(async () => {
       directories: { app: fixture, output: version === '0.0.1' ? path.join(probe, 'baseline') : target },
       files: ['main.cjs', 'desktop/**/*', 'src/**/*', 'probe.json', 'package.json'],
       publish: [{ provider: 'generic', url }],
-      linux: { executableName: 'styk-update-probe', category: 'Graphics', icon: path.join(root, 'desktop/assets/stykanimate.png') },
+      linux: { executableName: 'styk-update-probe', category: 'Graphics', icon: path.join(root, 'desktop/assets/stick.png') },
       appImage: { artifactName: 'update-test-${version}.AppImage' },
     } });
   }

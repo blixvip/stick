@@ -170,7 +170,7 @@ test('project aliases, background swatches and dirty assignments integrate with 
   editor.redo(); assert.equal(editor.frame.background_id, 1);
   editor.dirty = false; assert.equal(editor.dirty, false); editor.dirty = true; assert.equal(editor.dirty, true);
   const metadata = editor.serialize()._styk;
-  assert.deepEqual({format: metadata.format, format_version: metadata.format_version, name: metadata.name}, {format: 'StykAnimate', format_version: 1, name: 'First steps'});
+  assert.deepEqual({format: metadata.format, format_version: metadata.format_version, name: metadata.name}, {format: 'Stick', format_version: 1, name: 'First steps'});
   assert.equal(metadata.layers.version, 1);
 });
 

@@ -74,7 +74,7 @@ try{
   // Menus close when the list scrolls, so bring the card into view first.
   await page.locator('[data-public-id="fanfan1234"]').scrollIntoViewIfNeeded();await page.waitForTimeout(250);
   await page.locator('[data-public-id="fanfan1234"]').click({button:'right'});
-  check('a community card offers Insert, Save to My library and the website',await labels(menu)==='Insert|Save to My library|View on stykanimate.com');
+  check('a community card offers Insert, Save to My library and the website',await labels(menu)==='Insert|Save to My library|View on stick.com');
   await menu.getByRole('menuitem',{name:'Save to My library'}).click();
   await page.waitForFunction(()=>publicCalls.some(call=>call[0]==='save'));
   check('saving a community asset targets My library and reports it',await page.locator('.library-message').textContent()==='Folding fan saved to My library');

@@ -38,7 +38,7 @@ const PERCENT_SETTINGS=['opacity','flow','hardness','stabilization','roundness',
 const hexColor=rgb=>'#'+rgb.slice(0,3).map(n=>(Math.round(n)).toString(16).padStart(2,'0')).join('');
 /** A floating selection that moved, scaled, rotated or flipped. */
 export const moved=s=>Boolean(s&&(s.dx||s.dy||s.scale!==1||s.angle||(s.fx??1)!==1||(s.fy??1)!==1));
-const BRUSH_LIBRARY_KEY='stykanimate.drawing-brushes.v1';
+const BRUSH_LIBRARY_KEY='stick.drawing-brushes.v1';
 const loadLibrary=()=>{try{const v=JSON.parse(globalThis.localStorage?.getItem(BRUSH_LIBRARY_KEY)||'{}');return {presets:Array.isArray(v.presets)?v.presets.filter(p=>p&&typeof p.id==='string'&&typeof p.name==='string').slice(0,48):[],pressureCurve:Array.isArray(v.pressureCurve)&&v.pressureCurve.length===4&&v.pressureCurve.every(n=>Number.isFinite(n)&&n>=0&&n<=1)?v.pressureCurve:[...LINEAR_PRESSURE]};}catch{return {presets:[],pressureCurve:[...LINEAR_PRESSURE]};}};
 const FILTER_LABELS={blur:'Blur drawing',hsl:'Adjust hue and saturation',brightness:'Adjust brightness and contrast',invert:'Invert colours'};
 // Actions that keep (or act on) the pixel selection instead of applying it first.

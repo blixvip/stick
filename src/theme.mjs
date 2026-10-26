@@ -1,4 +1,4 @@
-export const THEME_CACHE_KEY = 'stykanimate.theme.v1';
+export const THEME_CACHE_KEY = 'stick.theme.v1';
 
 export function normalizeTheme(value) {
   return value === 'dark' || value === 'light' ? value : 'system';

@@ -1,5 +1,5 @@
 export default Object.freeze({
-  "privacyUi.helpShapeStykanimate": "Help shape Stick",
+  "privacyUi.helpShapeStick": "Help shape Stick",
   "privacyUi.closePrivacySettings": "Close privacy settings",
   "privacyUi.yourAnimationsFilenamesAndTextStayOutOf": "Your animations, filenames and text stay out of reports.",
   "privacyUi.accept": "Accept",
@@ -15,7 +15,7 @@ export default Object.freeze({
   "privacyUi.sampledEditingAndRenderingTimingsPlaybackMemoryUse": "Sampled editing and rendering timings, playback, memory use before and after operations, cache and recovery outcomes, and broad hardware categories. Small summaries around severe stalls contain timings and coarse workload settings. Operation timings include format, file-size, complexity and target-FPS ranges. Redacted errors include safe codes, operation stages and Stick source locations. Also includes app version/build and test-build status.",
   "privacyUi.saveCustomChoices": "Save custom choices",
   "privacyUi.whatHappensToMyData": "What happens to my data?",
-  "privacyUi.stykanimateIsTheControllerContact": "Stick is the controller. Contact",
+  "privacyUi.stickIsTheControllerContact": "Stick is the controller. Contact",
   "privacyUi.aleRipresoGmailCom": "ale.ripreso@gmail.com",
   "privacyUi.aboutAccessCorrectionDeletionOrOtherPrivacyRights": "about access, correction, deletion or other privacy rights. Optional reporting relies on your consent; withdrawing it does not change the lawfulness of earlier processing. You can complain to your local data protection authority.",
   "privacyUi.aRandomInstallationIdLinksYourReportsIt": "A random installation ID links your reports. It is not your name or account, but linked data is pseudonymous, not anonymous. Routine reports exclude project contents, names, file paths, text, keystrokes, screenshots, recordings and raw error messages. There is no session replay or advertising tracking.",

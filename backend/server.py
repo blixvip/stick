@@ -115,7 +115,7 @@ PRIVATE_PARTS = {".git", ".codex", ".agents", "__pycache__", "node_modules"}
 EXCLUDED_DIRS = PRIVATE_PARTS | {
     "reports", "tests", "vendor", "reference", "references", "reference_runs",
     "snapshots", "__snapshots__", "dependencies", "artifacts", "piv_extracted",
-    "third_party", "build", "dist", "local", "stykanimate", "stykanimate-webapp",
+    "third_party", "build", "dist", "local", "stick", "stick-webapp",
 }
 
 
@@ -478,7 +478,7 @@ class ProjectStore:
     def _decode_canonical(self, entry: Source) -> dict:
         checkpoint()
         if entry.kind == "stk":
-            with tempfile.TemporaryDirectory(prefix="stykanimate-import-") as directory:
+            with tempfile.TemporaryDirectory(prefix="stick-import-") as directory:
                 path = Path(directory) / entry.filename
                 path.write_bytes(entry.data)
                 document = bridge.stk_document(path, entry.data)
@@ -605,7 +605,7 @@ class ProjectStore:
                     elif kind == "stk":
                         # Only the verified legacy STK parser requires a path.
                         # Its temporary copy is private, bounded, and auto-removed.
-                        with tempfile.TemporaryDirectory(prefix="stykanimate-import-") as directory:
+                        with tempfile.TemporaryDirectory(prefix="stick-import-") as directory:
                             path = Path(directory) / name
                             path.write_bytes(data)
                             document = bridge.stk_document(path, data)
@@ -614,7 +614,7 @@ class ProjectStore:
                         # Compatibility with the web editor's early native-save
                         # wrapper. Current saves use the canonical document plus
                         # embedded source metadata, so original bytes survive.
-                        if isinstance(document, dict) and document.get("format") == "stykanimate":
+                        if isinstance(document, dict) and document.get("format") == "stick":
                             if document.get("version") != 1 or not isinstance(document.get("document"), dict):
                                 raise ApiError(422, "invalid_native_version", "Unsupported Stick project version.")
                             wrapper = document
@@ -732,7 +732,7 @@ class ProjectStore:
             validate_native_figure(document, format_name)
             output_doc = dict(document)
             output_doc.pop("_stykSource", None)
-            output_doc["_styk"] = {**document.get("_styk", {}), "format": "StykAnimate", "format_version": 1}
+            output_doc["_styk"] = {**document.get("_styk", {}), "format": "Stick", "format_version": 1}
             output = native_format.encode_v2(output_doc, format_name)
             base = re.sub(r'[\x00-\x1f\x7f/\\:*?"<>|]', "_", str(request.get("filename") or "Figure")).strip(" .")[:180] or "Figure"
             mark("encode")
@@ -775,7 +775,7 @@ class ProjectStore:
         mark("document_digest")
         if format_name == "styk":
             output_doc = dict(document)
-            output_doc["_styk"] = {**document.get("_styk", {}), "format": "StykAnimate", "format_version": 1}
+            output_doc["_styk"] = {**document.get("_styk", {}), "format": "Stick", "format_version": 1}
             if entry and entry.kind in ("piv", "stk"):
                 import base64
                 output_doc["_stykSource"] = {"kind": entry.kind, "version": entry.version,

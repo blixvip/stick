@@ -309,9 +309,9 @@ test('v2 rejects corruption, truncation, and wrong kind', async () => {
 
 test('normalizeDecodedDocument unwraps and validates like the service', async () => {
   const inner = {version: 5, keyframes: [], editable_paths: {}, _codec: {}, _stykWeb: {}};
-  const unwrapped = normalizeDecodedDocument({format: 'stykanimate', version: 1, document: inner}, 'styk');
+  const unwrapped = normalizeDecodedDocument({format: 'stick', version: 1, document: inner}, 'styk');
   assert.deepEqual(unwrapped, {version: 5, keyframes: []});
-  assert.throws(() => normalizeDecodedDocument({format: 'stykanimate', version: 2, document: {}}, 'styk'), /project version/);
+  assert.throws(() => normalizeDecodedDocument({format: 'stick', version: 2, document: {}}, 'styk'), /project version/);
   assert.throws(() => normalizeDecodedDocument([1, 2], 'styk'), /JSON object/);
   const figure = {figure_types: [{figure_type_id: 1}],
     keyframes: [{objects: [{figure_type_id: 1, join: {target_object_slot: 0}}]}]};

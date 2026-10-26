@@ -1,6 +1,6 @@
 import {messageError} from './localized-error.mjs';
 /** Lossless receiver for the backend-validated native v5 frame table. */
-export const NATIVE_FRAME_CONTENT_TYPE = 'application/vnd.stykanimate.piv-frames-v1';
+export const NATIVE_FRAME_CONTENT_TYPE = 'application/vnd.stick.piv-frames-v1';
 const MAX_BYTES = 256 * 1024 * 1024;
 // A separate inventory limit prevents a tiny-number binary stream from expanding
 // into an unbounded object graph. This is an estimate, not a JS heap measurement.

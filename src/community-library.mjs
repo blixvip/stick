@@ -1,4 +1,4 @@
-/** The community library for the browser build: what people share on stykanimate.com.
+/** The community library for the browser build: what people share on stick.com.
  *
  * This is the browser twin of desktop/public-library.cjs and follows the same contract, rules
  * and messages: the site's content document names the current index, the index lists every
@@ -141,7 +141,7 @@ export class DownloadLedger {
 }
 
 /** The ledger's home in the browser: one small localStorage entry. */
-export function localStorageLedgerStorage(storage, key = 'stykanimate-community-downloads') {
+export function localStorageLedgerStorage(storage, key = 'stick-community-downloads') {
   // Reading localStorage itself can throw when the browser blocks site data; the ledger then lasts for the session.
   const store = () => storage ?? globalThis.localStorage;
   return {

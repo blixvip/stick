@@ -102,7 +102,7 @@ try {
       } finally { exporter.dispose(); importer.dispose(); }
     });
   }
-  assert.ok(responses.some(r => r.status === 200 && r.type?.startsWith('application/vnd.stykanimate.piv-frames-v1')));
+  assert.ok(responses.some(r => r.status === 200 && r.type?.startsWith('application/vnd.stick.piv-frames-v1')));
   assert.deepEqual(errors, []);
   await writeFile(path.join(out, 'report.json'), JSON.stringify({checks, responses, errors}, null, 2));
   console.log(JSON.stringify({checks, responses, errors}, null, 2));

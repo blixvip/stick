@@ -1737,7 +1737,7 @@ export class Editor extends EventTarget {
     return this.object;
   }
   serialize() {
-    const document = clone(this.report); document._styk = {...document._styk, format: 'StykAnimate', format_version: 1, name: this.name};
+    const document = clone(this.report); document._styk = {...document._styk, format: 'Stick', format_version: 1, name: this.name};
     for (const frame of document.keyframes) for (const object of frame.objects) delete object.runtime_segments;
     syncDerived(document); validateScene(document); validateLayerState(document._styk.layers); validateAnimationDocument(document); validateFrameIdentities(document); validateLayerSheet(document); return document;
   }

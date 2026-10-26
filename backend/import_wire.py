@@ -7,7 +7,7 @@ Recovered identity fields are patched from the canonical decoder's sparse audit.
 """
 import struct
 
-CONTENT_TYPE = "application/vnd.stykanimate.piv-frames-v1"
+CONTENT_TYPE = "application/vnd.stick.piv-frames-v1"
 MAGIC = b"STYKPIV1"
 
 

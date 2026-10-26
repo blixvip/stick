@@ -82,7 +82,7 @@ try {
   check('The tool bar floats on the dark raised surface',await background('.studio-rail')==='rgb(27, 28, 35)'&&field.every(channel=>channel<32));
   await shot('editor-dark');
   await page.evaluate(()=>styk.settingsUI.flush());
-  check('Dark mode is stored with editor preferences',await page.evaluate(()=>JSON.parse(localStorage.getItem('stykanimate.editor.settings.v1')).theme==='dark'));
+  check('Dark mode is stored with editor preferences',await page.evaluate(()=>JSON.parse(localStorage.getItem('stick.editor.settings.v1')).theme==='dark'));
   await page.reload();await ready();
   check('Dark mode survives reload',await theme()==='dark');
 

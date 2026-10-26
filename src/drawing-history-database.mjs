@@ -1,13 +1,13 @@
 import {messageError} from './localized-error.mjs';
 import {HISTORY_CHUNK_BYTES,encodeHistoryChunk,decodeHistoryChunk} from './drawing-history-codec.mjs';
 
-const DB_NAME='stykanimate-drawing-history-v1';
+const DB_NAME='stick-drawing-history-v1';
 const request=req=>new Promise((resolve,reject)=>{req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});
 const complete=tx=>new Promise((resolve,reject)=>{tx.oncomplete=resolve;tx.onabort=()=>reject(tx.error??messageError(new Error(''), "errors.drawingHistoryDatabase.drawingHistoryTransactionAborted", {}));tx.onerror=()=>{};});
 const range=(session,id)=>id===undefined?IDBKeyRange.bound([session],[session,[]]):IDBKeyRange.bound([session,id],[session,id,[]]);
 const digest=async bytes=>new Uint8Array(await crypto.subtle.digest('SHA-256',bytes));
 const same=(a,b)=>a.length===b.length&&a.every((n,i)=>n===b[i]);
-const lockName=id=>'stykanimate-drawing-history:'+id;
+const lockName=id=>'stick-drawing-history:'+id;
 
 /** Temporary, session-owned disk backing. A manifest becomes readable only
  * after all chunks commit. Web Locks protect other live editors from cleanup. */

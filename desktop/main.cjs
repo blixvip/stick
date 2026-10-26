@@ -42,11 +42,11 @@ const APP_ROOT = path.resolve(__dirname, '..');
 const MAX_FILE_BYTES = 256 * 1024 * 1024;
 const fileFilters = () => [
   { name: t('desktop.main.animationAndStickFigures'), extensions: ['styk', 'stykmov', 'stkz', 'piv', 'stk', 'json', 'nodes', 'nodemc', 'stknds', 'zip'] },
-  { name: t('desktop.main.stykanimateMovieclip'), extensions: ['stykmov'] },
-  { name: t('desktop.main.stykanimateFigure'), extensions: ['stkz'] },
+  { name: t('desktop.main.stickMovieclip'), extensions: ['stykmov'] },
+  { name: t('desktop.main.stickFigure'), extensions: ['stkz'] },
   { name: t('desktop.main.pivotAnimation'), extensions: ['piv'] },
   { name: t('desktop.main.pivotStickFigure'), extensions: ['stk'] },
-  { name: t('desktop.main.stykanimateProject'), extensions: ['styk', 'json'] },
+  { name: t('desktop.main.stickProject'), extensions: ['styk', 'json'] },
 ];
 let window;
 let backend;
@@ -119,7 +119,7 @@ else {
   app.on('open-url', (event, url) => { event.preventDefault(); handleProtocol(url); });
   app.on('open-file', (event, file) => { event.preventDefault(); queueOpenFile(file); });
   app.whenReady().then(start).catch(async (error) => {
-    dialog.showErrorBox(t('desktop.main.stykanimateCouldNotStart'), error.message);
+    dialog.showErrorBox(t('desktop.main.stickCouldNotStart'), error.message);
     app.quit();
   });
 }
@@ -127,7 +127,7 @@ else {
 function trusted(event) {
   const url = event.senderFrame?.url || '';
   if (!window || event.sender !== window.webContents || !backend || new URL(url).origin !== backend.origin) {
-    throw messageError(new Error(''), 'desktop.main.errors.thisOperationIsRestrictedToTheStykAnimateWorkspace', {});
+    throw messageError(new Error(''), 'desktop.main.errors.thisOperationIsRestrictedToTheStickWorkspace', {});
   }
 }
 
@@ -186,7 +186,7 @@ function nativeMenu() {
       item(t('desktop.main.fitCanvas'), 'zoom-reset'), { type: 'separator' }, { role: 'togglefullscreen', accelerator: '' },
       ...(!app.isPackaged ? [{ role: 'toggleDevTools', accelerator: '' }] : []),
     ] },
-    { label: t('desktop.main.help'), submenu: [item(t('menu.shortcuts'), 'help'), item(t('desktop.main.checkForUpdates'), 'check-updates'), item(t('desktop.main.whatSNew'), 'release-notes'), item(t('desktop.main.supportDevelopment'), 'donate'), item(t('desktop.main.aboutStykAnimate'), 'about')] },
+    { label: t('desktop.main.help'), submenu: [item(t('menu.shortcuts'), 'help'), item(t('desktop.main.checkForUpdates'), 'check-updates'), item(t('desktop.main.whatSNew'), 'release-notes'), item(t('desktop.main.supportDevelopment'), 'donate'), item(t('desktop.main.aboutStick'), 'about')] },
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
@@ -194,7 +194,7 @@ function nativeMenu() {
 async function readImportFile(file) {
   const started = performance.now();
   const extension = path.extname(file).toLowerCase();
-  if (!['.piv', '.stk', '.styk', '.stkz', '.stykmov', '.json', '.nodes', '.nodemc', '.stknds', '.zip'].includes(extension)) throw messageError(new Error(''), 'desktop.main.errors.chooseAStykAnimatePivotOrStickNodesFile', {});
+  if (!['.piv', '.stk', '.styk', '.stkz', '.stykmov', '.json', '.nodes', '.nodemc', '.stknds', '.zip'].includes(extension)) throw messageError(new Error(''), 'desktop.main.errors.chooseAStickPivotOrStickNodesFile', {});
   const limit = ['.styk', '.stkz', '.stykmov', '.json'].includes(extension) ? MAX_FILE_BYTES : 128 * 1024 * 1024;
   const stat = await fs.stat(file);
   if (!stat.isFile()) throw messageError(new Error(''), 'desktop.main.errors.chooseAnAnimationOrStickFigureFile', {});
@@ -283,7 +283,7 @@ function registerIpc() {
         const prompt = unsavedPrompt({ restart: true });
         const answer = await dialog.showMessageBox(window, {
           type: 'question', title: t('desktop.main.restartToUpdate'), message: prompt.message,
-          detail: t('desktop.main.stykanimateWillCloseInstallTheDownloadedUpdateAndReopen'),
+          detail: t('desktop.main.stickWillCloseInstallTheDownloadedUpdateAndReopen'),
           buttons: prompt.buttons, defaultId: 0, cancelId: 1,
         });
         if (answer.response === 0) { sendAction('save-and-update'); return false; }
@@ -295,7 +295,7 @@ function registerIpc() {
       return true;
     }, () => { quitting = false; });
   });
-  const withTelemetry = handler => async (event, value) => { trusted(event); await telemetryReady; if (!telemetry) throw messageError(new Error(''), 'desktop.main.errors.privacySettingsAreUnavailablePleaseRestartStykAnimate', {}); return handler(value); };
+  const withTelemetry = handler => async (event, value) => { trusted(event); await telemetryReady; if (!telemetry) throw messageError(new Error(''), 'desktop.main.errors.privacySettingsAreUnavailablePleaseRestartStick', {}); return handler(value); };
   const support = new SupportService({ directory: app.getPath('userData'), version: app.getVersion(), development: !app.isPackaged });
   handle('styk:support-context', event => { trusted(event); return support.context(); });
   handle('styk:support-live', (event, id) => { trusted(event); return support.connectLive(id, value => { if (!event.sender.isDestroyed()) event.sender.send('styk:support-live-event', value); }); });
@@ -330,7 +330,7 @@ function registerIpc() {
   }));
   handle('styk:service-page', withTelemetry(page => {
     const route = { home: '/', download: '/download/' }[page];
-    if (!route) throw messageError(new Error(''), 'desktop.main.errors.unknownStykAnimatePage', {});
+    if (!route) throw messageError(new Error(''), 'desktop.main.errors.unknownStickPage', {});
     if (!telemetry.siteUrl) throw messageError(new Error(''), 'desktop.main.errors.thePublicWebsiteIsNotConfiguredYetContactAleRipresoGmailCom', {});
     return shell.openExternal(telemetry.siteUrl + route);
   }));
@@ -542,7 +542,7 @@ function registerIpc() {
         const result = await dialog.showSaveDialog(window, {
           title: t(options.saveAs ? 'common.saveAs' : 'desktop.main.saveAnimation'),
           defaultPath: destination || path.basename(String(options.defaultPath || 'Untitled.styk')),
-          filters: [{ name: t('desktop.main.stykanimateProject'), extensions: ['styk'] }],
+          filters: [{ name: t('desktop.main.stickProject'), extensions: ['styk'] }],
           properties: ['createDirectory', 'showOverwriteConfirmation'],
         });
         if (result.canceled || !result.filePath) return null;
@@ -579,7 +579,7 @@ function registerIpc() {
   const saveFilters = (options, fallback = 'styk') => (Array.isArray(options?.filters) ? options.filters.slice(0, 8).map((filter) => ({
     name: String(filter.name || 'File').slice(0, 80),
     extensions: Array.isArray(filter.extensions) ? filter.extensions.filter((ext) => /^[a-z0-9*]{1,12}$/i.test(ext)) : [],
-  })).filter((filter) => filter.extensions.length) : [{ name: t('desktop.main.stykanimateProject'), extensions: [fallback] }]);
+  })).filter((filter) => filter.extensions.length) : [{ name: t('desktop.main.stickProject'), extensions: [fallback] }]);
   handle('styk:file-write-begin', async (event, options) => {
     trusted(event);
     const stream = options?.stream === true;
@@ -694,7 +694,7 @@ function registerIpc() {
     const filters = Array.isArray(options.filters) ? options.filters.slice(0, 8).map((filter) => ({
       name: String(filter.name || 'File').slice(0, 80),
       extensions: Array.isArray(filter.extensions) ? filter.extensions.filter((ext) => /^[a-z0-9*]{1,12}$/i.test(ext)) : [],
-    })).filter((filter) => filter.extensions.length) : [{ name: t('desktop.main.stykanimateProject'), extensions: ['styk'] }];
+    })).filter((filter) => filter.extensions.length) : [{ name: t('desktop.main.stickProject'), extensions: ['styk'] }];
     const result = await dialog.showSaveDialog(window, {
       title: t('desktop.main.saveAnimation'),
       defaultPath: path.basename(String(options.defaultPath || 'Untitled.styk')),

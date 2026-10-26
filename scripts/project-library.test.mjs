@@ -10,7 +10,7 @@ const { ProjectLibrary, MAX_FOLDERS } = createRequire(import.meta.url)('../deskt
 const PNG = 'data:image/png;base64,' + Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3]).toString('base64');
 
 async function fixture(names = [], options = {}) {
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'stykanimate-projects-test-'));
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'stick-projects-test-'));
   const files = [];
   for (const name of names) {
     const filename = path.join(directory, name);

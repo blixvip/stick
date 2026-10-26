@@ -22,7 +22,7 @@ export async function encodeVfwVideo({codecId, width, height, fps, totalFrames, 
   if (!Number.isInteger(keyframeEvery) || keyframeEvery < 0 || keyframeEvery > 1000000 || !Number.isInteger(bitrate) || bitrate < 0 || bitrate > 200000000) throw messageError(new Error(''), "errors.vfwVideoExport.chooseAValidCodecKeyframeIntervalAndBitrate", {});
   if (!Number.isInteger(maxBytes) || maxBytes < 1024 || maxBytes > MAX_BYTES) throw messageError(new Error(''), "errors.vfwVideoExport.windowsVideoMustBeLimitedToBetween1", {});
   if (typeof renderFrame !== 'function') throw messageError(new Error(''), "errors.vfwVideoExport.windowsVideoExportNeedsAFrameRenderer", {});
-  for (const method of ['beginVfwExport', 'beginVfwFrame', 'writeVfwChunk', 'endVfwFrame', 'finishVfwExport', 'readVfwChunk', 'cancelVfwExport']) if (typeof desktop?.[method] !== 'function') throw messageError(new Error(''), "errors.vfwVideoExport.installedWindowsCodecsRequireTheStykanimateWindowsDesktop", {});
+  for (const method of ['beginVfwExport', 'beginVfwFrame', 'writeVfwChunk', 'endVfwFrame', 'finishVfwExport', 'readVfwChunk', 'cancelVfwExport']) if (typeof desktop?.[method] !== 'function') throw messageError(new Error(''), "errors.vfwVideoExport.installedWindowsCodecsRequireTheStickWindowsDesktop", {});
   if (typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined' || typeof createImageBitmap === 'undefined') throw messageError(new Error(''), "errors.vfwVideoExport.windowsVideoExportNeedsWorkerCanvasSupport", {});
   if (signal?.aborted) throw cancelled();
   const worker = new Worker(new URL('./vfw-frame-worker.mjs', import.meta.url), {type: 'module', name: 'Stick Windows video frames'});

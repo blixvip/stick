@@ -47,7 +47,7 @@ export async function enableOffline({env = globalThis, delay = 3000, onUpdate = 
 
 if (typeof document !== 'undefined' && document.querySelector('meta[name="styk-codec"][content="browser"]')) {
   enableOffline({
-    onUpdate: () => globalThis.styk?.ui?.toasts?.show({message: interfaceText("webOffline.aNewVersionOfStykanimateIsReadyIt"), messageKey: "webOffline.aNewVersionOfStykanimateIsReadyIt", slot: 'update', timeout: 10000, dismissible: true}),
+    onUpdate: () => globalThis.styk?.ui?.toasts?.show({message: interfaceText("webOffline.aNewVersionOfStickIsReadyIt"), messageKey: "webOffline.aNewVersionOfStickIsReadyIt", slot: 'update', timeout: 10000, dismissible: true}),
     onError: error => console.warn('Offline use is unavailable:', error?.message ?? error),
   });
 }

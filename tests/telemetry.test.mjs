@@ -11,7 +11,7 @@ const consent = { analytics: true, diagnostics: true };
 async function fixture(options = {}) {
   const directory = await mkdtemp(path.join(tmpdir(), 'styk-telemetry-'));
   const requests = [], fetchImpl = async (url, init) => { requests.push({ url, ...init }); return new Response('{}', { status: 200 }); };
-  const service = await new TelemetryService({ directory, schemaPath, version: '0.3.0', siteUrl: 'https://stykanimate.example', fetchImpl, ...options }).init({ timers: false });
+  const service = await new TelemetryService({ directory, schemaPath, version: '0.3.0', siteUrl: 'https://stick.example', fetchImpl, ...options }).init({ timers: false });
   return { directory, requests, service };
 }
 test('no identity, measurements or requests before consent, or after decline', async () => {
@@ -54,7 +54,7 @@ test('uploads are cumulative, bounded and throttled; sequence survives opt-out a
   const second = JSON.parse(requests[1].body); assert.equal(second.installationId, first.installationId); assert.ok(second.sequence > first.sequence);
   assert.equal(second.counters.open, 3, 'acknowledged activity is not lost after same-day re-opt-in');
   await service.close();
-  const restored = await new TelemetryService({ directory, schemaPath, version: '0.3.0', siteUrl: 'https://stykanimate.example', now: () => now }).init({ timers: false });
+  const restored = await new TelemetryService({ directory, schemaPath, version: '0.3.0', siteUrl: 'https://stick.example', now: () => now }).init({ timers: false });
   assert.ok(restored.preview().snapshots[0].sequence > second.sequence); assert.equal(restored.getState().consent.analytics, true); assert.equal(restored.preview().snapshots[0].counters.unclean_starts, undefined);
 });
 test('delete removes local data, queues an offline request, survives restart and excludes private tokens from preview', async () => {
@@ -63,7 +63,7 @@ test('delete removes local data, queues an offline request, survives restart and
   assert.ok(!JSON.stringify(service.preview()).includes(token));
   await service.deleteData(); assert.equal(service.getState().deletionPending, true); assert.deepEqual(service.preview().snapshots, []); assert.equal(service.state.token, null);
   const requests = [];
-  const restored = await new TelemetryService({ directory, schemaPath, version: '0.3.0', siteUrl: 'https://stykanimate.example', fetchImpl: async (url, init) => { requests.push({url, ...init}); return new Response('{}'); } }).init({ timers: false });
+  const restored = await new TelemetryService({ directory, schemaPath, version: '0.3.0', siteUrl: 'https://stick.example', fetchImpl: async (url, init) => { requests.push({url, ...init}); return new Response('{}'); } }).init({ timers: false });
   await restored.upload({ force: true }); assert.equal(requests.length, 1); assert.equal(requests[0].method, 'DELETE'); assert.equal(requests[0].headers.Authorization, 'Bearer ' + token); assert.equal(restored.getState().deletionPending, false);
   assert.equal(JSON.parse(await readFile(path.join(directory, 'telemetry-state.json'), 'utf8')).deletions.length, 0);
 });

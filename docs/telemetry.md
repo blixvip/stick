@@ -112,7 +112,7 @@ Preferences → Privacy & diagnostics → details → performance trace records3
 
 ## Website and release integration
 
-`desktop/service-config.json` contains only the service origin (empty by default), publisher/contact and release channel. A development run can use `STYK_SITE_URL=http://127.0.0.1:PORT`; production accepts HTTPS only. Main process networking avoids broadening renderer privileges or exposing tokens. `stykanimate://open` opens/focuses the installed application; `stykanimate://privacy` opens its privacy panel. All other routes, parameters, paths and credentials are rejected. The protocol never opens downloaded files or executes commands.
+`desktop/service-config.json` contains only the service origin (empty by default), publisher/contact and release channel. A development run can use `STYK_SITE_URL=http://127.0.0.1:PORT`; production accepts HTTPS only. Main process networking avoids broadening renderer privileges or exposing tokens. `stick://open` opens/focuses the installed application; `stick://privacy` opens its privacy panel. All other routes, parameters, paths and credentials are rejected. The protocol never opens downloaded files or executes commands.
 
 The download page reads the validated release manifest. Publish a current, tested installer/portable artifact on a suitable download host and supply HTTPS URL, version, size and SHA-256 in `LATEST_RELEASE_JSON`. Then regenerate and deploy the public API assets together with the Worker. Until a release is configured, the download page honestly shows that the beta is not yet published. Existing Windows installers are larger than Cloudflare’s25MiB static-asset limit; they must use a separate release/download host.
 

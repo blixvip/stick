@@ -62,7 +62,7 @@ def main():
         document = imported["document"]
         request = {"document": document, "sourceId": imported["sourceId"],
             "format": "styk", "filename": source_path.stem}
-        document["_styk"] = {"format": "StykAnimate", "format_version": 1, "name": source_path.stem}
+        document["_styk"] = {"format": "Stick", "format_version": 1, "name": source_path.stem}
         phases.append({"phase": phase, "total_ms": import_ms, "timings": imported["timings"],
             "memory_after": memory_snapshot()})
         for phase in ("first_save", "second_save"):

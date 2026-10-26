@@ -40,7 +40,7 @@ export function emptyDocument() {
   return {version: 5, canvas_width: 960, canvas_height: 540, fps: 24,
     auto_easing: false, auto_easing_disabled_raw: 1, auto_easing_source: 'file',
     backgrounds: [], figure_types: [defaultFigure()],
-    keyframes: [{...createFrame(), _styk: {easing: {interpolation: 'hold'}}}], _styk: {format: 'StykAnimate', format_version: 1, name: 'Untitled animation'}};
+    keyframes: [{...createFrame(), _styk: {easing: {interpolation: 'hold'}}}], _styk: {format: 'Stick', format_version: 1, name: 'Untitled animation'}};
 }
 
 export function createDemo() {

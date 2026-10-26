@@ -63,7 +63,7 @@ try {
   await page.keyboard.press('Control+,'); await page.locator('[data-tab="canvas"]').click();
   await page.locator('[data-setting="altDragDuplicate"]').selectOption('unique');
   await page.screenshot({path: `${out}/settings.png`}); await page.keyboard.press('Escape'); await settle();
-  await page.waitForFunction(() => JSON.parse(localStorage.getItem('stykanimate.editor.settings.v1')).altDragDuplicate === 'unique');
+  await page.waitForFunction(() => JSON.parse(localStorage.getItem('stick.editor.settings.v1')).altDragDuplicate === 'unique');
   await page.reload(); await page.waitForFunction(() => window.styk?.ready); await setup();
   check('Independent copy preference survives reopening', await page.evaluate(() => styk.state.settings.altDragDuplicate === 'unique'));
   p = await press(); await page.mouse.move(p.x + 80, p.y + 20, {steps: 6}); await release();

@@ -90,7 +90,7 @@ export function captureMovieclip(editor,{start=editor.tick,end=start+1,uids=[...
   });
   const first=at(report,start),rootObject=first.objects.find(o=>selected.has(o.unique_id)&&!o.join)??first.objects.find(o=>selected.has(o.unique_id));
   const root=rootObject&&buildGeometry(report,first).objects.get(rootObject.object_slot)?.root;
-  const document={...source,keyframes:localFrames,_styk:{format:'StykAnimate',format_version:1,name,
+  const document={...source,keyframes:localFrames,_styk:{format:'Stick',format_version:1,name,
     layers:metadata.layers,movieclipSource:{document:{...source,figure_types:[]},inheritFigures:true}}};
   if(Object.values(metadata.layers?.byId??{}).some(layer=>isDrawingLayer(layer)))clipDrawingKeys(document,localFrames);
   return {figure:movieclipFigure(allocateType(editor),name,document,{duration:end-start,pivot:root??{x:0,y:0}}),selected,start,end};

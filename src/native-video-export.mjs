@@ -18,7 +18,7 @@ export async function encodeNativeVideo({format, codec, width, height, fps, tota
   const directFrames = typeof renderNativeFrame === 'function';
   if (!directFrames && typeof renderFrame !== 'function') throw messageError(new Error(''), "errors.nativeVideoExport.nativeVideoExportNeedsAFrameRenderer", {});
   for (const method of ['beginVideoExport', 'beginVideoFrame', 'writeVideoChunk', 'endVideoFrame', 'finishVideoExport', 'readVideoChunk', 'cancelVideoExport'])
-    if (typeof desktop?.[method] !== 'function') throw messageError(new Error(''), "errors.nativeVideoExport.thisVideoFormatRequiresTheStykanimateDesktopApp", {});
+    if (typeof desktop?.[method] !== 'function') throw messageError(new Error(''), "errors.nativeVideoExport.thisVideoFormatRequiresTheStickDesktopApp", {});
   if (typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined' || typeof createImageBitmap === 'undefined') throw messageError(new Error(''), "errors.nativeVideoExport.nativeVideoExportNeedsWorkerCanvasSupport", {});
   if (signal?.aborted) throw cancelled();
   if (audioChunks && typeof desktop?.writeVideoAudioChunk !== 'function') throw messageError(new Error(''), "errors.nativeVideoExport.thisDesktopBuildDoesNotSupportAudioVideo", {});

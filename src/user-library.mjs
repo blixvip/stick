@@ -37,7 +37,7 @@ export class UserLibrary {
    *
    * Two sources share one grid: My library (the desktop library's folders,
    * desktop/library-store.cjs) and Community library (what people share on
-   * stykanimate.com, desktop/public-library.cjs). Cards insert on double-click,
+   * stick.com, desktop/public-library.cjs). Cards insert on double-click,
    * Enter or a drag to the stage; everything else is in a card's ⋯ menu.
    */
   constructor({editor, desktop, exporter, importer, pause, finishEdit, setTool, vfxInspector, activate, hotkeys = new HotkeyManager()}) {
@@ -56,10 +56,10 @@ export class UserLibrary {
     localizedMarkup(this.container, `<div class="library-head">
       <div ${COMMUNITY_LIBRARY ? '' : 'hidden '}class="library-source ui-segmented" data-size="sm" data-fill role="group" aria-label="Library source" data-i18n-aria-label="userLibrary.librarySource"><button type="button" class="ui-segmented-item" data-library-source="mine" aria-pressed="true" data-i18n="userLibrary.myLibrary">${messageHTML("userLibrary.myLibrary", {})}</button><button type="button" class="ui-segmented-item" data-library-source="public" aria-pressed="false">${icon('globe')}${messageHTML("userLibrary.communityLibrary", {})}</button></div>
       <div class="library-tools"><label class="library-search ui-field" data-size="sm">${icon('search')}<input class="ui-field-input" type="search" aria-label="Search library" placeholder="Search" spellcheck="false" autocomplete="off" data-i18n-aria-label="userLibrary.searchLibrary" data-i18n-placeholder="common.search"></label><span class="ui-select library-kind-filter" data-size="sm"><select aria-label="Show" data-i18n-aria-label="userLibrary.show"><option value="all" data-i18n="userLibrary.all">${messageHTML("userLibrary.all", {})}</option><option value="figure" data-i18n="userLibrary.figures">${messageHTML("userLibrary.figures", {})}</option><option value="movieclip" data-i18n="userLibrary.movieclips">${messageHTML("userLibrary.movieclips", {})}</option></select>${icon('chevron-down')}</span><button type="button" class="ui-icon-button" data-size="sm" data-library-menu aria-haspopup="menu" aria-label="Library options" title="Library options" data-i18n-aria-label="userLibrary.libraryOptions" data-i18n-title="userLibrary.libraryOptions">${icon('more')}</button></div>
-      <div class="library-location"><nav class="library-breadcrumbs ui-crumb" aria-label="Library folders" data-i18n-aria-label="userLibrary.libraryFolders"></nav><span class="library-origin">${icon('globe')}<span data-i18n="userLibrary.stykanimateCom">stykanimate.com</span></span><span class="library-count"></span><button type="button" class="ui-icon-button library-new-folder" data-size="sm" data-library-action="folder" aria-label="New library folder" title="New folder" data-i18n-aria-label="userLibrary.newLibraryFolder" data-i18n-title="userLibrary.newFolder">${icon('folder-plus')}</button></div>
+      <div class="library-location"><nav class="library-breadcrumbs ui-crumb" aria-label="Library folders" data-i18n-aria-label="userLibrary.libraryFolders"></nav><span class="library-origin">${icon('globe')}<span data-i18n="userLibrary.stickCom">stick.com</span></span><span class="library-count"></span><button type="button" class="ui-icon-button library-new-folder" data-size="sm" data-library-action="folder" aria-label="New library folder" title="New folder" data-i18n-aria-label="userLibrary.newLibraryFolder" data-i18n-title="userLibrary.newFolder">${icon('folder-plus')}</button></div>
     </div>
     <div class="library-content"><div class="library-grid" role="listbox" aria-label="My library" data-i18n-aria-label="userLibrary.myLibrary"></div><div class="library-empty ui-empty" hidden></div></div>
-    <div class="library-foot"><p class="library-message" role="status" aria-live="polite"></p><button type="button" class="ui-button library-add" data-variant="outline" data-library-action="save">${icon('plus')}<span class="ui-label" data-i18n="userLibrary.addSelection">${messageHTML("userLibrary.addSelection", {})}</span></button><button type="button" class="ui-button library-website" data-variant="ghost" data-size="sm" data-library-action="website">${icon('link')}<span class="ui-label" data-i18n="userLibrary.browseStykanimateComLibrary">${messageHTML("userLibrary.browseStykanimateComLibrary", {})}</span></button></div>`);
+    <div class="library-foot"><p class="library-message" role="status" aria-live="polite"></p><button type="button" class="ui-button library-add" data-variant="outline" data-library-action="save">${icon('plus')}<span class="ui-label" data-i18n="userLibrary.addSelection">${messageHTML("userLibrary.addSelection", {})}</span></button><button type="button" class="ui-button library-website" data-variant="ghost" data-size="sm" data-library-action="website">${icon('link')}<span class="ui-label" data-i18n="userLibrary.browseStickComLibrary">${messageHTML("userLibrary.browseStickComLibrary", {})}</span></button></div>`);
     // Properties' footer: Add to library, shown with the Properties panel.
     this.propertySave = document.createElement('div'); this.propertySave.className = 'properties-library-save';
     localizedMarkup(this.propertySave, `<button type="button" class="button" data-library-action="save">${icon('plus')} ${messageHTML("userLibrary.addToLibrary", {})}</button>`);
@@ -117,7 +117,7 @@ export class UserLibrary {
     }, {root: this.content, rootMargin: '150px'});
     window.addEventListener('focus', () => { if (this.visible && this.source === 'mine' && !this.busy && !this.grid.querySelector('input')) this.run(() => this.refresh()); });
     editor.addEventListener('change', () => this.syncSelection()); this.syncSelection();
-    // stykanimate://library/<id> from the website: the main process keeps the link until it is taken.
+    // stick://library/<id> from the website: the main process keeps the link until it is taken.
     if (desktop?.takePublicLibraryLink) {
       const take = () => this.run(async () => { const id = await desktop.takePublicLibraryLink(); if (id !== null && id !== undefined) await this.openPublic(id); });
       desktop.onPublicLibraryLink?.(take); take();
@@ -211,7 +211,7 @@ export class UserLibrary {
     const examples = `<button type="button" class="ui-button" data-variant="outline" data-size="sm" data-action="rig-examples" data-i18n="userLibrary.rigExamples">${messageHTML("userLibrary.rigExamples", {})}</button>`;
     const browse = !COMMUNITY_LIBRARY ? '' : `<button type="button" class="ui-button" data-variant="outline" data-size="sm" data-library-source-link="public" data-i18n="userLibrary.browseTheCommunityLibrary">${messageHTML("userLibrary.browseTheCommunityLibrary", {})}</button>`;
     if (filtered) localizedMarkup(this.empty, card(interfaceText("userLibrary.noMatches"), '', `<button type="button" class="ui-button" data-size="sm" data-library-clear data-i18n="userLibrary.clearSearch">${messageHTML("userLibrary.clearSearch", {})}</button>`, {title: {key: "userLibrary.noMatches", params: {}}}));
-    else if (pub && !this.desktop?.listPublicLibrary) localizedMarkup(this.empty, card(interfaceText("userLibrary.communityLibrary"), interfaceText("userLibrary.freeFiguresAndMovieclipsSharedByTheCommunity"), `<a class="ui-button" data-variant="outline" data-size="sm" href="${PUBLIC_PAGE}" target="_blank" rel="noopener noreferrer">${messageHTML("userLibrary.openStykanimateComLibrary", {})}</a>`, {title: {key: "userLibrary.communityLibrary", params: {}}, text: {key: "userLibrary.freeFiguresAndMovieclipsSharedByTheCommunity", params: {}}}));
+    else if (pub && !this.desktop?.listPublicLibrary) localizedMarkup(this.empty, card(interfaceText("userLibrary.communityLibrary"), interfaceText("userLibrary.freeFiguresAndMovieclipsSharedByTheCommunity"), `<a class="ui-button" data-variant="outline" data-size="sm" href="${PUBLIC_PAGE}" target="_blank" rel="noopener noreferrer">${messageHTML("userLibrary.openStickComLibrary", {})}</a>`, {title: {key: "userLibrary.communityLibrary", params: {}}, text: {key: "userLibrary.freeFiguresAndMovieclipsSharedByTheCommunity", params: {}}}));
     else if (pub && this.publicState === 'error') localizedMarkup(this.empty, card(interfaceText("userLibrary.communityLibraryIsUnavailable"), esc(this.publicError), `<button type="button" class="ui-button" data-size="sm" data-library-retry data-i18n="userLibrary.tryAgain">${messageHTML("userLibrary.tryAgain", {})}</button>`, {title: {key: "userLibrary.communityLibraryIsUnavailable", params: {}}}));
     else if (pub) localizedMarkup(this.empty, card(interfaceText("userLibrary.nothingHereYet"), interfaceText("userLibrary.figuresAndMovieclipsSharedByTheCommunityAppear"), undefined, {title: {key: "userLibrary.nothingHereYet", params: {}}, text: {key: "userLibrary.figuresAndMovieclipsSharedByTheCommunityAppear", params: {}}}));
     else if (!this.desktop?.listLibrary) localizedMarkup(this.empty, card(interfaceText("userLibrary.libraryIsAvailableInTheDesktopApp"), interfaceText("userLibrary.saveFiguresAndMovieclipsThereToReuseThem"), examples, {title: {key: "userLibrary.libraryIsAvailableInTheDesktopApp", params: {}}, text: {key: "userLibrary.saveFiguresAndMovieclipsThereToReuseThem", params: {}}}));
@@ -269,7 +269,7 @@ export class UserLibrary {
     }
     if (this.source === 'public') this.render();
   }
-  /** A stykanimate://library link: the Library opens on the public asset, selected and ready to insert. */
+  /** A stick://library link: the Library opens on the public asset, selected and ready to insert. */
   async openPublic(id) {
     this.showView('library');
     await this.setSource('public');
@@ -458,7 +458,7 @@ export class UserLibrary {
       {label: interfaceText('userLibrary.insert'), labelKey: "userLibrary.insert", icon: 'plus', shortcut: 'Enter', disabled: this.busy, run: run(() => this.insert(item))},
       {label: interfaceText("userLibrary.saveToMyLibrary"), labelKey: "userLibrary.saveToMyLibrary", icon: 'library', disabled: this.busy || !this.desktop?.savePublicLibraryAsset, run: run(() => this.savePublic(item))},
       null,
-      {label: interfaceText("userLibrary.viewOnStykanimateCom"), labelKey: "userLibrary.viewOnStykanimateCom", icon: 'link', run: run(() => this.desktop.openPublicLibraryPage(item.id))},
+      {label: interfaceText("userLibrary.viewOnStickCom"), labelKey: "userLibrary.viewOnStickCom", icon: 'link', run: run(() => this.desktop.openPublicLibraryPage(item.id))},
     ];
     else if (item) items = [
       {label: item.kind === 'folder' ? interfaceText("userLibrary.open") : interfaceText('userLibrary.insert'), labelKey: (item.kind === 'folder' ? "userLibrary.open" : "userLibrary.insert"), labelParams: (item.kind === 'folder' ? {} : {}), icon: item.kind === 'folder' ? 'folder' : 'plus', shortcut: 'Enter', disabled: this.busy, run: run(() => this.open(item.path))},
@@ -471,7 +471,7 @@ export class UserLibrary {
     else {
       items = pub ? [
         {label: interfaceText("userLibrary.refresh"), labelKey: "userLibrary.refresh", icon: 'rotate', disabled: !this.desktop?.listPublicLibrary, run: run(() => this.loadPublic({refresh: true}))},
-        {label: interfaceText("userLibrary.openStykanimateComLibrary"), labelKey: "userLibrary.openStykanimateComLibrary", icon: 'link', run: run(() => this.action('website'))},
+        {label: interfaceText("userLibrary.openStickComLibrary"), labelKey: "userLibrary.openStickComLibrary", icon: 'link', run: run(() => this.action('website'))},
       ] : [
         {label: interfaceText("userLibrary.newFolder"), labelKey: "userLibrary.newFolder", icon: 'folder-plus', disabled: !mine || this.busy, run: run(() => this.newFolder())},
         {label: interfaceText("userLibrary.addSelection"), labelKey: "userLibrary.addSelection", icon: 'plus', disabled: !mine || this.busy || !this.editor.selectedObjects.length, run: run(() => this.save())},

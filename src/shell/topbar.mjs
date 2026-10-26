@@ -47,7 +47,7 @@ export function bandBottom(doc = globalThis.document) {
 
 /** The band token that folds the menubar into the mark (the minimal tier). */
 export const MENUBAR_FOLD = 'menus';
-const CACHE_KEY = 'stykanimate.band-widths.v1';
+const CACHE_KEY = 'stick.band-widths.v1';
 /** A window at least this wide folds nothing, so its first commit need not wait for the band's measurement. */
 const WIDE = TIER_THRESHOLDS.width.regular + 1;
 

@@ -35,7 +35,7 @@ Duplicate `side_tables` aliases are omitted when they point to exactly the
 same image/text objects, avoiding a second JSON copy of sprites and glyph paths.
 The full writer accepts the canonical `image_assets` and `text_assets` arrays.
 `.json` uploads are accepted as native projects. The early web save wrapper
-`{format:"stykanimate",version:1,name,document}` also imports; current native
+`{format:"stick",version:1,name,document}` also imports; current native
 saves embed original Pivot source data directly in the document.
 
 `timings` contains `decode_ms`, `total_ms`, `cache_hit`, `source_bytes`, and

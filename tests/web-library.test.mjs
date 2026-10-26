@@ -161,7 +161,7 @@ test('two writers cannot take the same name at once when the tabs share a lock',
   const library = new LocalLibrary({backend: new MemoryBackend(), locks, now: () => 1, randomId: () => `t${++ids}`});
   const results = await Promise.all(['Same', 'Same', 'Same'].map(name => save(library, name)));
   assert.deepEqual(results.map(result => result.path).sort(), ['Same (2).stkz', 'Same (3).stkz', 'Same.stkz']);
-  assert.ok(held.length >= 3 && held.every(name => name === 'stykanimate-library'));
+  assert.ok(held.length >= 3 && held.every(name => name === 'stick-library'));
 });
 
 test('the browser interface has every call the panel makes, and the community ones go to the community client', async () => {

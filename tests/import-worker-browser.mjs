@@ -53,7 +53,7 @@ try {
         'Native import lost edited pose.');
       checks.push('Native project saves and worker imports retain source bytes and edited pose.');
 
-      const wrapped = {format: 'stykanimate', version: 1, name: 'Early project', document: sample.document};
+      const wrapped = {format: 'stick', version: 1, name: 'Early project', document: sample.document};
       const early = await importer.importNative(new File([JSON.stringify(wrapped)], 'early.json'));
       assert(early.document.version === 5 && early.kind === 'styk', 'Early JSON wrapper compatibility failed.');
       checks.push('Early native wrappers and JSON filename alias import correctly.');

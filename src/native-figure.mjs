@@ -58,7 +58,7 @@ export function nativeFigureDocument(report, {figureTypeId, figureUid, figureUid
     const savedFrame = createFrame(objects, 1); setOrder(savedFrame, frameOrder(frame).filter(id => selected.has(id)));
     return {version: report.version, canvas_width: report.canvas_width, canvas_height: report.canvas_height, fps: report.fps,
       auto_easing: false, auto_easing_disabled_raw: 1, figure_types: portableFigures(figures), backgrounds: [], keyframes: [savedFrame],
-      _styk: {format:'StykAnimate', format_version:1, name: sources.length === 1 ? figures[0].name || 'Figure' : 'Figure set', libraryKind: sources.length > 1 ? 'set' : figures[0]._styk?.movieclip ? 'movieclip' : 'figure'}};
+      _styk: {format:'Stick', format_version:1, name: sources.length === 1 ? figures[0].name || 'Figure' : 'Figure set', libraryKind: sources.length > 1 ? 'set' : figures[0]._styk?.movieclip ? 'movieclip' : 'figure'}};
   }
   const source = frame.objects.find(object => figureUid == null ? object.figure_type_id === figureTypeId : object.unique_id === figureUid);
   const figure = report.figure_types.find(figure => figure.figure_type_id === source?.figure_type_id);
@@ -79,6 +79,6 @@ export function nativeFigureDocument(report, {figureTypeId, figureUid, figureUid
     version: report.version, canvas_width: report.canvas_width, canvas_height: report.canvas_height,
     fps: report.fps, auto_easing: false, auto_easing_disabled_raw: 1,
     figure_types: portableFigures([figure]), backgrounds: [], keyframes: [createFrame([object], 1)],
-    _styk: {format: 'StykAnimate', format_version: 1, name: figure.name || 'Figure'},
+    _styk: {format: 'Stick', format_version: 1, name: figure.name || 'Figure'},
   };
 }

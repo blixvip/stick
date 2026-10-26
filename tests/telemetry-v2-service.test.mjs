@@ -9,7 +9,7 @@ import { MAX_SNAPSHOT_BYTES, MAX_OPERATION_CONTEXTS, COUNTERS, TIMINGS, GAUGES, 
 
 const schemaPath = path.resolve('src/telemetry-schema.mjs');
 const consent = { analytics: true, diagnostics: true };
-const origin = 'https://stykanimate.example';
+const origin = 'https://stick.example';
 const initialTime = Date.parse('2026-09-10T10:00:00Z');
 const histogram = (value = 120) => { const h = emptyHistogram(); observe(h, value); return h; };
 const context = (overrides = {}, milliseconds = 120) => ({ ...operationContext({ operation: 'save', stage: 'serialize', format: 'native', size: '1-10mb', complexity: '100-999', fps: '25-30', outcome: 'succeeded', ...overrides }), timing: histogram(milliseconds) });

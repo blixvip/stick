@@ -33,7 +33,7 @@ const result = {file, label, throttle, copies, cpu: os.cpus()[0].model.trim(), m
 try {
   const page = await browser.newPage({viewport: {width: 1600, height: 1000}}), errors = [];
   page.on('pageerror', error => errors.push(error.message));
-  if (process.env.STYK_RENDERER) await page.addInitScript(mode => localStorage.setItem('stykanimate.editor.settings.v1', JSON.stringify({rendererMode: mode})), process.env.STYK_RENDERER);
+  if (process.env.STYK_RENDERER) await page.addInitScript(mode => localStorage.setItem('stick.editor.settings.v1', JSON.stringify({rendererMode: mode})), process.env.STYK_RENDERER);
   if (process.env.STYK_BASELINE_CLIENT) {
     const ref = process.env.STYK_BASELINE_CLIENT, files = new Map();result.client = ref;
     await page.context().route(url => url.pathname === '/' || url.pathname === '/index.html' || url.pathname.startsWith('/src/'), async route => {

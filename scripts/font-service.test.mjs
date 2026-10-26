@@ -26,9 +26,9 @@ const bold = await readFile(
 );
 const align4 = (value) => Math.ceil(value / 4) * 4;
 async function fixture(t) {
-  const root = await mkdtemp(path.join(os.tmpdir(), "stykanimate-fonts-"));
+  const root = await mkdtemp(path.join(os.tmpdir(), "stick-fonts-"));
   assert.equal(path.dirname(root), os.tmpdir());
-  assert.ok(path.basename(root).startsWith("stykanimate-fonts-"));
+  assert.ok(path.basename(root).startsWith("stick-fonts-"));
   t.after(() => rm(root, { recursive: true, force: true }));
   return root;
 }

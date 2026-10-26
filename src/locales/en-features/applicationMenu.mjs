@@ -47,7 +47,7 @@ export default Object.freeze({
   "applicationMenu.whatSNew": "What’s new",
   "applicationMenu.supportDevelopment": "Support development",
   "applicationMenu.privacyDiagnostics": "Privacy & diagnostics",
-  "applicationMenu.stykanimateWebsite": "Stick website",
+  "applicationMenu.stickWebsite": "Stick website",
   "applicationMenu.exactValues": "Exact values…",
   "applicationMenu.splitSegment": "Split segment",
   "applicationMenu.removeJointKeepEnds": "Remove joint, keep ends",

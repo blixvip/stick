@@ -12,7 +12,7 @@ try {
   for (const rendererMode of ['gpu', 'canvas']) {
     const page = await browser.newPage({viewport: {width: 1440, height: 960}}), errors = [], samples = [];
     page.on('pageerror', e => errors.push(e.message)); page.on('crash', () => errors.push('Browser renderer crashed'));
-    await page.addInitScript(rendererMode => localStorage.setItem('stykanimate.editor.settings.v1',
+    await page.addInitScript(rendererMode => localStorage.setItem('stick.editor.settings.v1',
       JSON.stringify({rendererMode, locale: 'en', canvasZoomGesture: 'ctrl-scroll'})), rendererMode);
     await page.goto(server.origin); await page.waitForFunction(() => window.styk?.ready);
     const initial = await page.evaluate(async () => {

@@ -571,7 +571,7 @@ class FontService {
         stat.ino !== before.ino ||
         stat.dev !== before.dev
       )
-        throw messageError(new Error(''), 'desktop.fontService.errors.theInstalledFontChangedRestartStykAnimateToRefreshTheFontList', {});
+        throw messageError(new Error(''), 'desktop.fontService.errors.theInstalledFontChangedRestartStickToRefreshTheFontList', {});
       data = entry.collection
         ? await standaloneFace(handle, entry, stat.size)
         : await readRange(handle, 0, stat.size, stat.size);

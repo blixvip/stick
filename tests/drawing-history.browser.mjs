@@ -8,7 +8,7 @@ const check=(name,value)=>{assert.ok(value,name);checks.push(name);console.log('
 try{
   await page.goto(process.env.STYK_URL||'http://127.0.0.1:47839');await page.waitForFunction(()=>window.styk?.ready);
   const storage=await page.evaluate(async()=>{
-    const {DrawingHistoryDatabase}=await import('/src/drawing-history-database.mjs'),name='stykanimate-history-test-'+crypto.randomUUID(),a=new DrawingHistoryDatabase({name}),b=new DrawingHistoryDatabase({name}),tiny=new DrawingHistoryDatabase({name,maxBytes:1});
+    const {DrawingHistoryDatabase}=await import('/src/drawing-history-database.mjs'),name='stick-history-test-'+crypto.randomUUID(),a=new DrawingHistoryDatabase({name}),b=new DrawingHistoryDatabase({name}),tiny=new DrawingHistoryDatabase({name,maxBytes:1});
     const tiles=[{tx:-100,ty:200,before:null,after:Uint8ClampedArray.from({length:16384},(_,i)=>(i*17)%256)}];
     try{
       await a.begin(1);await a.append(1,tiles);let unpublished=false;try{await a.info(1);}catch{unpublished=true;}await a.finish(1);

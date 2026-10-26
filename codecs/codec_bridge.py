@@ -108,7 +108,7 @@ def attach_source(document: dict, source: bytes, path: Path, kind: str) -> dict:
         "source_base64": base64.b64encode(source).decode("ascii"),
         "sha256": hashlib.sha256(source).hexdigest(), "original_path": str(path.resolve()),
         "document_sha256": document_digest(document)}
-    document["_styk"] = {"format": "StykAnimate", "format_version": 1}
+    document["_styk"] = {"format": "Stick", "format_version": 1}
     return document
 
 
@@ -245,7 +245,7 @@ def validate_document(document: dict) -> None:
     if not isinstance(document, dict) or document.get("version") not in (2, 3, 4, 5):
         raise PivError("Not a supported Stick/Pivot document")
     native = document.get("_styk", {})
-    if native and (native.get("format") != "StykAnimate" or native.get("format_version") != 1):
+    if native and (native.get("format") != "Stick" or native.get("format_version") != 1):
         raise PivError("Unsupported Stick native project version")
     for key in ("canvas_width", "canvas_height"):
         value = document.get(key)
@@ -439,7 +439,7 @@ def save_project(document: dict, destination: Path, original: Path | None = None
         # until a later Pivot export. Asset blobs are already inline in the JSON.
         source_bytes(document)
         output = copy.copy(document)
-        output["_styk"] = {"format": "StykAnimate", "format_version": 1}
+        output["_styk"] = {"format": "Stick", "format_version": 1}
         atomic_json(output_path, output, staging=staged)
         return {"format": "styk", "path": str(destination)}
     if suffix != ".piv":

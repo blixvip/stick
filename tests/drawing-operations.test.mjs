@@ -73,7 +73,7 @@ test('a failed operation discards its queued gesture and releases its reservatio
 });
 
 test('pixel clipboard validates world coordinates and affine poses before replacing it',async()=>{
-  const editor={_drawingPixelClipboard:'previous',_emit:()=>{}},data={width:1,height:1,pixelsPerUnit:1,dataUrl:'data:image/png;base64,AA==',world:{x:1,y:2}},packet={format:'StykAnimate clipboard',version:1,kind:'drawing-pixels',data};
+  const editor={_drawingPixelClipboard:'previous',_emit:()=>{}},data={width:1,height:1,pixelsPerUnit:1,dataUrl:'data:image/png;base64,AA==',world:{x:1,y:2}},packet={format:'Stick clipboard',version:1,kind:'drawing-pixels',data};
   await assert.rejects(restoreClipboard(editor,{...packet,data:{...data,world:{x:NaN,y:2}}}),/origin/);
   await assert.rejects(restoreClipboard(editor,{...packet,data:{...data,matrix:[0,0,0,0,1,2]}}),/singular/);
   assert.equal(editor._drawingPixelClipboard,'previous');

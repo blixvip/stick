@@ -947,7 +947,7 @@ Two independent tiers (`visual-system.md` §11, `experience.md` §1.8). **Width 
 
 #### 3.11.6 Store (`layout-store.mjs`)
 
-- **Backends.** On desktop it uses `desktop.getWorkspacePreferences()` and `setWorkspacePreferences()` only, because localStorage does not survive restarts (the origin changes per launch). In the browser it uses localStorage key `stykanimate.workspace-layout.v2`.
+- **Backends.** On desktop it uses `desktop.getWorkspacePreferences()` and `setWorkspacePreferences()` only, because localStorage does not survive restarts (the origin changes per launch). In the browser it uses localStorage key `stick.workspace-layout.v2`.
 - **Saves** are debounced by 200 ms into an ordered promise chain. `flushPreferences()` returns that chain. Failures dispatch `styk-workspace-persistence-error` and show a warning toast.
 - **Merge-on-write.** Before each write it re-reads the disk and merges:
   - `shared` and each `modes.*` by newest `stamp`

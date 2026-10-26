@@ -2198,7 +2198,7 @@ function updateTitle() {
   const published = documentStateNow(), revision = published.revision;
   if (name === shownTitle.name && dirty === shownTitle.dirty && revision === shownTitle.revision && words === shownTitle.words) return;
   if (name !== shownTitle.name || dirty !== shownTitle.dirty || words !== shownTitle.words)
-    localizedText(document.querySelector("title"), "app.stykanimate", {value: dirty ? "• " : "", name: name});
+    localizedText(document.querySelector("title"), "app.stick", {value: dirty ? "• " : "", name: name});
   const documentChanged = name !== shownTitle.name || dirty !== shownTitle.dirty || revision !== shownTitle.revision;
   shownTitle = { name, dirty, revision, words };
   if (documentChanged) desktop?.setDocumentState?.(published);
@@ -2241,7 +2241,7 @@ function renderAssets() {
             `<button class="sample-item" data-sample="${esc(s.path)}">${icon(s.kind === "stk" ? "person" : "file")}<span>${esc(s.name)}</span><small>${esc(s.kind?.toUpperCase() || interfaceText("app.piv"))}</small></button>`,
         )
         .join("")
-    : `<p class="property-note" style="padding:0 15px" data-i18n="app.openStykanimatePivotOrStickNodesProjectsFigures">${messageHTML("app.openStykanimatePivotOrStickNodesProjectsFigures", {})}</p>`));
+    : `<p class="property-note" style="padding:0 15px" data-i18n="app.openStickPivotOrStickNodesProjectsFigures">${messageHTML("app.openStickPivotOrStickNodesProjectsFigures", {})}</p>`));
 }
 function renderInspector() {
   vfxInspector?.sync();
@@ -3437,7 +3437,7 @@ async function acceptImport(
 ) {
   try {
   let report = result.document ?? result.report ?? result;
-  if (report.format === "stykanimate") report = report.document;
+  if (report.format === "stick") report = report.document;
   const savedDraft = Boolean(report._styk?.simpleFrameDraft);
   const kind =
     result.kind ||
@@ -6089,7 +6089,7 @@ function showRecovery(record, records = [record]) {
         if (!copy) throw messageError(new Error(''), "errors.app.theRecoveryFileIsNoLongerAvailable", {});
       } else {
         copy = await readBrowserRecovery(undefined, {id: chosen.id});
-        if (!copy || copy.savedAt !== chosen.savedAt || copy.token !== chosen.token) throw messageError(new Error(''), "errors.app.theRecoveryCopyChangedReopenStykanimateToSee", {});
+        if (!copy || copy.savedAt !== chosen.savedAt || copy.token !== chosen.token) throw messageError(new Error(''), "errors.app.theRecoveryCopyChangedReopenStickToSee", {});
       }
       const name = chosen.name || copy.name;
       const restored = await importer.importNative(new File([copy.blob], `${name}.styk`));

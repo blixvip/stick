@@ -35,7 +35,7 @@ export class SupportDesktopUI {
   }
   async initialize() {
     const context = await this.bridge.getSupportContext();
-    const namespace = value => 'stykanimate.support.drafts.' + value.inboxId;
+    const namespace = value => 'stick.support.drafts.' + value.inboxId;
     const values = new Map(); let activeContext = context, pending = Promise.resolve();
     const seed = value => { activeContext = value; values.set(namespace(value), JSON.stringify(value.drafts || {})); values.set(namespace(value) + '-last', value.lastThread || ''); };
     seed(context);

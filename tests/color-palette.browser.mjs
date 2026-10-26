@@ -179,7 +179,7 @@ try{
     check(`the last palette falls back to ${fallback}`,await picker.locator(`[data-palette-view="${fallback}"]`).getAttribute('aria-pressed')==='true'
       &&await picker.locator('[data-palette-menu]').getAttribute('aria-expanded')==='false');
     check('focus returns to the palette menu',await picker.locator('[data-palette-menu]').evaluate(el=>el===document.activeElement));
-    check('deletion is saved',await page.evaluate(()=>JSON.parse(localStorage.getItem('stykanimate.colors.v1')).palettes.length)===0);
+    check('deletion is saved',await page.evaluate(()=>JSON.parse(localStorage.getItem('stick.colors.v1')).palettes.length)===0);
     await page.screenshot({path:`${output}/deleted-last-${fallback}.png`,clip:await picker.boundingBox()});
   }
   await page.keyboard.press('Escape');

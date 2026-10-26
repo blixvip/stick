@@ -2,7 +2,7 @@ import {messageError} from './localized-error.mjs';
 // Recovery bytes and tiny display/capacity metadata have separate stores.
 // Listing never materializes project bytes. Each tab owns one key; saves cannot
 // clear another tab's work. Web Locks keep live copies out of recovery offers.
-const NAME='stykanimate-recovery', STORE='documents', META='metadata', VERSION=2;
+const NAME='stick-recovery', STORE='documents', META='metadata', VERSION=2;
 export const MAX_RECOVERY_COPIES=8, MAX_RECOVERY_BYTES=512*1024*1024;
 const sizeOf=record=>record?.data instanceof ArrayBuffer ? record.data.byteLength : record?.blob?.size ?? 0;
 const metadata=(record,id)=>({id,name:record.name,savedAt:record.savedAt,token:record.token,size:sizeOf(record)});
@@ -24,7 +24,7 @@ function open(database){
     };
     request.onsuccess=()=>{const db=request.result;if(failed){db.close();return;}db.onversionchange=()=>db.close();resolve(db);};
     request.onerror=()=>reject(request.error??messageError(new Error(''), "errors.browserRecovery.recoveryStorageCouldNotBeOpened", {}));
-    request.onblocked=()=>{failed=true;reject(messageError(new Error(''), "errors.browserRecovery.closeOlderStykanimateTabsToUpdateRecoveryStorage", {}));};
+    request.onblocked=()=>{failed=true;reject(messageError(new Error(''), "errors.browserRecovery.closeOlderStickTabsToUpdateRecoveryStorage", {}));};
   });
 }
 
@@ -116,7 +116,7 @@ export class BrowserRecoverySession{
   claim(id){
     if(!this.locks?.request)return Promise.resolve(()=>{});
     return new Promise((resolve,reject)=>{
-      this.locks.request('stykanimate-recovery:'+id,{ifAvailable:true},lock=>{
+      this.locks.request('stick-recovery:'+id,{ifAvailable:true},lock=>{
         if(!lock){resolve(null);return;}
         return new Promise(release=>resolve(release));
       }).catch(reject);

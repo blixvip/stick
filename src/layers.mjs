@@ -20,7 +20,7 @@ export function validateLayerState(state) {
 export function* validateLayerStateSteps(state) {
   if (!record(state) || state.version !== 1 || !Array.isArray(state.order) || !state.order.length || state.order.length > 10000 ||
     !record(state.byId) || !record(state.assignments) || !Number.isSafeInteger(state.nextId) || state.nextId < 1)
-    throw messageError(new Error(''), "errors.layers.invalidStykanimateLayerMetadata", {});
+    throw messageError(new Error(''), "errors.layers.invalidStickLayerMetadata", {});
   const ids = new Set(); let largest = 0, work = 0;
   for (const id of state.order) {
     if (!isUserLayerId(id) || ids.has(id) || !owns(state.byId, id)) throw messageError(new Error(''), "errors.layers.layerIdsAndOrderMustBeUnique", {});
@@ -49,7 +49,7 @@ export function* validateLayerStateSteps(state) {
 }
 export function ensureLayerState(report) {
   if (!report._styk) report._styk = {};
-  if (!record(report._styk)) throw messageError(new Error(''), "errors.layers.invalidStykanimateMetadata", {});
+  if (!record(report._styk)) throw messageError(new Error(''), "errors.layers.invalidStickMetadata", {});
   const state = report._styk.layers ??= createLayerState();
   if (record(state) && (state.fixed === undefined || record(state.fixed))) {
     state.fixed ??= {};

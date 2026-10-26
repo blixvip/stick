@@ -207,7 +207,7 @@ export class ImportClient {
   async importFile(file,{entryIndex,onProgress,project=false}={}) {
     if (this.disposed) throw messageError(new Error(''), "errors.importClient.theFileImporterHasBeenDisposed", {});
     if (!file || typeof file.arrayBuffer !== 'function' || typeof file.name !== 'string') {
-      throw messageError(new TypeError(''), "errors.importClient.chooseAStykanimatePivotOrStickNodesFile", {});
+      throw messageError(new TypeError(''), "errors.importClient.chooseAStickPivotOrStickNodesFile", {});
     }
     const native = /\.(styk|stkz|stykmov|json)$/i.test(file.name);
     const limit = (native ? 256 : 128) * 1024 * 1024;

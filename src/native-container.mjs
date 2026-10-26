@@ -49,7 +49,7 @@ export async function sha256(bytes) {
 
 export async function inflate(bytes, limit = MAX_BYTES) {
   if (!Number.isSafeInteger(limit) || limit < 0 || limit > MAX_SKELETON_BYTES)
-    throw messageError(new Error(''), "errors.nativeContainer.theStykanimateDocumentExceedsTheUncompressedSizeLimit", {});
+    throw messageError(new Error(''), "errors.nativeContainer.theStickDocumentExceedsTheUncompressedSizeLimit", {});
   const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate'));
   const reader = stream.getReader(), chunks = [];
   let length = 0;
@@ -59,7 +59,7 @@ export async function inflate(bytes, limit = MAX_BYTES) {
       if (done) break;
       if (value.byteLength > limit - length) {
         await reader.cancel().catch(() => {});
-        throw messageError(new Error(''), "errors.nativeContainer.theStykanimateDocumentExceedsTheUncompressedSizeLimit", {});
+        throw messageError(new Error(''), "errors.nativeContainer.theStickDocumentExceedsTheUncompressedSizeLimit", {});
       }
       chunks.push(value); length += value.byteLength;
     }
@@ -150,32 +150,32 @@ async function packCached(bytes, digest, {cache, stats}) {
 
 async function unpack(codec, bytes, rawLength) {
   if (codec === 0) {
-    if (bytes.byteLength !== rawLength) throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedInvalidPayloadLength", {});
+    if (bytes.byteLength !== rawLength) throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedInvalidPayloadLength", {});
     return bytes;
   }
   if (codec === 1) {
     const out = await inflate(bytes, rawLength);
-    if (out.byteLength !== rawLength) throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedInvalidPayloadLength", {});
+    if (out.byteLength !== rawLength) throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedInvalidPayloadLength", {});
     return out;
   }
   if (codec === 2) {
     const z = await zstd();
     if (!z) throw Object.assign(messageError(new Error(''), "errors.nativeContainer.thisProjectUsesZstdCompressionThisBuildCannot", {}), {code: 'codec_unavailable'});
     const out = await z.decompress(bytes, rawLength);
-    if (out.byteLength !== rawLength) throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedInvalidPayloadLength", {});
+    if (out.byteLength !== rawLength) throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedInvalidPayloadLength", {});
     return out;
   }
-  throw messageError(new Error(''), "errors.nativeContainer.unsupportedStykanimateFileVersionUpdateTheAppTo", {});
+  throw messageError(new Error(''), "errors.nativeContainer.unsupportedStickFileVersionUpdateTheAppTo", {});
 }
 
 function parseHeader(bytes, kind) {
-  if (bytes.byteLength < HEADER) throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsTruncatedOrHasAn", {});
+  if (bytes.byteLength < HEADER) throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsTruncatedOrHasAn", {});
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   if (decoder.decode(bytes.subarray(0, 4)) !== MAGIC[kind])
-    throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileTypeDoesNotMatchIts", {});
+    throw messageError(new Error(''), "errors.nativeContainer.theStickFileTypeDoesNotMatchIts", {});
   const version = view.getUint8(4), codec = view.getUint8(5), flags = view.getUint16(6, true);
   if (![1, 2].includes(version) || ![0, 1, 2].includes(codec) || flags !== 0 || (version === 1 && codec !== 1))
-    throw messageError(new Error(''), "errors.nativeContainer.unsupportedStykanimateFileVersionUpdateTheAppTo", {});
+    throw messageError(new Error(''), "errors.nativeContainer.unsupportedStickFileVersionUpdateTheAppTo", {});
   const raw = view.getBigUint64(8, true), stored = view.getBigUint64(16, true);
   if (raw <= 0n || raw > BigInt(version === 2 ? MAX_SKELETON_BYTES : MAX_BYTES) || stored > BigInt(MAX_BYTES))
     throw messageError(new Error(''), "errors.nativeContainer.theNativeDocumentExceedsTheUncompressedSizeLimit", {});
@@ -199,19 +199,19 @@ export async function decodeDocument(data, kind) {
   const header = parseHeader(bytes, kind);
   if (header.version === 1) {
     if (HEADER + header.stored !== bytes.byteLength)
-      throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsTruncatedOrHasTrailing", {});
+      throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsTruncatedOrHasTrailing", {});
     const payload = await unpack(header.codec, bytes.subarray(HEADER), header.raw);
     if (!(await sha256(payload)).every((b, i) => b === header.digest[i]))
-      throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedChecksumMismatch", {});
+      throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedChecksumMismatch", {});
     return {document: JSON.parse(decoder.decode(payload)), version: 1, skeletonBytes: payload, materializedBytes: payload.byteLength};
   }
   if (bytes.byteLength < HEADER + 4)
-    throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsTruncatedOrHasAn", {});
+    throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsTruncatedOrHasAn", {});
   // Layout: header(56) | count u32 | compressed skeleton | N x 64B records | payloads.
   const count = header.view.getUint32(HEADER, true);
   const skeletonEnd = HEADER + 4 + header.stored;
   if (count > 64 || skeletonEnd + count * SECTION > bytes.byteLength)
-    throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsTruncatedOrHasAn", {});
+    throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsTruncatedOrHasAn", {});
   const records = [];
   let pos = skeletonEnd + count * SECTION, expected = header.raw;
   for (let i = 0; i < count; i++) {
@@ -220,27 +220,27 @@ export async function decodeDocument(data, kind) {
       raw: Number(view.getBigUint64(off + 8, true)), stored: Number(view.getBigUint64(off + 16, true)),
       digest: bytes.subarray(off + 24, off + 56)};
     if (![1, 2].includes(section.kind))
-      throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileHasAnUnknownSectionKind", {});
+      throw messageError(new Error(''), "errors.nativeContainer.theStickFileHasAnUnknownSectionKind", {});
     if (![0, 1, 2].includes(section.codec) || view.getUint16(off + 2, true) || view.getUint32(off + 4, true) || view.getBigUint64(off + 56, true))
-      throw messageError(new Error(''), "errors.nativeContainer.unsupportedStykanimateFileVersionUpdateTheAppTo", {});
+      throw messageError(new Error(''), "errors.nativeContainer.unsupportedStickFileVersionUpdateTheAppTo", {});
     if (!Number.isSafeInteger(section.raw) || !Number.isSafeInteger(section.stored) ||
         section.raw > MAX_BYTES || section.stored > bytes.byteLength - pos ||
         (section.codec === 0 && section.raw !== section.stored))
-      throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsTruncatedOrHasAn2", {});
+      throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsTruncatedOrHasAn2", {});
     expected += section.raw * 3; // materialized JSON upper bound (base64 growth)
     records.push({...section, offset: pos}); pos += section.stored;
   }
-  if (pos !== bytes.byteLength) throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsTruncatedOrHasTrailing", {});
+  if (pos !== bytes.byteLength) throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsTruncatedOrHasTrailing", {});
   if (expected > MAX_BYTES * 4)
     throw messageError(new Error(''), "errors.nativeContainer.theNativeDocumentExceedsTheUncompressedSizeLimit", {});
   const skeleton = await unpack(header.codec, bytes.subarray(HEADER + 4, skeletonEnd), header.raw);
   if (!(await sha256(skeleton)).every((b, i) => b === header.digest[i]))
-    throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedChecksumMismatch", {});
+    throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedChecksumMismatch", {});
   const sections = [];
   for (const section of records) {
     const raw = await unpack(section.codec, bytes.subarray(section.offset, section.offset + section.stored), section.raw);
     if (!(await sha256(raw)).every((b, i) => b === section.digest[i]))
-      throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedChecksumMismatch", {});
+      throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedChecksumMismatch", {});
     sections.push({kind: section.kind, bytes: raw});
   }
   const document = JSON.parse(decoder.decode(skeleton));
@@ -275,7 +275,7 @@ export function materializeMarkers(node, sections, {maxMaterializedBytes = MAX_B
     const section = sections[s];
     if (![s, offset, count].every(Number.isSafeInteger) || !section || section.kind !== 1 || offset % width ||
         offset > section.bytes.byteLength || count > Math.floor((section.bytes.byteLength - offset) / width))
-      throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedInvalidArraySection", {});
+      throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedInvalidArraySection", {});
     // Covers Python numeric objects and list capacity as well as JS arrays.
     admitAllocation(count * 48);
     const bytes = section.bytes, absolute = bytes.byteOffset + offset;
@@ -291,7 +291,7 @@ export function materializeMarkers(node, sections, {maxMaterializedBytes = MAX_B
       throw messageError(new Error(''), "errors.nativeContainer.theNativeDocumentExceedsTheUncompressedSizeLimit", {});
     for (let i = 0; i < count; i++) {
       const item = read(i);
-      if (!Number.isFinite(item)) throw messageError(new Error(''), "errors.nativeContainer.theStykanimateDocumentContainsNonFiniteNumbers", {});
+      if (!Number.isFinite(item)) throw messageError(new Error(''), "errors.nativeContainer.theStickDocumentContainsNonFiniteNumbers", {});
       jsonBytes += String(item).length;
       if (jsonBytes > maxMaterializedBytes)
         throw messageError(new Error(''), "errors.nativeContainer.theNativeDocumentExceedsTheUncompressedSizeLimit", {});
@@ -304,7 +304,7 @@ export function materializeMarkers(node, sections, {maxMaterializedBytes = MAX_B
     const s = +match[1], offset = +match[2], count = +match[3], section = sections[s];
     if (![s, offset, count].every(Number.isSafeInteger) || !section || section.kind !== 2 ||
         offset > section.bytes.byteLength || count > section.bytes.byteLength - offset)
-      throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedInvalidPayloadSection", {});
+      throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedInvalidPayloadSection", {});
     return {section, offset, count};
   };
   const preflight = value => {
@@ -318,7 +318,7 @@ export function materializeMarkers(node, sections, {maxMaterializedBytes = MAX_B
       }
       if (value.startsWith('S2E:')) { admit(jsonStringBytes(value.slice(4))); return; }
       if (value.startsWith('S2B:') || value.startsWith('S2S:') || value.startsWith('S2D:'))
-        throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedMalformedSectionMarker", {});
+        throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedMalformedSectionMarker", {});
       admit(jsonStringBytes(value)); return;
     }
     if (Array.isArray(value)) {
@@ -349,7 +349,7 @@ export function materializeMarkers(node, sections, {maxMaterializedBytes = MAX_B
     }
     if (value.startsWith('S2E:')) return value.slice(4);
     if (value.startsWith('S2B:') || value.startsWith('S2S:') || value.startsWith('S2D:'))
-      throw messageError(new Error(''), "errors.nativeContainer.theStykanimateFileIsDamagedMalformedSectionMarker", {});
+      throw messageError(new Error(''), "errors.nativeContainer.theStickFileIsDamagedMalformedSectionMarker", {});
     return value;
   };
   const walk = value => {
@@ -545,7 +545,7 @@ export function liftDocument(document, {preBlobs = [], maxBytes = MAX_BYTES} = {
 }
 
 function documentTooLarge() {
-  return Object.assign(messageError(new Error(''), "errors.nativeContainer.theStykanimateDocumentExceedsTheUncompressedSizeLimit", {}), {code: 'document_too_large'});
+  return Object.assign(messageError(new Error(''), "errors.nativeContainer.theStickDocumentExceedsTheUncompressedSizeLimit", {}), {code: 'document_too_large'});
 }
 
 /** Length of canonical base64, checked before decoding an oversized payload. */
@@ -576,10 +576,10 @@ export async function encodeContainerV2Parts(lifted, kind, options = {}) {
   if (skeletonBytes.byteLength > MAX_SKELETON_BYTES ||
       lifted.sections.some(section => section.bytes.byteLength > MAX_BYTES) ||
       skeletonBytes.byteLength + sectionRawBytes * 3 > MAX_BYTES * 4)
-    throw Object.assign(messageError(new Error(''), "errors.nativeContainer.theStykanimateDocumentExceedsTheUncompressedSizeLimit", {}), {code:'document_too_large'});
+    throw Object.assign(messageError(new Error(''), "errors.nativeContainer.theStickDocumentExceedsTheUncompressedSizeLimit", {}), {code:'document_too_large'});
   if (!Object.hasOwn(MAGIC, kind) || lifted.sections.length > 64 || lifted.sections.some(section =>
       ![1, 2].includes(section.kind) || !(section.bytes instanceof Uint8Array)))
-    throw messageError(new Error(''), "errors.nativeContainer.unsupportedStykanimateFileVersionUpdateTheAppTo", {});
+    throw messageError(new Error(''), "errors.nativeContainer.unsupportedStickFileVersionUpdateTheAppTo", {});
   const skeletonDigest = await sha256(skeletonBytes);
   const jsonPacked = await packCached(skeletonBytes, skeletonDigest, options);
   const packed = [];
@@ -686,9 +686,9 @@ export async function verifyEmbeddedSource(document) {
 /** Apply the decode-time document normalization the file service performs:
  *  wrapper unwrap, native-figure shape check, browser-field removal. */
 export function normalizeDecodedDocument(document, kind) {
-  if (kind === 'styk' && document && document.format === 'stykanimate') {
+  if (kind === 'styk' && document && document.format === 'stick') {
     if (document.version !== 1 || !document.document || typeof document.document !== 'object' || Array.isArray(document.document))
-      throw Object.assign(messageError(new Error(''), "errors.nativeContainer.unsupportedStykanimateProjectVersion", {}), {code: 'invalid_native_version'});
+      throw Object.assign(messageError(new Error(''), "errors.nativeContainer.unsupportedStickProjectVersion", {}), {code: 'invalid_native_version'});
     document = document.document;
   }
   if (!document || typeof document !== 'object' || Array.isArray(document))

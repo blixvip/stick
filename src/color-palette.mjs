@@ -18,9 +18,9 @@ export const PERSONAL_PALETTE_LIMIT = 64;
 export const PERSONAL_PALETTES_LIMIT = 32;
 export const RECENT_LIMIT = 12;
 const NAME_LIMIT = 60;
-const STORE_KEY = 'stykanimate.colors.v1';
+const STORE_KEY = 'stick.colors.v1';
 // Draw kept its recent colours with the brushes before palettes were shared.
-const LEGACY_BRUSH_KEY = 'stykanimate.drawing-brushes.v1';
+const LEGACY_BRUSH_KEY = 'stick.drawing-brushes.v1';
 const HEX = /^#[0-9a-f]{6}$/;
 
 /** Lower-case #rrggbb, or null for anything else. */

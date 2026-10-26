@@ -6,7 +6,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 
 const { RecoveryStore } = createRequire(import.meta.url)('../desktop/recovery.cjs');
-const directory = () => mkdtemp(path.join(os.tmpdir(), 'stykanimate-recovery-test-'));
+const directory = () => mkdtemp(path.join(os.tmpdir(), 'stick-recovery-test-'));
 const document = JSON.stringify({ version: 5, keyframes: [{ objects: [] }] });
 const data = Buffer.from(document).toString('base64');
 

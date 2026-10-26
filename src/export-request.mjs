@@ -110,9 +110,9 @@ export const EXPORT_FORMATS = Object.freeze([
   entry('gif-sequence', 'export-gif-sequence', 'frames', "exportRequest.gifSequence", '', 'zip', {shortKey: 'exportRequest.gifSequence'}),
   entry('svg-sequence', 'export-svg-sequence', 'frames', "exportRequest.svgSequence", '', 'zip', {shortKey: 'exportRequest.svgSequence'}),
   entry('piv', 'export-piv', 'editable', "exportRequest.pivotAnimation", 'PIV', 'piv'),
-  entry('stkz', 'export-stkz', 'editable', "exportRequest.stykanimateFigure", 'STKZ', 'stkz', {needsObject: true}),
+  entry('stkz', 'export-stkz', 'editable', "exportRequest.stickFigure", 'STKZ', 'stkz', {needsObject: true}),
   entry('stk', 'export-stk', 'editable', "exportRequest.pivotFigure", 'STK', 'stk', {needsObject: true}),
-  entry('stykmov', 'export-stykmov', 'editable', "exportRequest.stykanimateMovieclip", 'STYKMOV', 'stykmov', {needsObject: true}),
+  entry('stykmov', 'export-stykmov', 'editable', "exportRequest.stickMovieclip", 'STYKMOV', 'stykmov', {needsObject: true}),
 ]);
 const FORMATS = new Map(EXPORT_FORMATS.map(format => [format.id, format]));
 const BY_ACTION = new Map(EXPORT_FORMATS.map(format => [format.action, format.id]));
@@ -142,9 +142,9 @@ const TYPE_HINTS = Object.freeze({
   'gif-sequence': "exportRequest.everyFrameAsANumberedGifPictureIn",
   'svg-sequence': "exportRequest.everyFrameAsANumberedVectorDrawingIn",
   piv: "exportRequest.theWholeAnimationToOpenInPivotAnimator",
-  stkz: "exportRequest.theSelectedFigureToReuseInOtherStykanimate",
+  stkz: "exportRequest.theSelectedFigureToReuseInOtherStick",
   stk: "exportRequest.theSelectedFigureToUseInPivotAnimator",
-  stykmov: "exportRequest.theSelectedMovieclipToReuseInOtherStykanimate",
+  stykmov: "exportRequest.theSelectedMovieclipToReuseInOtherStick",
 });
 /** The Type row's sentence for a format ('' for none). A movieclip's figure entry writes .stykmov, so it is described as one. */
 export const exportTypeHint = (format, {movieclip = false} = {}) => { const key = TYPE_HINTS[format === 'stkz' && movieclip ? 'stykmov' : format]; return key ? interfaceText(key) : ''; };

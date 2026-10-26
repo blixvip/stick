@@ -84,7 +84,7 @@ try {
   await page.screenshot({path: path.join(out, 'before-transition.png')});
   await page.evaluate(() => { styk.editor.seek(4); });
   await page.screenshot({path: path.join(out, 'after-transition.png')});
-  assert.ok(responses.some(r => r.status === 200 && r.type?.startsWith('application/vnd.stykanimate.piv-frames-v1')),
+  assert.ok(responses.some(r => r.status === 200 && r.type?.startsWith('application/vnd.stick.piv-frames-v1')),
     'Real import must exercise the native frame transport');
   assert.deepEqual(errors, []);
   await writeFile(path.join(out, 'report.json'), JSON.stringify({checks, responses, errors}, null, 2));

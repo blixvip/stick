@@ -100,7 +100,7 @@ class SourceLifetimeTests(unittest.TestCase):
         edited["keyframes"][0]["objects"][0]["angles"][0] += .125
         edited["keyframes"][0]["objects"][1]["lengths"] = [17.25] * len(edited["keyframes"][0]["objects"][1]["angles"])
         edited["opaque_future"] = {"values": [9007199254740993, 1.125, "01", True], "bytes": "\u0000\u00ff"}
-        edited["_styk"] = {"format": "StykAnimate", "format_version": 1, "name": "Active draft", "future": {"keep": 1}}
+        edited["_styk"] = {"format": "Stick", "format_version": 1, "name": "Active draft", "future": {"keep": 1}}
         before = copy.deepcopy(edited)
         native, _ = self.store.export({**opened, "document": edited, "format": "styk"})
         self.assertEqual(edited, before)

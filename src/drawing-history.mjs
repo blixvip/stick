@@ -14,7 +14,7 @@ export class DrawingHistoryDisk {
     if(this.ready)return this.ready;
     this.ready=new Promise((resolve,reject)=>{
       if(!globalThis.navigator?.locks){resolve();return;}
-      this.lock=navigator.locks.request('stykanimate-drawing-history:'+this.session,()=>new Promise(done=>{this.releaseLock=done;resolve();}));this.lock.catch(reject);
+      this.lock=navigator.locks.request('stick-drawing-history:'+this.session,()=>new Promise(done=>{this.releaseLock=done;resolve();}));this.lock.catch(reject);
     });return this.ready;
   }
   request(kind,data={}){

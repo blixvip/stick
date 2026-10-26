@@ -12,7 +12,7 @@ const checks = [], errors = [];
 try {
   const page = await browser.newPage({viewport: {width: 1440, height: 960}});
   page.on('pageerror', error => errors.push(error.message));
-  await page.addInitScript(() => localStorage.setItem('stykanimate.editor.settings.v1', JSON.stringify({rendererMode: 'canvas', locale: 'en'})));
+  await page.addInitScript(() => localStorage.setItem('stick.editor.settings.v1', JSON.stringify({rendererMode: 'canvas', locale: 'en'})));
   await page.goto(server.origin); await page.waitForFunction(() => window.styk?.ready);
   const settle = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const mode = async name => {

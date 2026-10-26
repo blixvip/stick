@@ -193,7 +193,7 @@ function recoveryDatabase({ putError = null, transactionError = null, openError 
   const db = { close() { calls.closed++; }, createObjectStore() {}, transaction(name, mode) {
     assert.deepEqual(name, ['documents','metadata']); assert.equal(mode, 'readwrite'); if (transactionError) throw transactionError; return tx;
   } };
-  const database = { open(name, version) { calls.opened++; assert.equal(name, 'stykanimate-recovery'); assert.equal(version, 2);
+  const database = { open(name, version) { calls.opened++; assert.equal(name, 'stick-recovery'); assert.equal(version, 2);
     queueMicrotask(() => { if (openError) { request.error = openError; request.onerror?.(); } else { request.result = db; request.onsuccess?.(); } });
     return request;
   } };

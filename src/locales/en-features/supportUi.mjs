@@ -1,8 +1,8 @@
 export default Object.freeze({
-  "supportUi.stykanimate": "Stick",
+  "supportUi.stick": "Stick",
   "supportUi.closeWelcomeScreen": "Close welcome screen",
   "supportUi.whatSNewIn": "What’s new in",
-  "supportUi.stykanimate2": "Stick.",
+  "supportUi.stick2": "Stick.",
   "supportUi.releaseVersion": "Release version",
   "supportUi.recentReleases": "Recent releases",
   "supportUi.releaseNotes": "Release notes",
@@ -15,5 +15,5 @@ export default Object.freeze({
   "supportUi.installed2": " · Installed",
   "supportUi.couldnTLoadReleasesTryAgain": "Couldn’t load releases. Try again.",
   "supportUi.couldnTOpenKoFiTryAgain": "Couldn’t open GitHub. Try again.",
-  "supportUi.stykanimateVersion": "Stick {version}"
+  "supportUi.stickVersion": "Stick {version}"
 });

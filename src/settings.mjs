@@ -17,7 +17,7 @@ import {normalizeExportPreferences} from './export-request.mjs';
 
 import { normalizeFingerDraw, normalizeTouchSetting } from './touch/touch-mode.mjs';
 
-export const EDITOR_SETTINGS_KEY = "stykanimate.editor.settings.v1";
+export const EDITOR_SETTINGS_KEY = "stick.editor.settings.v1";
 export const DEFAULT_EDITOR_SETTINGS = Object.freeze({
   locale: "en",
   theme: "dark",

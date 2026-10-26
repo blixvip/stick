@@ -8,7 +8,7 @@ import { createRequire } from 'node:module';
 const { FileStreams } = createRequire(import.meta.url)('../desktop/file-streams.cjs');
 
 async function fixture(t, options = {}) {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'stykanimate-stream-test-'));
+  const root = await mkdtemp(path.join(os.tmpdir(), 'stick-stream-test-'));
   const streams = new FileStreams({ recoveryDirectory: root, maxBytes: 64, maxChunkBytes: 4, ...options });
   t.after(async () => { await streams.dispose(); });
   return { root, streams, destination: path.join(root, 'animation.styk') };

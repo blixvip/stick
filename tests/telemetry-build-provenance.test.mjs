@@ -13,7 +13,7 @@ async function fixture() {
     'desktop/main.cjs': 'module.exports = { desktop: true };\n',
     'backend/app.py': 'APP = "Stick"\n',
     'codecs/decoder.py': 'FORMAT_VERSION = 1\n',
-    'package.json': JSON.stringify({ name: 'stykanimate-test', version: '0.5.6' }) + '\n',
+    'package.json': JSON.stringify({ name: 'stick-test', version: '0.5.6' }) + '\n',
   };
   for (const [file, content] of Object.entries(sources)) {
     await mkdir(path.dirname(path.join(root, file)), { recursive: true });
