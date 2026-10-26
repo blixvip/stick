@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stick：免费的火柴人动画制作软件</title>
+  <meta name="description" content="摆姿势、打关键帧、手绘、导出。 Stick 是一款免费开源的火柴人动画软件，支持 Windows、Linux 和浏览器。 制作火柴人打斗、走路循环、表情包和动画短片，并导出 MP4、GIF 或 PNG。">
+  <meta name="keywords" content="Stick, stick figure animation, stickman animation, stick figure animator, Pivot Animator alternative, Stick Nodes PC, 2D animation software, free animation software, GIF maker">
+  <link rel="canonical" href="https://blixvip.github.io/stick/zh-CN/">
+  <link rel="alternate" hreflang="en" href="https://blixvip.github.io/stick/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://blixvip.github.io/stick/zh-CN/">
+  <link rel="alternate" hreflang="zh-Hant" href="https://blixvip.github.io/stick/zh-TW/">
+  <link rel="alternate" hreflang="ja" href="https://blixvip.github.io/stick/ja/">
+  <link rel="alternate" hreflang="ko" href="https://blixvip.github.io/stick/ko/">
+  <link rel="alternate" hreflang="es" href="https://blixvip.github.io/stick/es/">
+  <link rel="alternate" hreflang="pt-BR" href="https://blixvip.github.io/stick/pt-BR/">
+  <link rel="alternate" hreflang="fr" href="https://blixvip.github.io/stick/fr/">
+  <link rel="alternate" hreflang="de" href="https://blixvip.github.io/stick/de/">
+  <link rel="alternate" hreflang="ru" href="https://blixvip.github.io/stick/ru/">
+  <link rel="alternate" hreflang="x-default" href="https://blixvip.github.io/stick/">
+  <meta name="theme-color" content="#050507">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Stick">
+  <meta property="og:title" content="Stick：免费的火柴人动画制作软件">
+  <meta property="og:description" content="摆姿势、打关键帧、手绘、导出。 Stick 是一款免费开源的火柴人动画软件，支持 Windows、Linux 和浏览器。 制作火柴人打斗、走路循环、表情包和动画短片，并导出 MP4、GIF 或 PNG。">
+  <meta property="og:url" content="https://blixvip.github.io/stick/zh-CN/">
+  <meta property="og:image" content="https://blixvip.github.io/stick/media/og.png">
+  <meta property="og:image:width" content="1280"><meta property="og:image:height" content="640">
+  <meta property="og:video" content="https://blixvip.github.io/stick/media/stick-editor-tour.mp4">
+  <meta property="og:locale" content="zh_CN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Stick：免费的火柴人动画制作软件">
+  <meta name="twitter:description" content="摆姿势、打关键帧、手绘、导出。 Stick 是一款免费开源的火柴人动画软件，支持 Windows、Linux 和浏览器。 制作火柴人打斗、走路循环、表情包和动画短片，并导出 MP4、GIF 或 PNG。">
+  <meta name="twitter:image" content="https://blixvip.github.io/stick/media/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Stick","url":"https://blixvip.github.io/stick/zh-CN/","inLanguage":"zh-Hans","description":"摆姿势、打关键帧、手绘、导出。 Stick 是一款免费开源的火柴人动画软件，支持 Windows、Linux 和浏览器。 制作火柴人打斗、走路循环、表情包和动画短片，并导出 MP4、GIF 或 PNG。","applicationCategory":"MultimediaApplication","applicationSubCategory":"Animation software","operatingSystem":"Windows, Linux, Web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"license":"https://www.gnu.org/licenses/gpl-3.0.html","isAccessibleForFree":true,"image":"https://blixvip.github.io/stick/media/og.png","screenshot":"https://blixvip.github.io/stick/media/hero.jpg","downloadUrl":"https://github.com/blixvip/stick/releases","codeRepository":"https://github.com/blixvip/stick","video":{"@type":"VideoObject","name":"观看 2 分钟演示","description":"摆姿势、打关键帧、手绘、导出。 Stick 是一款免费开源的火柴人动画软件，支持 Windows、Linux 和浏览器。 制作火柴人打斗、走路循环、表情包和动画短片，并导出 MP4、GIF 或 PNG。","thumbnailUrl":"https://blixvip.github.io/stick/media/hero.jpg","contentUrl":"https://blixvip.github.io/stick/media/stick-editor-tour.mp4","uploadDate":"2026-10-25","duration":"PT1M54S"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Stick 免费吗？","acceptedAnswer":{"@type":"Answer","text":"Stick 完全免费，基于 GPL-3.0 协议开源。无需账号，没有水印，也没有付费版本。"}},{"@type":"Question","name":"Stick 可以替代 Pivot Animator 吗？","acceptedAnswer":{"@type":"Answer","text":"可以。Stick 能打开 Pivot Animator 的项目（.piv）和人物（.stk），也能导出回去，并新增了分层时间轴、补间、特效、手绘和现代 WebGPU 渲染。"}},{"@type":"Question","name":"能在电脑上打开 Stick Nodes 项目吗？","acceptedAnswer":{"@type":"Answer","text":"可以。Stick 支持导入 Stick Nodes 的人物、影片剪辑和项目，可以在 Windows 或 Linux 电脑上继续制作。"}},{"@type":"Question","name":"如何制作火柴人动画？","acceptedAnswer":{"@type":"Answer","text":"拖动关节摆好姿势，按 添加帧（A），改变姿势，然后按 空格 播放。Stick 会补间两帧之间的动作。最后点击 导出，选择 MP4、GIF 或 TikTok 等预设。"}},{"@type":"Question","name":"可以离线使用吗？会上传我的作品吗？","acceptedAnswer":{"@type":"Answer","text":"完全支持离线使用。你的项目只保存在自己的电脑上，不会上传。"}}]}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,500;0,700;1,800;1,900&display=swap">
+  <style>
+    :root { --bg: #050507; --panel: #0d0f15; --line: #1f2230; --text: #eef2ff; --muted: #9aa3b5; --glow: #c9d6ff; color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: radial-gradient(1200px 700px at 50% -10%, #151826 0%, var(--bg) 60%) no-repeat, var(--bg); color: var(--text); font: 17px/1.6 "Inter Tight", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans", "Malgun Gothic", sans-serif; }
+    a { color: var(--text); }
+    .wrap { width: min(1120px, 100% - 32px); margin: 0 auto; }
+    header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 24px; letter-spacing: -.02em; }
+    .brand img { width: 38px; height: 38px; }
+    .top-links { display: flex; gap: 18px; font-size: 15px; } .top-links a { color: var(--muted); text-decoration: none; } .top-links a:hover { color: var(--text); }
+    .langs { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 14px; color: var(--muted); padding: 6px 0 0; }
+    .langs a { color: var(--muted); text-decoration: none; } .langs a:hover { color: var(--text); } .langs [aria-current] { color: var(--text); font-weight: 700; }
+    .hero { text-align: center; padding: 48px 0 24px; }
+    .hero img.logo { width: min(420px, 80%); filter: drop-shadow(0 0 28px rgba(201, 214, 255, .35)); }
+    h1 { font-size: clamp(34px, 5.4vw, 62px); line-height: 1.05; font-style: italic; font-weight: 900; letter-spacing: -.03em; margin: 22px 0 14px; text-shadow: 0 0 30px rgba(201, 214, 255, .25); }
+    .lead { color: var(--muted); max-width: 760px; margin: 0 auto; font-size: 19px; } .lead b { color: var(--text); }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 28px 0 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 12px; font-weight: 700; text-decoration: none; border: 1px solid var(--line); background: var(--panel); }
+    .btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); box-shadow: 0 0 32px rgba(201, 214, 255, .35); }
+    .window { margin: 34px auto 0; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 30px 80px rgba(0,0,0,.7), 0 0 60px rgba(201,214,255,.10); background: #000; }
+    .window video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+    section { padding: 64px 0 8px; }
+    h2 { font-size: clamp(28px, 3.6vw, 40px); font-style: italic; font-weight: 900; letter-spacing: -.02em; margin: 0 0 18px; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+    .feature { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .feature video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; border-bottom: 1px solid var(--line); }
+    .feature h3 { margin: 16px 18px 6px; font-size: 20px; font-style: italic; font-weight: 800; } .feature p { margin: 0 18px 18px; color: var(--muted); font-size: 15.5px; }
+    code { font-family: ui-monospace, Consolas, monospace; font-size: .9em; background: #161925; padding: 2px 6px; border-radius: 6px; }
+    kbd { font: 600 .85em ui-monospace, Consolas, monospace; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 1px 5px; background: #161925; }
+    p { color: #d6dbea; } strong { color: var(--text); }
+    ul.get li { margin: 8px 0; color: #d6dbea; }
+    details { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin: 10px 0; }
+    summary { cursor: pointer; font-weight: 700; } details p { margin: 10px 0 0; color: var(--muted); }
+    pre { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; overflow-x: auto; font: 14px/1.6 ui-monospace, Consolas, monospace; color: #d6dbea; }
+    footer { text-align: center; color: var(--muted); padding: 60px 0 40px; font-size: 14px; } footer img { width: 56px; }
+    @media (max-width: 640px) { .top-links { display: none; } body { font-size: 16px; } section { padding-top: 44px; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="../"><img src="../favicon.svg" alt="" width="38" height="38">Stick</a>
+      <nav class="top-links"><a href="#功能">功能</a><a href="#tour">观看 2 分钟演示</a><a href="#常见问题">常见问题</a><a href="https://github.com/blixvip/stick">GitHub</a></nav>
+    </header>
+    <nav class="langs" aria-label="Language"><a href="../" hreflang="en" lang="en">English</a><span aria-current="true">简体中文</span><a href="../zh-TW/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="../ja/" hreflang="ja" lang="ja">日本語</a><a href="../ko/" hreflang="ko" lang="ko">한국어</a><a href="../es/" hreflang="es" lang="es">Español</a><a href="../pt-BR/" hreflang="pt-BR" lang="pt-BR">Português</a><a href="../fr/" hreflang="fr" lang="fr">Français</a><a href="../de/" hreflang="de" lang="de">Deutsch</a><a href="../ru/" hreflang="ru" lang="ru">Русский</a></nav>
+    <main>
+      <div class="hero">
+        <img class="logo" src="../media/logo-stacked.svg" alt="Stick logo: a stick figure running between code brackets" width="420" height="378">
+        <h1>Stick：免费的火柴人动画制作软件</h1>
+        <p class="lead"><b>摆姿势、打关键帧、手绘、导出。</b><br>Stick 是一款免费开源的火柴人动画软件，支持 Windows、Linux 和浏览器。<br>制作火柴人打斗、走路循环、表情包和动画短片，并导出 MP4、GIF 或 PNG。</p>
+        <div class="cta">
+          <a class="btn primary" href="#tour">▶ 观看 2 分钟演示</a>
+          <a class="btn" href="https://github.com/blixvip/stick">⭐ GitHub</a>
+          <a class="btn" href="#获取-stick">获取 Stick</a>
+        </div>
+        <div class="window"><video autoplay muted loop playsinline poster="../media/hero.jpg" aria-label="Stick：免费的火柴人动画制作软件"><source src="../media/hero.mp4" type="video/mp4"></video></div>
+      </div>
+      <section id="什么是-stick"><h2>什么是 Stick？</h2><p><strong>Stick</strong> 是一款用于制作<strong>火柴人动画</strong>的桌面和网页应用。拖动关节摆出姿势，添加一帧，再换个姿势，Stick 会自动补间中间的动作。它拥有带图层的时间轴、洋葱皮、镜头运动、视觉特效、手绘笔刷，以及用于自定义角色的骨骼编辑器。</p>
+<p>它可以打开 <strong>Pivot Animator</strong>（<code>.piv</code>、<code>.stk</code>）和 <strong>Stick Nodes</strong> 项目，旧作品可以直接继续编辑。所有操作都在你的电脑上完成：无需账号、没有水印、不会上传。</p></section>
+      <section id="功能"><h2>功能</h2>
+      <div class="features">
+      <article class="feature">
+        <video class="clip" muted loop playsinline preload="none" poster="../media/pose.jpg" aria-label="随心摆姿势"><source src="../media/pose.mp4" type="video/mp4"></video>
+        <h3>随心摆姿势</h3><p>拖动手和脚，反向动力学（IK）会自动弯曲手肘和膝盖。支持角度锁定、可伸缩节点和 3D 部件。</p>
+      </article>
+      <article class="feature">
+        <video class="clip" muted loop playsinline preload="none" poster="../media/play.jpg" aria-label="关键帧与播放"><source src="../media/play.mp4" type="video/mp4"></video>
+        <h3>关键帧与播放</h3><p>添加一帧、改变姿势、点击播放。补间、缓动曲线和实时 WebGPU 播放让长动画依然流畅。</p>
+      </article>
+      <article class="feature">
+        <video class="clip" muted loop playsinline preload="none" poster="../media/timeline.jpg" aria-label="专业时间轴"><source src="../media/timeline.mp4" type="video/mp4"></video>
+        <h3>专业时间轴</h3><p>简单帧条或高级时间轴：图层、文件夹、关键帧、缓动、播放范围、洋葱皮和音轨。</p>
+      </article>
+      <article class="feature">
+        <video class="clip" muted loop playsinline preload="none" poster="../media/effects.jpg" aria-label="内置特效"><source src="../media/effects.mp4" type="video/mp4"></video>
+        <h3>内置特效</h3><p>发光、光环、阴影、模糊、粒子、能量光束、爆炸、烟雾和能量提升，可逐帧设置关键帧。</p>
+      </article>
+      <article class="feature">
+        <video class="clip" muted loop playsinline preload="none" poster="../media/draw.jpg" aria-label="在任意帧上手绘"><source src="../media/draw.mp4" type="video/mp4"></video>
+        <h3>在任意帧上手绘</h3><p>墨水、毛笔、铅笔、针管笔、马克笔、炭笔、喷枪、粉笔、油画等笔刷，手绘与骨骼动画自由混合。</p>
+      </article>
+      <article class="feature">
+        <video class="clip" muted loop playsinline preload="none" poster="../media/build.jpg" aria-label="打造自己的角色"><source src="../media/build.mp4" type="video/mp4"></video>
+        <h3>打造自己的角色</h3><p>用线条、圆形、多边形、文字和图片制作角色，可从齿轮、折扇、箱子和 3D 形状等示例开始。</p>
+      </article>
+      <article class="feature">
+        <video class="clip" muted loop playsinline preload="none" poster="../media/command-search.jpg" aria-label="一键搜索所有命令"><source src="../media/command-search.mp4" type="video/mp4"></video>
+        <h3>一键搜索所有命令</h3><p>按 <kbd>F1</kbd> 或 <kbd>Ctrl</kbd>+<kbd>P</kbd> 查找任何命令，所有快捷键都可自定义。</p>
+      </article>
+      <article class="feature">
+        <video class="clip" muted loop playsinline preload="none" poster="../media/settings.jpg" aria-label="深色或浅色，27 种语言"><source src="../media/settings.mp4" type="video/mp4"></video>
+        <h3>深色或浅色，27 种语言</h3><p>默认深色主题，也可切换浅色；支持界面缩放和平板触控布局。</p>
+      </article>
+      </div></section>
+      <section id="随处导出"><h2>随处导出</h2><p>一键预设：<strong>YouTube</strong>、<strong>YouTube Shorts</strong>、<strong>抖音 / TikTok</strong>、<strong>Instagram Reels</strong>、<strong>X</strong>、聊天用 <strong>GIF</strong>、透明 PNG 序列和 4K。支持导出 <strong>MP4</strong>、<strong>WebM</strong>（含透明通道）、<strong>GIF</strong>、<strong>APNG</strong>、<strong>PNG / JPEG / SVG</strong> 序列，以及可编辑的 <code>.piv</code> 和 <code>.stk</code> 文件。</p>
+        <div class="window"><video muted loop playsinline preload="none" class="clip" poster="../media/export.jpg"><source src="../media/export.mp4" type="video/mp4"></video></div></section>
+      <section id="tour"><h2>观看 2 分钟演示</h2>
+        <div class="window"><video controls preload="metadata" poster="../media/hero.jpg"><source src="../media/stick-editor-tour.mp4" type="video/mp4"></video></div></section>
+      <section id="获取-stick"><h2>获取 Stick</h2><ul class="get"><li><strong>自行构建</strong>：只需几条命令，见<a href="#从源码构建">从源码构建</a>。可作为桌面应用运行，也可在浏览器中运行。</li><li><strong>安装包</strong>：Windows（安装版和便携版）与 Linux（AppImage）版本发布在 <a href="https://github.com/blixvip/stick/releases">Releases 页面</a>。点击 <strong>Watch → Custom → Releases</strong> 获取更新通知。</li><li><strong>先看演示</strong>：<a href="https://github.com/blixvip/stick/releases/download/showcase/stick-editor-preview.mp4">2 分钟视频介绍</a>。</li></ul><p>⭐ <strong>给本仓库点个 Star</strong>，关注新版本，也让更多动画爱好者发现 Stick。</p></section>
+      <section id="常见问题"><h2>常见问题</h2>
+      <details><summary>Stick 免费吗？</summary><p>Stick 完全免费，基于 GPL-3.0 协议开源。无需账号，没有水印，也没有付费版本。</p></details>
+      <details><summary>Stick 可以替代 Pivot Animator 吗？</summary><p>可以。Stick 能打开 Pivot Animator 的项目（<code>.piv</code>）和人物（<code>.stk</code>），也能导出回去，并新增了分层时间轴、补间、特效、手绘和现代 WebGPU 渲染。</p></details>
+      <details><summary>能在电脑上打开 Stick Nodes 项目吗？</summary><p>可以。Stick 支持导入 Stick Nodes 的人物、影片剪辑和项目，可以在 Windows 或 Linux 电脑上继续制作。</p></details>
+      <details><summary>如何制作火柴人动画？</summary><p>拖动关节摆好姿势，按 <b>添加帧</b>（<kbd>A</kbd>），改变姿势，然后按 <kbd>空格</kbd> 播放。Stick 会补间两帧之间的动作。最后点击 <b>导出</b>，选择 MP4、GIF 或 TikTok 等预设。</p></details>
+      <details><summary>可以离线使用吗？会上传我的作品吗？</summary><p>完全支持离线使用。你的项目只保存在自己的电脑上，不会上传。</p></details>
+      </section>
+      <section id="从源码构建"><h2>从源码构建</h2><p>环境要求：Node.js 22+ 和 Python 3.11+。</p>
+<pre><code>git clone https://github.com/blixvip/stick.git
+cd stick
+npm ci
+python -m pip install -r backend/requirements-fast.txt
+npm start            # 桌面应用（Electron）
+npm run serve        # 或在浏览器中打开编辑器: http://127.0.0.1:47831</code></pre></section>
+      <section id="许可证"><h2>许可证</h2><p>Stick 是基于 <a href="https://github.com/blixvip/stick/blob/main/LICENSE">GNU 通用公共许可证 v3.0</a>（或更高版本）发布的自由软件。它是 GPL 许可的 StykAnimate 项目的修改版本，按许可证要求保留此声明。Stick 是独立项目，与 Pivot Animator 和 Stick Nodes 无关联，提及这些名称仅为说明文件兼容性。</p></section>
+    </main>
+    <footer><img src="../media/app-icon.svg" alt="Stick" width="56" height="56"><br><strong>Stick</strong> · 免费火柴人动画软件 · 支持 Windows、Linux 和网页的火柴人动画制作工具<br><a href="https://github.com/blixvip/stick">github.com/blixvip/stick</a></footer>
+  </div>
+  <script>
+    // Feature clips play only while on screen.
+    const clips = document.querySelectorAll('video.clip');
+    const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); }), {rootMargin: '120px'});
+    clips.forEach(v => io.observe(v));
+  </script>
+</body>
+</html>
