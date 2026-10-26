@@ -33,7 +33,7 @@
   .band-history { display: flex; align-items: center; gap: 0; }
   .shell-top :where(.band-label) { white-space: nowrap; }
 
-  /* The mark: the StykAnimate symbol in brand blue and the StykAnimate menu's chevron. */
+  /* The mark: the Stick symbol in brand blue and the Stick menu's chevron. */
   .shell-mark {
     display: inline-flex; align-items: center; gap: var(--space-0-5); flex: none;
     block-size: var(--control-lg); padding: 0 var(--space-1) 0 var(--space-1-5);

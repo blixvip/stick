@@ -25,7 +25,7 @@ export async function drawingBarrier(report,options={}) {
  * or fill on the pixel worker never blocks painting. The Worker is spawned
  * lazily so this stays safe in non-DOM contexts. */
 export class StrokeWorker {
-  open(){if(!this.worker){this.worker=new Worker(new URL('./drawing-stroke-worker.mjs',import.meta.url),{type:'module',name:'StykAnimate drawing stroke'});this.worker.onmessage=({data})=>this.onmessage?.(data);this.worker.onerror=event=>{event.preventDefault();this.onerror?.((event.message ? new Error(event.message) : messageError(new Error(''), "errors.drawingResources.drawingStrokeWorkerStopped")));};this.worker.onmessageerror=()=>this.onerror?.(messageError(new Error(''), "errors.drawingResources.strokePixelsCouldNotBeTransferred", {}));}}
+  open(){if(!this.worker){this.worker=new Worker(new URL('./drawing-stroke-worker.mjs',import.meta.url),{type:'module',name:'Stick drawing stroke'});this.worker.onmessage=({data})=>this.onmessage?.(data);this.worker.onerror=event=>{event.preventDefault();this.onerror?.((event.message ? new Error(event.message) : messageError(new Error(''), "errors.drawingResources.drawingStrokeWorkerStopped")));};this.worker.onmessageerror=()=>this.onerror?.(messageError(new Error(''), "errors.drawingResources.strokePixelsCouldNotBeTransferred", {}));}}
   post(message,transfer){if(this.closed)return;this.open();this.worker.postMessage(message,transfer??[]);}
   // dispose() stays respawnable for crash recovery; close() is permanent.
   dispose(){this.worker?.terminate();this.worker=null;}

@@ -1,4 +1,4 @@
-/* StykAnimate studio: one canvas, one timeline, contextual tools. */
+/* Stick studio: one canvas, one timeline, contextual tools. */
 .figure-layer-field{display:flex;align-items:center;gap:12px;padding:8px 18px 12px;font-size:11px}
 .figure-layer-field>label{display:flex;align-items:center;gap:6px;color:var(--muted);flex-shrink:0}
 .figure-layer-field .icon{width:14px;height:14px}

@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "StykAnimate",
-  "short_name": "StykAnimate",
+  "name": "Stick",
+  "short_name": "Stick",
   "description": "Free stick figure animation studio that runs in your browser.",
   "start_url": "./",
   "scope": "./",

@@ -82,7 +82,7 @@ function audioTrack({sampleRate, channels, description, packets}, {trackId, offs
   return box('trak',
     fullBox('tkhd', 0, 3, u32(0), u32(0), u32(trackId), u32(0), u32(movieDuration), zeros(8), u16(0), u16(1), u16(0x0100), u16(0), MATRIX, u32(0), u32(0)),
     box('mdia', fullBox('mdhd', 0, 0, u32(0), u32(0), u32(sampleRate), u32(total), u16(0x55c4), u16(0)),
-      fullBox('hdlr', 0, 0, u32(0), fourcc('soun'), zeros(12), text.encode('StykAnimate\0')),
+      fullBox('hdlr', 0, 0, u32(0), fourcc('soun'), zeros(12), text.encode('Stick\0')),
       box('minf', fullBox('smhd', 0, 0, zeros(4)), box('dinf', fullBox('dref', 0, 0, u32(1), fullBox('url ', 0, 1))), table)));
 }
 
@@ -172,7 +172,7 @@ export class Mp4Muxer {
       fullBox('stco', 0, 0, u32(1), u32(this.dataStart)));
     const media = box('mdia',
       fullBox('mdhd', 0, 0, u32(0), u32(0), u32(this.timescale), u32(duration), u16(0x55c4), u16(0)),
-      fullBox('hdlr', 0, 0, u32(0), fourcc('vide'), zeros(12), text.encode('StykAnimate\0')),
+      fullBox('hdlr', 0, 0, u32(0), fourcc('vide'), zeros(12), text.encode('Stick\0')),
       box('minf', fullBox('vmhd', 0, 1, zeros(8)), box('dinf', fullBox('dref', 0, 0, u32(1), fullBox('url ', 0, 1))), table));
     const track = box('trak',
       fullBox('tkhd', 0, 3, u32(0), u32(0), u32(1), u32(0), u32(videoDuration), zeros(8), u16(0), u16(0), u16(0), u16(0), MATRIX, fixed(this.width), fixed(this.height)),

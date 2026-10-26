@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Private, file-based codec transport for the native StykAnimate application.
+"""Private, file-based codec transport for the native Stick application.
 
 Only import/export uses Python. Evaluation, rendering, editing, and playback
 remain native C++. No server, network access, or original-file writes occur.
@@ -243,10 +243,10 @@ def stk_document(path: Path, source: bytes) -> dict:
 def validate_document(document: dict) -> None:
     checkpoint()
     if not isinstance(document, dict) or document.get("version") not in (2, 3, 4, 5):
-        raise PivError("Not a supported StykAnimate/Pivot document")
+        raise PivError("Not a supported Stick/Pivot document")
     native = document.get("_styk", {})
     if native and (native.get("format") != "StykAnimate" or native.get("format_version") != 1):
-        raise PivError("Unsupported StykAnimate native project version")
+        raise PivError("Unsupported Stick native project version")
     for key in ("canvas_width", "canvas_height"):
         value = document.get(key)
         if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 < value <= 100000:

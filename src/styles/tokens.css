@@ -1,5 +1,5 @@
 /* ==========================================================================
-   StykAnimate design tokens, v1 ("Islands")
+   Stick design tokens, v1 ("Islands")
    --------------------------------------------------------------------------
    Load order: this file is the `tokens` layer. The layer order is declared
    once, in the entry sheet (src/styles/app.css):
@@ -29,7 +29,7 @@
 @layer tokens {
 
   /* ------------------------------------------------------------------------
-     TIER 1 - PRIMITIVES (brand palette, from StykAnimate-Site base.css,
+     TIER 1 - PRIMITIVES (brand palette, from the Stick logo,
      extended into tool-scale ramps). Never referenced by components.
      ------------------------------------------------------------------------ */
   :root {

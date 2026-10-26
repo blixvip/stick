@@ -118,7 +118,7 @@ export class DocumentExporter {
 
   async _export(report, {sourceId, format, name, figureTypeId, figureUid, figureUids, tick, signal, getRevision, originalRevision, started}) {
     const reusedWorker = Boolean(this.worker);
-    const worker = this.worker ??= new Worker(new URL('./document-export-worker.mjs', import.meta.url), {type: 'module', name: 'StykAnimate document export'});
+    const worker = this.worker ??= new Worker(new URL('./document-export-worker.mjs', import.meta.url), {type: 'module', name: 'Stick document export'});
     if (!reusedWorker) {
       const idleFailure = event => {
         if (this.worker === worker && !this.active) {

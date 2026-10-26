@@ -59,7 +59,7 @@ export class ExportFrameRenderer {
     this.worker?.terminate();
     this.worker = new Worker(
       new URL("./export-frame-worker.mjs", import.meta.url),
-      { type: "module", name: "StykAnimate export rendering" },
+      { type: "module", name: "Stick export rendering" },
     );
     this.worker.addEventListener("message", ({ data }) => {
       const pending = this.pending;

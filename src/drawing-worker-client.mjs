@@ -13,7 +13,7 @@ export class DrawingWorker {
     if(this.pending.size>=this.maxPending)return Promise.reject(messageError(new Error(''), "errors.drawingResources.drawingWorkerIsBusyWaitForTheCurrent", {}));
     if(!this.worker){
       let worker;
-      try {worker=this.worker=new Worker(this.url,{type:'module',name:'StykAnimate drawing pixels'});}
+      try {worker=this.worker=new Worker(this.url,{type:'module',name:'Stick drawing pixels'});}
       catch(error){return Promise.reject(error);}
       worker.onmessage=({data})=>{
         if(this.worker!==worker){data.bitmap?.close();return;}

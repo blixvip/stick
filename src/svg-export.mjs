@@ -88,7 +88,7 @@ export async function exportSVG({report, frame, frameIndex = 0, geometry, width,
       if(resources.preload)await drawExportSceneTiled(context,report,frame,geometry,resources);
       else {const {drawExportScene}=await import('./export-frame-core.mjs');drawExportScene(context,report,frame,geometry,resources);}
       const href=await dataURL(await canvas.convertToBlob({type:'image/png'}));
-      return new Blob([`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><desc>StykAnimate composited artwork rendered as an embedded image.</desc><image width="${width}" height="${height}" href="${href}"/></svg>`],{type:'image/svg+xml'});
+      return new Blob([`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><desc>Stick composited artwork rendered as an embedded image.</desc><image width="${width}" height="${height}" href="${href}"/></svg>`],{type:'image/svg+xml'});
     }finally{canvas.width=canvas.height=1;}
   }
   const definitions = [], bitmaps = resources.svgBitmaps ?? new Map();
@@ -319,5 +319,5 @@ export async function exportSVG({report, frame, frameIndex = 0, geometry, width,
   // SVG remains editable vector artwork. Crisp edges is an actual SVG rasterizer
   // hint; supersampling is reserved for fixed-resolution raster exports.
   const rendering = smoothing === 'none' ? ' shape-rendering="crispEdges"' : '';
-  return new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${sceneWidth} ${sceneHeight}" preserveAspectRatio="none"${rendering}><title>StykAnimate frame ${Number(frameIndex) + 1}</title><defs>${definitions.join('')}</defs><g transform="matrix(${matrix.map(number).join(' ')})">${scene}</g></svg>`], {type: 'image/svg+xml'});
+  return new Blob([`<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${sceneWidth} ${sceneHeight}" preserveAspectRatio="none"${rendering}><title>Stick frame ${Number(frameIndex) + 1}</title><defs>${definitions.join('')}</defs><g transform="matrix(${matrix.map(number).join(' ')})">${scene}</g></svg>`], {type: 'image/svg+xml'});
 }

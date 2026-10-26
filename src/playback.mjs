@@ -83,7 +83,7 @@ export class PlaybackCache {
     while(this.workers.length<count){
       const index=this.workers.length;
       const worker = this.workerFactory ? this.workerFactory(this.workerURL) : new Worker(this.workerURL, {
-        type: 'module', name: `StykAnimate playback preparation ${index + 1}` });
+        type: 'module', name: `Stick playback preparation ${index + 1}` });
       const client = { worker, index, loadAck: null };
       worker.addEventListener('message', event => this._receive(event.data, client));
       worker.addEventListener('error', event => { event.preventDefault?.(); if(this.workers[index]===client)this._fail((event.message ? new Error(event.message) : messageError(new Error(''), "errors.playback.thePlaybackWorkerStoppedUnexpectedly"))); });

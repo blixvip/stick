@@ -105,7 +105,7 @@ async function decodeImage(file, {maxPixels = DEFAULT_MEDIA_PIXELS, preserveOpaq
   if (signal?.aborted) throw messageError(new DOMException('', 'AbortError'), "errors.mediaAuthoring.imageImportCancelled", {});
   if (typeof Worker === 'undefined') throw messageError(new Error(''), "errors.mediaAuthoring.imageDecodingWorkersAreUnavailableInThisApp", {});
   const result = await new Promise((resolve, reject) => {
-    const worker = new Worker(new URL('./media-image-worker.mjs', import.meta.url), {type: 'module', name: 'StykAnimate image import'});
+    const worker = new Worker(new URL('./media-image-worker.mjs', import.meta.url), {type: 'module', name: 'Stick image import'});
     let settled = false;
     const finish = (error, result) => {
       if (settled) return;

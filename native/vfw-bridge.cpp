@@ -243,7 +243,7 @@ void encode(int argc, wchar_t** argv) {
   AVISTREAMINFOW stream{}; stream.fccType = streamtypeVIDEO; stream.dwScale = denominator; stream.dwRate = numerator;
   stream.dwSuggestedBufferSize = format.header.biSizeImage; stream.dwQuality = quality;
   SetRect(&stream.rcFrame, 0, 0, format.header.biWidth, format.header.biHeight);
-  wcscpy_s(stream.szName, L"StykAnimate video");
+  wcscpy_s(stream.szName, L"Stick video");
   check(AVIFileCreateStreamW(avi.file, &avi.raw, &stream), "AVIFileCreateStream");
   if (handler) {
     AVICOMPRESSOPTIONS options{}; options.fccType = streamtypeVIDEO; options.fccHandler = handler; options.dwQuality = quality;

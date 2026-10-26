@@ -8,7 +8,7 @@ import {messageError} from '../localized-error.mjs';
  * cap) or the browser's localStorage:
  *
  *   {
- *     studioVersion: 1, right: 300, timeline: 240,   // v1 mirror, read by StykAnimate 1.1
+ *     studioVersion: 1, right: 300, timeline: 240,   // v1 mirror, read by Stick 1.1
  *     layoutVersion: 2,
  *     shared: {stamp, sizes: {left, right, bottom, structure, timelineLabels}},
  *     modes: {

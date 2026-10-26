@@ -5686,7 +5686,7 @@ const settingsProvider = {
   },
 };
 // The command palette (Ctrl+P, Ctrl+Shift+P, F1, or Search commands… in the
-// StykAnimate menu): an index of the registry, never a home of its own.
+// Stick menu): an index of the registry, never a home of its own.
 const palette = createCommandPalette({
   commands,
   overlays,

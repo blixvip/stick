@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""StykAnimate local file codec and desktop web host (Python 3.10+).
+"""Stick local file codec and desktop web host (Python 3.10+).
 
 The render/edit loop never crosses this process boundary. This long-lived
 service only imports, validates, and exports the existing Pivot document schema.
@@ -172,7 +172,7 @@ def health_payload(jobs_snapshot: dict, session: str | None, *, max_import: int 
     """The /api/health body: what this codec can read and how it is running."""
     from process_metrics import memory_mib
     scanner = fast_decode.native_scan.status()
-    return {"ok": True, "name": "StykAnimate-webapp", "schemaVersion": 1,
+    return {"ok": True, "name": "Stick", "schemaVersion": 1,
         "jobs": jobs_snapshot,
         "codec": "Pivot verified grammar / bulk reader", "versions": [2, 3, 4, 5],
         "formats": ["piv", "stk", "styk", "stkz", "stykmov"], "maxImportBytes": MAX_SOURCE if max_import is None else max_import,
@@ -616,7 +616,7 @@ class ProjectStore:
                         # embedded source metadata, so original bytes survive.
                         if isinstance(document, dict) and document.get("format") == "stykanimate":
                             if document.get("version") != 1 or not isinstance(document.get("document"), dict):
-                                raise ApiError(422, "invalid_native_version", "Unsupported StykAnimate project version.")
+                                raise ApiError(422, "invalid_native_version", "Unsupported Stick project version.")
                             wrapper = document
                             document = wrapper["document"]
                             if wrapper.get("_stykSource") and "_stykSource" not in document:
@@ -853,7 +853,7 @@ class LocalServer(ThreadingHTTPServer):
 class Handler(BaseHTTPRequestHandler):
     server: LocalServer
     protocol_version = "HTTP/1.1"
-    server_version = "StykAnimate/1"
+    server_version = "Stick/1"
 
     def _job(self):
         return self.server.jobs.enter(self.headers.get("X-Styk-Job-Id"),

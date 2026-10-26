@@ -361,7 +361,7 @@ class HttpTests(unittest.TestCase):
     def setUpClass(cls):
         cls.directory = tempfile.TemporaryDirectory(prefix="styk-web-http-test-")
         root = Path(cls.directory.name)
-        (root / "index.html").write_text("<!doctype html><title>StykAnimate</title>")
+        (root / "index.html").write_text("<!doctype html><title>Stick</title>")
         cls.server = server.LocalServer(("127.0.0.1", 0), server.ProjectStore(server.WORKSPACE), root)
         cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
         cls.thread.start()
@@ -388,7 +388,7 @@ class HttpTests(unittest.TestCase):
         self.assertTrue(json.loads(data)["ok"])
         status, _, data = self.request("GET", "/")
         self.assertEqual(status, 200)
-        self.assertIn(b"StykAnimate", data)
+        self.assertIn(b"Stick", data)
         source = (server.WORKSPACE / "Pivot Animator v5/Animations/tween_pendulum.piv").read_bytes()
         status, _, data = self.request("POST", "/api/import?filename=pendulum.piv", source,
             {"Content-Type": "application/octet-stream"})

@@ -26,7 +26,7 @@ export class ImportClient {
   }
 
   _startWorker() {
-    const worker = new Worker(this.workerURL, {type: 'module', name: 'StykAnimate file importer'});
+    const worker = new Worker(this.workerURL, {type: 'module', name: 'Stick file importer'});
     this.worker=worker;this.failure=null;
     worker.addEventListener('message', event => {if(this.worker===worker)this._receive(event.data);});
     worker.addEventListener('messageerror', () => {if(this.worker===worker)this._fail(Object.assign(messageError(new Error(''), "errors.importClient.theImportedProjectCouldNotBeTransferred", {}), { telemetryCode: 'snapshot_failed', telemetryStage: 'prepare' }));});

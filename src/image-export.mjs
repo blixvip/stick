@@ -127,7 +127,7 @@ export async function exportAnimation({
   }
   const worker = new Worker(
     new URL("./image-export-worker.mjs", import.meta.url),
-    { type: "module", name: "StykAnimate image export" },
+    { type: "module", name: "Stick image export" },
   );
   let sequence = 0,
     pending = null,

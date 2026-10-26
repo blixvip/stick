@@ -1,4 +1,4 @@
-// Offline support for the StykAnimate web build (docs/WEB.md).
+// Offline support for the Stick web build (docs/WEB.md).
 //
 // The editor is a fixed set of files, so each build has its own cache holding all
 // of them, and every request the page makes is answered from it: the app starts

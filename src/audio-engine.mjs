@@ -14,7 +14,7 @@ export class AudioEngine {
   request(operation, fields = {}, transfers = []) {
     if (this.disposed) return Promise.reject(abort());
     if (!this.worker) {
-      this.worker = new Worker(new URL('./audio-worker.mjs', import.meta.url), {type: 'module', name: 'StykAnimate audio'});
+      this.worker = new Worker(new URL('./audio-worker.mjs', import.meta.url), {type: 'module', name: 'Stick audio'});
       this.worker.onmessage = ({data}) => { const request = this.pending.get(data.id); if (!request) return; this.pending.delete(data.id); clearTimeout(request.timer); data.error ? request.reject(restoreMessageError(new Error(data.error), data)) : request.resolve(data.result); };
       this.worker.onerror = event => { event.preventDefault(); this.failWorker((event.message ? new Error(event.message) : messageError(new Error(''), "errors.audioEngine.theAudioWorkerStopped"))); };
       this.worker.onmessageerror = () => this.failWorker(messageError(new Error(''), "errors.audioEngine.audioCouldNotBeTransferred", {}));

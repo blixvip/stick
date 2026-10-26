@@ -72,7 +72,7 @@ export class ThumbnailRenderer {
       throw messageError(new Error(''), "errors.thumbnailRenderer.framePreviewsRequireABrowserWithWorkerCanvas", {});
     const worker = (this.worker = new Worker(
       new URL("./thumbnail-worker.mjs", import.meta.url),
-      { type: "module", name: "StykAnimate frame thumbnails" },
+      { type: "module", name: "Stick frame thumbnails" },
     ));
     worker.addEventListener("message", (event) => {
       if (this.worker !== worker) { event.data.bitmap?.close(); return; }

@@ -1,4 +1,4 @@
-/* StykAnimate design system.
+/* Stick design system.
    One definition of colour, type, spacing, radius, elevation and motion for the
    editor chrome. Component stylesheets reference the --theme-* tokens (their
    literal fallbacks predate this file); theme.css overrides the colour tokens
@@ -18,7 +18,7 @@
   --theme-text: #1f2328;
   --theme-secondary: #4a5361;
   --theme-muted: #66707e;
-  /* Colour · interaction. The StykAnimate brand blue. */
+  /* Colour · interaction. The Stick brand blue. */
   --theme-accent: #0d99ff;
   --theme-action: #0d99ff;
   --theme-action-hover: #0086e6;

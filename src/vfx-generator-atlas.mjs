@@ -259,7 +259,7 @@ export function prewarmAtlas(){
   let worker,timer,finished=false;
   const finish=()=>{if(finished)return;finished=true;clearTimeout(timer);worker?.terminate();resolve(missing.every(row=>rows.has(row)));};
   try{
-   worker=new Worker(new URL('./vfx-generator-atlas-worker.mjs',import.meta.url),{type:'module',name:'StykAnimate particle materials'});
+   worker=new Worker(new URL('./vfx-generator-atlas-worker.mjs',import.meta.url),{type:'module',name:'Stick particle materials'});
    worker.onmessage=({data})=>{if(finished)return;if(data.done)finish();else adoptRow(data.row,data.levels);};
    worker.onerror=event=>{event.preventDefault();finish();};
    worker.onmessageerror=finish;

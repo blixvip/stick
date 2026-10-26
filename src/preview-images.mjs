@@ -60,7 +60,7 @@ export class PreviewImages extends Map {
     if (this.busy || !this.queued) return;
     clearTimeout(this.idleTimer); this.idleTimer = null;
     if (!this.worker) {
-      const worker = this.worker = new Worker(new URL('./preview-image-worker.mjs', import.meta.url), {type: 'module', name: 'StykAnimate preview images'});
+      const worker = this.worker = new Worker(new URL('./preview-image-worker.mjs', import.meta.url), {type: 'module', name: 'Stick preview images'});
       // Scoped to this worker: a replacement decoder may reuse its variant IDs.
       // Weak keys never retain copies evicted from the main-thread image budget.
       const variants = new WeakMap();

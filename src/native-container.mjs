@@ -1,5 +1,5 @@
 import {messageError} from './localized-error.mjs';
-/** StykAnimate native container codec (worker side).
+/** Stick native container codec (worker side).
  *
  * Container version 1: 56-byte header + zlib-compressed UTF-8 JSON document.
  * Container version 2: same 56-byte header (version=2; the size/digest fields

@@ -25,7 +25,7 @@ export async function encodeVfwVideo({codecId, width, height, fps, totalFrames, 
   for (const method of ['beginVfwExport', 'beginVfwFrame', 'writeVfwChunk', 'endVfwFrame', 'finishVfwExport', 'readVfwChunk', 'cancelVfwExport']) if (typeof desktop?.[method] !== 'function') throw messageError(new Error(''), "errors.vfwVideoExport.installedWindowsCodecsRequireTheStykanimateWindowsDesktop", {});
   if (typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined' || typeof createImageBitmap === 'undefined') throw messageError(new Error(''), "errors.vfwVideoExport.windowsVideoExportNeedsWorkerCanvasSupport", {});
   if (signal?.aborted) throw cancelled();
-  const worker = new Worker(new URL('./vfw-frame-worker.mjs', import.meta.url), {type: 'module', name: 'StykAnimate Windows video frames'});
+  const worker = new Worker(new URL('./vfw-frame-worker.mjs', import.meta.url), {type: 'module', name: 'Stick Windows video frames'});
   let pending, sequence = 0, failure, transfer, cancellation, completed = false;
   const check = () => { if (signal?.aborted) throw cancelled(); if (failure) throw failure; };
   const fail = error => { failure = error; clearTimeout(pending?.timer); pending?.reject(error); pending = null; worker.terminate(); };

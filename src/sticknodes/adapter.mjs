@@ -1,5 +1,5 @@
 import {messageError} from '../localized-error.mjs';
-/** Stick Nodes -> authoritative StykAnimate document. No source bytes or runtime
+/** Stick Nodes -> authoritative Stick document. No source bytes or runtime
  * decoder objects enter editor history. Definitions and clip timelines stay shared. */
 import {openDocument} from './decoder/project.mjs';
 import {unpackZip,isZip} from './decoder/archive.mjs';
@@ -61,7 +61,7 @@ export async function importStickNodes(input,{filename='project.stknds',signal,o
  if(doc.sounds.length)warn('EXTERNAL_AUDIO',`${doc.sounds.length} sound references need their external audio files; names are retained in import metadata.`);
  for(const meta of doc.figures){check();const source=doc.getFigure(meta.index),info=convertedFigure(source,meta.index,meta.name);figureInfo.push(info);definitions.push(info.figure);
   rememberGuesses(source.diagnostics);
-  if(source.features.some(f=>['smart-stretch','floaty','angle-lock','drag-lock','connectors'].includes(f)))warn('CONSTRAINTS','Constrained source poses are preserved as editable StykAnimate joints; native constraint dynamics are not simulated.');
+  if(source.features.some(f=>['smart-stretch','floaty','angle-lock','drag-lock','connectors'].includes(f)))warn('CONSTRAINTS','Constrained source poses are preserved as editable Stick joints; native constraint dynamics are not simulated.');
   if((meta.index&15)===15){onProgress({phase:'Converting figure library',progress:.35+.15*meta.index/doc.figures.length});await yieldImport();}
  }
  if(layoutGuesses.size){const profiles=[...layoutGuesses.keys()];warn('UNVERIFIED_LAYOUT',`Best-effort import: untested layouts ${profiles.slice(0,8).join(', ')}${profiles.length>8?` and ${profiles.length-8} more`:''} were read using existing version-based rules. Review the result for missing or inaccurate features.`);}
@@ -118,7 +118,7 @@ export async function importStickNodes(input,{filename='project.stknds',signal,o
     if(handle!=null){const p=handle===0?{x:pi.x,y:1080-pi.y}:layoutFigure(doc.posedFigure(pi)).get(join.nodeId)?.end,childObject=objects[child];
      const x=handle===0?p.x:pi.x+p.x,y=handle===0?p.y:1080-pi.y+p.y;
      if(Math.hypot(childObject.root_x-x,childObject.root_y-y)<.1)childObject.join={target_object_slot:parent,target_handle_id:handle};
-     else {childObject._styk.sticknodes.join=compact(join);warn('JOIN_OFFSETS','Offset attachments keep their stored poses. Reattach them with StykAnimate joints to author new attachment motion.');}
+     else {childObject._styk.sticknodes.join=compact(join);warn('JOIN_OFFSETS','Offset attachments keep their stored poses. Reattach them with Stick joints to author new attachment motion.');}
     }
    }
    

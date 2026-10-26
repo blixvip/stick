@@ -73,7 +73,7 @@ class WebMMuxer {
     // matching WebCodecs. Per-frame clusters keep signed block timecode zero.
     this.info = element(0x1549a966, [uint(0x2ad7b1, 1000),
       float(0x4489, Math.round(totalFrames * 1e6 / fps)),
-      string(0x4d80, 'StykAnimate'), string(0x5741, 'StykAnimate')]);
+      string(0x4d80, 'Stick'), string(0x5741, 'Stick')]);
     const video = element(0xae, [
       uint(0xd7, 1), uint(0x73c5, 1), uint(0x83, 1), uint(0x9c, 0),
       string(0x86, codec === 'vp8' ? 'V_VP8' : 'V_VP9'),

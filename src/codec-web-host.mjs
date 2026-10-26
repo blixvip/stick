@@ -17,7 +17,7 @@ export class BrowserCodecHost {
   #createWorker;
 
   constructor({createWorker = () => new Worker(new URL('./codec-web-worker.mjs', import.meta.url),
-    {type: 'module', name: 'StykAnimate Pivot codec'})} = {}) {
+    {type: 'module', name: 'Stick Pivot codec'})} = {}) {
     this.#createWorker = createWorker;
   }
 

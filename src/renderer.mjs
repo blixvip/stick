@@ -1022,7 +1022,7 @@ class WebGPURenderer {
   }
   async initialize(startup) {
     const d = this.device;
-    const module = d.createShaderModule({ code: SHADER, label: 'StykAnimate signed-distance vector shader' });
+    const module = d.createShaderModule({ code: SHADER, label: 'Stick signed-distance vector shader' });
     const info = await startup.wait(module.getCompilationInfo());
     const errors = info.messages.filter(m => m.type === 'error');
     if (errors.length) throw new Error(errors.map(m => `${m.lineNum}:${m.linePos} ${m.message}`).join('\n'));
@@ -1081,7 +1081,7 @@ class WebGPURenderer {
     return this.gpuDrawingReady;
   }
   createVectorPipeline(count = this.msaaCount) {
-    return this.device.createRenderPipelineAsync({ label: 'StykAnimate vector + asset compositor', layout: this.pipelineLayout,
+    return this.device.createRenderPipelineAsync({ label: 'Stick vector + asset compositor', layout: this.pipelineLayout,
       vertex: { module: this.vectorModule, entryPoint: 'vs' }, fragment: { module: this.vectorModule, entryPoint: 'fs', targets: [{ format: this.format, blend: { color: { srcFactor: 'one', dstFactor: 'one-minus-src-alpha', operation: 'add' }, alpha: { srcFactor: 'one', dstFactor: 'one-minus-src-alpha', operation: 'add' } } }] },
       primitive: { topology: 'triangle-list' }, multisample: { count },
     });
@@ -1959,7 +1959,7 @@ class WebGPURenderer {
     this.lastGeneratorBatch=generatorBatch;
     const generatorPlan=generatorBatch&&generatorSchedule(generatorBatch,hiddenUids);
     if(generatorPlan&&!generatorPlan.empty)this.generatorGpu().upload(generatorBatch);
-    const encoder = this.device.createCommandEncoder({ label: 'StykAnimate viewport frame' });
+    const encoder = this.device.createCommandEncoder({ label: 'Stick viewport frame' });
     if(drawingGpu&&!drawingGpu.destroyed)drawingGpu.encode(encoder);
     const timestampWrites=this.gpuTiming?.begin(this.measureFrame);
     this.stats.onionRenderedFrames=this.stats.onionFrameHits=0;

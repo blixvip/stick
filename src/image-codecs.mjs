@@ -356,7 +356,7 @@ export class SequenceZIP extends BoundedOutput {
       encoder.encode(
         JSON.stringify(
           {
-            format: "StykAnimate image sequence",
+            format: "Stick image sequence",
             version: 1,
             width: this.width,
             height: this.height,

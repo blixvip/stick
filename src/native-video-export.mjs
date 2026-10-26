@@ -22,7 +22,7 @@ export async function encodeNativeVideo({format, codec, width, height, fps, tota
   if (typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined' || typeof createImageBitmap === 'undefined') throw messageError(new Error(''), "errors.nativeVideoExport.nativeVideoExportNeedsWorkerCanvasSupport", {});
   if (signal?.aborted) throw cancelled();
   if (audioChunks && typeof desktop?.writeVideoAudioChunk !== 'function') throw messageError(new Error(''), "errors.nativeVideoExport.thisDesktopBuildDoesNotSupportAudioVideo", {});
-  const worker = directFrames ? null : new Worker(new URL('./native-video-frame-worker.mjs', import.meta.url), {type: 'module', name: 'StykAnimate native video frames'});
+  const worker = directFrames ? null : new Worker(new URL('./native-video-frame-worker.mjs', import.meta.url), {type: 'module', name: 'Stick native video frames'});
   let pending, sequence = 0, failure, transfer, cancellation, completed = false;
   const check = () => { if (signal?.aborted) throw cancelled(); if (failure) throw failure; };
   const fail = error => { failure = error; clearTimeout(pending?.timer); pending?.reject(error); pending = null; worker?.terminate(); };

@@ -338,7 +338,7 @@ export function toInterchange(report,{includeOriginal=true,includeTrace=false}={
   return {...rest,schema:'sticknodes-lab/interchange@1',figures,
     integration:{coordinates:'source-fields-preserved',angleUnit:'degrees',colors:'RGBA-0..255',
       ids:'source-draw-order-indices',animationSupported:false,behaviorSolverIncluded:false,
-      note:'Non è il formato nativo di StykAnimate. Serve un adattatore esplicito; non scartare i campi sorgente.'},
+      note:'Non è il formato nativo di Stick. Serve un adattatore esplicito; non scartare i campi sorgente.'},
     ...(includeOriginal?{source:{encoding:'base64',originalBase64:toBase64(_original),payloadBase64:toBase64(_payload)}}:{})};
 }
 

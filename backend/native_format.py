@@ -65,9 +65,9 @@ def _unpack(codec: int, data: bytes, raw_length: int) -> bytes:
             decoder = zlib.decompressobj()
             out = decoder.decompress(data, raw_length + 1)
         except zlib.error as error:
-            raise ValueError('The StykAnimate file is damaged (invalid compressed data).') from error
+            raise ValueError('The Stick file is damaged (invalid compressed data).') from error
         if not decoder.eof or decoder.unused_data or decoder.unconsumed_tail:
-            raise ValueError('The StykAnimate file is damaged (invalid payload length).')
+            raise ValueError('The Stick file is damaged (invalid payload length).')
     elif codec == 2:
         if _zstd is None:
             raise ValueError('This project uses zstd compression this build cannot decode. Update the app to open this file.')
@@ -77,41 +77,41 @@ def _unpack(codec: int, data: bytes, raw_length: int) -> bytes:
             size = _zstd.frame_content_size(data)
             parameters = _zstd.get_frame_parameters(data)
             if (size >= 0 and size != raw_length) or parameters.window_size > MAX_SKELETON_BYTES:
-                raise ValueError('The StykAnimate file is damaged (invalid payload length).')
+                raise ValueError('The Stick file is damaged (invalid payload length).')
             # Some decoder versions ignore allow_extra_data for unknown-size
             # frames. Walk only block framing before decoding, without copying
             # payloads, to require exactly one frame including its checksum.
             offset = _zstd.frame_header_size(data)
             while True:
                 if offset + 3 > len(data):
-                    raise ValueError('The StykAnimate file is damaged (invalid compressed data).')
+                    raise ValueError('The Stick file is damaged (invalid compressed data).')
                 header = int.from_bytes(data[offset:offset + 3], 'little')
                 block_type, block_size = (header >> 1) & 3, header >> 3
                 if block_type == 3 or block_size > min(parameters.window_size, 128 * 1024):
-                    raise ValueError('The StykAnimate file is damaged (invalid compressed data).')
+                    raise ValueError('The Stick file is damaged (invalid compressed data).')
                 offset += 3 + (1 if block_type == 1 else block_size)
                 if offset > len(data):
-                    raise ValueError('The StykAnimate file is damaged (invalid compressed data).')
+                    raise ValueError('The Stick file is damaged (invalid compressed data).')
                 if header & 1:
                     break
             if parameters.has_checksum:
                 offset += 4
             if offset != len(data):
-                raise ValueError('The StykAnimate file is damaged (invalid payload length).')
+                raise ValueError('The Stick file is damaged (invalid payload length).')
             out = _zstd.ZstdDecompressor().decompress(data, max_output_size=raw_length + 1,
                                                    allow_extra_data=False)
         except _zstd.ZstdError as error:
-            raise ValueError('The StykAnimate file is damaged (invalid compressed data).') from error
+            raise ValueError('The Stick file is damaged (invalid compressed data).') from error
     else:
-        raise ValueError('Unsupported StykAnimate file version. Update the app to open this file.')
+        raise ValueError('Unsupported Stick file version. Update the app to open this file.')
     if len(out) != raw_length:
-        raise ValueError('The StykAnimate file is damaged (invalid payload length).')
+        raise ValueError('The Stick file is damaged (invalid payload length).')
     return out
 
 
 def encode(payload: bytes, kind: str, *, max_bytes=MAX_BYTES) -> bytes:
     if kind not in MAGIC:
-        raise ValueError('Unknown StykAnimate file kind.')
+        raise ValueError('Unknown Stick file kind.')
     if not payload or len(payload) > max_bytes:
         raise ValueError('The native document exceeds the uncompressed size limit.')
     compressed = zlib.compress(payload, level=3)
@@ -264,7 +264,7 @@ def _materialize(node, sections, *, max_materialized_bytes=MAX_BYTES * 4, valida
         size = TYPE_BYTES[element_type]
         section = sections[index] if index < len(sections) else None
         if section is None or section[0] != 1 or offset % size or offset + count * size > len(section[1]):
-            raise ValueError('The StykAnimate file is damaged (invalid array section reference).')
+            raise ValueError('The Stick file is damaged (invalid array section reference).')
         # Includes numeric objects and list capacity, beyond packed width.
         admit(count * 48, allocation=True)
         view = memoryview(section[1])[offset:offset + count * size]
@@ -273,7 +273,7 @@ def _materialize(node, sections, *, max_materialized_bytes=MAX_BYTES * 4, valida
             raise ValueError('The native document exceeds the uncompressed size limit.')
         for item, in struct.iter_unpack('<' + TYPE_FORMAT[element_type], view):
             if isinstance(item, float) and not math.isfinite(item):
-                raise ValueError('The StykAnimate document contains non-finite numbers.')
+                raise ValueError('The Stick document contains non-finite numbers.')
             json_size += len(str(item))
             if json_size > max_materialized_bytes:
                 raise ValueError('The native document exceeds the uncompressed size limit.')
@@ -285,7 +285,7 @@ def _materialize(node, sections, *, max_materialized_bytes=MAX_BYTES * 4, valida
         index, offset, count = int(match[1]), int(match[2]), int(match[3])
         section = sections[index] if index < len(sections) else None
         if section is None or section[0] != 2 or offset + count > len(section[1]):
-            raise ValueError('The StykAnimate file is damaged (invalid payload section reference).')
+            raise ValueError('The Stick file is damaged (invalid payload section reference).')
         return memoryview(section[1])[offset:offset + count], count
 
     def preflight(value):
@@ -305,7 +305,7 @@ def _materialize(node, sections, *, max_materialized_bytes=MAX_BYTES * 4, valida
                 admit(_json_string_size(value[4:]))
                 return
             if value.startswith(('S2B:', 'S2S:', 'S2D:')):
-                raise ValueError('The StykAnimate file is damaged (malformed section marker).')
+                raise ValueError('The Stick file is damaged (malformed section marker).')
             admit(_json_string_size(value))
         elif isinstance(value, list):
             admit(2 + max(0, len(value) - 1))
@@ -341,7 +341,7 @@ def _materialize(node, sections, *, max_materialized_bytes=MAX_BYTES * 4, valida
         if value.startswith('S2E:'):
             return value[4:]
         if value.startswith(('S2B:', 'S2S:', 'S2D:')):
-            raise ValueError('The StykAnimate file is damaged (malformed section marker).')
+            raise ValueError('The Stick file is damaged (malformed section marker).')
         return value
 
     def walk(value):
@@ -364,7 +364,7 @@ def encode_v2(document: dict, kind: str, *, max_bytes=MAX_BYTES,
               max_skeleton_bytes=MAX_SKELETON_BYTES) -> bytes:
     """Serialize an editable document dict as a sectioned container v2."""
     if kind not in MAGIC:
-        raise ValueError('Unknown StykAnimate file kind.')
+        raise ValueError('Unknown Stick file kind.')
     skeleton, sections = _lift(document, max_bytes=max_bytes)
     _materialize(skeleton, sections, max_materialized_bytes=max_bytes * 4, validate_only=True)
     payload = json.dumps(skeleton, ensure_ascii=False, allow_nan=False, separators=(',', ':')).encode('utf-8')
@@ -389,36 +389,36 @@ def encode_v2(document: dict, kind: str, *, max_bytes=MAX_BYTES,
 def _decode_v2(data: bytes, kind: str, header_fields, max_bytes: int) -> bytes:
     _, _, compression, _, size, packed_size, digest = header_fields
     if len(data) < HEADER.size + 4:
-        raise ValueError('The StykAnimate file is truncated or has an invalid header.')
+        raise ValueError('The Stick file is truncated or has an invalid header.')
     count = struct.unpack_from('<I', data, HEADER.size)[0]
     skeleton_end = HEADER.size + 4 + packed_size
     if count > 64 or skeleton_end + count * SECTION.size > len(data):
-        raise ValueError('The StykAnimate file is truncated or has an invalid header.')
+        raise ValueError('The Stick file is truncated or has an invalid header.')
     records, pos, expected = [], skeleton_end + count * SECTION.size, size
     for index in range(count):
         offset = skeleton_end + index * SECTION.size
         section_kind, codec, reserved, pad, raw, stored, section_digest = SECTION.unpack_from(data, offset)
         if section_kind not in (1, 2):
-            raise ValueError('The StykAnimate file has an unknown section kind.')
+            raise ValueError('The Stick file has an unknown section kind.')
         if codec not in (0, 1, 2) or reserved or pad or any(data[offset + 56:offset + 64]):
-            raise ValueError('Unsupported StykAnimate file version. Update the app to open this file.')
+            raise ValueError('Unsupported Stick file version. Update the app to open this file.')
         if raw > max_bytes or pos + stored > len(data) or (codec == 0 and raw != stored):
-            raise ValueError('The StykAnimate file is truncated or has an invalid section table.')
+            raise ValueError('The Stick file is truncated or has an invalid section table.')
         expected += raw * 3  # materialized JSON upper bound (base64 growth)
         records.append((section_kind, codec, raw, stored, section_digest, pos))
         pos += stored
     if pos != len(data):
-        raise ValueError('The StykAnimate file is truncated or has trailing data.')
+        raise ValueError('The Stick file is truncated or has trailing data.')
     if expected > max_bytes * 4:
         raise ValueError('The native document exceeds the uncompressed size limit.')
     payload = _unpack(compression, data[HEADER.size + 4:skeleton_end], size)
     if hashlib.sha256(payload).digest() != digest:
-        raise ValueError('The StykAnimate file is damaged (checksum mismatch).')
+        raise ValueError('The Stick file is damaged (checksum mismatch).')
     sections = []
     for section_kind, codec, raw, stored, section_digest, offset in records:
         section = _unpack(codec, data[offset:offset + stored], raw)
         if hashlib.sha256(section).digest() != section_digest:
-            raise ValueError('The StykAnimate file is damaged (checksum mismatch).')
+            raise ValueError('The Stick file is damaged (checksum mismatch).')
         sections.append((section_kind, section))
     document = _materialize(json.loads(payload), sections, max_materialized_bytes=max_bytes * 4)
     return json.dumps(document, ensure_ascii=True, allow_nan=False, separators=(',', ':')).encode('ascii')
@@ -427,35 +427,35 @@ def _decode_v2(data: bytes, kind: str, header_fields, max_bytes: int) -> bytes:
 def decode(data: bytes, kind='styk', *, max_bytes=MAX_BYTES,
            max_skeleton_bytes=MAX_SKELETON_BYTES) -> bytes:
     if kind not in MAGIC:
-        raise ValueError('Unknown StykAnimate file kind.')
+        raise ValueError('Unknown Stick file kind.')
     if len(data) > max_bytes:
         raise ValueError('The native file exceeds the compressed size limit.')
     # Read compatibility for both original plain JSON and the early wrapper.
     if kind == 'styk' and data.lstrip(b'\xef\xbb\xbf \t\r\n').startswith(b'{'):
         return data
     if len(data) < HEADER.size:
-        raise ValueError('The StykAnimate file is truncated or has an invalid header.')
+        raise ValueError('The Stick file is truncated or has an invalid header.')
     fields = HEADER.unpack_from(data)
     magic, version, compression, flags, size, packed_size, digest = fields
     if magic != MAGIC[kind]:
-        raise ValueError('The StykAnimate file type does not match its extension.')
+        raise ValueError('The Stick file type does not match its extension.')
     if version not in (1, 2) or compression not in (0, 1, 2) or flags != 0:
-        raise ValueError('Unsupported StykAnimate file version. Update the app to open this file.')
+        raise ValueError('Unsupported Stick file version. Update the app to open this file.')
     if not 0 < size <= (max_skeleton_bytes if version == 2 else max_bytes):
         raise ValueError('The native document exceeds the uncompressed size limit.')
     if version == 2:
         return _decode_v2(data, kind, fields, max_bytes)
     if compression != 1:
-        raise ValueError('Unsupported StykAnimate file version. Update the app to open this file.')
+        raise ValueError('Unsupported Stick file version. Update the app to open this file.')
     if packed_size != len(data) - HEADER.size:
-        raise ValueError('The StykAnimate file is truncated or has trailing data.')
+        raise ValueError('The Stick file is truncated or has trailing data.')
     decoder = zlib.decompressobj()
     try:
         payload = decoder.decompress(data[HEADER.size:], size + 1)
     except zlib.error as error:
-        raise ValueError('The StykAnimate file is damaged (invalid compressed data).') from error
+        raise ValueError('The Stick file is damaged (invalid compressed data).') from error
     if len(payload) != size or not decoder.eof or decoder.unused_data or decoder.unconsumed_tail:
-        raise ValueError('The StykAnimate file is damaged (invalid payload length).')
+        raise ValueError('The Stick file is damaged (invalid payload length).')
     if hashlib.sha256(payload).digest() != digest:
-        raise ValueError('The StykAnimate file is damaged (checksum mismatch).')
+        raise ValueError('The Stick file is damaged (checksum mismatch).')
     return payload
