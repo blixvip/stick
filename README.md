@@ -268,6 +268,22 @@ Browser tests (`tests/*.browser.mjs`) run against `npm run serve`, for example `
 
 Bug reports, ideas, translations and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Report security problems privately as described in [SECURITY.md](SECURITY.md).
 
+<!-- more-from-blixvip:start -->
+## More from blixvip
+
+| Project | What it does |
+| --- | --- |
+| **[GenMotion](https://github.com/blixvip/GenMotion)** | Type an idea, get a finished motion-graphics video. Top Western + Chinese image models, your own API keys. |
+| **[NullMotion](https://github.com/blixvip/NullMotion)** | Play a finished motion-graphics ad in sync with the rough drafts it grew from. Export the breakdown as MP4. |
+| **[MotionClone](https://github.com/blixvip/MotionClone)** | Rebuild any reference video as an editable HyperFrames project and compare it against the original. |
+| **[html-anime](https://github.com/blixvip/html-anime)** | Turn a scene prompt into a shot sheet, then have a coding agent draw the film in HTML. No video model. |
+| **[easyedit](https://github.com/blixvip/easyedit)** | Type a movie name, get a fan edit: captioned speech cut, then a montage cut to the beat. |
+| **[thumbnail-studio](https://github.com/blixvip/thumbnail-studio)** | A minimal Windows workspace for YouTube thumbnails: ChatGPT beside your references. |
+| **[blixtrade](https://github.com/blixvip/blixtrade)** | Open-source core of BLIX, the AI memecoin terminal for Solana, with a public API and MCP server. |
+
+<sub>If one of these helped you, a ⭐ helps other people find it. Follow [@waselyyy](https://x.com/waselyyy) for new drops.</sub>
+<!-- more-from-blixvip:end -->
+
 ## License
 
 Stick is free software under the [GNU General Public License v3.0](LICENSE) or later. It is a modified version of earlier GPL-licensed software, changed in October 2026; the full change history is in this repository. Bundled third-party components keep their own licenses, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
