@@ -12,6 +12,7 @@ import path from 'node:path';
 import { BROWSER, launchBrowser } from './support/cross-browser.mjs';
 import { startCommunitySite } from './support/community-site.mjs';
 import { buildWeb } from '../scripts/build-web.mjs';
+import { COMMUNITY_LIBRARY } from '../src/user-library.mjs';
 import { startWebServer } from '../scripts/serve-web.mjs';
 
 const temp = await mkdtemp(path.join(os.tmpdir(), 'styk-library-'));
@@ -123,77 +124,82 @@ try {
   check('A removed asset is gone, and the scene keeps its copy', (await figureCount(page)) === before + 1);
   await panel(page).locator('.library-breadcrumbs button', { hasText: 'Library' }).click();
 
-  // --- The community library.
-  const heroBytes = await (async () => {
-    await page.evaluate(() => { const { editor } = window.styk; editor.select(editor.frame.objects[0].unique_id, -1); });
-    await panel(page).locator('[data-library-action="save"]').first().click();
-    await until('another saved figure', async () => (await cards(page).count()) >= 2);
-    const base64 = await page.evaluate(async () => {
-      const api = window.styk.library.desktop, { readLibraryFile } = await import('/src/library-files.mjs');
-      const entry = (await api.listLibrary('')).entries.find((item) => item.kind !== 'folder');
-      const bytes = new Uint8Array(await (await readLibraryFile(api, entry.path)).arrayBuffer());
-      let text = ''; for (const byte of bytes) text += String.fromCharCode(byte);
-      return btoa(text);
-    });
-    return Buffer.from(base64, 'base64');
-  })();
-  community.publish([
-    { id: 'aaaaaaaaaa', kind: 'figure', name: 'Shared Hero', category: 'characters', author: 'Ana', tags: ['blue', 'stick'], description: 'A blue hero', bytes: heroBytes },
-    { id: 'cccccccccc', kind: 'project', name: 'Whole Project', category: 'animations', bytes: Buffer.from('project') },
-  ]);
-  await source(page, 'public');
-  await until('the community cards', async () => (await panel(page).locator('.library-card:not(.is-skeleton)').count()) === 1);
-  check('The community library lists what the site publishes, and only what can be inserted', (await names(page)).join() === 'Shared Hero');
-  await until('the poster', () => cards(page).first().evaluate((card) => card.classList.contains('is-loaded')));
-  check('Its poster (a WebP from the site) is shown', await cards(page).first().evaluate((card) => /^data:image\/webp/.test(card.querySelector('img')?.src ?? '')));
-  check('Every request went to the editor\'s own origin', community.state.requests.length > 0);
-  await panel(page).locator('.library-head input[type="search"]').fill('zebra');
-  check('Searching finds nothing for an unrelated word', await panel(page).innerText().then((text) => text.includes('No matches')));
-  await panel(page).locator('.library-head input[type="search"]').fill('stick');
-  check('and finds an asset by its tags', (await cards(page).count()) === 1);
-  await panel(page).locator('.library-head input[type="search"]').fill('');
+  if (COMMUNITY_LIBRARY) {
+    // --- The community library.
+    const heroBytes = await (async () => {
+      await page.evaluate(() => { const { editor } = window.styk; editor.select(editor.frame.objects[0].unique_id, -1); });
+      await panel(page).locator('[data-library-action="save"]').first().click();
+      await until('another saved figure', async () => (await cards(page).count()) >= 2);
+      const base64 = await page.evaluate(async () => {
+        const api = window.styk.library.desktop, { readLibraryFile } = await import('/src/library-files.mjs');
+        const entry = (await api.listLibrary('')).entries.find((item) => item.kind !== 'folder');
+        const bytes = new Uint8Array(await (await readLibraryFile(api, entry.path)).arrayBuffer());
+        let text = ''; for (const byte of bytes) text += String.fromCharCode(byte);
+        return btoa(text);
+      });
+      return Buffer.from(base64, 'base64');
+    })();
+    community.publish([
+      { id: 'aaaaaaaaaa', kind: 'figure', name: 'Shared Hero', category: 'characters', author: 'Ana', tags: ['blue', 'stick'], description: 'A blue hero', bytes: heroBytes },
+      { id: 'cccccccccc', kind: 'project', name: 'Whole Project', category: 'animations', bytes: Buffer.from('project') },
+    ]);
+    await source(page, 'public');
+    await until('the community cards', async () => (await panel(page).locator('.library-card:not(.is-skeleton)').count()) === 1);
+    check('The community library lists what the site publishes, and only what can be inserted', (await names(page)).join() === 'Shared Hero');
+    await until('the poster', () => cards(page).first().evaluate((card) => card.classList.contains('is-loaded')));
+    check('Its poster (a WebP from the site) is shown', await cards(page).first().evaluate((card) => /^data:image\/webp/.test(card.querySelector('img')?.src ?? '')));
+    check('Every request went to the editor\'s own origin', community.state.requests.length > 0);
+    await panel(page).locator('.library-head input[type="search"]').fill('zebra');
+    check('Searching finds nothing for an unrelated word', await panel(page).innerText().then((text) => text.includes('No matches')));
+    await panel(page).locator('.library-head input[type="search"]').fill('stick');
+    check('and finds an asset by its tags', (await cards(page).count()) === 1);
+    await panel(page).locator('.library-head input[type="search"]').fill('');
 
-  const beforeInsert = await figureCount(page);
-  await cards(page).first().dblclick();
-  await until('the community figure in the scene', async () => (await figureCount(page)) === beforeInsert + 1);
-  check('A community figure is downloaded, verified and inserted', true);
-  check('The site counted that download once', community.state.counted.join() === 'aaaaaaaaaa');
-  await cards(page).first().dblclick();
-  await until('the second insert', async () => (await figureCount(page)) === beforeInsert + 2);
-  check('Inserting it again does not count again', community.state.counted.length === 1);
+    const beforeInsert = await figureCount(page);
+    await cards(page).first().dblclick();
+    await until('the community figure in the scene', async () => (await figureCount(page)) === beforeInsert + 1);
+    check('A community figure is downloaded, verified and inserted', true);
+    check('The site counted that download once', community.state.counted.join() === 'aaaaaaaaaa');
+    await cards(page).first().dblclick();
+    await until('the second insert', async () => (await figureCount(page)) === beforeInsert + 2);
+    check('Inserting it again does not count again', community.state.counted.length === 1);
 
-  await cards(page).first().click({ button: 'right' });
-  await page.getByRole('menuitem', { name: 'Save to My library' }).click();
-  await until('the saved copy', async () => /saved to My library/i.test(await message(page)));
-  await source(page, 'mine');
-  await until('the copy in My library', async () => (await names(page)).includes('Shared Hero'));
-  check('Save to My library keeps a copy with its own preview', await cards(page).filter({ hasText: 'Shared Hero' }).first().evaluate(async (card) => { await new Promise((resolve) => setTimeout(resolve, 500)); return !!card.querySelector('img') || card.classList.contains('is-loaded'); }));
+    await cards(page).first().click({ button: 'right' });
+    await page.getByRole('menuitem', { name: 'Save to My library' }).click();
+    await until('the saved copy', async () => /saved to My library/i.test(await message(page)));
+    await source(page, 'mine');
+    await until('the copy in My library', async () => (await names(page)).includes('Shared Hero'));
+    check('Save to My library keeps a copy with its own preview', await cards(page).filter({ hasText: 'Shared Hero' }).first().evaluate(async (card) => { await new Promise((resolve) => setTimeout(resolve, 500)); return !!card.querySelector('img') || card.classList.contains('is-loaded'); }));
 
-  // --- A later visit knows it already counted this download.
-  await page.reload({ waitUntil: 'load' });
-  await page.waitForFunction(() => window.styk?.ready === true, undefined, { timeout: 90000 });
-  await showLibrary(page);
-  await source(page, 'public');
-  await until('the community cards again', async () => (await cards(page).count()) === 1);
-  await cards(page).first().dblclick();
-  await until('the insert after reload', async () => (await figureCount(page)) === (await figureCount(page)) && /added to the scene/i.test(await message(page)));
-  check('A later visit reads the public file directly and does not count again', community.state.counted.length === 1);
-  check('No console errors, page errors or CSP violations', problems.length === 0 || (console.error(problems), false));
+    // --- A later visit knows it already counted this download.
+    await page.reload({ waitUntil: 'load' });
+    await page.waitForFunction(() => window.styk?.ready === true, undefined, { timeout: 90000 });
+    await showLibrary(page);
+    await source(page, 'public');
+    await until('the community cards again', async () => (await cards(page).count()) === 1);
+    await cards(page).first().dblclick();
+    await until('the insert after reload', async () => (await figureCount(page)) === (await figureCount(page)) && /added to the scene/i.test(await message(page)));
+    check('A later visit reads the public file directly and does not count again', community.state.counted.length === 1);
+    check('No console errors, page errors or CSP violations', problems.length === 0 || (console.error(problems), false));
 
-  // --- The site is unreachable.
-  await community.close();
-  // A fresh browser has none of the site's answers cached (a repeat visit would still show the catalogue it has).
-  const away = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
-  const offline = await open(away);
-  await showLibrary(offline.page);
-  await source(offline.page, 'public');
-  await until('the unreachable message', async () => /unavailable|Could not reach/i.test(await offline.page.locator('#user-library .library-empty').innerText()));
-  check('An unreachable community library says so in plain words, with a way to retry', /is unavailable right now|Could not reach the community library/.test(await offline.page.locator('#user-library .library-empty').innerText())
-    && await offline.page.getByRole('button', { name: 'Try again', exact: true }).isVisible());
-  await source(offline.page, 'mine');
-  await until('My library while the site is down', async () => (await panel(offline.page).innerText()).includes('No saved assets yet'));
-  check('My library does not need the site', true);
-  await away.close();
+    // --- The site is unreachable.
+    await community.close();
+    // A fresh browser has none of the site's answers cached (a repeat visit would still show the catalogue it has).
+    const away = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
+    const offline = await open(away);
+    await showLibrary(offline.page);
+    await source(offline.page, 'public');
+    await until('the unreachable message', async () => /unavailable|Could not reach/i.test(await offline.page.locator('#user-library .library-empty').innerText()));
+    check('An unreachable community library says so in plain words, with a way to retry', /is unavailable right now|Could not reach the community library/.test(await offline.page.locator('#user-library .library-empty').innerText())
+      && await offline.page.getByRole('button', { name: 'Try again', exact: true }).isVisible());
+    await source(offline.page, 'mine');
+    await until('My library while the site is down', async () => (await panel(offline.page).innerText()).includes('No saved assets yet'));
+    check('My library does not need the site', true);
+    await away.close();
+  } else {
+    // Stick ships with the upstream community library switched off (src/user-library.mjs), so only check it stays hidden.
+    check('The community library is hidden while it is switched off', !(await panel(page).locator('[data-library-source="public"]').isVisible()));
+  }
 
   // --- A browser that blocks storage.
   const blocked = await open(context, { blockStorage: true });

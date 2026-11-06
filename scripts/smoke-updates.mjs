@@ -20,12 +20,12 @@ try {
   const splash = page.locator('.release-splash');
   await splash.waitFor({ state: 'visible' });
   assert.ok((await splash.innerText()).includes(`Version ${version}`));
-  assert.equal(await splash.locator('.support-donate').getAttribute('href'), 'https://ko-fi.com/Q5Q41WY7QC');
+  assert.equal(await splash.locator('.support-donate').getAttribute('href'), 'https://github.com/blixvip/stick');
   await page.screenshot({ path: path.join(output, 'startup.png') });
   evidence.startup = true;
   await application.evaluate(({ shell }) => { globalThis.openedLinks = []; shell.openExternal = async url => { globalThis.openedLinks.push(url); }; });
   await splash.locator('.support-donate').click();
-  assert.deepEqual(await application.evaluate(() => globalThis.openedLinks), ['https://ko-fi.com/Q5Q41WY7QC']);
+  assert.deepEqual(await application.evaluate(() => globalThis.openedLinks), ['https://github.com/blixvip/stick']);
   await splash.getByRole('button', { name: 'Close welcome screen' }).click();
   await page.reload();
   await page.waitForFunction(() => window.styk?.ready, undefined, { timeout: 30000 });
@@ -39,7 +39,7 @@ try {
   evidence.exportPanel = true;
   await page.keyboard.press('Escape');
   await (await openAppMenu(page, 'help')).locator('[data-action="donate"]').click();
-  assert.equal((await application.evaluate(() => globalThis.openedLinks)).at(-1), 'https://ko-fi.com/Q5Q41WY7QC');
+  assert.equal((await application.evaluate(() => globalThis.openedLinks)).at(-1), 'https://github.com/blixvip/stick');
   evidence.helpDonation = true;
 
   // Capture the production service through its public status operation. Only
