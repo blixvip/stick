@@ -284,6 +284,12 @@ Bug reports, ideas, translations and pull requests are welcome. Read [CONTRIBUTI
 <sub>If one of these helped you, a ⭐ helps other people find it. Follow [@waselyyy](https://x.com/waselyyy) for new drops.</sub>
 <!-- more-from-blixvip:end -->
 
+## Community and contributing
+
+[![Join the contributor Discord](https://img.shields.io/badge/Discord-Join%20the%20open%20source%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/wJfHQXfEMM)
+
+**Want to send a PR? Join the [blix open source Discord](https://discord.gg/wJfHQXfEMM) first.** It's the one server for everyone contributing to any blixvip repo: questions, ideas, PR discussion, help, and release news.
+
 ## License
 
 Stick is free software under the [GNU General Public License v3.0](LICENSE) or later. It is a modified version of earlier GPL-licensed software, changed in October 2026; the full change history is in this repository. Bundled third-party components keep their own licenses, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

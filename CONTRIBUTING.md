@@ -1,5 +1,7 @@
 # Contributing to Stick
 
+> 💬 **Before you open a PR, join the [blix open source Discord](https://discord.gg/wJfHQXfEMM).** It's the home for contributors across every blixvip repo: ask questions, run ideas by us, and talk through your PR.
+
 Thanks for helping make Stick better. This guide covers how to report problems, suggest ideas and send changes.
 
 ## Ask, report or suggest

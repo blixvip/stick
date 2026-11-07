@@ -1,3 +1,4 @@
+<!-- Not in the contributor Discord yet? Join before your PR: https://discord.gg/wJfHQXfEMM -->
 ## What does this change?
 
 <!-- The problem it solves and how. Link the issue, e.g. "Fixes #123". -->
