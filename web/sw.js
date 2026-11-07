@@ -96,7 +96,10 @@ self.addEventListener('fetch', event => {
 
 async function respond(request, key) {
   const cache = await caches.open(CACHE), hit = await cache.match(key);
-  if (hit) return hit;
+  // Hand the page a new Response over the stored body rather than the Cache Storage response itself. Chrome
+  // (156, Windows) silently cancels module script loads in a newly opened tab when they are answered with the
+  // stored responses directly: some tabs never boot. The status, headers and streamed body are the same.
+  if (hit) return new Response(hit.body, {status: hit.status, statusText: hit.statusText, headers: hit.headers});
   const response = await fetch(request);
   if (response.ok && isCodec(key.slice(SCOPE.length))) await cache.put(key, response.clone());
   return response;

@@ -19,7 +19,7 @@
 //    then runs main.cjs as plain Node where `app` is undefined.
 //
 //  - A page starts in the editor, not on Home (src/home/home.mjs): tests and
-//    profiling scripts drive the editor. Every browser context gets
+//    profiling scripts drive the editor. Every Chromium, Firefox and WebKit context gets
 //    `window.stykStartupView = 'editor'` and Electron STYK_STARTUP_VIEW=editor; a
 //    test of Home at startup defines the value itself ('home') before the page loads.
 //
@@ -115,6 +115,17 @@ export const chromium = new Proxy(playwright.chromium, {
     return typeof value === 'function' ? value.bind(target) : value;
   },
 });
+
+// Firefox and WebKit (tests/support/cross-browser.mjs) start in the editor too.
+const editorFirstLaunch = target => new Proxy(target, {
+  get(browserType, property) {
+    if (property === 'launch') return async (options) => editorFirst(await browserType.launch(options));
+    const value = Reflect.get(browserType, property, browserType);
+    return typeof value === 'function' ? value.bind(browserType) : value;
+  },
+});
+export const firefox = editorFirstLaunch(playwright.firefox);
+export const webkit = editorFirstLaunch(playwright.webkit);
 
 export const _electron = new Proxy(playwright._electron, {
   get(target, property) {
