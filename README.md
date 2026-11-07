@@ -268,6 +268,17 @@ Browser tests (`tests/*.browser.mjs`) run against `npm run serve`, for example `
 
 Bug reports, ideas, translations and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Report security problems privately as described in [SECURITY.md](SECURITY.md).
 
+<!-- discord-incentive:start -->
+### 💬 Why join the Discord first
+
+**[discord.gg/grokbot](https://discord.gg/grokbot)** is the one server for every blixvip repo, and it gets you more than a chat window:
+
+- 🟢 **Claim an issue and it is yours.** Say which one in `#contributors` and it is assigned to you, so two people never build the same thing twice.
+- 🏷️ **A contributor role** on the server the moment your first pull request is merged.
+- 🗺️ **A say in what gets built.** The roadmap is argued out there before it turns into issues.
+- 🙋 **A human to ask.** Stuck on setup, or unsure whether an idea is even wanted? Faster than waiting on an issue thread.
+<!-- discord-incentive:end -->
+
 ## Contributors
 
 Thank you to everyone who has helped build Stick. New here? Read [CONTRIBUTING.md](CONTRIBUTING.md) and pick one of the [good first issues](https://github.com/blixvip/stick/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
@@ -292,9 +303,9 @@ Thank you to everyone who has helped build Stick. New here? Read [CONTRIBUTING.m
 
 ## Community and contributing
 
-[![Join the contributor Discord](https://img.shields.io/badge/Discord-Join%20the%20open%20source%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/wJfHQXfEMM)
+[![Join the contributor Discord](https://img.shields.io/badge/Discord-Join%20the%20open%20source%20community-5865F2?logo=discord&logoColor=white)](https://discord.gg/grokbot)
 
-**Want to send a PR? Join the [blix open source Discord](https://discord.gg/wJfHQXfEMM) first.** It's the one server for everyone contributing to any blixvip repo: questions, ideas, PR discussion, help, and release news.
+**Want to send a PR? Join the [blix open source Discord](https://discord.gg/grokbot) first.** It's the one server for everyone contributing to any blixvip repo: questions, ideas, PR discussion, help, and release news.
 
 ## License
 
