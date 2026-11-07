@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💬 Questions, ideas and contributing (Discord)
-    url: https://discord.gg/wJfHQXfEMM
+    url: https://discord.gg/grokbot
     about: The blix open source Discord, home for contributors across every blixvip repo.
   - name: Questions, help and show-and-tell
     url: https://github.com/blixvip/stick/discussions
