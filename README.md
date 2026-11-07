@@ -268,6 +268,12 @@ Browser tests (`tests/*.browser.mjs`) run against `npm run serve`, for example `
 
 Bug reports, ideas, translations and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Report security problems privately as described in [SECURITY.md](SECURITY.md).
 
+## Contributors
+
+Thank you to everyone who has helped build Stick. New here? Read [CONTRIBUTING.md](CONTRIBUTING.md) and pick one of the [good first issues](https://github.com/blixvip/stick/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
+
+<a href="https://github.com/blixvip/stick/graphs/contributors"><img src="https://contrib.rocks/image?repo=blixvip/stick" alt="Contributors" /></a>
+
 <!-- more-from-blixvip:start -->
 ## More from blixvip
 
