@@ -73,7 +73,7 @@ test('names, formats and previews are checked like the desktop library checks th
   for (const thumbnail of [undefined, '', 'data:image/jpeg;base64,AAAA', 'data:image/png;base64,AAAA', `${PNG}!`, `data:image/png;base64,${'A'.repeat(1400001)}`]) await assert.rejects(begin({thumbnail}), /PNG thumbnail/, String(thumbnail).slice(0, 30));
   await assert.rejects(begin({folder: '../up'}), /Invalid library path/); await assert.rejects(begin({folder: 'C:/x'}), /Invalid library path/); await assert.rejects(begin({folder: '/root'}), /Invalid library path/);
   await assert.rejects(begin({folder: 'Missing'}), /ENOENT/);
-  assert.equal(validName('Hello'), 'Hello'); assert.equal(validName(' Hello'), 'Hello'); assert.throws(() => validName('Hello '), /Use a name/, 'the desktop refuses a trailing space too'); assert.equal(safeName('a/b:c'), 'a-b-c'); assert.equal(safeName('CON'), 'Asset CON'); assert.equal(safeName(''), 'Untitled asset'); assert.equal(safeName('x'.repeat(200)).length, 110);
+  assert.equal(validName('Hello'), 'Hello'); assert.equal(validName(' Hello'), 'Hello'); assert.throws(() => validName('Hello '), /Use a name/, 'the desktop refuses a trailing space too'); assert.equal(safeName('a/b:c'), 'a-b-c'); assert.equal(safeName('CON'), 'Asset CON'); assert.equal(safeName(''), 'Untitled asset'); assert.equal(safeName('x'.repeat(200)).length, 110); assert.equal(validName(safeName('a'.repeat(109) + '.b')), 'a'.repeat(109)); assert.equal(validName(safeName(' .hidden')), 'hidden');
 });
 
 test('folders nest, list first, and refuse clashing names', async () => {

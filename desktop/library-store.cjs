@@ -16,7 +16,7 @@ function validName(value, max = 120) {
 }
 /** A display name made safe for a file name (the renderer does the same for Add to library). */
 function safeName(value) {
-  let name = String(value ?? '').replace(/[<>:"/\\|?*\x00-\x1f]/g, '-').replace(/^\.+|[. ]+$/g, '').slice(0, 110).trim() || 'Untitled asset';
+  let name = String(value ?? '').trim().replace(/[<>:"/\\|?*\x00-\x1f]/g, '-').slice(0, 110).replace(/^\.+|[. ]+$/g, '') || 'Untitled asset';
   if (/^(con|prn|aux|nul|com[0-9]|lpt[0-9])(?:\.|$)/i.test(name)) name = `Asset ${name}`;
   return name;
 }

@@ -4,6 +4,7 @@ import {connectTranslations, replaceLocalized, tupleMessages, messageTuple, loca
 import {interfaceLocalization, t as interfaceText} from './localization.mjs';
 
 import {messageError} from './localized-error.mjs';
+import {safeName} from './web-library.mjs';
 
 import {drawingBarrier} from './drawing-resources.mjs';
 import {icon} from './icons.mjs';
@@ -522,8 +523,7 @@ export class UserLibrary {
       const revision=this.editor.revision;await drawingBarrier(this.editor.report);if(revision!==this.editor.revision)throw messageError(new Error(''), "errors.userLibrary.theSelectionChangedBeforeSavingToTheLibrary", {});
       const report = librarySnapshot(this.editor), format = report._styk.libraryKind === 'movieclip' ? 'stykmov' : 'stkz';
       const [thumbnail, blob] = await Promise.all([libraryPreview(report), this.exporter.export(report, {format, figureUids:report.keyframes[0].objects.map(o => o.unique_id)})]);
-      let name = report._styk.name.replace(/[<>:"/\\|?*\x00-\x1f]/g,'-').replace(/^\.+|[. ]+$/g,'').slice(0,110).trim() || interfaceText("userLibrary.untitledAsset");
-      if (/^(con|prn|aux|nul|com[0-9]|lpt[0-9])(?:\.|$)/i.test(name)) name = `Asset ${name}`;
+      const name = safeName(report._styk.name || interfaceText("userLibrary.untitledAsset"));
       const result = await saveLibraryFile(this.desktop, blob, {folder, name, kind:report._styk.libraryKind, extension:`.${format}`, thumbnail});
       this.input.value = ''; this.filterValue = 'all'; this.kindSelect.value = 'all'; await this.refresh(folder); this.select(result.path); this.say({messageKey:"userLibrary.notice.savedTo",messageParams:{value0: folder || {messageKey:"userLibrary.myLibrary"}}});
       this.cardFor(result.path)?.scrollIntoView({block:'nearest'});
